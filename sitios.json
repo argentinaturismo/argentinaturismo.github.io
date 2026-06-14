@@ -1,0 +1,443 @@
+[
+  {
+    "id": "s1",
+    "name": "Teatro Colóniu t 878698 68 y98 y8y",
+    "provincia": "caba",
+    "cat": "Cultural",
+    "desc": "El Teatro Colón es un teatro de ópera, ballet y conciertos de la ciudad autónoma de Buenos Aires, la capital de Argentina. Es considerado uno de los diez mejores teatros de ópera del mundo según National Geographic. Posee la sala con la mejor acústica para ópera y la segunda mejor para conciertos del mundo. El actual Colón sustituyó al teatro original, inaugurado en 1857. A finales de siglo, se hizo evidente la necesidad de construir un nuevo teatro y, tras un proceso de veinte años, el actual teatro abrió sus puertas el 25 de mayo de 1908 con Aida de Giuseppe Verdi. Fue declarado Monumento Histórico Nacional en 1991.",
+    "lat": -34.6011,
+    "lng": -58.3833
+  },
+  {
+    "id": "s2",
+    "name": "Casa Rosada",
+    "provincia": "caba",
+    "cat": "Histórico",
+    "desc": "Sede del Poder Ejecutivo Nacional, símbolo de la historia argentina. Dentro de la misma se encuentra el despacho del presidente de la Nación Argentina y de sus distintas secretarías, y del jefe de Gabinete de Ministros. Alberga además el Museo de la Casa de Gobierno, con objetos relacionados con los presidentes del país. En 1942 fue declarada Monumento Histórico Nacional.",
+    "lat": -34.6083,
+    "lng": -58.3708
+  },
+  {
+    "id": "s3",
+    "name": "Puerto Madero",
+    "provincia": "caba",
+    "cat": "Urbano",
+    "desc": "Barrio moderno sobre el Río de la Plata con arquitectura contemporánea, ubicado en la Comuna 1 de la Ciudad Autónoma de Buenos Aires. A su vez, es uno de los cuarenta y ocho barrios oficiales en los que se subdivide la capital argentina. Su ubicación cercana a la zona este de la ciudad, lo extenso de su área y su vista al río hacen que este distrito sea uno de los más valorados de Buenos Aires.\n\nEl barrio debe su nombre a Eduardo Madero, comerciante de Buenos Aires que presentó tres proyectos para la construcción del puerto de la ciudad, el último de los cuales fue aprobado por el entonces Presidente de la Nación Julio Argentino Roca en 1882. El barrio se ubica, en su totalidad, en terrenos ganados al Río de la Plata. Por las inversiones efectuadas para localizar allí el puerto (desde 1890 en adelante), y por las obras que se hicieron después, una vez desafectada el área portuaria, desde 1990 en adelante, puede ser considerado el barrio con la mayor inversión pública y privada en la historia de la ciudad de Buenos Aires.",
+    "lat": -34.618,
+    "lng": -58.362
+  },
+  {
+    "id": "s4",
+    "name": "Catedral Metropolitana",
+    "provincia": "caba",
+    "cat": "Religioso",
+    "desc": "La Catedral metropolitana de la Santísima Trinidad (más conocida cómo Catedral Metropolitana de Buenos Aires y oficialmente Iglesia catedral de la Santísima Trinidad) es un templo católico de Argentina, sede de la arquidiócesis de Buenos Aires. Fue la Sede Primada de la Iglesia católica de Argentina hasta el 7 de septiembre del 2024, cuando la misma pasó a la Catedral de Santiago del Estero. Se encuentra ubicada en el barrio porteño de San Nicolás, en la intersección de la calle San Martín y la avenida Rivadavia, frente a la plaza de Mayo. En su interior se encuentra el mausoleo del Libertador José de San Martín, inaugurado en 1880.",
+    "lat": -34.6086,
+    "lng": -58.3732
+  },
+  {
+    "id": "s5",
+    "name": "Caminito (La Boca)",
+    "provincia": "caba",
+    "cat": "Cultural",
+    "desc": "Caminito es un paseo peatonal y museo a cielo abierto ubicado en el barrio de La Boca, en Buenos Aires. Se originó sobre un antiguo trazado ferroviario recuperado por el pintor Benito Quinquela Martín en la década de 1950. Es famoso por sus coloridos conventillos, construidos por inmigrantes y pintados con sobrantes de pintura de los astilleros. Su nombre homenajea al célebre tango “Caminito”, compuesto por Juan de Dios Filiberto en 1926. Actualmente es uno de los principales atractivos turísticos de la ciudad, con artistas, espectáculos de tango y ferias de artesanías.",
+    "lat": -34.6354,
+    "lng": -58.3631
+  },
+  {
+    "id": "s6",
+    "name": "Mercado de San Telmo",
+    "provincia": "caba",
+    "cat": "Gastronómico",
+    "desc": "El Mercado de San Telmo, ubicado en el histórico barrio homónimo, fue inaugurado en 1897 y diseñado por el arquitecto Juan Antonio Buschiazzo. Nació para abastecer a la creciente población de inmigrantes que llegaba a Buenos Aires. Su estructura de hierro y vidrio conserva gran parte del diseño original y fue declarada Monumento Histórico Nacional. Además de puestos tradicionales de alimentos, alberga locales de antigüedades, artesanías y propuestas gastronómicas. Actualmente es uno de los sitios más emblemáticos y visitados de la ciudad. Mercado histórico con gastronomía, antigüedades y cultura porteña.",
+    "lat": -34.621,
+    "lng": -58.3709
+  },
+  {
+    "id": "s7",
+    "name": "Cementerio de la Recoleta",
+    "provincia": "caba",
+    "cat": "Histórico",
+    "desc": "El Cementerio de la Recoleta fue inaugurado en 1822 y fue el primer cementerio público de Buenos Aires. Está ubicado en el barrio de Recoleta y se destaca por sus más de 4.500 bóvedas y mausoleos de gran valor artístico y arquitectónico. Más de 90 de sus sepulcros fueron declarados Monumento Histórico Nacional. Allí descansan numerosas personalidades de la historia argentina, entre ellas Eva Perón, presidentes, escritores y científicos. Considerado un museo a cielo abierto, es uno de los sitios históricos y turísticos más visitados de la ciudad.",
+    "lat": -34.5879,
+    "lng": -58.3927
+  },
+  {
+    "id": "s8",
+    "name": "Reserva Ecológica Costanera Sur",
+    "provincia": "caba",
+    "cat": "Natural",
+    "desc": "La Reserva Ecológica Costanera Sur, ubicada junto a Puerto Madero, es la principal área natural protegida de la Ciudad de Buenos Aires y posee unas 350 hectáreas. Se formó de manera espontánea sobre terrenos ganados al Río de la Plata mediante rellenos realizados a fines de la década de 1970. Fue creada oficialmente en 1986 y concentra la mayor biodiversidad de la ciudad, con cientos de especies de flora y fauna. En 2005 fue declarada Sitio Ramsar por la importancia internacional de sus humedales. Actualmente constituye uno de los espacios verdes y recreativos más visitados de Buenos Aires.",
+    "lat": -34.6133,
+    "lng": -58.3513
+  },
+  {
+    "id": "s9",
+    "name": "Museo de Arte Latinoamericano de Buenos Aires",
+    "provincia": "caba",
+    "cat": "Cultural",
+    "desc": "El Museo de Arte Latinoamericano de Buenos Aires (MALBA) fue fundado en 2001 por el empresario y coleccionista Eduardo Costantini. Está ubicado en el barrio de Palermo y alberga una de las colecciones más importantes de arte moderno y contemporáneo de América Latina. Su patrimonio incluye obras de artistas como Frida Kahlo, Diego Rivera, Antonio Berni y Tarsila do Amaral. Además de las exposiciones permanentes y temporarias, desarrolla actividades de cine, literatura y educación. Es uno de los principales centros culturales y museos más visitados de Buenos Aires.",
+    "lat": -34.5764,
+    "lng": -58.4157
+  },
+  {
+    "id": "s10",
+    "name": "Bosques de Palermo",
+    "provincia": "caba",
+    "cat": "Natural",
+    "desc": "Los Bosques de Palermo, oficialmente Parque Tres de Febrero, constituyen el espacio verde más emblemático y extenso de la Ciudad de Buenos Aires, con unas 370 hectáreas. Fueron inaugurados en 1875 por iniciativa del presidente Domingo Faustino Sarmiento y posteriormente ampliados por el paisajista francés Carlos Thays. El predio alberga lagos, plazas, el Rosedal, el Planetario y numerosos espacios recreativos y culturales. Posee una gran diversidad de árboles y aves, por lo que es considerado el principal pulmón verde de la ciudad. Actualmente es uno de los lugares más frecuentados por porteños y turistas para realizar actividades deportivas y disfrutar de la naturaleza.",
+    "lat": -34.5731,
+    "lng": -58.419
+  },
+  {
+    "id": "s11",
+    "name": "Sierra de la Ventana",
+    "provincia": "buenos_aires_prov",
+    "cat": "Aventura",
+    "desc": "Sierra de la Ventana es una localidad turística del sudoeste de la provincia de Buenos Aires, situada en el sistema serrano más importante de la provincia. Su principal atractivo es el Parque Provincial Ernesto Tornquist, que alberga el Cerro Ventana, famoso por la abertura natural de 8 metros que le da nombre. La región posee una gran riqueza paisajística y biodiversidad, con sierras, arroyos y senderos ideales para el ecoturismo y el trekking. Fundada en 1908 con la llegada del ferrocarril, se desarrolló como centro de descanso y recreación. Actualmente es uno de los destinos turísticos más visitados de la provincia de Buenos Aires.",
+    "lat": -38.1274,
+    "lng": -61.8113
+  },
+  {
+    "id": "s12",
+    "name": "Villa Gesell",
+    "provincia": "buenos_aires_prov",
+    "cat": "Urbano",
+    "lat": -37.2667,
+    "lng": -56.9667,
+    "desc": "Ciudad costera con pinos y ambiente bohemio en la costa atlántica."
+  },
+  {
+    "id": "s13",
+    "name": "Estancia La Candelaria",
+    "provincia": "buenos_aires_prov",
+    "cat": "Rural",
+    "desc": "La Estancia La Candelaria, ubicada en la localidad de Lobos, provincia de Buenos Aires, es uno de los cascos históricos más imponentes de la región pampeana, célebre por su majestuoso castillo de estilo neogótico francés. Construido a finales del siglo XIX por iniciativa de la familia Piñeiro, el palacio destaca por su torreón, sus vitrales y un mobiliario original traído directamente de Europa que evoca la opulencia de la aristocracia de la época. El imponente edificio está rodeado por un parque de más de 100 hectáreas diseñado por el reconocido paisajista Carlos Thays, el cual alberga alrededor de 240 especies botánicas, estatuas, fuentes y senderos arbolados. Actualmente, el lugar funciona como un exclusivo hotel de campo y un centro de eventos donde los visitantes pueden hospedarse tanto en las lujosas habitaciones del castillo como en sectores de estilo colonial. Su propuesta turística combina la historia y la arquitectura de élite con actividades tradicionales del campo argentino, ofreciendo días de campo con espectáculos folclóricos, partidos de polo, cabalgatas y gastronomía criolla de primer nivel.",
+    "lat": -37.1,
+    "lng": -58.5
+  },
+  {
+    "id": "s14",
+    "name": "Termas de Carhué",
+    "provincia": "buenos_aires_prov",
+    "cat": "Bienestar",
+    "desc": "Las Termas de Carhué, ubicadas a orillas del Lago Epecuén en el sudoeste de la provincia de Buenos Aires, son mundialmente famosas por las propiedades hipermarinas de sus aguas, cuya salinidad es solo comparable con la del Mar Muerto. Este particular espejo de agua posee una concentración mineral diez veces superior a la del océano, lo que otorga a sus aguas y fangos cualidades térmicas, curativas y una flotabilidad natural única. Tras la trágica inundación de la vecina Villa Epecuén en 1985, Carhué se consolidó como el centro termal y hotelero de la región, desarrollando modernas piscinas cubiertas y spas que aprovechan este recurso durante todo el año. El destino atrae tanto a turistas que buscan alivio para afecciones de la piel y las articulaciones como a interesados en el turismo histórico y fotográfico, quienes recorren las icónicas ruinas que emergieron tras el retroceso del agua. El paisaje se complementa con una avifauna fascinante, destacando las colonias de flamencos rosados, y una imponente arquitectura art déco diseñada por Francisco Salamone que enmarca los accesos a la zona.",
+    "lat": -37.1833,
+    "lng": -62.75
+  },
+  {
+    "id": "s15",
+    "name": "Fiesta de la Tradición",
+    "provincia": "buenos_aires_prov",
+    "cat": "Eventos",
+    "lat": -34.25,
+    "lng": -59.4667,
+    "desc": "Festival gaucho más importante del país, San Antonio de Areco."
+  },
+  {
+    "id": "s16",
+    "name": "Mar del Plata",
+    "provincia": "buenos_aires_prov",
+    "cat": "Urbano",
+    "lat": -38.0055,
+    "lng": -57.5426,
+    "desc": "La ciudad balnearia más concurrida del país."
+  },
+  {
+    "id": "s17",
+    "name": "Manzana Jesuítica",
+    "provincia": "cordoba",
+    "cat": "Histórico",
+    "lat": -31.412,
+    "lng": -64.1888,
+    "desc": "Conjunto patrimonial Jesuítico, Patrimonio de la Humanidad UNESCO."
+  },
+  {
+    "id": "s18",
+    "name": "Valle de Punilla",
+    "provincia": "cordoba",
+    "cat": "Natural",
+    "lat": -31.0833,
+    "lng": -64.4833,
+    "desc": "Hermoso valle serrano con ríos, cascadas y cerros."
+  },
+  {
+    "id": "s19",
+    "name": "Villa Carlos Paz",
+    "provincia": "cordoba",
+    "cat": "Urbano",
+    "lat": -31.424,
+    "lng": -64.4985,
+    "desc": "Principal centro turístico serrano con lago artificial."
+  },
+  {
+    "id": "s20",
+    "name": "Cosquín — Folklore",
+    "provincia": "cordoba",
+    "cat": "Eventos",
+    "lat": -31.2423,
+    "lng": -64.4704,
+    "desc": "Capital nacional del folklore, festival anual cada enero."
+  },
+  {
+    "id": "s21",
+    "name": "Aconcagua",
+    "provincia": "mendoza",
+    "cat": "Aventura",
+    "lat": -32.6532,
+    "lng": -70.0109,
+    "desc": "Cima más alta del hemisferio sur (6.962 msnm). Meca del andinismo."
+  },
+  {
+    "id": "s22",
+    "name": "Bodegas Catena Zapata",
+    "provincia": "mendoza",
+    "cat": "Gastronómico",
+    "lat": -33.0333,
+    "lng": -68.9667,
+    "desc": "Icónica bodega de arquitectura piramidal en Luján de Cuyo."
+  },
+  {
+    "id": "s23",
+    "name": "Fiesta Nacional de la Vendimia",
+    "provincia": "mendoza",
+    "cat": "Eventos",
+    "lat": -32.8908,
+    "lng": -68.8272,
+    "desc": "La mayor celebración vitivinícola de Argentina, cada marzo."
+  },
+  {
+    "id": "s24",
+    "name": "Termas de Cacheuta",
+    "provincia": "mendoza",
+    "cat": "Bienestar",
+    "lat": -33.0167,
+    "lng": -69.1333,
+    "desc": "Complejos termales en el Cañón del Mendoza."
+  },
+  {
+    "id": "s25",
+    "name": "Villa la Angostura",
+    "provincia": "neuquen",
+    "cat": "Natural",
+    "lat": -40.7667,
+    "lng": -71.65,
+    "desc": "Villa lacustre patagónica junto al Lago Nahuel Huapi."
+  },
+  {
+    "id": "s26",
+    "name": "Parque Nacional Lanín",
+    "provincia": "neuquen",
+    "cat": "Natural",
+    "lat": -39.6333,
+    "lng": -71.5,
+    "desc": "El volcán Lanín domina este parque de lagos y bosques araucarios."
+  },
+  {
+    "id": "s27",
+    "name": "Las Grutas",
+    "provincia": "rio_negro",
+    "cat": "Bienestar",
+    "lat": -40.8167,
+    "lng": -65.0833,
+    "desc": "Playas de aguas cálidas en el Golfo San Matías."
+  },
+  {
+    "id": "s28",
+    "name": "Bariloche — Centro Cívico",
+    "provincia": "rio_negro",
+    "cat": "Urbano",
+    "lat": -41.1333,
+    "lng": -71.3,
+    "desc": "Arquitectura de piedra y madera en la \"Suiza argentina\"."
+  },
+  {
+    "id": "s29",
+    "name": "Cerro Catedral",
+    "provincia": "rio_negro",
+    "cat": "Aventura",
+    "lat": -41.1667,
+    "lng": -71.45,
+    "desc": "Mejor centro de esquí de Sudamérica."
+  },
+  {
+    "id": "s30",
+    "name": "Quebrada de Humahuaca",
+    "provincia": "jujuy",
+    "cat": "Natural",
+    "lat": -23.2078,
+    "lng": -65.3526,
+    "desc": "Valle multicolor, Patrimonio de la Humanidad UNESCO."
+  },
+  {
+    "id": "s31",
+    "name": "Pucará de Tilcara",
+    "provincia": "jujuy",
+    "cat": "Histórico",
+    "lat": -23.5853,
+    "lng": -65.398,
+    "desc": "Fortaleza precolombina en la Quebrada de Humahuaca."
+  },
+  {
+    "id": "s32",
+    "name": "Laguna de los Pozuelos",
+    "provincia": "jujuy",
+    "cat": "Natural",
+    "lat": -22.4,
+    "lng": -65.9833,
+    "desc": "Reserva de biosfera con flamencos rosados en la Puna."
+  },
+  {
+    "id": "s33",
+    "name": "Cachi",
+    "provincia": "salta",
+    "cat": "Rural",
+    "lat": -25.1167,
+    "lng": -66.15,
+    "desc": "Pueblo de adobe en el Valle Calchaquí."
+  },
+  {
+    "id": "s34",
+    "name": "Tren a las Nubes",
+    "provincia": "salta",
+    "cat": "Aventura",
+    "lat": -24.7901,
+    "lng": -65.408,
+    "desc": "Recorrido ferroviario hasta 4.220 msnm."
+  },
+  {
+    "id": "s35",
+    "name": "Cafayate — Bodegas",
+    "provincia": "salta",
+    "cat": "Gastronómico",
+    "lat": -26.0721,
+    "lng": -65.9755,
+    "desc": "Capital del torrontés, con bodegas en paisajes de quebrada."
+  },
+  {
+    "id": "s36",
+    "name": "Cataratas del Iguazú",
+    "provincia": "misiones",
+    "cat": "Natural",
+    "desc": "Las Cataratas del Iguazú, ubicadas en la frontera entre Argentina y Brasil, son una de las Siete Maravillas Naturales del Mundo y están formadas por unos 275 saltos de agua alimentados por el río Iguazú. Su caída más imponente es la Garganta del Diablo, una espectacular garganta en forma de \"U\" con más de 80 metros de altura que concentra el mayor caudal del conjunto. Rodeadas por una exuberante selva subtropical protegida por parques nacionales en ambos países, albergan una asombrosa biodiversidad que incluye cientos de especies de aves y mamíferos. El lado argentino ofrece una experiencia inmersiva mediante pasarelas que recorren los saltos desde adentro, mientras que el lado brasileño brinda una vista panorámica e imponente de todo el cañón. Este destino es considerado Patrimonio de la Humanidad por la UNESCO gracias a su valor geológico excepcional y a su rol crucial en la conservación del ecosistema de la selva paranaense.",
+    "lat": -25.6953,
+    "lng": -54.4367
+  },
+  {
+    "id": "s37",
+    "name": "Ruinas jesuíticas de San Ignacio",
+    "provincia": "misiones",
+    "cat": "Histórico",
+    "desc": "Las Ruinas de San Ignacio Miní, ubicadas en la provincia de Misiones, Argentina, son uno de los testimonios mejor conservados de las misiones jesuíticas guaraníes de los siglos XVII y XVIII. Fundada originalmente en 1610 y reasentada en su ubicación actual en 1696, la reducción llegó a albergar a más de 3,000 indígenas bajo un singular modelo de organización comunitaria, social y cultural. Sus imponentes estructuras, construidas en piedra arenisca roja local siguiendo el estilo conocido como \"barroco guaraní\", destacan por los detallados relieves de motivos florales y ángeles tallados por los propios nativos. El complejo arqueológico, declarado Patrimonio de la Humanidad por la UNESCO en 1984, cuenta con una plaza central alrededor de la cual se distribuyen la majestuosa iglesia, el colegio, el cementerio y las viviendas indígenas. Hoy en día, el sitio funciona como un museo a cielo abierto que preserva la memoria de este histórico encuentro cultural e incluye un espectáculo nocturno de luces y sonidos que recrea la vida cotidiana de la misión.",
+    "lat": -27.2603,
+    "lng": -55.5372
+  },
+  {
+    "id": "s38",
+    "name": "Parque Teyú Cuaré",
+    "provincia": "misiones",
+    "cat": "Aventura",
+    "lat": -27.3167,
+    "lng": -55.5833,
+    "desc": "Reserva con senderos y miradores sobre el río Uruguay."
+  },
+  {
+    "id": "s39",
+    "name": "Glaciar Perito Moreno",
+    "provincia": "santa_cruz",
+    "cat": "Natural",
+    "lat": -50.4952,
+    "lng": -73.0395,
+    "desc": "Uno de los glaciares más espectaculares del planeta."
+  },
+  {
+    "id": "s41",
+    "name": "Península Valdés",
+    "provincia": "chubut",
+    "cat": "Natural",
+    "desc": "La Península Valdés, ubicada en la provincia de Chubut sobre el mar Argentino, es uno de los santuarios de vida silvestre más importantes del planeta y fue declarada Patrimonio de la Humanidad por la UNESCO en 1999. Este accidente geográfico costero es mundialmente célebre por ser el principal sitio de reproducción de la ballena franca austral, atrayendo a miles de turistas que realizan avistajes embarcados desde Puerto Pirámides entre los meses de junio y diciembre. Además de los cetáceos, sus playas y acantilados albergan importantes colonias de elefantes y lobos marinos, pingüinos de Magallanes y familias de orcas que varan intencionalmente en la costa para cazar. Su paisaje estepario y árido, conectado al continente por el istmo Carlos Ameghino, resguarda también una variada fauna terrestre que incluye choiques, maras y manadas de guanacos que recorren los extensos caminos de ripio. Con una geografía singular que encierra los golfos Nuevo y San José, este ecosistema marino y costero se posiciona como un modelo global de conservación y un imán para el turismo científico y de naturaleza.",
+    "lat": -42.5,
+    "lng": -64.2
+  },
+  {
+    "id": "s43",
+    "name": "Parque Nacional de Tierra del Fuego",
+    "provincia": "tierra_del_fuego",
+    "cat": "Natural",
+    "desc": "El parque más austral del mundo.",
+    "lat": -54.7333,
+    "lng": -68.5833
+  },
+  {
+    "id": "s45",
+    "name": "Casa histórica de la Independencia",
+    "provincia": "tucuman",
+    "cat": "Histórico",
+    "desc": "Donde se declaró la Independencia Argentina el 9 de julio de 1816.",
+    "lat": -26.8346,
+    "lng": -65.2024
+  },
+  {
+    "id": "s47",
+    "name": "Esteros del Iberá",
+    "provincia": "corrientes",
+    "cat": "Natural",
+    "desc": "Los Esteros del Iberá, ubicados en la provincia de Corrientes, Argentina, constituyen el segundo humedal más grande del mundo y uno de los reservorios de agua dulce más importantes del continente. Este inmenso ecosistema de agua brillante, formado por lagunas, embalsados y canales, se extiende sobre más de un millón de hectáreas de áreas protegidas que combinan parques nacionales y provinciales. El sitio es un verdadero santuario de vida silvestre, famoso por albergar poblaciones estables de yacarés, carpinchos, ciervos de los pantanos y más de 350 especies de aves que se pueden observar a corta distancia. Además, la región es un modelo global de conservación gracias a exitosos proyectos de reintroducción de especies extinguidas localmente, logrando el regreso de la fauna clave como el yaguareté y el oso hormiguero gigante. El acceso al parque se realiza a través de diversos portales, siendo Colonia Carlos Pellegrini el más desarrollado, donde los visitantes pueden explorar el humedal mediante paseos en lancha, caminatas y cabalgatas guiadas.",
+    "lat": -28.5,
+    "lng": -57.5
+  },
+  {
+    "id": "s48",
+    "name": "Carnaval de Corrientes",
+    "provincia": "corrientes",
+    "cat": "Eventos",
+    "lat": -27.4806,
+    "lng": -58.8341,
+    "desc": "Fiesta de comparsas y murgas, interés turístico nacional."
+  },
+  {
+    "id": "s49",
+    "name": "Termas de Federación",
+    "provincia": "entre_rios",
+    "cat": "Bienestar",
+    "desc": "Las Termas de Federación, ubicadas a orillas del embalse de Salto Grande en la provincia de Entre Ríos, son el complejo termal pionero y uno de los más visitados de Argentina tras el hallazgo del agua en 1994. El parque cuenta con un amplio predio con piscinas cuyas temperaturas oscilan entre los 36 y 41 grados Celsius, alimentadas por aguas que surgen desde los 1200 metros de profundidad dentro del Sistema Acuífero Guaraní. Sus aguas termales poseen propiedades terapéuticas y relajantes debido a su alta concentración de minerales, siendo ideales para combatir el estrés y afecciones óseas o musculares. El complejo se destaca por su diseño accesible y familiar, dividiéndose en sectores pasivos para el descanso y zonas recreativas que incluyen una moderna piscina con olas y un parque acuático. Su excelente infraestructura turística, sumada a la cercanía con la costanera local, convierte a este destino en un motor económico clave de la región y en un referente del bienestar termal en el litoral del país.",
+    "lat": -30.9833,
+    "lng": -57.9167
+  },
+  {
+    "id": "s50",
+    "name": "Carnaval de Gualeguaychú",
+    "provincia": "entre_rios",
+    "cat": "Eventos",
+    "desc": "El Carnaval de Gualeguaychú, celebrado en la provincia de Entre Ríos, es considerado el espectáculo a cielo abierto más importante del verano argentino y uno de los carnavales de mayor calidad artística a nivel mundial. El evento se desarrolla en el Corsódromo de la ciudad, un predio inaugurado en 1997 que cuenta con una pasarela de 500 metros y capacidad para albergar a más de 25,000 espectadores por noche durante los meses de enero y febrero. Cada año, las comparsas tradicionales de los clubes locales compiten ferozmente presentando imponentes carrozas, elaborados vestuarios con miles de plumas y deslumbrantes coreografías basadas en temáticas sociales o culturales complejas. El despliegue artístico se caracteriza por el ensordecedor ritmo de las batucadas y las bandas en vivo, logrando una sincronía perfecta que contagia de baile y alegría a las tribunas. Esta enorme industria cultural no solo moviliza a cientos de apasionados integrantes de la comunidad que trabajan todo el año en los talleres, sino que también posiciona a la ciudad como un polo turístico clave del litoral argentino.",
+    "lat": -33.0128,
+    "lng": -58.5197
+  },
+  {
+    "id": "u1780917786104",
+    "name": "Museo de Arte Tigre",
+    "provincia": "caba",
+    "cat": "Cultural",
+    "desc": "El Museo de Arte Tigre (MAT) es uno de los principales museos de arte argentino y uno de los edificios más emblemáticos del partido de Tigre. Se encuentra sobre el Paseo Victorica, frente al río Luján, y combina un importante patrimonio artístico con una destacada arquitectura de estilo francés. El edificio fue concebido en 1909 como sede del Tigre Club, una institución social y deportiva destinada a la élite porteña. Fue inaugurado en 1912 y en 1927 incorporó un casino, uno de los más importantes del país. En 1979 fue declarado Monumento Histórico Nacional. El Museo de Arte Tigre abrió sus puertas al público en 2006. Su fachada tiene influencia de la Belle Époque.",
+    "lat": -34.40923,
+    "lng": -58.59104
+  },
+  {
+    "id": "u1780967286866",
+    "name": "Museo de la Reconquista",
+    "provincia": "buenos_aires_prov",
+    "cat": "Cultural",
+    "desc": "El Museo se crea el 4 de agosto de 1967. Su misión es la de fortalecer la identidad cultural a partir de la historia social de Tigre y el hecho histórico del desembarco de Santiago de Liniers, el 4 de Agosto de 1806 en el Río de Las Conchas (Hoy Reconquista) durante la 1° invasión inglesa. Liniers eligió el pueblo de Las Conchas (hoy Tigre) para iniciar su marcha hacia la liberación de Bs As. El edificio es una casa construida en 1940 con características de estilo colonial. Consta de 6 salas que muestran la historia natural y social del Partido de Tigre, objetos históricos patrimoniales, personajes e hitos importantes y una sala para muestras temporales. Cuenta además con la Biblioteca “Lizardo Vidal Molina” especializada en la historia de Tigre, archivo documental, fototeca, mapoteca y hemeroteca.",
+    "lat": -34.4166,
+    "lng": -58.5899
+  },
+  {
+    "id": "u1781379537220e2am",
+    "name": "Cerro de la Gloria",
+    "provincia": "mendoza",
+    "cat": "Cultural",
+    "desc": "El Cerro de la Gloria se encuentra en el Parque General San Martín de la ciudad de Mendoza y es uno de los principales símbolos históricos de la provincia. En su cima se erige el Monumento al Ejército de los Andes, inaugurado en 1914 en homenaje a la gesta libertadora encabezada por el general José de San Martín. La imponente obra escultórica, realizada en bronce por el uruguayo Juan Manuel Ferrari, representa distintos episodios del Cruce de los Andes. El sitio fue declarado Patrimonio Cultural de Mendoza y constituye un importante punto de referencia histórica y artística. Además, desde sus miradores se obtienen amplias vistas de la ciudad y de la cordillera de los Andes, lo que lo convierte en uno de los lugares más visitados por turistas y mendocinos.",
+    "lat": -32.8886,
+    "lng": -68.8858
+  }
+]
