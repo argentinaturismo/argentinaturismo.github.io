@@ -25,12 +25,91 @@
     #page-intro {
       position:fixed; inset:0; z-index:20;
       opacity:1;
+      background:#0d1a2b; /* azul oscuro, evita el negro vacío mientras cargan las fotos */
     }
     #page-mapa {
       position:fixed; inset:0; z-index:10;
       display:none;
       flex-direction:column;
       opacity:0;
+    }
+    #page-provincias {
+      position:fixed; inset:0; z-index:15;
+      display:none;
+      flex-direction:column;
+      background:#000;
+      opacity:0;
+    }
+    #page-categorias {
+      position:fixed; inset:0; z-index:16;
+      display:none;
+      flex-direction:column;
+      background:#000;
+      opacity:0;
+    }
+    .pp-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:24px 40px;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      flex-shrink:0;
+    }
+    .pp-title {
+      font-family:'Playfair Display',serif; font-size:1.7rem; font-weight:700;
+      color:#e8c96a; letter-spacing:0.01em;
+    }
+    .pp-toggle-all { font-size:0.85rem!important; padding:7px 18px!important; border-radius:6px!important; }
+    .pp-grid {
+      flex:1; min-height:0;
+      display:grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap:16px;
+      padding:30px 40px;
+    }
+    .pp-item {
+      display:flex; align-items:center; justify-content:center;
+      text-align:center; padding:10px 12px;
+      border-radius:10px; border:1.5px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.04);
+      color:#e8eaf2;
+      font-family:'Barlow',sans-serif; font-weight:700;
+      font-size:clamp(0.95rem, 1.7vw, 1.55rem);
+      line-height:1.2;
+      cursor:pointer; user-select:none;
+      transition:background .2s ease, border-color .2s ease, color .2s ease, transform .12s ease;
+    }
+    .pp-item:hover { transform:translateY(-2px); }
+    .pp-item.on  { background:rgba(22,163,74,0.16); border-color:rgba(22,163,74,0.55); color:#bbf7d0; }
+    .pp-item.on:hover  { background:rgba(22,163,74,0.26); }
+    .pp-item.off { background:rgba(220,38,38,0.08); border-color:rgba(220,38,38,0.32); color:rgba(255,255,255,0.38); }
+    .pp-item.off:hover { background:rgba(220,38,38,0.16); color:rgba(255,255,255,0.6); }
+    .pp-footer {
+      display:flex; justify-content:center;
+      padding:24px 40px 36px;
+      flex-shrink:0;
+    }
+    .btn-listo-pp {
+      padding:17px 70px;
+      background:#e8c96a; color:#0f1117; border:none; border-radius:8px;
+      font-family:'Barlow',sans-serif; font-weight:700; font-size:1rem;
+      letter-spacing:0.14em; text-transform:uppercase; cursor:pointer;
+      transition:opacity .2s ease, transform .1s ease;
+    }
+    .btn-listo-pp:hover  { opacity:0.86; }
+    .btn-listo-pp:active { transform:translateY(1px); }
+    .pp-grid-cat {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+    }
+    @media (max-width:900px) {
+      .pp-grid { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(6, 1fr); }
+      .pp-grid-cat { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); }
+    }
+    @media (max-width:560px) {
+      .pp-grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(8, 1fr); gap:10px; padding:20px; }
+      .pp-grid-cat { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(5, 1fr); }
+      .pp-header { padding:18px 20px; }
+      .pp-title { font-size:1.25rem; }
     }
 
 
@@ -54,41 +133,69 @@
       position:absolute; inset:0;
       background-size:cover; background-position:center;
       opacity:0;
-      animation: slideshow 28s infinite;
+      animation: slideshow 80s infinite;
       transform:scale(1);
     }
     .slide span {
       position:absolute; inset:0; display:block;
       background-size:cover; background-position:center;
-      animation: kenburns 28s infinite;
+      animation: kenburns 80s infinite;
     }
-    .slide:nth-child(1) { animation-delay:0s;  }
-    .slide:nth-child(2) { animation-delay:4s;  }
-    .slide:nth-child(3) { animation-delay:8s;  }
-    .slide:nth-child(4) { animation-delay:12s; }
-    .slide:nth-child(5) { animation-delay:16s; }
-    .slide:nth-child(6) { animation-delay:20s; }
-    .slide:nth-child(7) { animation-delay:24s; }
-    .slide:nth-child(1) span { animation-delay:0s;  }
-    .slide:nth-child(2) span { animation-delay:4s;  }
-    .slide:nth-child(3) span { animation-delay:8s;  }
-    .slide:nth-child(4) span { animation-delay:12s; }
-    .slide:nth-child(5) span { animation-delay:16s; }
-    .slide:nth-child(6) span { animation-delay:20s; }
-    .slide:nth-child(7) span { animation-delay:24s; }
+    /* La primera diapositiva arranca visible de inmediato;
+       al completar la vuelta, la animación la retoma con delay negativo */
+    .slide:nth-child(1)  { opacity:1; animation-delay:-0.5s; }
+    .slide:nth-child(2)  { animation-delay:4s;   }
+    .slide:nth-child(3)  { animation-delay:8s;   }
+    .slide:nth-child(4)  { animation-delay:12s;  }
+    .slide:nth-child(5)  { animation-delay:16s;  }
+    .slide:nth-child(6)  { animation-delay:20s;  }
+    .slide:nth-child(7)  { animation-delay:24s;  }
+    .slide:nth-child(8)  { animation-delay:28s;  }
+    .slide:nth-child(9)  { animation-delay:32s;  }
+    .slide:nth-child(10) { animation-delay:36s;  }
+    .slide:nth-child(11) { animation-delay:40s;  }
+    .slide:nth-child(12) { animation-delay:44s;  }
+    .slide:nth-child(13) { animation-delay:48s;  }
+    .slide:nth-child(14) { animation-delay:52s;  }
+    .slide:nth-child(15) { animation-delay:56s;  }
+    .slide:nth-child(16) { animation-delay:60s;  }
+    .slide:nth-child(17) { animation-delay:64s;  }
+    .slide:nth-child(18) { animation-delay:68s;  }
+    .slide:nth-child(19) { animation-delay:72s;  }
+    .slide:nth-child(20) { animation-delay:76s;  }
+    .slide:nth-child(1)  span { animation-delay:-0.5s; }
+    .slide:nth-child(2)  span { animation-delay:4s;   }
+    .slide:nth-child(3)  span { animation-delay:8s;   }
+    .slide:nth-child(4)  span { animation-delay:12s;  }
+    .slide:nth-child(5)  span { animation-delay:16s;  }
+    .slide:nth-child(6)  span { animation-delay:20s;  }
+    .slide:nth-child(7)  span { animation-delay:24s;  }
+    .slide:nth-child(8)  span { animation-delay:28s;  }
+    .slide:nth-child(9)  span { animation-delay:32s;  }
+    .slide:nth-child(10) span { animation-delay:36s;  }
+    .slide:nth-child(11) span { animation-delay:40s;  }
+    .slide:nth-child(12) span { animation-delay:44s;  }
+    .slide:nth-child(13) span { animation-delay:48s;  }
+    .slide:nth-child(14) span { animation-delay:52s;  }
+    .slide:nth-child(15) span { animation-delay:56s;  }
+    .slide:nth-child(16) span { animation-delay:60s;  }
+    .slide:nth-child(17) span { animation-delay:64s;  }
+    .slide:nth-child(18) span { animation-delay:68s;  }
+    .slide:nth-child(19) span { animation-delay:72s;  }
+    .slide:nth-child(20) span { animation-delay:76s;  }
 
     @keyframes slideshow {
-      0%     { opacity:0; }
-      1.8%   { opacity:1; }
-      14.3%  { opacity:1; }
-      16.1%  { opacity:0; }
-      100%   { opacity:0; }
+      0%      { opacity:0; }
+      0.625%  { opacity:1; }
+      5%      { opacity:1; }
+      5.625%  { opacity:0; }
+      100%    { opacity:0; }
     }
     @keyframes kenburns {
-      0%     { transform:scale(1);     }
-      14.3%  { transform:scale(1.025); }
-      16.1%  { transform:scale(1.03);  }
-      100%   { transform:scale(1.03); }
+      0%      { transform:scale(1);     }
+      5%      { transform:scale(1.025); }
+      5.625%  { transform:scale(1.03);  }
+      100%    { transform:scale(1.03); }
     }
 
     /* ── OVERLAY ── */
@@ -228,11 +335,35 @@
 
     /* ── HEADER ── */
     header { background:var(--panel); border-bottom:1px solid var(--border);
-             padding:0 22px; height:54px; display:flex; align-items:center; gap:12px; flex-shrink:0; }
+             padding:0 22px; height:54px; display:flex; align-items:center; gap:12px; flex-shrink:0;
+             position:relative; }
     header .flag { font-size:1.5rem; }
     header h1 { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:900; color:var(--accent); }
     header .subtitle { font-size:0.68rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; }
-    .header-right { margin-left:auto; }
+    .header-right { margin-left:auto; display:flex; gap:10px; }
+    .btn-volver {
+      background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
+      color:var(--accent); border-radius:6px; padding:7px 14px;
+      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
+      cursor:pointer; white-space:nowrap;
+      transition:background .2s ease, border-color .2s ease;
+    }
+    .btn-volver:hover { background:rgba(232,201,106,0.2); border-color:rgba(232,201,106,0.55); }
+    .btn-volver:active { transform:translateY(1px); }
+    .header-count-box {
+      position:absolute; left:340px; top:50%; transform:translateY(-50%);
+      background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
+      color:var(--accent); border-radius:6px; padding:7px 14px;
+      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
+      white-space:nowrap; display:flex; align-items:center;
+    }
+    .header-count-box span {
+      font-family:'Playfair Display',serif; font-weight:900; margin-right:4px;
+    }
+    @media (max-width:760px) {
+      .btn-volver { font-size:0.68rem; padding:6px 10px; }
+      .header-count-box { font-size:0.68rem; padding:6px 10px; left:300px; }
+    }
     .tag { background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.25);
            color:var(--accent); border-radius:20px; padding:3px 10px;
            font-size:0.67rem; letter-spacing:0.08em; font-weight:500; }
@@ -241,7 +372,7 @@
     .main { display:flex; flex:1; overflow:hidden; }
 
     /* ── SIDEBAR ── */
-    aside { width:230px; min-width:210px; background:var(--panel);
+    aside { width:340px; min-width:300px; background:#000;
             border-right:1px solid var(--border); display:flex; flex-direction:column;
             overflow-y:auto; flex-shrink:0; }
     aside::-webkit-scrollbar { width:4px; }
@@ -270,15 +401,6 @@
     .toggle-item.off:hover { background:rgba(220,38,38,0.16); opacity:1; }
     .toggle-item.prov-selected { border-color:var(--accent)!important; box-shadow:0 0 0 1px var(--accent); }
     .cat-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-
-    /* ── FILTERED SITES COUNT BOX ── */
-    .sb-count-box {
-      background:#fff; color:#0f1117;
-      border-radius:6px; padding:8px 12px;
-      font-family:'Barlow',sans-serif; font-size:0.8rem; font-weight:600;
-      text-align:center;
-    }
-    .sb-count-box span { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:900; }
 
     /* ── MAP AREA ── */
     .map-area { flex:1; display:flex; flex-direction:column; overflow:hidden; position:relative; }
@@ -379,51 +501,14 @@
     .leaflet-popup { display:none !important; }
     .crosshair { cursor:crosshair !important; }
 
-    /* ── SIDEBAR TABS ── */
-    .sidebar-tabs { flex:1; display:flex; flex-direction:column; overflow:hidden; min-height:0; }
-    .sidebar-tab {
-      display:none; flex-direction:column; flex:1; min-height:0;
-      padding:12px 11px;
+    /* ── PANEL DE INFORMACIÓN (único contenido del sidebar) ── */
+    .info-panel-full {
+      flex:1; min-height:0; overflow-y:hidden;
+      display:flex; flex-direction:column;
+      padding:16px 14px;
     }
-    .sidebar-tab.active { display:flex; }
-    .tab-header {
-      display:flex; align-items:center; justify-content:space-between;
-      margin-bottom:10px; flex-shrink:0;
-    }
-    .tab-title {
-      font-family:'Playfair Display',serif; font-size:0.92rem; font-weight:700;
-      color:var(--accent);
-    }
-    .tab-list {
-      flex:1; min-height:0; overflow-y:auto;
-      display:flex; flex-direction:column; gap:4px;
-      margin-bottom:10px;
-    }
-    .tab-list::-webkit-scrollbar { width:4px; }
-    .tab-list::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
-    .tab-list .toggle-item { width:100%; }
-    .btn-listo {
-      width:100%; padding:11px; flex-shrink:0;
-      background:var(--accent); color:#0f1117; border:none;
-      border-radius:8px; font-family:'Barlow',sans-serif;
-      font-size:0.85rem; font-weight:700; cursor:pointer;
-      transition:opacity .2s, transform .1s;
-    }
-    .btn-listo:hover  { opacity:0.86; }
-    .btn-listo:active { transform:translateY(1px); }
-
-    /* TAB 3 — site description (black) */
-    .tab-info {
-      background:#000;
-    }
-    .tab-info .tab-title { color:var(--accent); }
-    .tab-info-back {
-      background:none; border:1px solid #333; color:#888;
-      border-radius:5px; padding:3px 9px; font-size:0.66rem;
-      cursor:pointer; font-family:'Barlow',sans-serif; transition:color .2s;
-    }
-    .tab-info-back:hover { color:#fff; border-color:#666; }
-    .tab-info-
+    .info-panel-full::-webkit-scrollbar { width:4px; }
+    .info-panel-full::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
     .tab-info-placeholder {
       font-size:0.78rem; color:#666; font-style:italic;
       line-height:1.7; text-align:center; margin-top:30px; padding:0 8px;
@@ -441,10 +526,16 @@
     }
     .tab-info-content .tic-desc {
       font-size:0.82rem; color:#ccc; line-height:1.7;
+      text-align:justify; text-justify:inter-word;
+      hyphens:auto; -webkit-hyphens:auto;
+      overflow-wrap:break-word;
     }
   
 
   </style>
+  <link rel="preload" as="image" href="https://commons.wikimedia.org/wiki/Special:FilePath/Cataratas_Iguazu_vista_general.JPG?width=2400" />
+  <link rel="preload" as="image" href="https://commons.wikimedia.org/wiki/Special:FilePath/Quebrada_de_las_Conchas-_Salta-.jpg?width=2400" />
+  <link rel="preload" as="image" href="https://commons.wikimedia.org/wiki/Special:FilePath/99-Quebrada_de_Humahuaca.jpg?width=2400" />
 </head>
 <body>
 
@@ -458,7 +549,20 @@
     <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/ACONCAGUA-2010.JPG?width=2400')"></span></div>
     <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Glaciar_Perito_Moreno26_-_Argentina.JPG?width=2400')"></span></div>
     <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Bariloche-_Argentina.jpg?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Obelisco_en_Buenos_Aires.JPG?width=2400')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Avenida_9_de_Julio,_Buenos_Aires_(40089810910).jpg?width=2400')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Bodega_Dante_Robino,_Mendoza.jpg?width=2400')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Esteros_del_Ibera_Laguna.JPG?width=2400')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Buenos_Aires_Caminito_1.jpg?width=2400')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Vista_desde_el_aire_del_Cementerio_de_la_Recoleta_01.jpg?width=2400')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Manzana_Jesuita,_C%C3%B3rdoba,_Argentina_-_panoramio.jpg?width=2400')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/View_of_Puerto_Madero.jpg?width=2400')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Casa_de_tucuman_-_panoramio.jpg?width=2400')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Mar_del_Plata.jpg?width=2400')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Los_Glaciares_National_Park_(16730819361).jpg?width=2400')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Ruinas_Jesuiticas_San_Ignacio_Mini.JPG?width=2400')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Salinas_grandes._Inmensidad.jpg?width=2400')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Casa_Rosada_buenos_aires.JPG?width=2400')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Buenos_Aires_-_Avenida_de_Mayo_the_Congress_and_La_Inmobiliaria_-_6976.jpg?width=2400')"></span></div>
   </div>
 
   <div class="overlay"></div>
@@ -501,7 +605,20 @@
       'Mendoza · Aconcagua',
       'Santa Cruz · Glaciar Perito Moreno',
       'Río Negro · Bariloche',
-      'Buenos Aires · El Obelisco'
+      'Buenos Aires · Av. 9 de Julio y el Obelisco',
+      'Mendoza · Viñedos',
+      'Corrientes · Esteros del Iberá',
+      'Buenos Aires · La Boca, Caminito',
+      'Buenos Aires · Cementerio de la Recoleta',
+      'Córdoba · Manzana Jesuítica',
+      'Buenos Aires · Puerto Madero',
+      'Tucumán · Casa Histórica de la Independencia',
+      'Buenos Aires · Mar del Plata',
+      'Santa Cruz · Parque Nacional Los Glaciares',
+      'Misiones · Ruinas Jesuíticas de San Ignacio Miní',
+      'Jujuy / Salta · Salinas Grandes',
+      'Buenos Aires · Casa Rosada',
+      'Buenos Aires · Congreso y Avenida de Mayo'
     ];
     const el = document.getElementById('caption');
     let i = 0;
@@ -511,7 +628,51 @@
       setTimeout(() => { el.textContent = captions[i]; el.style.opacity = 0.55; }, 250);
     }, 4000);
     el.style.transition = 'opacity .3s ease';
+
+    // Precarga de la primera imagen para eliminar el retardo inicial.
+    // El primer slide arranca con opacity:1 en CSS pero si la imagen aún
+    // no descargó se ve el fondo. Este código la carga como objeto Image
+    // y hace un fade-in suave cuando esté lista.
+    (function() {
+      var firstSpan = document.querySelector('.slide:nth-child(1) span');
+      if (!firstSpan) return;
+      var url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Cataratas_Iguazu_vista_general.JPG?width=2400';
+      var img = new Image();
+      img.onload = function() {
+        firstSpan.style.backgroundImage = "url('" + url + "')";
+        firstSpan.style.transition = 'opacity 0.8s ease';
+        firstSpan.style.opacity = '0';
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() { firstSpan.style.opacity = '1'; });
+        });
+      };
+      img.src = url;
+    })();
   </script>
+</div>
+
+<!-- ═══════════════════  SELECCIÓN DE PROVINCIAS  ═══════════════════ -->
+<div id="page-provincias">
+  <div class="pp-header">
+    <div class="pp-title">Seleccione las provincias</div>
+    <button class="toggle-all-btn pp-toggle-all state-off" id="btn-all-prov-intro">Habilitar</button>
+  </div>
+  <div class="pp-grid" id="grid-provincias-intro"></div>
+  <div class="pp-footer">
+    <button class="btn-listo-pp" id="btn-provincias-listo" type="button">Listo</button>
+  </div>
+</div>
+
+<!-- ═══════════════════  SELECCIÓN DE TIPOS DE TURISMO  ═══════════════════ -->
+<div id="page-categorias">
+  <div class="pp-header">
+    <div class="pp-title">Seleccione tipos de turismo</div>
+    <button class="toggle-all-btn pp-toggle-all state-off" id="btn-all-cats-intro">Habilitar</button>
+  </div>
+  <div class="pp-grid pp-grid-cat" id="grid-categorias-intro"></div>
+  <div class="pp-footer">
+    <button class="btn-listo-pp" id="btn-categorias-listo" type="button">Listo</button>
+  </div>
 </div>
 
 <!-- ═══════════════════  MAPA  ═══════════════════ -->
@@ -523,65 +684,29 @@
     <h1>Argentina Turismo</h1>
     <div class="subtitle">Mapa Interactivo de Sitios Turísticos</div>
   </div>
+  <div class="header-count-box" id="header-count-box"><span id="sb-count-num">0</span> sitios</div>
   <div class="header-right">
+    <button class="btn-volver" id="btn-volver-provincias" type="button">Volver a Provincias</button>
+    <button class="btn-volver" id="btn-volver-sitios" type="button">Volver a Sitios</button>
   </div>
 </header>
 
 <div class="main">
 
-  <!-- SIDEBAR -->
+  <!-- SIDEBAR: solo descripción del sitio (negro) -->
   <aside>
-    <div class="sidebar-tabs">
-
-      <!-- TAB 1: PROVINCIAS -->
-      <div class="sidebar-tab active" id="tab-provincias">
-        <div class="tab-header">
-          <div class="tab-title">Seleccione las provincias</div>
-          <button class="toggle-all-btn state-on" id="btn-all-prov">Inhabilitar</button>
-        </div>
-        <div class="tab-list" id="grid-provincias"></div>
-        <button class="btn-listo" id="btn-tab1-listo">Listo</button>
+    <div class="info-panel-full" id="info-panel-full">
+      <div class="tab-info-placeholder" id="tab-info-placeholder">
+        Hacé clic en un sitio turístico del mapa para ver su información aquí.
       </div>
-
-      <!-- TAB 2: TIPOS DE TURISMO -->
-      <div class="sidebar-tab" id="tab-categorias">
-        <div class="tab-header">
-          <div class="tab-title">Seleccione tipos de turismo</div>
-          <button class="toggle-all-btn state-on" id="btn-all-cats">Inhabilitar</button>
+      <div class="tab-info-content" id="tab-info-content">
+        <div class="tic-header">
+          <span class="tic-cat" id="tic-cat"></span>
+          <span class="tic-name" id="tic-name"></span>
         </div>
-        <div class="tab-list" id="grid-categorias"></div>
-        <button class="btn-listo" id="btn-tab2-listo">Listo</button>
-      </div>
-
-      <!-- TAB 3: INFO DEL SITIO (negro) -->
-      <div class="sidebar-tab tab-info" id="tab-info">
-        <div class="tab-header">
-          <div class="tab-title">Información del sitio</div>
-          <button class="tab-info-back" id="btn-tab3-back">‹ Filtros</button>
-        </div>
-        <div class="tab-info-body">
-          <div class="tab-info-placeholder" id="tab-info-placeholder">
-            Hacé clic en un sitio turístico del mapa para ver su información aquí.
-          </div>
-          <div class="tab-info-content" id="tab-info-content">
-            <div class="tic-header">
-              <span class="tic-cat" id="tic-cat"></span>
-              <span class="tic-name" id="tic-name"></span>
-            </div>
-            <div class="tic-desc" id="tic-desc"></div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- CONTADOR DE SITIOS FILTRADOS -->
-    <div class="sidebar-section">
-      <div class="sb-count-box" id="sb-count-box">
-        <span id="sb-count-num">0</span> sitios visibles
+        <div class="tic-desc" id="tic-desc"></div>
       </div>
     </div>
-
   </aside>
 
   <!-- MAP AREA -->
@@ -630,16 +755,18 @@
 <script>
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
 const CATEGORIAS = [
-  { id:'Cultural',     label:'Cultural',     color:'#a855f7' },
-  { id:'Histórico',    label:'Histórico',    color:'#f59e0b' },
-  { id:'Natural',      label:'Natural',      color:'#22c55e' },
-  { id:'Religioso',    label:'Religioso',    color:'#facc15' },
-  { id:'Gastronómico', label:'Gastronómico', color:'#ef4444' },
-  { id:'Aventura',     label:'Aventura',     color:'#f97316' },
-  { id:'Urbano',       label:'Urbano',       color:'#3b82f6' },
-  { id:'Rural',        label:'Rural',        color:'#d97706' },
-  { id:'Eventos',      label:'Eventos',      color:'#ec4899' },
-  { id:'Bienestar',    label:'Bienestar',    color:'#06b6d4' },
+  { id:'Aventura',         label:'Aventura',         color:'#f97316' },
+  { id:'Bienestar',        label:'Bienestar',        color:'#06b6d4' },
+  { id:'Cultural',         label:'Cultural',         color:'#a855f7' },
+  { id:'Deportivo',        label:'Deportivo',        color:'#84cc16' },
+  { id:'Entretenimiento',  label:'Entretenimiento',  color:'#6366f1' },
+  { id:'Eventos',          label:'Eventos',          color:'#ec4899' },
+  { id:'Gastronómico',     label:'Gastronómico',     color:'#ef4444' },
+  { id:'Histórico',        label:'Histórico',        color:'#f59e0b' },
+  { id:'Natural',          label:'Natural',          color:'#22c55e' },
+  { id:'Religioso',        label:'Religioso',        color:'#facc15' },
+  { id:'Rural',            label:'Rural',            color:'#d97706' },
+  { id:'Urbano',           label:'Urbano',           color:'#3b82f6' },
 ];
 
 const PROVINCIAS_LIST = [
@@ -672,8 +799,8 @@ const PROVINCIAS_LIST = [
 const LS_KEY = 'arg_turismo_sitios';
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
-const activeProv = new Set(PROVINCIAS_LIST.map(p => p.key));
-const activeCats  = new Set(CATEGORIAS.map(c => c.id));
+const activeProv = new Set();
+const activeCats  = new Set();
 let SITIOS = [];
 let vistaActual = 'argentina', provActual = null;
 let mapArg = null, mapProv = null, clusterArg = null, clusterProv = null;
@@ -708,86 +835,87 @@ async function loadSitios() {
   try { SITIOS = JSON.parse(localStorage.getItem(LS_KEY)) || []; } catch(e) { SITIOS = []; }
 }
 
-// ─── BUILD GRIDS ──────────────────────────────────────────────────────────────
-function buildGrids() {
-  const gp = document.getElementById('grid-provincias');
-  gp.innerHTML = '';
+// ─── PROVINCIAS INTRO (pantalla completa, antes de entrar al mapa) ────────────
+const provIntroEls = {};
+function buildProvinciasIntro() {
+  const grid = document.getElementById('grid-provincias-intro');
+  if (!grid) return;
+  grid.innerHTML = '';
   const sortedProv = [...PROVINCIAS_LIST].sort((a,b) => a.label.localeCompare(b.label, 'es'));
   sortedProv.forEach(p => {
     const el = document.createElement('div');
-    el.className = 'toggle-item on';
+    el.className = 'pp-item ' + (activeProv.has(p.key) ? 'on' : 'off');
     el.textContent = p.label;
-    el.addEventListener('click', () => onProvClick(p.key, el));
-    gp.appendChild(el);
-    provEls[p.key] = el;
+    el.addEventListener('click', () => {
+      if (activeProv.has(p.key)) { activeProv.delete(p.key); el.classList.replace('on','off'); }
+      else                       { activeProv.add(p.key);    el.classList.replace('off','on'); }
+      updateProvIntroBtn();
+    });
+    grid.appendChild(el);
+    provIntroEls[p.key] = el;
   });
-  const gc = document.getElementById('grid-categorias');
-  gc.innerHTML = '';
-  CATEGORIAS.forEach(c => {
+  updateProvIntroBtn();
+}
+
+function updateProvIntroBtn() {
+  const btn = document.getElementById('btn-all-prov-intro');
+  if (!btn) return;
+  if (activeProv.size > 0) { btn.textContent = 'Inhabilitar'; btn.className = 'toggle-all-btn pp-toggle-all state-on'; }
+  else                     { btn.textContent = 'Habilitar';   btn.className = 'toggle-all-btn pp-toggle-all state-off'; }
+}
+
+document.getElementById('btn-all-prov-intro').addEventListener('click', () => {
+  if (activeProv.size > 0) {
+    PROVINCIAS_LIST.forEach(p => { activeProv.delete(p.key); provIntroEls[p.key] && provIntroEls[p.key].classList.replace('on','off'); });
+  } else {
+    PROVINCIAS_LIST.forEach(p => { activeProv.add(p.key); provIntroEls[p.key] && provIntroEls[p.key].classList.replace('off','on'); });
+  }
+  updateProvIntroBtn();
+});
+
+// ─── TIPOS DE TURISMO INTRO (pantalla completa, antes de entrar al mapa) ──────
+const catIntroEls = {};
+function buildCategoriasIntro() {
+  const grid = document.getElementById('grid-categorias-intro');
+  if (!grid) return;
+  grid.innerHTML = '';
+  const sortedCats = [...CATEGORIAS].sort((a,b) => a.label.localeCompare(b.label, 'es'));
+  sortedCats.forEach(c => {
     const el = document.createElement('div');
-    el.className = 'toggle-item on';
-    el.innerHTML = `<div class="cat-dot" style="background:${c.color};box-shadow:0 0 4px ${c.color}80;"></div><span>${c.label}</span>`;
+    el.className = 'pp-item ' + (activeCats.has(c.id) ? 'on' : 'off');
+    el.textContent = c.label;
     el.addEventListener('click', () => {
       if (activeCats.has(c.id)) { activeCats.delete(c.id); el.classList.replace('on','off'); }
       else                      { activeCats.add(c.id);    el.classList.replace('off','on'); }
-      updateCatBtn(); refresh();
+      updateCatIntroBtn();
     });
-    gc.appendChild(el);
-    catEls[c.id] = el;
+    grid.appendChild(el);
+    catIntroEls[c.id] = el;
   });
+  updateCatIntroBtn();
 }
 
-// ─── TAB NAVIGATION ───────────────────────────────────────────────────────────
-function showSidebarTab(tabId) {
-  document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
+function updateCatIntroBtn() {
+  const btn = document.getElementById('btn-all-cats-intro');
+  if (!btn) return;
+  if (activeCats.size > 0) { btn.textContent = 'Inhabilitar'; btn.className = 'toggle-all-btn pp-toggle-all state-on'; }
+  else                     { btn.textContent = 'Habilitar';   btn.className = 'toggle-all-btn pp-toggle-all state-off'; }
 }
 
-document.getElementById('btn-tab1-listo').addEventListener('click', () => {
-  showSidebarTab('tab-categorias');
-});
-
-document.getElementById('btn-tab2-listo').addEventListener('click', () => {
-  showSidebarTab('tab-info');
-});
-
-document.getElementById('btn-tab3-back').addEventListener('click', () => {
-  showSidebarTab('tab-provincias');
-});
-
-// ─── FILTERED SITES COUNT ─────────────────────────────────────────────────────
-function updateCountBox(n) {
-  document.getElementById('sb-count-num').textContent = n;
-}
-
-// ─── TOGGLE ALL ───────────────────────────────────────────────────────────────
-const btnAllProv = document.getElementById('btn-all-prov');
-const btnAllCats = document.getElementById('btn-all-cats');
-function updateProvBtn() {
-  if (activeProv.size > 0) { btnAllProv.textContent='Inhabilitar'; btnAllProv.className='toggle-all-btn state-on'; }
-  else                     { btnAllProv.textContent='Habilitar';   btnAllProv.className='toggle-all-btn state-off'; }
-}
-function updateCatBtn() {
-  if (activeCats.size > 0) { btnAllCats.textContent='Inhabilitar'; btnAllCats.className='toggle-all-btn state-on'; }
-  else                     { btnAllCats.textContent='Habilitar';   btnAllCats.className='toggle-all-btn state-off'; }
-}
-btnAllProv.addEventListener('click', () => {
-  if (activeProv.size > 0) {
-    PROVINCIAS_LIST.forEach(p => { activeProv.delete(p.key); provEls[p.key] && provEls[p.key].classList.replace('on','off'); });
-    if (vistaActual === 'provincia') cerrarProvincia();
-  } else {
-    PROVINCIAS_LIST.forEach(p => { activeProv.add(p.key); provEls[p.key] && provEls[p.key].classList.replace('off','on'); });
-  }
-  updateProvBtn(); refresh();
-});
-btnAllCats.addEventListener('click', () => {
+document.getElementById('btn-all-cats-intro').addEventListener('click', () => {
   if (activeCats.size > 0) {
-    CATEGORIAS.forEach(c => { activeCats.delete(c.id); catEls[c.id] && catEls[c.id].classList.replace('on','off'); });
+    CATEGORIAS.forEach(c => { activeCats.delete(c.id); catIntroEls[c.id] && catIntroEls[c.id].classList.replace('on','off'); });
   } else {
-    CATEGORIAS.forEach(c => { activeCats.add(c.id); catEls[c.id] && catEls[c.id].classList.replace('off','on'); });
+    CATEGORIAS.forEach(c => { activeCats.add(c.id); catIntroEls[c.id] && catIntroEls[c.id].classList.replace('off','on'); });
   }
-  updateCatBtn(); refresh();
+  updateCatIntroBtn();
 });
+
+// ─── FILTERED SITES COUNT (sin recuadro visible; se mantiene por compatibilidad) ─
+function updateCountBox(n) {
+  const elx = document.getElementById('sb-count-num');
+  if (elx) elx.textContent = n;
+}
 
 // ─── MAP HELPERS ──────────────────────────────────────────────────────────────
 function catById(id) { return CATEGORIAS.find(c => c.id === id); }
@@ -872,7 +1000,7 @@ function renderArgentina() {
 function onProvClick(key, el) {
   if (!activeProv.has(key)) {
     activeProv.add(key); el.classList.replace('off','on');
-    updateProvBtn(); refresh(); return;
+    refresh(); return;
   }
   if (vistaActual === 'provincia' && provActual === key) { cerrarProvincia(); return; }
   if (provActual) provEls[provActual] && provEls[provActual].classList.remove('prov-selected');
@@ -972,13 +1100,9 @@ function setStep(step) {
   }
 }
 
-// ─── MAP CLICK → SET ORIGIN ───────────────────────────────────────────────────
+// ─── MAP CLICK → SET ORIGIN (desactivado; se reincorporará con nuevo diseño) ──
 function onMapClick(e) {
-  if (pickStep !== 'origin') return;
-  const { lat, lng } = e.latlng;
-  originLatLng = { lat, lng };
-  placeOriginMarker(lat, lng);
-  setStep('dest');
+  // funcionalidad de origen/destino desactivada temporalmente
 }
 
 // ─── ORIGIN MARKER ────────────────────────────────────────────────────────────
@@ -1022,7 +1146,7 @@ function showSiteInfo(s) {
       ).addTo(m);
   }
 
-  // Tab 3 content — type + name + description
+  // Panel de información — tipo + nombre + descripción
   document.getElementById('tic-cat').textContent  = cat.id;
   document.getElementById('tic-cat').style.cssText = `background:${cat.color};color:#000;`;
   document.getElementById('tic-name').textContent = s.name;
@@ -1031,8 +1155,27 @@ function showSiteInfo(s) {
   document.getElementById('tab-info-placeholder').style.display = 'none';
   document.getElementById('tab-info-content').style.display     = 'block';
 
-  // Switch to tab 3 so the info is visible
-  showSidebarTab('tab-info');
+  fitDescriptionText();
+}
+
+// ─── AJUSTE AUTOMÁTICO DE TEXTO (evita scroll, reduce 1px por vez) ────────────
+function fitDescriptionText() {
+  const desc  = document.getElementById('tic-desc');
+  const panel = document.getElementById('info-panel-full');
+  if (!desc || !panel) return;
+
+  const BASE_PX = 13;  // equivalente a 0.82rem con raíz de 16px
+  const MIN_PX  = 9;   // tamaño mínimo legible
+
+  let fontSize = BASE_PX;
+  desc.style.fontSize = fontSize + 'px';
+
+  let guard = 0;
+  while (panel.scrollHeight > panel.clientHeight && fontSize > MIN_PX && guard < 30) {
+    fontSize -= 1;
+    desc.style.fontSize = fontSize + 'px';
+    guard++;
+  }
 }
 
 // ─── ROUTE CALCULATION ────────────────────────────────────────────────────────
@@ -1096,72 +1239,107 @@ document.getElementById('mtb-close').addEventListener('click', () => {
 // ─── INIT (called after transition) ──────────────────────────────────────────
 async function initApp() {
   await loadSitios();
-  buildGrids();
-  setStep('origin');
+  // NOTA: la selección de origen/destino y el cálculo de distancia/tiempo
+  // se reincorporará más adelante con un nuevo diseño. Por ahora queda
+  // desactivada (ver onMapClick) y el banner permanece oculto.
   initMapArgentina();
 }
 
-// ─── LANDING CAPTIONS ────────────────────────────────────────────────────────
-(function() {
-  var introCapEl = document.getElementById('caption');
-  if (!introCapEl) return;
-  var caps = [
-    'Misiones \u00b7 Cataratas del Igua\u00fa',
-    'Salta \u00b7 Quebrada de las Conchas',
-    'Jujuy \u00b7 Quebrada de Humahuaca',
-    'Mendoza \u00b7 Aconcagua',
-    'Santa Cruz \u00b7 Glaciar Perito Moreno',
-    'R\u00edo Negro \u00b7 Bariloche',
-    'Buenos Aires \u00b7 El Obelisco'
-  ];
-  introCapEl.style.transition = 'opacity .3s ease';
-  var ci = 0;
-  setInterval(function() {
-    ci = (ci + 1) % caps.length;
-    introCapEl.style.opacity = 0;
-    setTimeout(function() {
-      introCapEl.textContent = caps[ci];
-      introCapEl.style.opacity = 0.55;
-    }, 250);
-  }, 4000);
-})();
-
-
-// ─── TRANSITION: Intro → Map ──────────────────────────────────────────────────
+// ─── TRANSITIONS: Intro → Provincias → Mapa ───────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
-  var btnEntrar = document.getElementById('btn-entrar');
-  if (!btnEntrar) { console.error('btn-entrar not found'); return; }
 
-  btnEntrar.addEventListener('click', function() {
-    var intro  = document.getElementById('page-intro');
-    var mapaEl = document.getElementById('page-mapa');
+  function fadeSwap(fromEl, toEl, toDisplay, afterShown) {
+    fromEl.style.transition = 'opacity 1.1s ease';
+    fromEl.style.opacity    = '0';
 
-    // Step 1: fade out intro
-    intro.style.transition = 'opacity 1.1s ease';
-    intro.style.opacity    = '0';
-
-    // Step 2: after 0.5s make map block visible (still transparent)
     setTimeout(function() {
-      intro.style.display = 'none';
-      mapaEl.style.display = 'flex';
+      fromEl.style.display = 'none';
+      toEl.style.display   = toDisplay;
 
-      // Force browser reflow before starting fade-in
-      void mapaEl.offsetHeight;
+      // Force reflow before starting fade-in
+      void toEl.offsetHeight;
 
-      mapaEl.style.transition = 'opacity 1.1s ease';
-      mapaEl.style.opacity    = '1';
+      toEl.style.transition = 'opacity 1.1s ease';
+      toEl.style.opacity    = '1';
 
-      // Step 3: init Leaflet map
-      if (typeof initApp === 'function') {
-        initApp().then(function() {
+      if (typeof afterShown === 'function') afterShown();
+    }, 550);
+  }
+
+  // Build the fullscreen province/category grids as soon as the page loads
+  // (they don't depend on Leaflet or sitios.json, so they're ready instantly)
+  if (typeof buildProvinciasIntro === 'function') buildProvinciasIntro();
+  if (typeof buildCategoriasIntro === 'function') buildCategoriasIntro();
+
+  // Step 1: Entrar → pantalla de selección de provincias
+  var btnEntrar = document.getElementById('btn-entrar');
+  if (btnEntrar) {
+    btnEntrar.addEventListener('click', function() {
+      var intro = document.getElementById('page-intro');
+      var pp    = document.getElementById('page-provincias');
+      fadeSwap(intro, pp, 'flex');
+    });
+  }
+
+  // Step 2: Listo (provincias) → pantalla de tipos de turismo
+  var btnProvinciasListo = document.getElementById('btn-provincias-listo');
+  if (btnProvinciasListo) {
+    btnProvinciasListo.addEventListener('click', function() {
+      var pp  = document.getElementById('page-provincias');
+      var cat = document.getElementById('page-categorias');
+      fadeSwap(pp, cat, 'flex');
+    });
+  }
+
+  // Step 3: Listo (tipos de turismo) → mapa
+  var btnCategoriasListo = document.getElementById('btn-categorias-listo');
+  if (btnCategoriasListo) {
+    btnCategoriasListo.addEventListener('click', function() {
+      var cat    = document.getElementById('page-categorias');
+      var mapaEl = document.getElementById('page-mapa');
+      fadeSwap(cat, mapaEl, 'flex', function() {
+        // Si el mapa ya fue inicializado antes (el usuario volvió y avanzó
+        // de nuevo), no se vuelve a crear el mapa de Leaflet — solo se
+        // refresca el filtrado de sitios con la selección actual.
+        if (typeof mapArg !== 'undefined' && mapArg) {
+          if (typeof refresh === 'function') refresh();
           setTimeout(function() {
-            if (typeof mapArg  !== 'undefined' && mapArg)  mapArg.invalidateSize();
+            mapArg.invalidateSize();
             if (typeof mapProv !== 'undefined' && mapProv) mapProv.invalidateSize();
           }, 150);
-        });
-      }
-    }, 550);
-  });
+          return;
+        }
+        if (typeof initApp === 'function') {
+          initApp().then(function() {
+            setTimeout(function() {
+              if (typeof mapArg  !== 'undefined' && mapArg)  mapArg.invalidateSize();
+              if (typeof mapProv !== 'undefined' && mapProv) mapProv.invalidateSize();
+            }, 150);
+          });
+        }
+      });
+    });
+  }
+
+  // Volver: mapa → pantalla de provincias
+  var btnVolverProvincias = document.getElementById('btn-volver-provincias');
+  if (btnVolverProvincias) {
+    btnVolverProvincias.addEventListener('click', function() {
+      var mapaEl = document.getElementById('page-mapa');
+      var pp     = document.getElementById('page-provincias');
+      fadeSwap(mapaEl, pp, 'flex');
+    });
+  }
+
+  // Volver: mapa → pantalla de tipos de turismo
+  var btnVolverSitios = document.getElementById('btn-volver-sitios');
+  if (btnVolverSitios) {
+    btnVolverSitios.addEventListener('click', function() {
+      var mapaEl = document.getElementById('page-mapa');
+      var cat    = document.getElementById('page-categorias');
+      fadeSwap(mapaEl, cat, 'flex');
+    });
+  }
 });
 
 </script>
