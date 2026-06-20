@@ -4,10 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Argentina Turismo</title>
+
+  <!-- Preconnect: acelera la conexión inicial con los servidores externos -->
+  <link rel="preconnect" href="https://commons.wikimedia.org" crossorigin />
+  <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://unpkg.com" crossorigin />
+
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+
+  <!-- Leaflet sólo se usa en el paso 4 (mapa); se cargan sin bloquear el primer pintado -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  </noscript>
+
   <style>
     :root {
       --bg:#0f1117; --panel:#171c27; --panel2:#1e2436;
@@ -57,23 +73,26 @@
       font-family:'Playfair Display',serif; font-size:1.7rem; font-weight:700;
       color:#e8c96a; letter-spacing:0.01em;
     }
-    .pp-toggle-all { font-size:0.85rem!important; padding:7px 18px!important; border-radius:6px!important; }
-    .pp-grid {
+    .pp-header-noborder { border-bottom: none !important; }
+    .pp-grid, .pp-grid-cat {
       flex:1; min-height:0;
       display:grid;
       grid-template-columns: repeat(6, 1fr);
-      grid-template-rows: repeat(4, 1fr);
+      grid-auto-rows: 70px;
+      align-content: center;
+      justify-content: center;
       gap:16px;
       padding:30px 40px;
     }
+    .pp-grid-cat, .pp-grid-start { align-content: start; }
     .pp-item {
       display:flex; align-items:center; justify-content:center;
-      text-align:center; padding:10px 12px;
+      text-align:center; padding:8px 10px;
       border-radius:10px; border:1.5px solid rgba(255,255,255,0.14);
       background:rgba(255,255,255,0.04);
       color:#e8eaf2;
       font-family:'Barlow',sans-serif; font-weight:700;
-      font-size:clamp(0.95rem, 1.7vw, 1.55rem);
+      font-size:clamp(0.825rem, 1.55vw, 1.425rem);
       line-height:1.2;
       cursor:pointer; user-select:none;
       transition:background .2s ease, border-color .2s ease, color .2s ease, transform .12s ease;
@@ -97,17 +116,11 @@
     }
     .btn-listo-pp:hover  { opacity:0.86; }
     .btn-listo-pp:active { transform:translateY(1px); }
-    .pp-grid-cat {
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(3, 1fr);
-    }
     @media (max-width:900px) {
-      .pp-grid { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(6, 1fr); }
-      .pp-grid-cat { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); }
+      .pp-grid, .pp-grid-cat { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 62px; }
     }
     @media (max-width:560px) {
-      .pp-grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(8, 1fr); gap:10px; padding:20px; }
-      .pp-grid-cat { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(5, 1fr); }
+      .pp-grid, .pp-grid-cat { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 52px; gap:10px; padding:20px; }
       .pp-header { padding:18px 20px; }
       .pp-title { font-size:1.25rem; }
     }
@@ -353,12 +366,12 @@
     .header-count-box {
       position:absolute; left:340px; top:50%; transform:translateY(-50%);
       background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
-      color:var(--accent); border-radius:6px; padding:7px 14px;
-      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
+      color:var(--accent); border-radius:6px; padding:7px 18px;
+      font-family:'Barlow',sans-serif; font-size:1rem; font-weight:600;
       white-space:nowrap; display:flex; align-items:center;
     }
     .header-count-box span {
-      font-family:'Playfair Display',serif; font-weight:900; margin-right:4px;
+      font-family:'Playfair Display',serif; font-weight:900; font-size:1.35rem; margin-right:6px;
     }
     @media (max-width:760px) {
       .btn-volver { font-size:0.68rem; padding:6px 10px; }
@@ -369,14 +382,12 @@
            font-size:0.67rem; letter-spacing:0.08em; font-weight:500; }
 
     /* ── LAYOUT ── */
-    .main { display:flex; flex:1; overflow:hidden; }
+    .main { display:flex; flex:1; min-height:0; overflow:hidden; }
 
     /* ── SIDEBAR ── */
     aside { width:340px; min-width:300px; background:#000;
             border-right:1px solid var(--border); display:flex; flex-direction:column;
-            overflow-y:auto; flex-shrink:0; }
-    aside::-webkit-scrollbar { width:4px; }
-    aside::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
+            overflow-y:hidden; flex-shrink:0; }
     .sidebar-section { padding:7px 11px 6px; border-bottom:1px solid var(--border); }
     .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:5px; }
     .section-label { font-size:0.57rem; font-weight:700; letter-spacing:0.16em;
@@ -404,41 +415,6 @@
 
     /* ── MAP AREA ── */
     .map-area { flex:1; display:flex; flex-direction:column; overflow:hidden; position:relative; }
-
-    @keyframes pulse-step {
-      0%,100% { background-color:rgba(59,130,246,0.10); }
-      50%      { background-color:rgba(59,130,246,0.22); }
-    }
-
-    /* ── ROUTE BAR (above the map) ── */
-    #map-top-banner {
-      position:static; width:100%; flex-shrink:0;
-      display:none; align-items:center; justify-content:center; gap:14px;
-      background:var(--panel2); border-bottom:1px solid var(--border);
-      padding:10px 16px;
-      font-family:'Barlow',sans-serif; color:#fff;
-    }
-    #map-top-banner.visible { display:flex; }
-    #map-top-banner.picking {
-      background:rgba(59,130,246,0.1);
-      animation:pulse-step 1.2s ease-in-out infinite;
-    }
-    .mtb-icon { font-size:1.05rem; flex-shrink:0; }
-    .mtb-text { font-size:0.82rem; font-weight:600; white-space:nowrap; }
-    .mtb-metrics { display:flex; align-items:center; gap:14px; }
-    .mtb-metric { display:flex; flex-direction:column; gap:1px; align-items:center; }
-    .mtb-val { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:700; color:#fff; }
-    .mtb-lbl { font-size:0.58rem; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.09em; }
-    .mtb-sep { width:1px; height:26px; background:rgba(255,255,255,0.15); }
-    .mtb-loading { font-size:0.78rem; color:#e8c96a; white-space:nowrap; }
-    .mtb-error   { font-size:0.76rem; color:#fca5a5; white-space:nowrap; }
-    .mtb-close {
-      background:none; border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.5);
-      border-radius:5px; padding:3px 9px; font-size:0.72rem; cursor:pointer;
-      font-family:'Barlow',sans-serif; transition:color .2s, border-color .2s;
-      flex-shrink:0;
-    }
-    .mtb-close:hover { color:#fff; border-color:rgba(255,255,255,0.5); }
 
     /* ── MAP LABEL tooltip ── */
     .leaflet-tooltip.site-label {
@@ -494,6 +470,13 @@
     /* ── MAPS ── */
     #map-argentina, #map-provincia { width:100%; flex:1; background:#0d1020; }
     #map-provincia { display:none; }
+    .map-version-label {
+      position:absolute; left:10px; bottom:8px; z-index:650;
+      font-family:'Barlow',sans-serif; font-size:0.66rem; font-weight:600;
+      color:rgba(255,255,255,0.55); background:rgba(0,0,0,0.45);
+      padding:3px 8px; border-radius:5px; pointer-events:none;
+      letter-spacing:0.02em;
+    }
 
     /* ── Leaflet ── */
     .leaflet-container { background:#0d1020; }
@@ -501,14 +484,14 @@
     .leaflet-popup { display:none !important; }
     .crosshair { cursor:crosshair !important; }
 
-    /* ── PANEL DE INFORMACIÓN (único contenido del sidebar) ── */
-    .info-panel-full {
-      flex:1; min-height:0; overflow-y:hidden;
+    /* ── PANEL DE INFORMACIÓN (mitad superior del sidebar, con scroll propio) ── */
+    .info-panel-top {
+      flex:1; min-height:0; overflow-y:auto;
       display:flex; flex-direction:column;
       padding:16px 14px;
     }
-    .info-panel-full::-webkit-scrollbar { width:4px; }
-    .info-panel-full::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
+    .info-panel-top::-webkit-scrollbar { width:4px; }
+    .info-panel-top::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
     .tab-info-placeholder {
       font-size:0.78rem; color:#666; font-style:italic;
       line-height:1.7; text-align:center; margin-top:30px; padding:0 8px;
@@ -530,12 +513,212 @@
       hyphens:auto; -webkit-hyphens:auto;
       overflow-wrap:break-word;
     }
+
+    /* ── RECUADROS RÁPIDOS: Días / Horarios / Costo / Mejor época ── */
+    .info-quickfacts {
+      flex-shrink:0; border-top:1px solid var(--border);
+      padding:10px 14px 10px; display:flex; flex-direction:column; gap:6px;
+    }
+    .qf-row { display:flex; gap:6px; }
+    .qf-box {
+      flex:1; min-width:0; padding:5px 7px; border-radius:8px;
+      background:rgba(255,255,255,0.04); border:1px solid var(--border);
+      text-align:center;
+    }
+
+    .qf-lbl {
+      font-size:0.56rem; font-weight:700; color:var(--accent);
+      text-transform:uppercase; letter-spacing:0.06em;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .qf-val {
+      font-size:0.68rem; color:#ddd; margin-top:1px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+
+    /* ── PANEL DE RUTA (parte inferior de la pantalla): origen → destino → distancia/tiempo ── */
+    .info-panel-bottom {
+      flex-shrink:0; border-top:1px solid var(--border);
+      padding:8px 14px 10px; height:104px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:5px; overflow:hidden;
+    }
+    .route-prompt {
+      display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center;
+    }
+    .route-step-icon { font-size:1.15rem; }
+    .route-step-text {
+      font-family:'Barlow',sans-serif; font-size:0.8rem; font-weight:700;
+      color:var(--accent); letter-spacing:0.02em;
+    }
+    .route-step-hint {
+      font-size:0.64rem; color:#777; line-height:1.4; max-width:230px;
+    }
+    .route-loading {
+      font-size:0.74rem; color:var(--accent); text-align:center;
+    }
+    .route-error {
+      font-size:0.7rem; color:#fca5a5; text-align:center; line-height:1.4;
+    }
+    .route-metrics {
+      display:flex; align-items:stretch; gap:8px; width:100%;
+    }
+    .route-metric {
+      flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:0; padding:4px 6px; border-radius:8px;
+      background:rgba(232,201,106,0.07); border:1px solid rgba(232,201,106,0.25);
+    }
+    .route-metric-lbl {
+      font-size:0.54rem; font-weight:700; color:var(--accent);
+      text-transform:uppercase; letter-spacing:0.06em;
+    }
+    .route-metric-val {
+      font-family:'Playfair Display',serif; font-size:0.92rem; font-weight:700; color:#fff;
+    }
+    .route-reset {
+      background:none; border:1px solid var(--border); color:#888;
+      border-radius:6px; padding:3px 10px; font-size:0.64rem;
+      font-family:'Barlow',sans-serif; cursor:pointer; transition:color .2s, border-color .2s;
+    }
+    .route-reset:hover { color:#fff; border-color:#666; }
+
+    /* ── BOTÓN MIS ORÍGENES (header) ── */
+    .btn-origenes-header {
+      position:absolute; left:560px; top:50%; transform:translateY(-50%);
+      background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
+      color:var(--accent); border-radius:6px; padding:7px 14px;
+      font-family:'Barlow',sans-serif; font-size:0.88rem; font-weight:600;
+      cursor:pointer; white-space:nowrap;
+      transition:background .2s ease, border-color .2s ease;
+    }
+    .btn-origenes-header:hover { background:rgba(232,201,106,0.2); border-color:rgba(232,201,106,0.55); }
+
+    /* ── MODAL BACKDROP ── */
+    .mo-backdrop {
+      position:fixed; inset:0; z-index:100;
+      background:rgba(0,0,0,0.72);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .mo-panel {
+      background:#171c27; border:1px solid #2a3050; border-radius:12px;
+      width:min(680px, 96vw); max-height:88vh;
+      display:flex; flex-direction:column; overflow:hidden;
+      box-shadow:0 24px 64px rgba(0,0,0,0.7);
+    }
+
+    /* ── MODAL HEADER ── */
+    .mo-header {
+      display:flex; align-items:center; gap:12px;
+      padding:18px 22px; border-bottom:1px solid #2a3050; flex-shrink:0;
+    }
+    .mo-title { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; color:#e8c96a; }
+    .mo-subtitle { font-size:0.72rem; color:#7a83a6; margin-left:4px; }
+    .mo-close {
+      margin-left:auto; background:none; border:1px solid #2a3050; color:#7a83a6;
+      border-radius:6px; padding:4px 10px; cursor:pointer; font-size:0.8rem;
+      transition:color .2s, border-color .2s;
+    }
+    .mo-close:hover { color:#e8eaf2; border-color:#7a83a6; }
+
+    /* ── FORM ── */
+    .mo-form {
+      padding:16px 22px; border-bottom:1px solid #2a3050; flex-shrink:0;
+      display:none;
+    }
+    .mo-form.visible { display:block; }
+    .mo-form-title { font-size:0.78rem; font-weight:700; color:#e8c96a; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:12px; }
+    .mo-fields {
+      display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;
+    }
+    .mo-field-full { grid-column:1 / -1; }
+    .mo-field-group { display:flex; flex-direction:column; gap:4px; }
+    .mo-label { font-size:0.65rem; font-weight:700; color:#7a83a6; text-transform:uppercase; letter-spacing:0.08em; }
+    .mo-input {
+      background:#0f1117; border:1px solid #2a3050; border-radius:6px;
+      color:#e8eaf2; font-family:'Barlow',sans-serif; font-size:0.82rem;
+      padding:7px 10px; outline:none;
+      transition:border-color .2s;
+    }
+    .mo-input:focus { border-color:#e8c96a; }
+    .mo-input::placeholder { color:#3a4060; }
+    .mo-form-actions { display:flex; gap:8px; justify-content:flex-end; }
+    .mo-btn-cancel {
+      background:none; border:1px solid #2a3050; color:#7a83a6;
+      border-radius:6px; padding:7px 18px; font-family:'Barlow',sans-serif;
+      font-size:0.78rem; font-weight:600; cursor:pointer;
+      transition:color .2s, border-color .2s;
+    }
+    .mo-btn-cancel:hover { color:#e8eaf2; border-color:#7a83a6; }
+    .mo-btn-save-item {
+      background:#e8c96a; color:#0f1117; border:none; border-radius:6px;
+      padding:7px 22px; font-family:'Barlow',sans-serif;
+      font-size:0.78rem; font-weight:700; cursor:pointer;
+      transition:opacity .2s;
+    }
+    .mo-btn-save-item:hover { opacity:0.85; }
+    .mo-error { font-size:0.72rem; color:#fca5a5; margin-top:8px; min-height:16px; }
+
+    /* ── LIST ── */
+    .mo-list-wrap { flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden; }
+    .mo-list-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 22px 8px; flex-shrink:0;
+    }
+    .mo-list-count { font-size:0.72rem; color:#7a83a6; font-weight:600; }
+    .mo-btn-add {
+      background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
+      color:#e8c96a; border-radius:6px; padding:5px 14px;
+      font-family:'Barlow',sans-serif; font-size:0.75rem; font-weight:700;
+      cursor:pointer; transition:background .2s;
+    }
+    .mo-btn-add:hover { background:rgba(232,201,106,0.2); }
+    .mo-btn-add:disabled { opacity:0.4; cursor:not-allowed; }
+    .mo-list { flex:1; overflow-y:auto; padding:0 22px 12px; }
+    .mo-list::-webkit-scrollbar { width:4px; }
+    .mo-list::-webkit-scrollbar-thumb { background:#2a3050; border-radius:4px; }
+    .mo-empty { font-size:0.78rem; color:#3a4060; font-style:italic; text-align:center; margin-top:20px; }
+    .mo-item {
+      display:grid; grid-template-columns:1fr auto;
+      align-items:center; gap:10px;
+      padding:10px 12px; margin-bottom:6px;
+      background:rgba(255,255,255,0.03); border:1px solid #2a3050; border-radius:8px;
+      transition:border-color .2s;
+    }
+    .mo-item:hover { border-color:#3a4060; }
+    .mo-item-info { min-width:0; }
+    .mo-item-name { font-size:0.85rem; font-weight:700; color:#e8eaf2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .mo-item-sub  { font-size:0.7rem; color:#7a83a6; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .mo-item-coords { font-size:0.65rem; color:#4a5370; margin-top:2px; font-family:monospace; }
+    .mo-item-actions { display:flex; gap:6px; flex-shrink:0; }
+    .mo-btn-edit, .mo-btn-del {
+      background:none; border:1px solid #2a3050; border-radius:5px;
+      padding:4px 10px; font-size:0.68rem; font-family:'Barlow',sans-serif;
+      font-weight:600; cursor:pointer; white-space:nowrap;
+      transition:background .15s, color .15s, border-color .15s;
+    }
+    .mo-btn-edit { color:#7a83a6; }
+    .mo-btn-edit:hover { color:#e8c96a; border-color:#e8c96a; background:rgba(232,201,106,0.08); }
+    .mo-btn-del  { color:#7a83a6; }
+    .mo-btn-del:hover  { color:#fca5a5; border-color:rgba(220,38,38,0.5); background:rgba(220,38,38,0.08); }
+
+    /* ── MODAL FOOTER ── */
+    .mo-footer {
+      padding:14px 22px; border-top:1px solid #2a3050; flex-shrink:0;
+      display:flex; justify-content:center;
+    }
+    .mo-btn-guardar {
+      background:#e8c96a; color:#0f1117; border:none; border-radius:8px;
+      padding:13px 60px; font-family:'Barlow',sans-serif;
+      font-size:0.9rem; font-weight:700; letter-spacing:0.12em;
+      text-transform:uppercase; cursor:pointer; transition:opacity .2s;
+    }
+    .mo-btn-guardar:hover { opacity:0.85; }
   
 
   </style>
-  <link rel="preload" as="image" href="https://commons.wikimedia.org/wiki/Special:FilePath/Cataratas_Iguazu_vista_general.JPG?width=2400" />
-  <link rel="preload" as="image" href="https://commons.wikimedia.org/wiki/Special:FilePath/Quebrada_de_las_Conchas-_Salta-.jpg?width=2400" />
-  <link rel="preload" as="image" href="https://commons.wikimedia.org/wiki/Special:FilePath/99-Quebrada_de_Humahuaca.jpg?width=2400" />
+  <link rel="preload" as="image" href="https://commons.wikimedia.org/wiki/Special:FilePath/Cataratas_Iguazu_vista_general.JPG?width=1920" />
+  <link rel="preload" as="image" href="https://commons.wikimedia.org/wiki/Special:FilePath/Quebrada_de_las_Conchas-_Salta-.jpg?width=1920" />
+  <link rel="preload" as="image" href="https://commons.wikimedia.org/wiki/Special:FilePath/99-Quebrada_de_Humahuaca.jpg?width=1920" />
 </head>
 <body>
 
@@ -543,26 +726,26 @@
 <div id="page-intro">
 <!-- SLIDESHOW -->
   <div class="slideshow">
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Cataratas_Iguazu_vista_general.JPG?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Quebrada_de_las_Conchas-_Salta-.jpg?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/99-Quebrada_de_Humahuaca.jpg?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/ACONCAGUA-2010.JPG?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Glaciar_Perito_Moreno26_-_Argentina.JPG?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Bariloche-_Argentina.jpg?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Avenida_9_de_Julio,_Buenos_Aires_(40089810910).jpg?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Bodega_Dante_Robino,_Mendoza.jpg?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Esteros_del_Ibera_Laguna.JPG?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Buenos_Aires_Caminito_1.jpg?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Vista_desde_el_aire_del_Cementerio_de_la_Recoleta_01.jpg?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Manzana_Jesuita,_C%C3%B3rdoba,_Argentina_-_panoramio.jpg?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/View_of_Puerto_Madero.jpg?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Casa_de_tucuman_-_panoramio.jpg?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Mar_del_Plata.jpg?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Los_Glaciares_National_Park_(16730819361).jpg?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Ruinas_Jesuiticas_San_Ignacio_Mini.JPG?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Salinas_grandes._Inmensidad.jpg?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Casa_Rosada_buenos_aires.JPG?width=2400')"></span></div>
-    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Buenos_Aires_-_Avenida_de_Mayo_the_Congress_and_La_Inmobiliaria_-_6976.jpg?width=2400')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Cataratas_Iguazu_vista_general.JPG?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Quebrada_de_las_Conchas-_Salta-.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/99-Quebrada_de_Humahuaca.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/ACONCAGUA-2010.JPG?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Glaciar_Perito_Moreno26_-_Argentina.JPG?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Bariloche-_Argentina.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Avenida_9_de_Julio,_Buenos_Aires_(40089810910).jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Bodega_Dante_Robino,_Mendoza.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Esteros_del_Ibera_Laguna.JPG?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Buenos_Aires_Caminito_1.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Vista_desde_el_aire_del_Cementerio_de_la_Recoleta_01.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Manzana_Jesuita,_C%C3%B3rdoba,_Argentina_-_panoramio.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/View_of_Puerto_Madero.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Casa_de_tucuman_-_panoramio.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Mar_del_Plata.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Los_Glaciares_National_Park_(16730819361).jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Ruinas_Jesuiticas_San_Ignacio_Mini.JPG?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Salinas_grandes._Inmensidad.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Casa_Rosada_buenos_aires.JPG?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Buenos_Aires_-_Avenida_de_Mayo_the_Congress_and_La_Inmobiliaria_-_6976.jpg?width=1920')"></span></div>
   </div>
 
   <div class="overlay"></div>
@@ -636,7 +819,7 @@
     (function() {
       var firstSpan = document.querySelector('.slide:nth-child(1) span');
       if (!firstSpan) return;
-      var url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Cataratas_Iguazu_vista_general.JPG?width=2400';
+      var url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Cataratas_Iguazu_vista_general.JPG?width=1920';
       var img = new Image();
       img.onload = function() {
         firstSpan.style.backgroundImage = "url('" + url + "')";
@@ -653,11 +836,11 @@
 
 <!-- ═══════════════════  SELECCIÓN DE PROVINCIAS  ═══════════════════ -->
 <div id="page-provincias">
-  <div class="pp-header">
+  <div class="pp-header pp-header-noborder">
     <div class="pp-title">Seleccione las provincias</div>
-    <button class="toggle-all-btn pp-toggle-all state-off" id="btn-all-prov-intro">Habilitar</button>
+    <button class="btn-volver btn-habilitar-prov" id="btn-all-prov-intro">Habilitar todo</button>
   </div>
-  <div class="pp-grid" id="grid-provincias-intro"></div>
+  <div class="pp-grid pp-grid-start" id="grid-provincias-intro"></div>
   <div class="pp-footer">
     <button class="btn-listo-pp" id="btn-provincias-listo" type="button">Listo</button>
   </div>
@@ -665,9 +848,12 @@
 
 <!-- ═══════════════════  SELECCIÓN DE TIPOS DE TURISMO  ═══════════════════ -->
 <div id="page-categorias">
-  <div class="pp-header">
+  <div class="pp-header pp-header-noborder">
     <div class="pp-title">Seleccione tipos de turismo</div>
-    <button class="toggle-all-btn pp-toggle-all state-off" id="btn-all-cats-intro">Habilitar</button>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <button class="btn-volver btn-habilitar-cat" id="btn-all-cats-intro">Habilitar todo</button>
+      <button class="btn-volver" id="btn-cats-volver-provincias" type="button">← Volver a Provincias</button>
+    </div>
   </div>
   <div class="pp-grid pp-grid-cat" id="grid-categorias-intro"></div>
   <div class="pp-footer">
@@ -685,6 +871,7 @@
     <div class="subtitle">Mapa Interactivo de Sitios Turísticos</div>
   </div>
   <div class="header-count-box" id="header-count-box"><span id="sb-count-num">0</span> sitios</div>
+  <button class="btn-origenes-header" id="btn-abrir-origenes" type="button">📍 Mis Orígenes</button>
   <div class="header-right">
     <button class="btn-volver" id="btn-volver-provincias" type="button">Volver a Provincias</button>
     <button class="btn-volver" id="btn-volver-sitios" type="button">Volver a Sitios</button>
@@ -693,9 +880,9 @@
 
 <div class="main">
 
-  <!-- SIDEBAR: solo descripción del sitio (negro) -->
+  <!-- SIDEBAR: descripción del sitio (arriba) + selección de ruta (abajo) -->
   <aside>
-    <div class="info-panel-full" id="info-panel-full">
+    <div class="info-panel-top" id="info-panel-top">
       <div class="tab-info-placeholder" id="tab-info-placeholder">
         Hacé clic en un sitio turístico del mapa para ver su información aquí.
       </div>
@@ -707,30 +894,54 @@
         <div class="tic-desc" id="tic-desc"></div>
       </div>
     </div>
+
+    <div class="info-quickfacts" id="info-quickfacts">
+      <div class="qf-row">
+        <div class="qf-box">
+          <div class="qf-lbl">Días de apertura</div>
+          <div class="qf-val" id="qf-dias">—</div>
+        </div>
+        <div class="qf-box">
+          <div class="qf-lbl">Horarios</div>
+          <div class="qf-val" id="qf-horario">—</div>
+        </div>
+      </div>
+      <div class="qf-row">
+        <div class="qf-box">
+          <div class="qf-lbl">Costo de entrada</div>
+          <div class="qf-val" id="qf-costo">—</div>
+        </div>
+        <div class="qf-box">
+          <div class="qf-lbl">Mejor época del año</div>
+          <div class="qf-val" id="qf-epoca">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-panel-bottom" id="info-panel-bottom">
+      <div class="route-prompt" id="route-prompt">
+        <span class="route-step-icon" id="route-step-icon">📍</span>
+        <span class="route-step-text" id="route-step-text">Seleccionar origen</span>
+        <span class="route-step-hint" id="route-step-hint">Hacé clic en cualquier punto del mapa</span>
+      </div>
+      <div class="route-loading" id="route-loading" style="display:none">Calculando ruta…</div>
+      <div class="route-error"   id="route-error"   style="display:none"></div>
+      <div class="route-metrics" id="route-metrics" style="display:none">
+        <div class="route-metric">
+          <div class="route-metric-lbl">Distancia</div>
+          <div class="route-metric-val" id="route-dist">—</div>
+        </div>
+        <div class="route-metric">
+          <div class="route-metric-lbl">Tiempo</div>
+          <div class="route-metric-val" id="route-time">—</div>
+        </div>
+      </div>
+      <button class="route-reset" id="route-reset" style="display:none">↺ Elegir otro origen</button>
+    </div>
   </aside>
 
   <!-- MAP AREA -->
   <div class="map-area">
-
-    <!-- TOP-CENTER BANNER: destino / distancia / tiempo -->
-    <div id="map-top-banner">
-      <span class="mtb-icon" id="mtb-icon">🏛</span>
-      <span class="mtb-text" id="mtb-text">Seleccione destino en el mapa</span>
-      <div class="mtb-loading" id="mtb-loading" style="display:none">Calculando ruta…</div>
-      <div class="mtb-error"   id="mtb-error"   style="display:none"></div>
-      <div class="mtb-metrics" id="mtb-metrics" style="display:none">
-        <div class="mtb-metric">
-          <div class="mtb-val" id="mtb-dist">—</div>
-          <div class="mtb-lbl">Distancia aprox.</div>
-        </div>
-        <div class="mtb-sep"></div>
-        <div class="mtb-metric">
-          <div class="mtb-val" id="mtb-time">—</div>
-          <div class="mtb-lbl">Tiempo aprox.</div>
-        </div>
-      </div>
-      <button class="mtb-close" id="mtb-close">✕</button>
-    </div>
 
     <!-- BANNER PROVINCIA -->
     <div class="map-banner" id="map-banner">
@@ -746,8 +957,67 @@
     <div id="map-argentina"></div>
     <div id="map-provincia"></div>
 
+    <div class="map-version-label">AR-Argentina Turismo v. 26.06.20.01</div>
+
   </div>
 </div>
+
+<!-- ═══════════════════  MODAL MIS ORÍGENES  ═══════════════════ -->
+<div id="modal-origenes" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel">
+    <div class="mo-header">
+      <span class="mo-title">📍 Mis Orígenes</span>
+      <span class="mo-subtitle">Hasta 10 puntos de partida personalizados</span>
+      <button class="mo-close" id="mo-close">✕</button>
+    </div>
+
+    <!-- Formulario agregar/editar -->
+    <div class="mo-form" id="mo-form">
+      <div class="mo-form-title" id="mo-form-title">Agregar origen</div>
+      <div class="mo-fields">
+        <div class="mo-field-group">
+          <label class="mo-label">Provincia</label>
+          <input class="mo-input" id="mo-f-provincia" type="text" placeholder="Ej: Buenos Aires" maxlength="60" />
+        </div>
+        <div class="mo-field-group">
+          <label class="mo-label">Localidad</label>
+          <input class="mo-input" id="mo-f-localidad" type="text" placeholder="Ej: Mar del Plata" maxlength="80" />
+        </div>
+        <div class="mo-field-group mo-field-full">
+          <label class="mo-label">Nombre del sitio</label>
+          <input class="mo-input" id="mo-f-nombre" type="text" placeholder="Ej: Casa de mis padres" maxlength="100" />
+        </div>
+        <div class="mo-field-group">
+          <label class="mo-label">Latitud</label>
+          <input class="mo-input" id="mo-f-lat" type="number" step="any" placeholder="-38.0055" />
+        </div>
+        <div class="mo-field-group">
+          <label class="mo-label">Longitud</label>
+          <input class="mo-input" id="mo-f-lng" type="number" step="any" placeholder="-57.5426" />
+        </div>
+      </div>
+      <div class="mo-form-actions">
+        <button class="mo-btn-cancel" id="mo-btn-cancel" type="button">Cancelar</button>
+        <button class="mo-btn-save-item" id="mo-btn-save-item" type="button">Guardar origen</button>
+      </div>
+      <div class="mo-error" id="mo-error"></div>
+    </div>
+
+    <!-- Lista de orígenes -->
+    <div class="mo-list-wrap">
+      <div class="mo-list-header">
+        <span class="mo-list-count" id="mo-list-count">0 / 10 orígenes</span>
+        <button class="mo-btn-add" id="mo-btn-add" type="button">+ Agregar</button>
+      </div>
+      <div class="mo-list" id="mo-list">
+        <div class="mo-empty" id="mo-empty">No hay orígenes guardados aún.</div>
+      </div>
+    </div>
+
+    <div class="mo-footer">
+      <button class="mo-btn-guardar" id="mo-btn-guardar" type="button">Guardar y cerrar</button>
+    </div>
+  </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -860,8 +1130,8 @@ function buildProvinciasIntro() {
 function updateProvIntroBtn() {
   const btn = document.getElementById('btn-all-prov-intro');
   if (!btn) return;
-  if (activeProv.size > 0) { btn.textContent = 'Inhabilitar'; btn.className = 'toggle-all-btn pp-toggle-all state-on'; }
-  else                     { btn.textContent = 'Habilitar';   btn.className = 'toggle-all-btn pp-toggle-all state-off'; }
+  if (activeProv.size > 0) { btn.textContent = 'Inhabilitar todo'; btn.className = 'btn-volver btn-habilitar-prov'; }
+  else                     { btn.textContent = 'Habilitar todo';   btn.className = 'btn-volver btn-habilitar-prov'; }
 }
 
 document.getElementById('btn-all-prov-intro').addEventListener('click', () => {
@@ -898,8 +1168,8 @@ function buildCategoriasIntro() {
 function updateCatIntroBtn() {
   const btn = document.getElementById('btn-all-cats-intro');
   if (!btn) return;
-  if (activeCats.size > 0) { btn.textContent = 'Inhabilitar'; btn.className = 'toggle-all-btn pp-toggle-all state-on'; }
-  else                     { btn.textContent = 'Habilitar';   btn.className = 'toggle-all-btn pp-toggle-all state-off'; }
+  if (activeCats.size > 0) { btn.textContent = 'Inhabilitar todo'; btn.className = 'btn-volver btn-habilitar-cat'; }
+  else                     { btn.textContent = 'Habilitar todo';   btn.className = 'btn-volver btn-habilitar-cat'; }
 }
 
 document.getElementById('btn-all-cats-intro').addEventListener('click', () => {
@@ -1066,43 +1336,46 @@ document.getElementById('btn-cerrar').addEventListener('click', cerrarProvincia)
 // ─── STEP LOGIC ───────────────────────────────────────────────────────────────
 function setStep(step) {
   pickStep = step;
-  const banner = document.getElementById('map-top-banner');
+  const prompt  = document.getElementById('route-prompt');
+  const icon    = document.getElementById('route-step-icon');
+  const text    = document.getElementById('route-step-text');
+  const hint    = document.getElementById('route-step-hint');
+  const loading = document.getElementById('route-loading');
+  const error   = document.getElementById('route-error');
+  const metrics = document.getElementById('route-metrics');
+  const reset   = document.getElementById('route-reset');
+
+  loading.style.display = 'none';
+  error.style.display   = 'none';
 
   if (step === 'origin') {
-    // Show "Seleccione punto de origen" at top-center of map
-    banner.classList.add('visible','picking');
-    document.getElementById('mtb-icon').style.display    = 'inline';
-    document.getElementById('mtb-icon').textContent      = '📍';
-    document.getElementById('mtb-text').style.display    = 'inline';
-    document.getElementById('mtb-text').textContent      = 'Seleccione punto de origen';
-    document.getElementById('mtb-loading').style.display = 'none';
-    document.getElementById('mtb-error').style.display   = 'none';
-    document.getElementById('mtb-metrics').style.display = 'none';
+    prompt.style.display  = 'flex';
+    icon.textContent      = '📍';
+    text.textContent      = 'Seleccionar origen';
+    hint.textContent      = 'Hacé clic en cualquier punto del mapa';
+    metrics.style.display = 'none';
+    reset.style.display   = 'none';
   } else if (step === 'dest') {
-    // Show "Seleccione destino" at top-center of map
-    banner.classList.add('visible','picking');
-    document.getElementById('mtb-icon').style.display    = 'inline';
-    document.getElementById('mtb-icon').textContent      = '🏛';
-    document.getElementById('mtb-text').style.display    = 'inline';
-    document.getElementById('mtb-text').textContent      = 'Seleccione destino en el mapa';
-    document.getElementById('mtb-loading').style.display = 'none';
-    document.getElementById('mtb-error').style.display   = 'none';
-    document.getElementById('mtb-metrics').style.display = 'none';
+    prompt.style.display  = 'flex';
+    icon.textContent      = '🏛';
+    text.textContent      = 'Seleccionar destino';
+    hint.textContent      = 'Hacé clic en un sitio turístico del mapa';
+    metrics.style.display = 'none';
+    reset.style.display   = 'inline-block';
   } else if (step === 'done') {
-    // Show only distance/time
-    banner.classList.add('visible');
-    banner.classList.remove('picking');
-    document.getElementById('mtb-icon').style.display    = 'none';
-    document.getElementById('mtb-text').style.display    = 'none';
-    document.getElementById('mtb-loading').style.display = 'none';
-    document.getElementById('mtb-error').style.display   = 'none';
-    document.getElementById('mtb-metrics').style.display = 'flex';
+    prompt.style.display  = 'none';
+    metrics.style.display = 'flex';
+    reset.style.display   = 'inline-block';
   }
 }
 
-// ─── MAP CLICK → SET ORIGIN (desactivado; se reincorporará con nuevo diseño) ──
+// ─── MAP CLICK → SET ORIGIN ───────────────────────────────────────────────────
 function onMapClick(e) {
-  // funcionalidad de origen/destino desactivada temporalmente
+  if (pickStep !== 'origin') return;
+  const { lat, lng } = e.latlng;
+  originLatLng = { lat, lng };
+  placeOriginMarker(lat, lng);
+  setStep('dest');
 }
 
 // ─── ORIGIN MARKER ────────────────────────────────────────────────────────────
@@ -1155,42 +1428,22 @@ function showSiteInfo(s) {
   document.getElementById('tab-info-placeholder').style.display = 'none';
   document.getElementById('tab-info-content').style.display     = 'block';
 
-  fitDescriptionText();
-}
-
-// ─── AJUSTE AUTOMÁTICO DE TEXTO (evita scroll, reduce 1px por vez) ────────────
-function fitDescriptionText() {
-  const desc  = document.getElementById('tic-desc');
-  const panel = document.getElementById('info-panel-full');
-  if (!desc || !panel) return;
-
-  const BASE_PX = 13;  // equivalente a 0.82rem con raíz de 16px
-  const MIN_PX  = 9;   // tamaño mínimo legible
-
-  let fontSize = BASE_PX;
-  desc.style.fontSize = fontSize + 'px';
-
-  let guard = 0;
-  while (panel.scrollHeight > panel.clientHeight && fontSize > MIN_PX && guard < 30) {
-    fontSize -= 1;
-    desc.style.fontSize = fontSize + 'px';
-    guard++;
-  }
+  // Recuadros rápidos: Días / Horarios / Costo / Mejor época
+  document.getElementById('qf-dias').textContent    = s.dias    || '—';
+  document.getElementById('qf-horario').textContent = s.horario || '—';
+  document.getElementById('qf-costo').textContent   = s.costo   || '—';
+  document.getElementById('qf-epoca').textContent   = s.epoca   || '—';
 }
 
 // ─── ROUTE CALCULATION ────────────────────────────────────────────────────────
 async function calcRoute(dLat, dLng, s) {
   if (!originLatLng) return;
 
-  // Show loading state in top banner
-  const banner = document.getElementById('map-top-banner');
-  banner.classList.add('visible');
-  banner.classList.remove('picking');
-  document.getElementById('mtb-icon').style.display    = 'none';
-  document.getElementById('mtb-text').style.display    = 'none';
-  document.getElementById('mtb-metrics').style.display = 'none';
-  document.getElementById('mtb-error').style.display   = 'none';
-  document.getElementById('mtb-loading').style.display = 'inline';
+  // Mostrar estado de carga en el panel inferior del sidebar
+  document.getElementById('route-prompt').style.display  = 'none';
+  document.getElementById('route-metrics').style.display = 'none';
+  document.getElementById('route-error').style.display   = 'none';
+  document.getElementById('route-loading').style.display = 'block';
 
   clearRoute();
   try {
@@ -1204,14 +1457,14 @@ async function calcRoute(dLat, dLng, s) {
     const hrs      = Math.floor(totalMin / 60);
     const mins     = totalMin % 60;
 
-    document.getElementById('mtb-dist').textContent = distKm + ' km';
-    document.getElementById('mtb-time').textContent = hrs > 0 ? `${hrs}h ${mins}m` : `${mins} min`;
+    document.getElementById('route-dist').textContent = distKm + ' km';
+    document.getElementById('route-time').textContent = hrs > 0 ? `${hrs}h ${mins}m` : `${mins} min`;
     setStep('done');
 
     const m = activeMap();
     if (m && route.geometry) {
       routePolyline = L.geoJSON(route.geometry, {
-        style:{ color:'#1a1a1a', weight:4.5, opacity:0.9, lineJoin:'round', lineCap:'round' }
+        style:{ color:'#1a1a1a', weight:2, opacity:0.9, lineJoin:'round', lineCap:'round' }
       }).addTo(m);
       // Fit map with extra bottom padding so destination doesn't hide behind info panel
       try {
@@ -1222,13 +1475,14 @@ async function calcRoute(dLat, dLng, s) {
       } catch(e) {}
     }
   } catch(e) {
-    document.getElementById('mtb-loading').style.display = 'none';
-    document.getElementById('mtb-error').style.display   = 'inline';
-    document.getElementById('mtb-error').textContent     = '⚠️ No se pudo calcular la ruta.';
+    document.getElementById('route-loading').style.display = 'none';
+    document.getElementById('route-error').style.display   = 'block';
+    document.getElementById('route-error').textContent     = '⚠️ No se pudo calcular la ruta. Probá con otro destino.';
+    setTimeout(() => { setStep('dest'); }, 2400);
   }
 }
 
-document.getElementById('mtb-close').addEventListener('click', () => {
+document.getElementById('route-reset').addEventListener('click', () => {
   clearRoute();
   originLatLng = null;
   clearOriginMarker();
@@ -1239,9 +1493,7 @@ document.getElementById('mtb-close').addEventListener('click', () => {
 // ─── INIT (called after transition) ──────────────────────────────────────────
 async function initApp() {
   await loadSitios();
-  // NOTA: la selección de origen/destino y el cálculo de distancia/tiempo
-  // se reincorporará más adelante con un nuevo diseño. Por ahora queda
-  // desactivada (ver onMapClick) y el banner permanece oculto.
+  setStep('origin');
   initMapArgentina();
 }
 
@@ -1291,6 +1543,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Volver: tipos de turismo → provincias
+  var btnCatsVolverProv = document.getElementById('btn-cats-volver-provincias');
+  if (btnCatsVolverProv) {
+    btnCatsVolverProv.addEventListener('click', function() {
+      var cat = document.getElementById('page-categorias');
+      var pp  = document.getElementById('page-provincias');
+      fadeSwap(cat, pp, 'flex');
+    });
+  }
+
   // Step 3: Listo (tipos de turismo) → mapa
   var btnCategoriasListo = document.getElementById('btn-categorias-listo');
   if (btnCategoriasListo) {
@@ -1325,6 +1587,11 @@ document.addEventListener('DOMContentLoaded', function() {
   var btnVolverProvincias = document.getElementById('btn-volver-provincias');
   if (btnVolverProvincias) {
     btnVolverProvincias.addEventListener('click', function() {
+      clearRoute();
+      originLatLng = null;
+      clearOriginMarker();
+      if (activeTooltip) { try { activeTooltip.remove(); } catch(e){} activeTooltip = null; }
+      setStep('origin');
       var mapaEl = document.getElementById('page-mapa');
       var pp     = document.getElementById('page-provincias');
       fadeSwap(mapaEl, pp, 'flex');
@@ -1335,11 +1602,180 @@ document.addEventListener('DOMContentLoaded', function() {
   var btnVolverSitios = document.getElementById('btn-volver-sitios');
   if (btnVolverSitios) {
     btnVolverSitios.addEventListener('click', function() {
+      clearRoute();
+      originLatLng = null;
+      clearOriginMarker();
+      if (activeTooltip) { try { activeTooltip.remove(); } catch(e){} activeTooltip = null; }
+      setStep('origin');
       var mapaEl = document.getElementById('page-mapa');
       var cat    = document.getElementById('page-categorias');
       fadeSwap(mapaEl, cat, 'flex');
     });
   }
+});
+
+// ─── MIS ORÍGENES ─────────────────────────────────────────────────────────────
+const MO_LS_KEY = 'arg_turismo_origenes';
+let moOrigenes   = [];   // array en memoria
+let moEditIndex  = null; // null = agregar, number = editar
+
+function moLoad() {
+  try { moOrigenes = JSON.parse(localStorage.getItem(MO_LS_KEY)) || []; }
+  catch(e) { moOrigenes = []; }
+}
+
+function moSave() {
+  try { localStorage.setItem(MO_LS_KEY, JSON.stringify(moOrigenes)); } catch(e) {}
+}
+
+function moRender() {
+  const list  = document.getElementById('mo-list');
+  const empty = document.getElementById('mo-empty');
+  const count = document.getElementById('mo-list-count');
+  const btnAdd = document.getElementById('mo-btn-add');
+  if (!list) return;
+
+  count.textContent = moOrigenes.length + ' / 10 orígenes';
+  btnAdd.disabled   = moOrigenes.length >= 10;
+
+  if (moOrigenes.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    list.appendChild(empty);
+    return;
+  }
+  empty.style.display = 'none';
+  list.innerHTML = '';
+
+  moOrigenes.forEach(function(o, i) {
+    const item = document.createElement('div');
+    item.className = 'mo-item';
+    const sub = [o.provincia, o.localidad].filter(Boolean).join(' · ');
+    item.innerHTML =
+      '<div class="mo-item-info">' +
+        '<div class="mo-item-name">' + escHtml(o.nombre || '(sin nombre)') + '</div>' +
+        (sub ? '<div class="mo-item-sub">' + escHtml(sub) + '</div>' : '') +
+        '<div class="mo-item-coords">' + (o.lat !== '' ? o.lat : '?') + ', ' + (o.lng !== '' ? o.lng : '?') + '</div>' +
+      '</div>' +
+      '<div class="mo-item-actions">' +
+        '<button class="mo-btn-edit" data-i="' + i + '">✏ Editar</button>' +
+        '<button class="mo-btn-del"  data-i="' + i + '">✕</button>' +
+      '</div>';
+    list.appendChild(item);
+  });
+
+  list.querySelectorAll('.mo-btn-edit').forEach(function(btn) {
+    btn.addEventListener('click', function() { moStartEdit(parseInt(btn.dataset.i)); });
+  });
+  list.querySelectorAll('.mo-btn-del').forEach(function(btn) {
+    btn.addEventListener('click', function() { moDel(parseInt(btn.dataset.i)); });
+  });
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function moShowForm(show) {
+  const form = document.getElementById('mo-form');
+  if (form) form.classList.toggle('visible', show);
+  document.getElementById('mo-error').textContent = '';
+}
+
+function moClearForm() {
+  ['mo-f-provincia','mo-f-localidad','mo-f-nombre','mo-f-lat','mo-f-lng'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('mo-error').textContent = '';
+}
+
+function moStartAdd() {
+  moEditIndex = null;
+  moClearForm();
+  document.getElementById('mo-form-title').textContent = 'Agregar origen';
+  document.getElementById('mo-btn-save-item').textContent = 'Guardar origen';
+  moShowForm(true);
+  document.getElementById('mo-f-nombre').focus();
+}
+
+function moStartEdit(i) {
+  moEditIndex = i;
+  const o = moOrigenes[i];
+  document.getElementById('mo-f-provincia').value = o.provincia || '';
+  document.getElementById('mo-f-localidad').value = o.localidad || '';
+  document.getElementById('mo-f-nombre').value    = o.nombre    || '';
+  document.getElementById('mo-f-lat').value       = o.lat !== undefined ? o.lat : '';
+  document.getElementById('mo-f-lng').value       = o.lng !== undefined ? o.lng : '';
+  document.getElementById('mo-form-title').textContent    = 'Editar origen';
+  document.getElementById('mo-btn-save-item').textContent = 'Actualizar origen';
+  document.getElementById('mo-error').textContent = '';
+  moShowForm(true);
+  document.getElementById('mo-f-nombre').focus();
+}
+
+function moSaveItem() {
+  const nombre    = document.getElementById('mo-f-nombre').value.trim();
+  const provincia = document.getElementById('mo-f-provincia').value.trim();
+  const localidad = document.getElementById('mo-f-localidad').value.trim();
+  const latRaw    = document.getElementById('mo-f-lat').value.trim();
+  const lngRaw    = document.getElementById('mo-f-lng').value.trim();
+  const errEl     = document.getElementById('mo-error');
+
+  if (!nombre) { errEl.textContent = 'El nombre del sitio es obligatorio.'; return; }
+  const lat = latRaw !== '' ? parseFloat(latRaw) : '';
+  const lng = lngRaw !== '' ? parseFloat(lngRaw) : '';
+  if (latRaw !== '' && isNaN(lat)) { errEl.textContent = 'Latitud inválida.'; return; }
+  if (lngRaw !== '' && isNaN(lng)) { errEl.textContent = 'Longitud inválida.'; return; }
+  if (lat !== '' && (lat < -90  || lat > 90))  { errEl.textContent = 'Latitud debe estar entre -90 y 90.'; return; }
+  if (lng !== '' && (lng < -180 || lng > 180)) { errEl.textContent = 'Longitud debe estar entre -180 y 180.'; return; }
+
+  const entry = { nombre, provincia, localidad, lat, lng };
+
+  if (moEditIndex === null) {
+    if (moOrigenes.length >= 10) { errEl.textContent = 'Límite de 10 orígenes alcanzado.'; return; }
+    moOrigenes.push(entry);
+  } else {
+    moOrigenes[moEditIndex] = entry;
+    moEditIndex = null;
+  }
+
+  moShowForm(false);
+  moClearForm();
+  moRender();
+}
+
+function moDel(i) {
+  moOrigenes.splice(i, 1);
+  if (moEditIndex !== null) { moShowForm(false); moClearForm(); moEditIndex = null; }
+  moRender();
+}
+
+function moOpen() {
+  moLoad();
+  moShowForm(false);
+  moClearForm();
+  moEditIndex = null;
+  moRender();
+  document.getElementById('modal-origenes').style.display = 'flex';
+}
+
+function moClose(save) {
+  if (save) moSave();
+  document.getElementById('modal-origenes').style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('btn-abrir-origenes').addEventListener('click', moOpen);
+  document.getElementById('mo-close').addEventListener('click', function() { moClose(false); });
+  document.getElementById('mo-btn-guardar').addEventListener('click', function() { moClose(true); });
+  document.getElementById('mo-btn-add').addEventListener('click', moStartAdd);
+  document.getElementById('mo-btn-cancel').addEventListener('click', function() { moShowForm(false); moClearForm(); moEditIndex = null; });
+  document.getElementById('mo-btn-save-item').addEventListener('click', moSaveItem);
+  // Cerrar con clic en el backdrop
+  document.getElementById('modal-origenes').addEventListener('click', function(e) {
+    if (e.target === this) moClose(false);
+  });
 });
 
 </script>
