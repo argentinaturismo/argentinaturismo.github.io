@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://unpkg.com" crossorigin />
 
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Barlow:wght@300;400;500;600;700;800&family=Italianno&display=swap" rel="stylesheet" />
 
   <!-- Leaflet sólo se usa en el paso 4 (mapa); se cargan sin bloquear el primer pintado -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" media="print" onload="this.media='all'" />
@@ -53,16 +53,40 @@
       position:fixed; inset:0; z-index:15;
       display:none;
       flex-direction:column;
-      background:#000;
       opacity:0;
     }
     #page-categorias {
       position:fixed; inset:0; z-index:16;
       display:none;
       flex-direction:column;
-      background:#000;
       opacity:0;
     }
+    #page-quienes-somos {
+      position:fixed; inset:0; z-index:18;
+      display:none;
+      background:#000;
+      opacity:0;
+      overflow-y:auto;
+    }
+    .pp-bg-span {
+      position:absolute; inset:0; display:block;
+      background-size:cover; background-position:center;
+      z-index:0;
+    }
+    .pp-overlay-gradient {
+      position:absolute; inset:0; z-index:1; pointer-events:none;
+      background:linear-gradient(180deg,
+        rgba(15,17,23,0.52) 0%,
+        rgba(15,17,23,0.10) 35%,
+        rgba(15,17,23,0.20) 65%,
+        rgba(15,17,23,0.78) 100%);
+    }
+    #page-provincias > *:not(.pp-bg-span):not(.pp-overlay-gradient),
+    #page-categorias > *:not(.pp-bg-span):not(.pp-overlay-gradient) {
+      position:relative; z-index:2;
+    }
+    .pp-bg { display:none; }
+    .pp-overlay { display:none; }
     .pp-header {
       display:flex; align-items:center; justify-content:space-between;
       padding:24px 40px;
@@ -72,6 +96,7 @@
     .pp-title {
       font-family:'Playfair Display',serif; font-size:1.7rem; font-weight:700;
       color:#e8c96a; letter-spacing:0.01em;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.7);
     }
     .pp-header-noborder { border-bottom: none !important; }
     .pp-grid, .pp-grid-cat {
@@ -88,8 +113,10 @@
     .pp-item {
       display:flex; align-items:center; justify-content:center;
       text-align:center; padding:8px 10px;
-      border-radius:10px; border:1.5px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.04);
+      border-radius:10px;
+      border:1.5px solid rgba(255,255,255,0.18);
+      background:rgba(15,17,23,0.52);
+      backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
       color:#e8eaf2;
       font-family:'Barlow',sans-serif; font-weight:700;
       font-size:clamp(0.825rem, 1.55vw, 1.425rem);
@@ -97,11 +124,11 @@
       cursor:pointer; user-select:none;
       transition:background .2s ease, border-color .2s ease, color .2s ease, transform .12s ease;
     }
-    .pp-item:hover { transform:translateY(-2px); }
-    .pp-item.on  { background:rgba(22,163,74,0.16); border-color:rgba(22,163,74,0.55); color:#bbf7d0; }
-    .pp-item.on:hover  { background:rgba(22,163,74,0.26); }
-    .pp-item.off { background:rgba(220,38,38,0.08); border-color:rgba(220,38,38,0.32); color:rgba(255,255,255,0.38); }
-    .pp-item.off:hover { background:rgba(220,38,38,0.16); color:rgba(255,255,255,0.6); }
+    .pp-item:hover { transform:translateY(-2px); background:rgba(15,17,23,0.68); }
+    .pp-item.on  { background:rgba(22,163,74,0.28); border-color:rgba(22,163,74,0.65); color:#bbf7d0; }
+    .pp-item.on:hover  { background:rgba(22,163,74,0.38); }
+    .pp-item.off { background:rgba(220,38,38,0.18); border-color:rgba(220,38,38,0.42); color:rgba(255,255,255,0.38); }
+    .pp-item.off:hover { background:rgba(220,38,38,0.28); color:rgba(255,255,255,0.6); }
     .pp-footer {
       display:flex; justify-content:center;
       padding:24px 40px 36px;
@@ -116,6 +143,81 @@
     }
     .btn-listo-pp:hover  { opacity:0.86; }
     .btn-listo-pp:active { transform:translateY(1px); }
+
+    /* ── PÁGINA "QUIENES SOMOS" ── */
+    .qs-scroll { position:relative; min-height:100%; }
+    .qs-collage { position:absolute; inset:0; z-index:0; overflow:hidden; }
+    .qs-photo {
+      position:absolute; background-size:cover; background-position:center;
+      border-radius:12px; box-shadow:0 22px 55px rgba(0,0,0,0.65);
+      opacity:0.88;
+    }
+    .qs-photo-1 { width:33vw; height:40vh; top:4%;    left:2.5%; transform:rotate(-7deg); }
+    .qs-photo-2 { width:29vw; height:36vh; top:7%;    left:32%;  transform:rotate(5deg);  z-index:2; }
+    .qs-photo-3 { width:31vw; height:38vh; top:3%;    right:2.5%;transform:rotate(-4deg); }
+    .qs-photo-7  { width:30vw; height:34vh; top:24%;  left:4%;   transform:rotate(5deg); }
+    .qs-photo-8  { width:28vw; height:32vh; top:27%;  right:3%;  transform:rotate(-6deg); }
+    .qs-photo-9  { width:30vw; height:33vh; top:45%;  left:31%;  transform:rotate(4deg);  z-index:2; }
+    .qs-photo-10 { width:29vw; height:33vh; top:62%;  left:3%;   transform:rotate(-5deg); }
+    .qs-photo-11 { width:30vw; height:34vh; top:65%;  right:3%;  transform:rotate(6deg); }
+    .qs-photo-12 { width:28vw; height:30vh; top:83%;  left:32%;  transform:rotate(-4deg); z-index:2; }
+    .qs-photo-4 { width:29vw; height:35vh; bottom:4%; left:5%;   transform:rotate(6deg); }
+    .qs-photo-5 { width:31vw; height:37vh; bottom:2%; left:33%;  transform:rotate(-6deg); z-index:2; }
+    .qs-photo-6 { width:29vw; height:38vh; bottom:5%; right:4%;  transform:rotate(4deg); }
+    .qs-overlay-gradient {
+      position:absolute; inset:0; z-index:3; pointer-events:none;
+      background:linear-gradient(180deg,
+        rgba(0,0,0,0.80) 0%,
+        rgba(0,0,0,0.58) 22%,
+        rgba(0,0,0,0.66) 55%,
+        rgba(0,0,0,0.92) 100%);
+    }
+    .qs-content {
+      position:relative; z-index:4;
+      max-width:1140px; margin:0 auto;
+      padding:56px 28px 90px;
+      display:flex; flex-direction:column;
+    }
+    .qs-logo {
+      align-self:flex-start;
+      font-family:'Italianno', cursive;
+      font-weight:400;
+      font-size:clamp(3.6rem, 8.5vw, 6.4rem);
+      line-height:1;
+      color:#e8c96a;
+      text-shadow:0 4px 20px rgba(0,0,0,0.65);
+      margin-bottom:0;
+      padding-bottom:4px;
+    }
+    .qs-heading {
+      align-self:flex-start;
+      font-family:'Barlow',sans-serif; font-weight:800; text-transform:uppercase;
+      font-size:1.3rem; letter-spacing:0.14em; color:#fff;
+      margin:22px 0 24px;
+      padding-bottom:10px; border-bottom:2px solid rgba(232,201,106,0.5);
+    }
+    .qs-body p {
+      font-family:'Barlow',sans-serif; font-size:0.95rem; line-height:1.85;
+      color:#e3e6f0; text-align:justify;
+      margin-bottom:20px;
+    }
+    .qs-btn-continuar {
+      align-self:center; margin-top:14px;
+      padding:16px 64px;
+      background:#e8c96a; color:#0f1117; border:none; border-radius:8px;
+      font-family:'Barlow',sans-serif; font-weight:700; font-size:0.92rem;
+      letter-spacing:0.14em; text-transform:uppercase; cursor:pointer;
+      transition:opacity .2s ease, transform .1s ease;
+    }
+    .qs-btn-continuar:hover  { opacity:0.86; }
+    .qs-btn-continuar:active { transform:translateY(1px); }
+    @media (max-width:760px) {
+      .qs-content { padding:40px 16px 70px; }
+      .qs-photo-2, .qs-photo-5, .qs-photo-8, .qs-photo-11 { display:none; }
+      .qs-photo { width:44vw; height:26vh; }
+      .qs-body p { font-size:0.88rem; }
+    }
+
     @media (max-width:900px) {
       .pp-grid, .pp-grid-cat { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 62px; }
     }
@@ -353,6 +455,10 @@
     header .flag { font-size:1.5rem; }
     header h1 { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:900; color:var(--accent); }
     header .subtitle { font-size:0.68rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; }
+    .header-center-group {
+      position:absolute; left:50%; transform:translateX(-50%);
+      display:flex; align-items:center; gap:10px;
+    }
     .header-right { margin-left:auto; display:flex; gap:10px; }
     .btn-volver {
       background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
@@ -363,19 +469,49 @@
     }
     .btn-volver:hover { background:rgba(232,201,106,0.2); border-color:rgba(232,201,106,0.55); }
     .btn-volver:active { transform:translateY(1px); }
+    .header-origen-select {
+      background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
+      color:var(--accent); border-radius:6px; padding:7px 10px;
+      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
+      cursor:pointer; white-space:nowrap; max-width:200px;
+      transition:background .2s, border-color .2s;
+    }
+    .header-origen-select:hover, .header-origen-select:focus { background:rgba(232,201,106,0.2); border-color:rgba(232,201,106,0.55); outline:none; }
+    .header-origen-select option { background:#171c27; color:#e8eaf2; }
+    .header-origen-hint {
+      color:var(--accent); font-family:'Barlow',sans-serif; font-size:0.78rem;
+      font-weight:600; white-space:nowrap; padding:7px 14px;
+      background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
+      border-radius:6px;
+    }
+    .header-route-metric {
+      display:flex; align-items:center; gap:6px;
+      background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
+      border-radius:6px; padding:7px 14px; white-space:nowrap;
+      font-family:'Barlow',sans-serif;
+    }
+    .header-route-lbl {
+      font-size:0.66rem; font-weight:700; color:var(--accent);
+      text-transform:uppercase; letter-spacing:0.06em;
+    }
+    .header-route-val {
+      font-size:0.78rem; font-weight:700; color:var(--text);
+    }
     .header-count-box {
       position:absolute; left:340px; top:50%; transform:translateY(-50%);
       background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
-      color:var(--accent); border-radius:6px; padding:7px 18px;
-      font-family:'Barlow',sans-serif; font-size:1rem; font-weight:600;
-      white-space:nowrap; display:flex; align-items:center;
+      color:var(--accent); border-radius:6px; padding:7px 14px;
+      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
+      white-space:nowrap; display:flex; align-items:center; gap:5px;
     }
     .header-count-box span {
-      font-family:'Playfair Display',serif; font-weight:900; font-size:1.35rem; margin-right:6px;
+      font-family:'Barlow',sans-serif; font-weight:700; font-size:0.78rem;
     }
     @media (max-width:760px) {
       .btn-volver { font-size:0.68rem; padding:6px 10px; }
       .header-count-box { font-size:0.68rem; padding:6px 10px; left:300px; }
+      .header-route-metric { padding:6px 10px; }
+      .header-route-val { font-size:0.7rem; }
     }
     .tag { background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.25);
            color:var(--accent); border-radius:20px; padding:3px 10px;
@@ -538,19 +674,12 @@
 
     /* ── PANEL DE RUTA (parte inferior de la pantalla): origen → destino → distancia/tiempo ── */
     .info-panel-bottom {
-      flex-shrink:0; border-top:1px solid var(--border);
-      padding:8px 14px 10px; height:104px;
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      gap:5px; overflow:hidden;
+      display:none;
     }
     .route-prompt {
       display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center;
     }
     .route-step-icon { font-size:1.15rem; }
-    .route-step-text {
-      font-family:'Barlow',sans-serif; font-size:0.8rem; font-weight:700;
-      color:var(--accent); letter-spacing:0.02em;
-    }
     .route-step-hint {
       font-size:0.64rem; color:#777; line-height:1.4; max-width:230px;
     }
@@ -582,134 +711,111 @@
     }
     .route-reset:hover { color:#fff; border-color:#666; }
 
-    /* ── BOTÓN MIS ORÍGENES (header) ── */
-    .btn-origenes-header {
-      position:absolute; left:560px; top:50%; transform:translateY(-50%);
-      background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
-      color:var(--accent); border-radius:6px; padding:7px 14px;
-      font-family:'Barlow',sans-serif; font-size:0.88rem; font-weight:600;
-      cursor:pointer; white-space:nowrap;
-      transition:background .2s ease, border-color .2s ease;
+    /* ── ORIGEN DROPDOWN (sidebar) ── */
+    .origin-select {
+      width:100%; margin-top:8px;
+      background:#0f1117; border:1px solid rgba(232,201,106,0.35);
+      border-radius:6px; color:#e8eaf2;
+      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
+      padding:6px 10px; outline:none; cursor:pointer;
+      transition:border-color .2s;
     }
-    .btn-origenes-header:hover { background:rgba(232,201,106,0.2); border-color:rgba(232,201,106,0.55); }
+    .origin-select:hover, .origin-select:focus { border-color:#e8c96a; }
+    .origin-select option { background:#171c27; color:#e8eaf2; }
 
-    /* ── MODAL BACKDROP ── */
+    /* ── SELECT inside table ── */
+    .mo-cell-select {
+      appearance:auto; cursor:pointer;
+    }
+    .mo-cell-select:disabled { appearance:none; }
     .mo-backdrop {
-      position:fixed; inset:0; z-index:100;
-      background:rgba(0,0,0,0.72);
+      position:fixed; inset:0; z-index:1100;
+      background:rgba(0,0,0,0.75);
       display:flex; align-items:center; justify-content:center;
     }
     .mo-panel {
       background:#171c27; border:1px solid #2a3050; border-radius:12px;
-      width:min(680px, 96vw); max-height:88vh;
+      width:min(900px, 96vw); max-height:90vh;
       display:flex; flex-direction:column; overflow:hidden;
       box-shadow:0 24px 64px rgba(0,0,0,0.7);
+      position:relative; z-index:1101; isolation:isolate;
     }
-
-    /* ── MODAL HEADER ── */
     .mo-header {
       display:flex; align-items:center; gap:12px;
-      padding:18px 22px; border-bottom:1px solid #2a3050; flex-shrink:0;
+      padding:16px 22px; border-bottom:1px solid #2a3050; flex-shrink:0;
     }
-    .mo-title { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; color:#e8c96a; }
-    .mo-subtitle { font-size:0.72rem; color:#7a83a6; margin-left:4px; }
+    .mo-title { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:#e8c96a; flex:1; }
     .mo-close {
-      margin-left:auto; background:none; border:1px solid #2a3050; color:#7a83a6;
+      background:none; border:1px solid #2a3050; color:#7a83a6;
       border-radius:6px; padding:4px 10px; cursor:pointer; font-size:0.8rem;
       transition:color .2s, border-color .2s;
     }
     .mo-close:hover { color:#e8eaf2; border-color:#7a83a6; }
 
-    /* ── FORM ── */
-    .mo-form {
-      padding:16px 22px; border-bottom:1px solid #2a3050; flex-shrink:0;
-      display:none;
-    }
-    .mo-form.visible { display:block; }
-    .mo-form-title { font-size:0.78rem; font-weight:700; color:#e8c96a; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:12px; }
-    .mo-fields {
-      display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;
-    }
-    .mo-field-full { grid-column:1 / -1; }
-    .mo-field-group { display:flex; flex-direction:column; gap:4px; }
-    .mo-label { font-size:0.65rem; font-weight:700; color:#7a83a6; text-transform:uppercase; letter-spacing:0.08em; }
-    .mo-input {
-      background:#0f1117; border:1px solid #2a3050; border-radius:6px;
-      color:#e8eaf2; font-family:'Barlow',sans-serif; font-size:0.82rem;
-      padding:7px 10px; outline:none;
-      transition:border-color .2s;
-    }
-    .mo-input:focus { border-color:#e8c96a; }
-    .mo-input::placeholder { color:#3a4060; }
-    .mo-form-actions { display:flex; gap:8px; justify-content:flex-end; }
-    .mo-btn-cancel {
-      background:none; border:1px solid #2a3050; color:#7a83a6;
-      border-radius:6px; padding:7px 18px; font-family:'Barlow',sans-serif;
-      font-size:0.78rem; font-weight:600; cursor:pointer;
-      transition:color .2s, border-color .2s;
-    }
-    .mo-btn-cancel:hover { color:#e8eaf2; border-color:#7a83a6; }
-    .mo-btn-save-item {
-      background:#e8c96a; color:#0f1117; border:none; border-radius:6px;
-      padding:7px 22px; font-family:'Barlow',sans-serif;
-      font-size:0.78rem; font-weight:700; cursor:pointer;
-      transition:opacity .2s;
-    }
-    .mo-btn-save-item:hover { opacity:0.85; }
-    .mo-error { font-size:0.72rem; color:#fca5a5; margin-top:8px; min-height:16px; }
+    /* ── BODY / TABLE ── */
+    .mo-body { flex:1; overflow-y:auto; padding:16px 22px; }
+    .mo-body::-webkit-scrollbar { width:4px; }
+    .mo-body::-webkit-scrollbar-thumb { background:#2a3050; border-radius:4px; }
 
-    /* ── LIST ── */
-    .mo-list-wrap { flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden; }
-    .mo-list-header {
-      display:flex; align-items:center; justify-content:space-between;
-      padding:12px 22px 8px; flex-shrink:0;
+    .mo-table { width:100%; border-collapse:collapse; }
+    .mo-th {
+      font-family:'Barlow',sans-serif; font-size:0.62rem; font-weight:700;
+      color:#7a83a6; text-transform:uppercase; letter-spacing:0.09em;
+      padding:6px 8px; text-align:left; border-bottom:1px solid #2a3050;
+      white-space:nowrap;
     }
-    .mo-list-count { font-size:0.72rem; color:#7a83a6; font-weight:600; }
-    .mo-btn-add {
-      background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
-      color:#e8c96a; border-radius:6px; padding:5px 14px;
-      font-family:'Barlow',sans-serif; font-size:0.75rem; font-weight:700;
-      cursor:pointer; transition:background .2s;
+    .mo-th-n       { width:28px; text-align:center; }
+    .mo-th-coord   { width:96px; }
+    .mo-th-actions { width:120px; }
+
+    .mo-tr { border-bottom:1px solid rgba(42,48,80,0.6); }
+    .mo-tr:last-child { border-bottom:none; }
+
+    .mo-td {
+      padding:5px 6px; vertical-align:middle;
     }
-    .mo-btn-add:hover { background:rgba(232,201,106,0.2); }
-    .mo-btn-add:disabled { opacity:0.4; cursor:not-allowed; }
-    .mo-list { flex:1; overflow-y:auto; padding:0 22px 12px; }
-    .mo-list::-webkit-scrollbar { width:4px; }
-    .mo-list::-webkit-scrollbar-thumb { background:#2a3050; border-radius:4px; }
-    .mo-empty { font-size:0.78rem; color:#3a4060; font-style:italic; text-align:center; margin-top:20px; }
-    .mo-item {
-      display:grid; grid-template-columns:1fr auto;
-      align-items:center; gap:10px;
-      padding:10px 12px; margin-bottom:6px;
-      background:rgba(255,255,255,0.03); border:1px solid #2a3050; border-radius:8px;
-      transition:border-color .2s;
+    .mo-td-n { text-align:center; font-size:0.68rem; color:#4a5370; font-weight:700; }
+
+    /* inline inputs inside the table */
+    .mo-cell-input {
+      width:100%; background:#0f1117; border:1px solid #2a3050; border-radius:5px;
+      color:#e8eaf2; font-family:'Barlow',sans-serif; font-size:0.78rem;
+      padding:5px 8px; outline:none; transition:border-color .18s;
     }
-    .mo-item:hover { border-color:#3a4060; }
-    .mo-item-info { min-width:0; }
-    .mo-item-name { font-size:0.85rem; font-weight:700; color:#e8eaf2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .mo-item-sub  { font-size:0.7rem; color:#7a83a6; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .mo-item-coords { font-size:0.65rem; color:#4a5370; margin-top:2px; font-family:monospace; }
-    .mo-item-actions { display:flex; gap:6px; flex-shrink:0; }
-    .mo-btn-edit, .mo-btn-del {
+    .mo-cell-input:focus { border-color:#e8c96a; }
+    .mo-cell-input::placeholder { color:#3a4060; }
+    .mo-cell-input:disabled {
+      background:transparent; border-color:transparent; color:#e8eaf2;
+      cursor:default; padding:5px 4px;
+    }
+    .mo-cell-input:disabled::placeholder { color:transparent; }
+
+    /* action buttons per row */
+    .mo-td-actions { display:flex; gap:5px; justify-content:flex-end; white-space:nowrap; }
+    .mo-btn-edit, .mo-btn-del, .mo-btn-ok {
       background:none; border:1px solid #2a3050; border-radius:5px;
-      padding:4px 10px; font-size:0.68rem; font-family:'Barlow',sans-serif;
-      font-weight:600; cursor:pointer; white-space:nowrap;
+      padding:4px 9px; font-size:0.65rem; font-family:'Barlow',sans-serif;
+      font-weight:700; cursor:pointer; white-space:nowrap;
       transition:background .15s, color .15s, border-color .15s;
     }
     .mo-btn-edit { color:#7a83a6; }
     .mo-btn-edit:hover { color:#e8c96a; border-color:#e8c96a; background:rgba(232,201,106,0.08); }
     .mo-btn-del  { color:#7a83a6; }
     .mo-btn-del:hover  { color:#fca5a5; border-color:rgba(220,38,38,0.5); background:rgba(220,38,38,0.08); }
+    .mo-btn-ok   { color:#7a83a6; }
+    .mo-btn-ok:hover   { color:#86efac; border-color:rgba(34,197,94,0.5); background:rgba(34,197,94,0.08); }
 
-    /* ── MODAL FOOTER ── */
+    .mo-error { font-size:0.72rem; color:#fca5a5; margin-top:8px; min-height:16px; }
+
+    /* ── FOOTER ── */
     .mo-footer {
       padding:14px 22px; border-top:1px solid #2a3050; flex-shrink:0;
       display:flex; justify-content:center;
     }
     .mo-btn-guardar {
       background:#e8c96a; color:#0f1117; border:none; border-radius:8px;
-      padding:13px 60px; font-family:'Barlow',sans-serif;
-      font-size:0.9rem; font-weight:700; letter-spacing:0.12em;
+      padding:11px 54px; font-family:'Barlow',sans-serif;
+      font-size:0.88rem; font-weight:700; letter-spacing:0.1em;
       text-transform:uppercase; cursor:pointer; transition:opacity .2s;
     }
     .mo-btn-guardar:hover { opacity:0.85; }
@@ -834,8 +940,53 @@
   </script>
 </div>
 
+<!-- ═══════════════════  QUIENES SOMOS  ═══════════════════ -->
+<div id="page-quienes-somos">
+  <div class="qs-scroll">
+  <div class="qs-collage">
+    <div class="qs-photo qs-photo-1" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Cataratas_Iguazu_vista_general.JPG?width=1920')"></div>
+    <div class="qs-photo qs-photo-2" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Glaciar_Perito_Moreno26_-_Argentina.JPG?width=1920')"></div>
+    <div class="qs-photo qs-photo-3" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Bariloche-_Argentina.jpg?width=1920')"></div>
+    <div class="qs-photo qs-photo-7" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/99-Quebrada_de_Humahuaca.jpg?width=1920')"></div>
+    <div class="qs-photo qs-photo-8" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Bodega_Dante_Robino,_Mendoza.jpg?width=1920')"></div>
+    <div class="qs-photo qs-photo-9" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Esteros_del_Ibera_Laguna.JPG?width=1920')"></div>
+    <div class="qs-photo qs-photo-10" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Ushuaia,_Tierra_del_Fuego.jpg?width=1920')"></div>
+    <div class="qs-photo qs-photo-11" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Mar_del_Plata.jpg?width=1920')"></div>
+    <div class="qs-photo qs-photo-12" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Ruinas_Jesuiticas_San_Ignacio_Mini.JPG?width=1920')"></div>
+    <div class="qs-photo qs-photo-4" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/ACONCAGUA-2010.JPG?width=1920')"></div>
+    <div class="qs-photo qs-photo-5" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Buenos_Aires_Caminito_1.jpg?width=1920')"></div>
+    <div class="qs-photo qs-photo-6" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Salinas_grandes._Inmensidad.jpg?width=1920')"></div>
+    <div class="qs-overlay-gradient"></div>
+  </div>
+
+  <div class="qs-content">
+    <div class="qs-logo">Argentina Turismo</div>
+
+    <h2 class="qs-heading">Quiénes somos</h2>
+
+    <div class="qs-body">
+      <p>Argentina Turismo nace con el propósito de acercar la inmensa riqueza turística de nuestro país a viajeros, estudiantes, investigadores y amantes de los destinos que hacen de Argentina una tierra única. Nuestro objetivo es ofrecer una herramienta de consulta sencilla, visual e interactiva que permita descubrir los principales atractivos turísticos distribuidos a lo largo de todo el territorio nacional.</p>
+
+      <p>Desde los glaciares de la Patagonia hasta las selvas subtropicales del noreste, desde las montañas andinas hasta las extensas llanuras pampeanas, Argentina reúne una diversidad natural, cultural e histórica excepcional. A través de esta plataforma buscamos facilitar el acceso a información relevante sobre cada destino, promoviendo el conocimiento y la valoración del patrimonio turístico argentino.</p>
+
+      <p>Inspirados en la misión de difusión y promoción turística que caracteriza a los organismos oficiales de turismo del país, trabajamos para brindar una visión integral de los atractivos, experiencias y actividades que pueden encontrarse en cada provincia. Nuestro compromiso es contribuir a que más personas descubran la diversidad de paisajes, tradiciones, gastronomía, festividades y expresiones culturales que conforman la identidad argentina.</p>
+
+      <p>Esta plataforma integra información geográfica, descripciones de sitios de interés y herramientas de exploración interactiva que permiten planificar recorridos y conocer mejor cada destino. Creemos que el turismo no solo impulsa el desarrollo económico y regional, sino que también fortalece el intercambio cultural y el reconocimiento de la riqueza natural e histórica de nuestro país.</p>
+
+      <p>Argentina es un territorio de contrastes y experiencias inolvidables. Nuestro deseo es que cada visitante encuentre aquí una puerta de entrada para explorar sus maravillas, descubrir nuevos destinos y valorar la extraordinaria diversidad que distingue a la República Argentina ante el mundo.</p>
+
+      <p>Bienvenidos a Argentina Turismo, una invitación permanente a conocer, recorrer y disfrutar cada rincón de nuestro país.</p>
+    </div>
+
+    <button class="qs-btn-continuar" id="btn-quienes-continuar" type="button">Continuar</button>
+  </div>
+  </div>
+</div>
+
 <!-- ═══════════════════  SELECCIÓN DE PROVINCIAS  ═══════════════════ -->
 <div id="page-provincias">
+  <span class="pp-bg-span" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Ushuaia,_Tierra_del_Fuego.jpg?width=1920')"></span>
+  <div class="pp-overlay-gradient"></div>
   <div class="pp-header pp-header-noborder">
     <div class="pp-title">Seleccione las provincias</div>
     <button class="btn-volver btn-habilitar-prov" id="btn-all-prov-intro">Habilitar todo</button>
@@ -848,11 +999,13 @@
 
 <!-- ═══════════════════  SELECCIÓN DE TIPOS DE TURISMO  ═══════════════════ -->
 <div id="page-categorias">
+  <span class="pp-bg-span" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Centro_civico_bariloche.jpg?width=1920')"></span>
+  <div class="pp-overlay-gradient"></div>
   <div class="pp-header pp-header-noborder">
     <div class="pp-title">Seleccione tipos de turismo</div>
     <div style="display:flex; gap:10px; align-items:center;">
-      <button class="btn-volver btn-habilitar-cat" id="btn-all-cats-intro">Habilitar todo</button>
       <button class="btn-volver" id="btn-cats-volver-provincias" type="button">← Volver a Provincias</button>
+      <button class="btn-volver btn-habilitar-cat" id="btn-all-cats-intro">Habilitar todo</button>
     </div>
   </div>
   <div class="pp-grid pp-grid-cat" id="grid-categorias-intro"></div>
@@ -871,10 +1024,25 @@
     <div class="subtitle">Mapa Interactivo de Sitios Turísticos</div>
   </div>
   <div class="header-count-box" id="header-count-box"><span id="sb-count-num">0</span> sitios</div>
-  <button class="btn-origenes-header" id="btn-abrir-origenes" type="button">📍 Mis Orígenes</button>
+  <div class="header-center-group">
+    <button class="btn-volver" id="btn-abrir-origenes" type="button">Origen</button>
+    <select class="header-origen-select" id="header-origen-select">
+      <option value="">Seleccionar un origen</option>
+    </select>
+    <span class="header-origen-hint" id="header-origen-hint" style="display:none;">Seleccionar un sitio del mapa</span>
+    <button class="btn-volver" id="btn-cambiar-origen" type="button" style="display:none;">Cambiar Origen</button>
+    <div class="header-route-metric" id="header-route-dist-box" style="display:none;">
+      <span class="header-route-lbl">Distancia</span>
+      <span class="header-route-val" id="header-route-dist">—</span>
+    </div>
+    <div class="header-route-metric" id="header-route-time-box" style="display:none;">
+      <span class="header-route-lbl">Tiempo</span>
+      <span class="header-route-val" id="header-route-time">—</span>
+    </div>
+  </div>
   <div class="header-right">
-    <button class="btn-volver" id="btn-volver-provincias" type="button">Volver a Provincias</button>
-    <button class="btn-volver" id="btn-volver-sitios" type="button">Volver a Sitios</button>
+    <button class="btn-volver" id="btn-volver-provincias" type="button">← Volver a Provincias</button>
+    <button class="btn-volver" id="btn-volver-sitios" type="button">← Volver a Sitios</button>
   </div>
 </header>
 
@@ -921,8 +1089,10 @@
     <div class="info-panel-bottom" id="info-panel-bottom">
       <div class="route-prompt" id="route-prompt">
         <span class="route-step-icon" id="route-step-icon">📍</span>
-        <span class="route-step-text" id="route-step-text">Seleccionar origen</span>
         <span class="route-step-hint" id="route-step-hint">Hacé clic en cualquier punto del mapa</span>
+        <select class="origin-select" id="origin-select" style="display:none;">
+          <option value="">— Mis orígenes guardados —</option>
+        </select>
       </div>
       <div class="route-loading" id="route-loading" style="display:none">Calculando ruta…</div>
       <div class="route-error"   id="route-error"   style="display:none"></div>
@@ -962,61 +1132,37 @@
   </div>
 </div>
 
-<!-- ═══════════════════  MODAL MIS ORÍGENES  ═══════════════════ -->
+<!-- ═══════════════════  MODAL ORIGEN  ═══════════════════ -->
 <div id="modal-origenes" class="mo-backdrop" style="display:none;">
   <div class="mo-panel">
+
     <div class="mo-header">
-      <span class="mo-title">📍 Mis Orígenes</span>
-      <span class="mo-subtitle">Hasta 10 puntos de partida personalizados</span>
-      <button class="mo-close" id="mo-close">✕</button>
+      <span class="mo-title">Orígenes</span>
+      <button class="mo-close" id="mo-close" type="button">✕</button>
     </div>
 
-    <!-- Formulario agregar/editar -->
-    <div class="mo-form" id="mo-form">
-      <div class="mo-form-title" id="mo-form-title">Agregar origen</div>
-      <div class="mo-fields">
-        <div class="mo-field-group">
-          <label class="mo-label">Provincia</label>
-          <input class="mo-input" id="mo-f-provincia" type="text" placeholder="Ej: Buenos Aires" maxlength="60" />
-        </div>
-        <div class="mo-field-group">
-          <label class="mo-label">Localidad</label>
-          <input class="mo-input" id="mo-f-localidad" type="text" placeholder="Ej: Mar del Plata" maxlength="80" />
-        </div>
-        <div class="mo-field-group mo-field-full">
-          <label class="mo-label">Nombre del sitio</label>
-          <input class="mo-input" id="mo-f-nombre" type="text" placeholder="Ej: Casa de mis padres" maxlength="100" />
-        </div>
-        <div class="mo-field-group">
-          <label class="mo-label">Latitud</label>
-          <input class="mo-input" id="mo-f-lat" type="number" step="any" placeholder="-38.0055" />
-        </div>
-        <div class="mo-field-group">
-          <label class="mo-label">Longitud</label>
-          <input class="mo-input" id="mo-f-lng" type="number" step="any" placeholder="-57.5426" />
-        </div>
-      </div>
-      <div class="mo-form-actions">
-        <button class="mo-btn-cancel" id="mo-btn-cancel" type="button">Cancelar</button>
-        <button class="mo-btn-save-item" id="mo-btn-save-item" type="button">Guardar origen</button>
-      </div>
+    <div class="mo-body">
+      <table class="mo-table">
+        <thead>
+          <tr>
+            <th class="mo-th mo-th-n">#</th>
+            <th class="mo-th">Provincia</th>
+            <th class="mo-th">Localidad</th>
+            <th class="mo-th">Nombre</th>
+            <th class="mo-th mo-th-coord">Latitud</th>
+            <th class="mo-th mo-th-coord">Longitud</th>
+            <th class="mo-th mo-th-actions"></th>
+          </tr>
+        </thead>
+        <tbody id="mo-tbody"></tbody>
+      </table>
       <div class="mo-error" id="mo-error"></div>
     </div>
 
-    <!-- Lista de orígenes -->
-    <div class="mo-list-wrap">
-      <div class="mo-list-header">
-        <span class="mo-list-count" id="mo-list-count">0 / 10 orígenes</span>
-        <button class="mo-btn-add" id="mo-btn-add" type="button">+ Agregar</button>
-      </div>
-      <div class="mo-list" id="mo-list">
-        <div class="mo-empty" id="mo-empty">No hay orígenes guardados aún.</div>
-      </div>
+    <div class="mo-footer">
+      <button class="mo-btn-guardar" id="mo-btn-guardar" type="button">Guardar y Salir</button>
     </div>
 
-    <div class="mo-footer">
-      <button class="mo-btn-guardar" id="mo-btn-guardar" type="button">Guardar y cerrar</button>
-    </div>
   </div>
 </div>
 
@@ -1066,7 +1212,8 @@ const PROVINCIAS_LIST = [
   { key:'tucuman',             label:'Tucumán',                lat:-26.82, lng:-65.22, zoom:8  },
 ];
 
-const LS_KEY = 'arg_turismo_sitios';
+const LS_KEY    = 'arg_turismo_sitios';
+const MO_LS_KEY = 'arg_turismo_origenes_v2';
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
 const activeProv = new Set();
@@ -1338,12 +1485,12 @@ function setStep(step) {
   pickStep = step;
   const prompt  = document.getElementById('route-prompt');
   const icon    = document.getElementById('route-step-icon');
-  const text    = document.getElementById('route-step-text');
   const hint    = document.getElementById('route-step-hint');
   const loading = document.getElementById('route-loading');
   const error   = document.getElementById('route-error');
   const metrics = document.getElementById('route-metrics');
   const reset   = document.getElementById('route-reset');
+  const origSel = document.getElementById('origin-select');
 
   loading.style.display = 'none';
   error.style.display   = 'none';
@@ -1351,31 +1498,52 @@ function setStep(step) {
   if (step === 'origin') {
     prompt.style.display  = 'flex';
     icon.textContent      = '📍';
-    text.textContent      = 'Seleccionar origen';
-    hint.textContent      = 'Hacé clic en cualquier punto del mapa';
+    hint.textContent      = 'Elegí un origen desde el menú superior';
     metrics.style.display = 'none';
     reset.style.display   = 'none';
+    // Populate origin dropdown
+    if (origSel) {
+      try {
+        const saved = JSON.parse(localStorage.getItem(MO_LS_KEY)) || [];
+        const valid = saved.filter(function(o) { return o.lat !== '' && o.lng !== ''; });
+        if (valid.length > 0) {
+          origSel.innerHTML = '<option value="">— Elegir desde Mis Orígenes —</option>';
+          valid.forEach(function(o, idx) {
+            const label = [o.nombre, o.localidad, o.provincia].filter(Boolean).join(' · ');
+            const opt = document.createElement('option');
+            opt.value = idx;
+            opt.dataset.lat = o.lat;
+            opt.dataset.lng = o.lng;
+            opt.textContent = label;
+            origSel.appendChild(opt);
+          });
+          origSel.style.display = 'block';
+          origSel.value = '';
+        } else {
+          origSel.style.display = 'none';
+        }
+      } catch(e) { origSel.style.display = 'none'; }
+    }
   } else if (step === 'dest') {
     prompt.style.display  = 'flex';
     icon.textContent      = '🏛';
-    text.textContent      = 'Seleccionar destino';
     hint.textContent      = 'Hacé clic en un sitio turístico del mapa';
     metrics.style.display = 'none';
     reset.style.display   = 'inline-block';
+    if (origSel) origSel.style.display = 'none';
   } else if (step === 'done') {
     prompt.style.display  = 'none';
     metrics.style.display = 'flex';
     reset.style.display   = 'inline-block';
+    if (origSel) origSel.style.display = 'none';
   }
 }
 
 // ─── MAP CLICK → SET ORIGIN ───────────────────────────────────────────────────
 function onMapClick(e) {
-  if (pickStep !== 'origin') return;
-  const { lat, lng } = e.latlng;
-  originLatLng = { lat, lng };
-  placeOriginMarker(lat, lng);
-  setStep('dest');
+  // El origen solo se puede seleccionar desde el menú desplegable "Seleccionar un origen"
+  // No se permite hacer clic en el mapa para elegir origen
+  return;
 }
 
 // ─── ORIGIN MARKER ────────────────────────────────────────────────────────────
@@ -1400,6 +1568,9 @@ function clearRoute() {
 function selectDestino(s) {
   if (!originLatLng) return;
   pickStep = 'dest';
+  // Hide the "Seleccionar un sitio del mapa" hint
+  const hint = document.getElementById('header-origen-hint');
+  if (hint) hint.style.display = 'none';
   calcRoute(s.lat, s.lng, s);
 }
 
@@ -1445,6 +1616,10 @@ async function calcRoute(dLat, dLng, s) {
   document.getElementById('route-error').style.display   = 'none';
   document.getElementById('route-loading').style.display = 'block';
 
+  // Ocultar los recuadros de Distancia/Tiempo del header mientras se recalcula
+  document.getElementById('header-route-dist-box').style.display = 'none';
+  document.getElementById('header-route-time-box').style.display = 'none';
+
   clearRoute();
   try {
     const url  = `https://router.project-osrm.org/route/v1/driving/${originLatLng.lng},${originLatLng.lat};${dLng},${dLat}?overview=full&geometries=geojson`;
@@ -1456,9 +1631,18 @@ async function calcRoute(dLat, dLng, s) {
     const totalMin = Math.round(route.duration / 60);
     const hrs      = Math.floor(totalMin / 60);
     const mins     = totalMin % 60;
+    const distText = distKm + ' km';
+    const timeText = hrs > 0 ? `${hrs}h ${mins}m` : `${mins} min`;
 
-    document.getElementById('route-dist').textContent = distKm + ' km';
-    document.getElementById('route-time').textContent = hrs > 0 ? `${hrs}h ${mins}m` : `${mins} min`;
+    document.getElementById('route-dist').textContent = distText;
+    document.getElementById('route-time').textContent = timeText;
+
+    // Recuadros "Distancia" y "Tiempo" en el header, junto a "Cambiar Origen"
+    document.getElementById('header-route-dist').textContent = distText;
+    document.getElementById('header-route-time').textContent = timeText;
+    document.getElementById('header-route-dist-box').style.display = 'flex';
+    document.getElementById('header-route-time-box').style.display = 'flex';
+
     setStep('done');
 
     const m = activeMap();
@@ -1478,6 +1662,8 @@ async function calcRoute(dLat, dLng, s) {
     document.getElementById('route-loading').style.display = 'none';
     document.getElementById('route-error').style.display   = 'block';
     document.getElementById('route-error').textContent     = '⚠️ No se pudo calcular la ruta. Probá con otro destino.';
+    document.getElementById('header-route-dist-box').style.display = 'none';
+    document.getElementById('header-route-time-box').style.display = 'none';
     setTimeout(() => { setStep('dest'); }, 2400);
   }
 }
@@ -1488,6 +1674,15 @@ document.getElementById('route-reset').addEventListener('click', () => {
   clearOriginMarker();
   if (activeTooltip) { try { activeTooltip.remove(); } catch(e){} activeTooltip = null; }
   setStep('origin');
+  // Restore header dropdown
+  const hint    = document.getElementById('header-origen-hint');
+  const sel     = document.getElementById('header-origen-select');
+  const cambiar = document.getElementById('btn-cambiar-origen');
+  if (hint)    hint.style.display    = 'none';
+  if (cambiar) cambiar.style.display = 'none';
+  if (sel)     { sel.value = ''; sel.style.display = 'block'; }
+  document.getElementById('header-route-dist-box').style.display = 'none';
+  document.getElementById('header-route-time-box').style.display = 'none';
 });
 
 // ─── INIT (called after transition) ──────────────────────────────────────────
@@ -1523,13 +1718,144 @@ document.addEventListener('DOMContentLoaded', function() {
   if (typeof buildProvinciasIntro === 'function') buildProvinciasIntro();
   if (typeof buildCategoriasIntro === 'function') buildCategoriasIntro();
 
-  // Step 1: Entrar → pantalla de selección de provincias
+  // Step 1: Entrar → página "Quienes somos"
   var btnEntrar = document.getElementById('btn-entrar');
   if (btnEntrar) {
     btnEntrar.addEventListener('click', function() {
       var intro = document.getElementById('page-intro');
-      var pp    = document.getElementById('page-provincias');
-      fadeSwap(intro, pp, 'flex');
+      var qs    = document.getElementById('page-quienes-somos');
+      fadeSwap(intro, qs, 'block');
+    });
+  }
+
+  // Step 1.5: Continuar (Quienes somos) → pantalla de selección de provincias
+  var btnQuienesContinuar = document.getElementById('btn-quienes-continuar');
+  if (btnQuienesContinuar) {
+    btnQuienesContinuar.addEventListener('click', function() {
+      var qs = document.getElementById('page-quienes-somos');
+      var pp = document.getElementById('page-provincias');
+      fadeSwap(qs, pp, 'flex');
+    });
+  }
+
+  // ── HEADER ORIGIN SELECT ──────────────────────────────────────────────────
+  function headerOrigenPopulate() {
+    const sel = document.getElementById('header-origen-select');
+    if (!sel) return;
+    try {
+      const saved = JSON.parse(localStorage.getItem(MO_LS_KEY)) || [];
+      const valid = saved.filter(o => o.lat !== '' && o.lng !== '' && o.nombre);
+      sel.innerHTML = '<option value="">Seleccionar un origen</option>';
+      valid.forEach(function(o, idx) {
+        const lbl = [o.nombre, o.localidad, o.provincia].filter(Boolean).join(' · ');
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.dataset.lat = o.lat;
+        opt.dataset.lng = o.lng;
+        opt.textContent = lbl;
+        sel.appendChild(opt);
+      });
+      sel.style.display = 'block';
+    } catch(e) { sel.style.display = 'none'; }
+  }
+
+  function headerOrigenHint(show) {
+    const hint   = document.getElementById('header-origen-hint');
+    const sel    = document.getElementById('header-origen-select');
+    const cambiar = document.getElementById('btn-cambiar-origen');
+    if (!hint || !sel) return;
+    if (show) {
+      sel.style.display    = 'none';
+      hint.style.display   = 'inline-flex';
+      if (cambiar) cambiar.style.display = 'inline-block';
+    } else {
+      hint.style.display   = 'none';
+      if (cambiar) cambiar.style.display = 'none';
+    }
+  }
+
+  // Populate on load
+  headerOrigenPopulate();
+
+  // Re-populate after saving Origen modal
+  var origBtnOrig = document.getElementById('mo-btn-guardar');
+  if (origBtnOrig) {
+    origBtnOrig.addEventListener('click', function() {
+      setTimeout(headerOrigenPopulate, 100);
+    });
+  }
+
+  // When user picks an origin from header dropdown
+  var hSel = document.getElementById('header-origen-select');
+  if (hSel) {
+    hSel.addEventListener('change', function() {
+      const opt = this.options[this.selectedIndex];
+      if (!opt || opt.value === '') return;
+      const lat = parseFloat(opt.dataset.lat);
+      const lng = parseFloat(opt.dataset.lng);
+      if (isNaN(lat) || isNaN(lng)) return;
+
+      // Place black origin marker
+      clearRoute();
+      clearOriginMarker();
+      originLatLng = { lat, lng };
+
+      // Black circle icon
+      const blackIcon = L.divIcon({
+        html:'<div style="width:14px;height:14px;border-radius:50%;background:#000;border:3px solid #fff;box-shadow:0 0 8px rgba(0,0,0,0.7);"></div>',
+        className:'', iconSize:[14,14], iconAnchor:[7,7]
+      });
+      const m = activeMap();
+      if (m) {
+        originMarker = L.marker([lat, lng], { icon: blackIcon, zIndexOffset:1000 })
+          .bindTooltip(opt.textContent, { permanent:false, direction:'top', className:'site-label' })
+          .addTo(m);
+        m.setView([lat, lng], Math.max(m.getZoom(), 8), { animate:true });
+      }
+
+      pickStep = 'dest';
+      // Show hint text, hide dropdown
+      headerOrigenHint(true);
+      // Reset select value
+      this.value = '';
+    });
+  }
+  // Cambiar Origen button — reset origin and show dropdown again
+  var btnCambiarOrigen = document.getElementById('btn-cambiar-origen');
+  if (btnCambiarOrigen) {
+    btnCambiarOrigen.addEventListener('click', function() {
+      // Clear current origin
+      clearRoute();
+      clearOriginMarker();
+      originLatLng = null;
+      if (activeTooltip) { try { activeTooltip.remove(); } catch(e){} activeTooltip = null; }
+      setStep('origin');
+      // Hide hint and this button, show dropdown again
+      const hint = document.getElementById('header-origen-hint');
+      const sel  = document.getElementById('header-origen-select');
+      if (hint) hint.style.display = 'none';
+      if (sel)  { sel.value = ''; sel.style.display = 'block'; }
+      this.style.display = 'none';
+      // Ocultar recuadros de Distancia/Tiempo del header
+      document.getElementById('header-route-dist-box').style.display = 'none';
+      document.getElementById('header-route-time-box').style.display = 'none';
+    });
+  }
+
+  // Origin dropdown in sidebar
+  var origSel = document.getElementById('origin-select');
+  if (origSel) {
+    origSel.addEventListener('change', function() {
+      const opt = this.options[this.selectedIndex];
+      if (!opt || opt.value === '') return;
+      const lat = parseFloat(opt.dataset.lat);
+      const lng = parseFloat(opt.dataset.lng);
+      if (isNaN(lat) || isNaN(lng)) return;
+      originLatLng = { lat, lng };
+      placeOriginMarker(lat, lng);
+      setStep('dest');
+      // Pan map to origin
+      if (mapArgentina) mapArgentina.setView([lat, lng], 10, { animate:true });
     });
   }
 
@@ -1592,6 +1918,12 @@ document.addEventListener('DOMContentLoaded', function() {
       clearOriginMarker();
       if (activeTooltip) { try { activeTooltip.remove(); } catch(e){} activeTooltip = null; }
       setStep('origin');
+      const hint    = document.getElementById('header-origen-hint');
+      const sel     = document.getElementById('header-origen-select');
+      const cambiar = document.getElementById('btn-cambiar-origen');
+      if (hint)    hint.style.display    = 'none';
+      if (cambiar) cambiar.style.display = 'none';
+      if (sel)     { sel.value = ''; sel.style.display = 'block'; }
       var mapaEl = document.getElementById('page-mapa');
       var pp     = document.getElementById('page-provincias');
       fadeSwap(mapaEl, pp, 'flex');
@@ -1607,6 +1939,12 @@ document.addEventListener('DOMContentLoaded', function() {
       clearOriginMarker();
       if (activeTooltip) { try { activeTooltip.remove(); } catch(e){} activeTooltip = null; }
       setStep('origin');
+      const hint    = document.getElementById('header-origen-hint');
+      const sel     = document.getElementById('header-origen-select');
+      const cambiar = document.getElementById('btn-cambiar-origen');
+      if (hint)    hint.style.display    = 'none';
+      if (cambiar) cambiar.style.display = 'none';
+      if (sel)     { sel.value = ''; sel.style.display = 'block'; }
       var mapaEl = document.getElementById('page-mapa');
       var cat    = document.getElementById('page-categorias');
       fadeSwap(mapaEl, cat, 'flex');
@@ -1614,154 +1952,171 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// ─── MIS ORÍGENES ─────────────────────────────────────────────────────────────
-const MO_LS_KEY = 'arg_turismo_origenes';
-let moOrigenes   = [];   // array en memoria
-let moEditIndex  = null; // null = agregar, number = editar
+// ─── ORIGEN MODAL ─────────────────────────────────────────────────────────────
+const MO_MAX    = 10;
+
+// Working copy while modal is open
+let moDraft = [];
 
 function moLoad() {
-  try { moOrigenes = JSON.parse(localStorage.getItem(MO_LS_KEY)) || []; }
-  catch(e) { moOrigenes = []; }
+  try { moDraft = JSON.parse(localStorage.getItem(MO_LS_KEY)) || []; }
+  catch(e) { moDraft = []; }
+  // Pad to MO_MAX with empty slots
+  while (moDraft.length < MO_MAX) moDraft.push({ provincia:'', localidad:'', nombre:'', lat:'', lng:'' });
+  moDraft = moDraft.slice(0, MO_MAX);
 }
 
-function moSave() {
-  try { localStorage.setItem(MO_LS_KEY, JSON.stringify(moOrigenes)); } catch(e) {}
+function moSaveLS() {
+  // Only persist rows that have at least a nombre
+  const toSave = moDraft.filter(r => r.nombre.trim() !== '');
+  try { localStorage.setItem(MO_LS_KEY, JSON.stringify(toSave)); } catch(e) {}
 }
 
-function moRender() {
-  const list  = document.getElementById('mo-list');
-  const empty = document.getElementById('mo-empty');
-  const count = document.getElementById('mo-list-count');
-  const btnAdd = document.getElementById('mo-btn-add');
-  if (!list) return;
-
-  count.textContent = moOrigenes.length + ' / 10 orígenes';
-  btnAdd.disabled   = moOrigenes.length >= 10;
-
-  if (moOrigenes.length === 0) {
-    list.innerHTML = '';
-    empty.style.display = 'block';
-    list.appendChild(empty);
-    return;
-  }
-  empty.style.display = 'none';
-  list.innerHTML = '';
-
-  moOrigenes.forEach(function(o, i) {
-    const item = document.createElement('div');
-    item.className = 'mo-item';
-    const sub = [o.provincia, o.localidad].filter(Boolean).join(' · ');
-    item.innerHTML =
-      '<div class="mo-item-info">' +
-        '<div class="mo-item-name">' + escHtml(o.nombre || '(sin nombre)') + '</div>' +
-        (sub ? '<div class="mo-item-sub">' + escHtml(sub) + '</div>' : '') +
-        '<div class="mo-item-coords">' + (o.lat !== '' ? o.lat : '?') + ', ' + (o.lng !== '' ? o.lng : '?') + '</div>' +
-      '</div>' +
-      '<div class="mo-item-actions">' +
-        '<button class="mo-btn-edit" data-i="' + i + '">✏ Editar</button>' +
-        '<button class="mo-btn-del"  data-i="' + i + '">✕</button>' +
-      '</div>';
-    list.appendChild(item);
-  });
-
-  list.querySelectorAll('.mo-btn-edit').forEach(function(btn) {
-    btn.addEventListener('click', function() { moStartEdit(parseInt(btn.dataset.i)); });
-  });
-  list.querySelectorAll('.mo-btn-del').forEach(function(btn) {
-    btn.addEventListener('click', function() { moDel(parseInt(btn.dataset.i)); });
-  });
-}
-
-function escHtml(s) {
+function escH(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function moShowForm(show) {
-  const form = document.getElementById('mo-form');
-  if (form) form.classList.toggle('visible', show);
-  document.getElementById('mo-error').textContent = '';
+function moProvOptions(selected, disabled) {
+  const provs = PROVINCIAS_LIST.map(function(p) { return p.label; });
+  let opts = '<option value="">' + (disabled ? (selected || '—') : '— Provincia —') + '</option>';
+  if (!disabled) {
+    provs.forEach(function(lbl) {
+      opts += '<option value="' + escH(lbl) + '"' + (lbl === selected ? ' selected' : '') + '>' + escH(lbl) + '</option>';
+    });
+  }
+  return opts;
 }
 
-function moClearForm() {
-  ['mo-f-provincia','mo-f-localidad','mo-f-nombre','mo-f-lat','mo-f-lng'].forEach(function(id) {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
+function moRenderTable() {
+  const tbody = document.getElementById('mo-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  moDraft.forEach(function(row, i) {
+    const tr = document.createElement('tr');
+    tr.className = 'mo-tr';
+    tr.dataset.idx = i;
+
+    tr.innerHTML =
+      '<td class="mo-td mo-td-n">' + (i + 1) + '</td>' +
+      '<td class="mo-td"><select class="mo-cell-input mo-cell-select" data-f="provincia" data-i="' + i + '" disabled>' + moProvOptions(row.provincia, true) + '</select></td>' +
+      '<td class="mo-td"><input class="mo-cell-input" data-f="localidad" data-i="' + i + '" type="text" maxlength="80" placeholder="Localidad" value="' + escH(row.localidad) + '" disabled /></td>' +
+      '<td class="mo-td"><input class="mo-cell-input" data-f="nombre" data-i="' + i + '" type="text" maxlength="100" placeholder="Nombre" value="' + escH(row.nombre) + '" disabled /></td>' +
+      '<td class="mo-td"><input class="mo-cell-input mo-coord" data-f="lat" data-i="' + i + '" type="number" step="any" placeholder="-38.00" value="' + escH(row.lat) + '" disabled /></td>' +
+      '<td class="mo-td"><input class="mo-cell-input mo-coord" data-f="lng" data-i="' + i + '" type="number" step="any" placeholder="-57.54" value="' + escH(row.lng) + '" disabled /></td>' +
+      '<td class="mo-td"><div class="mo-td-actions">' +
+        '<button class="mo-btn-edit" data-i="' + i + '" type="button">Editar</button>' +
+        '<button class="mo-btn-del"  data-i="' + i + '" type="button">Eliminar</button>' +
+      '</div></td>';
+
+    tbody.appendChild(tr);
   });
-  document.getElementById('mo-error').textContent = '';
+
+  // Wire edit buttons
+  tbody.querySelectorAll('.mo-btn-edit').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const i = parseInt(btn.dataset.i);
+      moEnableRow(i, btn);
+    });
+  });
+
+  // Wire delete buttons
+  tbody.querySelectorAll('.mo-btn-del').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const i = parseInt(btn.dataset.i);
+      moDraft[i] = { provincia:'', localidad:'', nombre:'', lat:'', lng:'' };
+      document.getElementById('mo-error').textContent = '';
+      moRenderTable();
+    });
+  });
 }
 
-function moStartAdd() {
-  moEditIndex = null;
-  moClearForm();
-  document.getElementById('mo-form-title').textContent = 'Agregar origen';
-  document.getElementById('mo-btn-save-item').textContent = 'Guardar origen';
-  moShowForm(true);
-  document.getElementById('mo-f-nombre').focus();
+function moEnableRow(i, editBtn) {
+  const tbody = document.getElementById('mo-tbody');
+  const tr = tbody.querySelector('tr[data-idx="' + i + '"]');
+  if (!tr) return;
+
+  // Enable all regular inputs
+  tr.querySelectorAll('.mo-cell-input').forEach(function(inp) { inp.disabled = false; });
+
+  // Replace the provincia select with the full options list
+  const provSel = tr.querySelector('[data-f="provincia"]');
+  const currentProv = moDraft[i].provincia || '';
+  provSel.innerHTML = moProvOptions(currentProv, false);
+  provSel.disabled = false;
+
+  // Replace action buttons with OK + Eliminar
+  const actDiv = tr.querySelector('.mo-td-actions');
+  actDiv.innerHTML =
+    '<button class="mo-btn-ok"  data-i="' + i + '" type="button">✓ OK</button>' +
+    '<button class="mo-btn-del" data-i="' + i + '" type="button">Eliminar</button>';
+
+  actDiv.querySelector('.mo-btn-ok').addEventListener('click', function() {
+    moCommitRow(i, tr);
+  });
+  actDiv.querySelector('.mo-btn-del').addEventListener('click', function() {
+    moDraft[i] = { provincia:'', localidad:'', nombre:'', lat:'', lng:'' };
+    document.getElementById('mo-error').textContent = '';
+    moRenderTable();
+  });
+
+  // Focus the nombre field (more useful than provincia dropdown)
+  const nombreInp = tr.querySelector('[data-f="nombre"]');
+  if (nombreInp) nombreInp.focus();
 }
 
-function moStartEdit(i) {
-  moEditIndex = i;
-  const o = moOrigenes[i];
-  document.getElementById('mo-f-provincia').value = o.provincia || '';
-  document.getElementById('mo-f-localidad').value = o.localidad || '';
-  document.getElementById('mo-f-nombre').value    = o.nombre    || '';
-  document.getElementById('mo-f-lat').value       = o.lat !== undefined ? o.lat : '';
-  document.getElementById('mo-f-lng').value       = o.lng !== undefined ? o.lng : '';
-  document.getElementById('mo-form-title').textContent    = 'Editar origen';
-  document.getElementById('mo-btn-save-item').textContent = 'Actualizar origen';
-  document.getElementById('mo-error').textContent = '';
-  moShowForm(true);
-  document.getElementById('mo-f-nombre').focus();
-}
+function moCommitRow(i, tr) {
+  const errEl = document.getElementById('mo-error');
+  const get = function(f) { return tr.querySelector('[data-f="' + f + '"]').value.trim(); };
 
-function moSaveItem() {
-  const nombre    = document.getElementById('mo-f-nombre').value.trim();
-  const provincia = document.getElementById('mo-f-provincia').value.trim();
-  const localidad = document.getElementById('mo-f-localidad').value.trim();
-  const latRaw    = document.getElementById('mo-f-lat').value.trim();
-  const lngRaw    = document.getElementById('mo-f-lng').value.trim();
-  const errEl     = document.getElementById('mo-error');
+  const nombre    = get('nombre');
+  const provincia = get('provincia');
+  const localidad = get('localidad');
+  const latRaw    = get('lat');
+  const lngRaw    = get('lng');
 
-  if (!nombre) { errEl.textContent = 'El nombre del sitio es obligatorio.'; return; }
-  const lat = latRaw !== '' ? parseFloat(latRaw) : '';
-  const lng = lngRaw !== '' ? parseFloat(lngRaw) : '';
-  if (latRaw !== '' && isNaN(lat)) { errEl.textContent = 'Latitud inválida.'; return; }
-  if (lngRaw !== '' && isNaN(lng)) { errEl.textContent = 'Longitud inválida.'; return; }
-  if (lat !== '' && (lat < -90  || lat > 90))  { errEl.textContent = 'Latitud debe estar entre -90 y 90.'; return; }
-  if (lng !== '' && (lng < -180 || lng > 180)) { errEl.textContent = 'Longitud debe estar entre -180 y 180.'; return; }
-
-  const entry = { nombre, provincia, localidad, lat, lng };
-
-  if (moEditIndex === null) {
-    if (moOrigenes.length >= 10) { errEl.textContent = 'Límite de 10 orígenes alcanzado.'; return; }
-    moOrigenes.push(entry);
-  } else {
-    moOrigenes[moEditIndex] = entry;
-    moEditIndex = null;
+  // Validate
+  if (latRaw !== '') {
+    const lat = parseFloat(latRaw);
+    if (isNaN(lat) || lat < -90 || lat > 90) { errEl.textContent = 'Fila ' + (i+1) + ': Latitud inválida (-90 a 90).'; return; }
+  }
+  if (lngRaw !== '') {
+    const lng = parseFloat(lngRaw);
+    if (isNaN(lng) || lng < -180 || lng > 180) { errEl.textContent = 'Fila ' + (i+1) + ': Longitud inválida (-180 a 180).'; return; }
   }
 
-  moShowForm(false);
-  moClearForm();
-  moRender();
-}
+  errEl.textContent = '';
+  moDraft[i] = {
+    provincia, localidad, nombre,
+    lat: latRaw !== '' ? parseFloat(latRaw) : '',
+    lng: lngRaw !== '' ? parseFloat(lngRaw) : ''
+  };
 
-function moDel(i) {
-  moOrigenes.splice(i, 1);
-  if (moEditIndex !== null) { moShowForm(false); moClearForm(); moEditIndex = null; }
-  moRender();
+  moRenderTable();
 }
 
 function moOpen() {
   moLoad();
-  moShowForm(false);
-  moClearForm();
-  moEditIndex = null;
-  moRender();
+  document.getElementById('mo-error').textContent = '';
+  moRenderTable();
   document.getElementById('modal-origenes').style.display = 'flex';
 }
 
 function moClose(save) {
-  if (save) moSave();
+  if (save) {
+    // Collect any rows currently being edited (inputs enabled) before saving
+    const tbody = document.getElementById('mo-tbody');
+    tbody.querySelectorAll('.mo-tr').forEach(function(tr) {
+      const inp = tr.querySelector('.mo-cell-input');
+      if (inp && !inp.disabled) {
+        const i = parseInt(tr.dataset.idx);
+        moCommitRow(i, tr);
+      }
+    });
+    moSaveLS();
+    // Refresh the origin dropdown if we're on the origin step
+    if (pickStep === 'origin') setStep('origin');
+  }
   document.getElementById('modal-origenes').style.display = 'none';
 }
 
@@ -1769,10 +2124,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('btn-abrir-origenes').addEventListener('click', moOpen);
   document.getElementById('mo-close').addEventListener('click', function() { moClose(false); });
   document.getElementById('mo-btn-guardar').addEventListener('click', function() { moClose(true); });
-  document.getElementById('mo-btn-add').addEventListener('click', moStartAdd);
-  document.getElementById('mo-btn-cancel').addEventListener('click', function() { moShowForm(false); moClearForm(); moEditIndex = null; });
-  document.getElementById('mo-btn-save-item').addEventListener('click', moSaveItem);
-  // Cerrar con clic en el backdrop
   document.getElementById('modal-origenes').addEventListener('click', function(e) {
     if (e.target === this) moClose(false);
   });
