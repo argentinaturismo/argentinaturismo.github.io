@@ -115,8 +115,7 @@
       text-align:center; padding:8px 10px;
       border-radius:10px;
       border:1.5px solid rgba(255,255,255,0.18);
-      background:rgba(15,17,23,0.52);
-      backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+      background:var(--panel);
       color:#e8eaf2;
       font-family:'Barlow',sans-serif; font-weight:700;
       font-size:clamp(0.825rem, 1.55vw, 1.425rem);
@@ -124,11 +123,11 @@
       cursor:pointer; user-select:none;
       transition:background .2s ease, border-color .2s ease, color .2s ease, transform .12s ease;
     }
-    .pp-item:hover { transform:translateY(-2px); background:rgba(15,17,23,0.68); }
-    .pp-item.on  { background:rgba(22,163,74,0.28); border-color:rgba(22,163,74,0.65); color:#bbf7d0; }
-    .pp-item.on:hover  { background:rgba(22,163,74,0.38); }
-    .pp-item.off { background:rgba(220,38,38,0.18); border-color:rgba(220,38,38,0.42); color:rgba(255,255,255,0.38); }
-    .pp-item.off:hover { background:rgba(220,38,38,0.28); color:rgba(255,255,255,0.6); }
+    .pp-item:hover { transform:translateY(-2px); background:var(--panel2); }
+    .pp-item.on  { background:#14532d; border-color:#22c55e; color:#bbf7d0; }
+    .pp-item.on:hover  { background:#166534; }
+    .pp-item.off { background:#3a1414; border-color:#dc2626; color:rgba(255,255,255,0.5); }
+    .pp-item.off:hover { background:#4c1d1d; color:rgba(255,255,255,0.7); }
     .pp-footer {
       display:flex; justify-content:center;
       padding:24px 40px 36px;
@@ -469,9 +468,11 @@
     }
     .btn-volver:hover { background:rgba(232,201,106,0.2); border-color:rgba(232,201,106,0.55); }
     .btn-volver:active { transform:translateY(1px); }
+    #btn-abrir-origenes { color:#ef4444; }
+    #btn-cambiar-origen { color:#ef4444; }
     .header-origen-select {
       background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
-      color:var(--accent); border-radius:6px; padding:7px 10px;
+      color:#ef4444; border-radius:6px; padding:7px 10px;
       font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
       cursor:pointer; white-space:nowrap; max-width:200px;
       transition:background .2s, border-color .2s;
@@ -479,7 +480,7 @@
     .header-origen-select:hover, .header-origen-select:focus { background:rgba(232,201,106,0.2); border-color:rgba(232,201,106,0.55); outline:none; }
     .header-origen-select option { background:#171c27; color:#e8eaf2; }
     .header-origen-hint {
-      color:var(--accent); font-family:'Barlow',sans-serif; font-size:0.78rem;
+      color:#ffeef2; font-family:'Barlow',sans-serif; font-size:0.78rem;
       font-weight:600; white-space:nowrap; padding:7px 14px;
       background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
       border-radius:6px;
@@ -491,7 +492,7 @@
       font-family:'Barlow',sans-serif;
     }
     .header-route-lbl {
-      font-size:0.66rem; font-weight:700; color:var(--accent);
+      font-size:0.66rem; font-weight:700; color:#38bdf8;
       text-transform:uppercase; letter-spacing:0.06em;
     }
     .header-route-val {
@@ -500,7 +501,7 @@
     .header-count-box {
       position:absolute; left:340px; top:50%; transform:translateY(-50%);
       background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
-      color:var(--accent); border-radius:6px; padding:7px 14px;
+      color:#ffeef2; border-radius:6px; padding:7px 14px;
       font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
       white-space:nowrap; display:flex; align-items:center; gap:5px;
     }
@@ -649,6 +650,13 @@
       hyphens:auto; -webkit-hyphens:auto;
       overflow-wrap:break-word;
     }
+    .tic-fotos { display:flex; gap:6px; margin-top:12px; }
+    .tic-fotos img {
+      flex:1; min-width:0; width:100%; height:78px; object-fit:cover;
+      border-radius:8px; border:1px solid var(--border); background:#11151f;
+      cursor:zoom-in; transition:opacity .15s;
+    }
+    .tic-fotos img:hover { opacity:0.85; }
 
     /* ── RECUADROS RÁPIDOS: Días / Horarios / Costo / Mejor época ── */
     .info-quickfacts {
@@ -662,15 +670,12 @@
       text-align:center;
     }
 
-    .qf-lbl {
-      font-size:0.56rem; font-weight:700; color:var(--accent);
-      text-transform:uppercase; letter-spacing:0.06em;
+    .qf-lbl, .qf-val {
+      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
+      color:#ffffff; letter-spacing:normal; text-transform:none;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
-    .qf-val {
-      font-size:0.68rem; color:#ddd; margin-top:1px;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
+    .qf-val { margin-top:1px; }
 
     /* ── PANEL DE RUTA (parte inferior de la pantalla): origen → destino → distancia/tiempo ── */
     .info-panel-bottom {
@@ -698,7 +703,7 @@
       background:rgba(232,201,106,0.07); border:1px solid rgba(232,201,106,0.25);
     }
     .route-metric-lbl {
-      font-size:0.54rem; font-weight:700; color:var(--accent);
+      font-size:0.54rem; font-weight:700; color:#38bdf8;
       text-transform:uppercase; letter-spacing:0.06em;
     }
     .route-metric-val {
@@ -1126,6 +1131,7 @@
           <span class="tic-name" id="tic-name"></span>
         </div>
         <div class="tic-desc" id="tic-desc"></div>
+        <div class="tic-fotos" id="tic-fotos"></div>
       </div>
     </div>
 
@@ -1229,7 +1235,7 @@
 
       <form class="mo-auth-form" id="mo-form-register" style="display:none;">
         <label class="mo-auth-label">Usuario
-          <input class="mo-auth-input" id="mo-reg-user" type="text" autocomplete="username" maxlength="32" placeholder="Elegí un usuario (no puede repetirse)" />
+          <input class="mo-auth-input" id="mo-reg-user" type="text" autocomplete="username" maxlength="32" placeholder="Elegí un usuario" />
         </label>
         <label class="mo-auth-label">Contraseña
           <input class="mo-auth-input" id="mo-reg-pass" type="password" autocomplete="new-password" maxlength="64" placeholder="Mínimo 4 caracteres" />
@@ -1704,6 +1710,20 @@ function showSiteInfo(s) {
   document.getElementById('tic-name').textContent = s.name;
   document.getElementById('tic-desc').textContent = s.desc || '';
 
+  // Fotos del sitio (cargadas desde el administrador) — se ocultan si no hay ninguna
+  const ticFotos = document.getElementById('tic-fotos');
+  const fotos = [s.foto1, s.foto2, s.foto3].filter(Boolean);
+  if (fotos.length) {
+    ticFotos.innerHTML = fotos.map(function(f) {
+      return '<img src="' + f.replace(/"/g,'&quot;') + '" alt="' + s.name.replace(/"/g,'&quot;') + '" loading="lazy" '
+           + 'onerror="this.remove()" onclick="window.open(this.src,\'_blank\')" />';
+    }).join('');
+    ticFotos.style.display = 'flex';
+  } else {
+    ticFotos.innerHTML = '';
+    ticFotos.style.display = 'none';
+  }
+
   document.getElementById('tab-info-placeholder').style.display = 'none';
   document.getElementById('tab-info-content').style.display     = 'block';
 
@@ -2132,12 +2152,25 @@ function sessionGet()   { try { return localStorage.getItem(SESSION_KEY) || ''; 
 function sessionSet(u)  { try { localStorage.setItem(SESSION_KEY, u); } catch(e) {} }
 function sessionClear() { try { localStorage.removeItem(SESSION_KEY); } catch(e) {} }
 
+// ── Modo invitado: se mantiene SOLO mientras la pestaña/navegador está abierto ──
+// (sessionStorage, no localStorage) — no es una cuenta, no persiste entre visitas,
+// no se sincroniza entre dispositivos. Sirve únicamente para no perder lo que
+// escribiste si cerrás y volvés a abrir el formulario de Orígenes en la misma visita.
+const GUEST_SESSION_KEY = 'arg_turismo_guest_origenes';
+function guestSessionLoad() {
+  try { return JSON.parse(sessionStorage.getItem(GUEST_SESSION_KEY)) || []; }
+  catch(e) { return []; }
+}
+function guestSessionSave(origenes) {
+  try { sessionStorage.setItem(GUEST_SESSION_KEY, JSON.stringify(origenes)); } catch(e) {}
+}
+
 // Orígenes "visibles" en cualquier parte del sitio (selector del header, panel de ruta, etc.):
-// SIEMPRE depende de si hay una sesión activa — datos personales, sólo con sesión.
+// con sesión activa son los de la cuenta; sin sesión, son los temporales de esta visita.
 function moActiveOrigenes() {
   const sess = sessionGet();
-  if (!sess) return [];
-  return dbLoadOrigenesForUser(sess);
+  if (sess) return dbLoadOrigenesForUser(sess);
+  return guestSessionLoad();
 }
 
 function escH(s) {
@@ -2323,10 +2356,10 @@ function moEnterTable(mode) {
     btnIn.style.display  = 'none';
     moDraft = dbLoadOrigenesForUser(moUsername);
   } else {
-    label.textContent = 'Modo invitado: lo que agregues acá no se va a guardar.';
+    label.textContent = 'Modo invitado: se mantiene mientras tengas el sitio abierto, pero no es permanente ni se sincroniza entre dispositivos.';
     btnOut.style.display = 'none';
     btnIn.style.display  = 'inline-block';
-    moDraft = [];
+    moDraft = guestSessionLoad();
   }
 
   while (moDraft.length < MO_MAX) moDraft.push({ provincia:'', localidad:'', nombre:'', lat:'', lng:'' });
@@ -2350,8 +2383,10 @@ function moClose(save) {
     if (moMode === 'session' && moUsername) {
       const toSave = moDraft.filter(function(r){ return r.nombre.trim() !== ''; });
       dbSaveOrigenesForUser(moUsername, toSave);
+    } else if (moMode === 'guest') {
+      const toSave = moDraft.filter(function(r){ return r.nombre.trim() !== ''; });
+      guestSessionSave(toSave);
     }
-    // Modo invitado: a propósito, no se guarda nada en ningún lado.
     if (typeof window.headerOrigenPopulate === 'function') window.headerOrigenPopulate();
     if (pickStep === 'origin') setStep('origin');
   }
