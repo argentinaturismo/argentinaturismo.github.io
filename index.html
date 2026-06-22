@@ -819,6 +819,72 @@
       text-transform:uppercase; cursor:pointer; transition:opacity .2s;
     }
     .mo-btn-guardar:hover { opacity:0.85; }
+
+    /* ── AUTENTICACIÓN (login / registro) dentro del modal de Orígenes ── */
+    .mo-auth {
+      display:flex; flex-direction:column; gap:14px;
+      padding:22px 26px 26px;
+    }
+    .mo-auth-intro {
+      font-family:'Barlow',sans-serif; font-size:0.82rem; color:#9aa3c4;
+      line-height:1.5; margin:0;
+    }
+    .mo-auth-tabs { display:flex; gap:6px; border-bottom:1px solid #2a3050; }
+    .mo-auth-tab {
+      flex:1; background:none; border:none; padding:10px 6px;
+      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:700;
+      letter-spacing:0.04em; color:#7a83a6; cursor:pointer;
+      border-bottom:2px solid transparent; transition:color .18s, border-color .18s;
+    }
+    .mo-auth-tab.active { color:#e8c96a; border-bottom-color:#e8c96a; }
+    .mo-auth-tab:hover   { color:#e8eaf2; }
+    .mo-auth-form { display:flex; flex-direction:column; gap:12px; }
+    .mo-auth-label {
+      display:flex; flex-direction:column; gap:5px;
+      font-family:'Barlow',sans-serif; font-size:0.72rem; font-weight:700;
+      letter-spacing:0.05em; color:#7a83a6; text-transform:uppercase;
+    }
+    .mo-auth-input {
+      background:#0f1117; border:1px solid #2a3050; border-radius:6px;
+      color:#e8eaf2; font-family:'Barlow',sans-serif; font-size:0.88rem;
+      font-weight:400; text-transform:none; letter-spacing:normal;
+      padding:10px 12px; outline:none; transition:border-color .18s;
+    }
+    .mo-auth-input:focus { border-color:#e8c96a; }
+    .mo-auth-input::placeholder { color:#3a4060; }
+    .mo-auth-error { font-size:0.74rem; color:#fca5a5; min-height:14px; }
+    .mo-auth-submit {
+      background:#e8c96a; color:#0f1117; border:none; border-radius:8px;
+      padding:12px; font-family:'Barlow',sans-serif; font-size:0.85rem;
+      font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
+      cursor:pointer; transition:opacity .2s; margin-top:4px;
+    }
+    .mo-auth-submit:hover { opacity:0.86; }
+    .mo-auth-guest {
+      background:none; border:none; color:#7a83a6; text-decoration:underline;
+      font-family:'Barlow',sans-serif; font-size:0.76rem; cursor:pointer;
+      align-self:center; margin-top:4px; transition:color .18s;
+    }
+    .mo-auth-guest:hover { color:#e8eaf2; }
+
+    /* ── BARRA DE ESTADO DE SESIÓN ── */
+    .mo-session-bar {
+      display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+      padding:10px 22px; border-bottom:1px solid #2a3050; flex-shrink:0;
+      background:rgba(232,201,106,0.05);
+    }
+    .mo-session-label {
+      flex:1; font-family:'Barlow',sans-serif; font-size:0.76rem; color:#9aa3c4;
+    }
+    .mo-session-label strong { color:#e8c96a; }
+    .mo-session-link {
+      background:none; border:1px solid #2a3050; border-radius:6px;
+      padding:5px 12px; color:#7a83a6; cursor:pointer;
+      font-family:'Barlow',sans-serif; font-size:0.7rem; font-weight:700;
+      letter-spacing:0.05em; text-transform:uppercase;
+      transition:color .18s, border-color .18s;
+    }
+    .mo-session-link:hover { color:#e8c96a; border-color:#e8c96a; }
   
 
   </style>
@@ -1141,7 +1207,51 @@
       <button class="mo-close" id="mo-close" type="button">✕</button>
     </div>
 
-    <div class="mo-body">
+    <!-- ── PANTALLA DE INICIO DE SESIÓN / REGISTRO ── -->
+    <div class="mo-auth" id="mo-auth">
+      <p class="mo-auth-intro">Iniciá sesión o creá una cuenta para guardar tus orígenes y usarlos desde cualquier dispositivo.</p>
+
+      <div class="mo-auth-tabs">
+        <button class="mo-auth-tab active" id="mo-tab-login"    type="button">Iniciar sesión</button>
+        <button class="mo-auth-tab"        id="mo-tab-register" type="button">Registrarse</button>
+      </div>
+
+      <form class="mo-auth-form" id="mo-form-login">
+        <label class="mo-auth-label">Usuario
+          <input class="mo-auth-input" id="mo-login-user" type="text" autocomplete="username" maxlength="32" placeholder="Tu nombre de usuario" />
+        </label>
+        <label class="mo-auth-label">Contraseña
+          <input class="mo-auth-input" id="mo-login-pass" type="password" autocomplete="current-password" maxlength="64" placeholder="Tu contraseña" />
+        </label>
+        <div class="mo-auth-error" id="mo-login-error"></div>
+        <button class="mo-auth-submit" type="submit">Entrar</button>
+      </form>
+
+      <form class="mo-auth-form" id="mo-form-register" style="display:none;">
+        <label class="mo-auth-label">Usuario
+          <input class="mo-auth-input" id="mo-reg-user" type="text" autocomplete="username" maxlength="32" placeholder="Elegí un usuario (no puede repetirse)" />
+        </label>
+        <label class="mo-auth-label">Contraseña
+          <input class="mo-auth-input" id="mo-reg-pass" type="password" autocomplete="new-password" maxlength="64" placeholder="Mínimo 4 caracteres" />
+        </label>
+        <label class="mo-auth-label">Confirmar contraseña
+          <input class="mo-auth-input" id="mo-reg-pass2" type="password" autocomplete="new-password" maxlength="64" placeholder="Repetí la contraseña" />
+        </label>
+        <div class="mo-auth-error" id="mo-reg-error"></div>
+        <button class="mo-auth-submit" type="submit">Crear cuenta</button>
+      </form>
+
+      <button class="mo-auth-guest" id="mo-btn-guest" type="button">Continuar sin iniciar sesión</button>
+    </div>
+
+    <!-- ── BARRA DE ESTADO DE SESIÓN (visible una vez dentro del formulario) ── -->
+    <div class="mo-session-bar" id="mo-session-bar" style="display:none;">
+      <span class="mo-session-label" id="mo-session-label"></span>
+      <button class="mo-session-link" id="mo-btn-logout"          type="button" style="display:none;">Cerrar sesión</button>
+      <button class="mo-session-link" id="mo-btn-login-from-guest" type="button" style="display:none;">Iniciar sesión</button>
+    </div>
+
+    <div class="mo-body" id="mo-body-wrap" style="display:none;">
       <table class="mo-table">
         <thead>
           <tr>
@@ -1159,7 +1269,7 @@
       <div class="mo-error" id="mo-error"></div>
     </div>
 
-    <div class="mo-footer">
+    <div class="mo-footer" id="mo-footer" style="display:none;">
       <button class="mo-btn-guardar" id="mo-btn-guardar" type="button">Guardar y Salir</button>
     </div>
 
@@ -1213,7 +1323,6 @@ const PROVINCIAS_LIST = [
 ];
 
 const LS_KEY    = 'arg_turismo_sitios';
-const MO_LS_KEY = 'arg_turismo_origenes_v2';
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
 const activeProv = new Set();
@@ -1501,11 +1610,10 @@ function setStep(step) {
     hint.textContent      = 'Elegí un origen desde el menú superior';
     metrics.style.display = 'none';
     reset.style.display   = 'none';
-    // Populate origin dropdown
+    // Populate origin dropdown — sólo se muestran orígenes guardados si hay sesión activa
     if (origSel) {
       try {
-        const saved = JSON.parse(localStorage.getItem(MO_LS_KEY)) || [];
-        const valid = saved.filter(function(o) { return o.lat !== '' && o.lng !== ''; });
+        const valid = moActiveOrigenes().filter(function(o) { return o.lat !== '' && o.lng !== ''; });
         if (valid.length > 0) {
           origSel.innerHTML = '<option value="">— Elegir desde Mis Orígenes —</option>';
           valid.forEach(function(o, idx) {
@@ -1743,8 +1851,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const sel = document.getElementById('header-origen-select');
     if (!sel) return;
     try {
-      const saved = JSON.parse(localStorage.getItem(MO_LS_KEY)) || [];
-      const valid = saved.filter(o => o.lat !== '' && o.lng !== '' && o.nombre);
+      const valid = moActiveOrigenes().filter(o => o.lat !== '' && o.lng !== '' && o.nombre);
       sel.innerHTML = '<option value="">Seleccionar un origen</option>';
       valid.forEach(function(o, idx) {
         const lbl = [o.nombre, o.localidad, o.provincia].filter(Boolean).join(' · ');
@@ -1758,6 +1865,7 @@ document.addEventListener('DOMContentLoaded', function() {
       sel.style.display = 'block';
     } catch(e) { sel.style.display = 'none'; }
   }
+  window.headerOrigenPopulate = headerOrigenPopulate;
 
   function headerOrigenHint(show) {
     const hint   = document.getElementById('header-origen-hint');
@@ -1958,18 +2066,78 @@ const MO_MAX    = 10;
 // Working copy while modal is open
 let moDraft = [];
 
-function moLoad() {
-  try { moDraft = JSON.parse(localStorage.getItem(MO_LS_KEY)) || []; }
-  catch(e) { moDraft = []; }
-  // Pad to MO_MAX with empty slots
-  while (moDraft.length < MO_MAX) moDraft.push({ provincia:'', localidad:'', nombre:'', lat:'', lng:'' });
-  moDraft = moDraft.slice(0, MO_MAX);
+// ─── CUENTAS Y SESIÓN ─────────────────────────────────────────────────────────
+// IMPORTANTE: este archivo es estático (sin servidor propio). Esto es una
+// simulación funcional de un sistema de cuentas: usuario único, contraseña,
+// sesión y datos ligados a la cuenta. El "padrón" de usuarios vive en el
+// localStorage de CADA navegador, así que todavía no es un registro
+// verdaderamente global compartido entre dispositivos de personas distintas.
+// La lógica está aislada en las funciones db*/session* para poder reemplazarlas
+// por llamadas a una API real (Firebase, Supabase, backend propio, etc.) sin
+// tener que tocar el resto del modal.
+const DB_USERS_KEY = 'arg_turismo_users_db';
+const SESSION_KEY  = 'arg_turismo_session';
+
+function dbHash(str) {
+  // Obfuscación simple — NO es un hash criptográfico real.
+  let h = 0;
+  for (let i = 0; i < str.length; i++) { h = (h * 31 + str.charCodeAt(i)) | 0; }
+  return 'h' + h;
+}
+function dbGetUsers() {
+  try { return JSON.parse(localStorage.getItem(DB_USERS_KEY)) || {}; }
+  catch(e) { return {}; }
+}
+function dbSaveUsers(users) {
+  try { localStorage.setItem(DB_USERS_KEY, JSON.stringify(users)); } catch(e) {}
+}
+function dbUserKey(username) { return String(username || '').trim().toLowerCase(); }
+
+function dbRegister(username, password) {
+  const uname = String(username || '').trim();
+  const key   = dbUserKey(uname);
+  if (!uname || uname.length < 3)       return { ok:false, error:'El usuario debe tener al menos 3 caracteres.' };
+  if (!/^[a-zA-Z0-9_.-]+$/.test(uname)) return { ok:false, error:'Usá solo letras, números, puntos, guiones o guión bajo.' };
+  if (!password || password.length < 4) return { ok:false, error:'La contraseña debe tener al menos 4 caracteres.' };
+  const users = dbGetUsers();
+  if (users[key]) return { ok:false, error:'Ese nombre de usuario ya existe. Elegí otro.' };
+  users[key] = { username:uname, password:dbHash(password), origenes:[] };
+  dbSaveUsers(users);
+  return { ok:true, username:uname };
 }
 
-function moSaveLS() {
-  // Only persist rows that have at least a nombre
-  const toSave = moDraft.filter(r => r.nombre.trim() !== '');
-  try { localStorage.setItem(MO_LS_KEY, JSON.stringify(toSave)); } catch(e) {}
+function dbLogin(username, password) {
+  const key   = dbUserKey(username);
+  const users = dbGetUsers();
+  const u = users[key];
+  if (!u || u.password !== dbHash(password)) return { ok:false, error:'Usuario o contraseña incorrectos.' };
+  return { ok:true, username:u.username };
+}
+
+function dbSaveOrigenesForUser(username, origenes) {
+  const users = dbGetUsers();
+  const key = dbUserKey(username);
+  if (!users[key]) return;
+  users[key].origenes = origenes;
+  dbSaveUsers(users);
+}
+
+function dbLoadOrigenesForUser(username) {
+  const users = dbGetUsers();
+  const key = dbUserKey(username);
+  return (users[key] && users[key].origenes) ? users[key].origenes.slice() : [];
+}
+
+function sessionGet()   { try { return localStorage.getItem(SESSION_KEY) || ''; } catch(e) { return ''; } }
+function sessionSet(u)  { try { localStorage.setItem(SESSION_KEY, u); } catch(e) {} }
+function sessionClear() { try { localStorage.removeItem(SESSION_KEY); } catch(e) {} }
+
+// Orígenes "visibles" en cualquier parte del sitio (selector del header, panel de ruta, etc.):
+// SIEMPRE depende de si hay una sesión activa — datos personales, sólo con sesión.
+function moActiveOrigenes() {
+  const sess = sessionGet();
+  if (!sess) return [];
+  return dbLoadOrigenesForUser(sess);
 }
 
 function escH(s) {
@@ -2095,11 +2263,77 @@ function moCommitRow(i, tr) {
   moRenderTable();
 }
 
+let moMode     = 'guest'; // 'session' | 'guest'
+let moUsername = '';
+
 function moOpen() {
-  moLoad();
+  const errEl = document.getElementById('mo-error');
+  if (errEl) errEl.textContent = '';
+  const sess = sessionGet();
+  if (sess) {
+    moUsername = sess;
+    moMode = 'session';
+    moEnterTable('session');
+  } else {
+    moShowAuth();
+  }
+  document.getElementById('modal-origenes').style.display = 'flex';
+}
+
+function moShowAuth() {
+  moUsername = '';
+  document.getElementById('mo-auth').style.display        = 'flex';
+  document.getElementById('mo-session-bar').style.display  = 'none';
+  document.getElementById('mo-body-wrap').style.display     = 'none';
+  document.getElementById('mo-footer').style.display        = 'none';
+  moSwitchTab('login');
+  ['mo-login-error','mo-reg-error'].forEach(function(id){ document.getElementById(id).textContent = ''; });
+  ['mo-login-user','mo-login-pass','mo-reg-user','mo-reg-pass','mo-reg-pass2'].forEach(function(id){ document.getElementById(id).value = ''; });
+}
+
+function moSwitchTab(tab) {
+  const tabLogin  = document.getElementById('mo-tab-login');
+  const tabReg    = document.getElementById('mo-tab-register');
+  const formLogin = document.getElementById('mo-form-login');
+  const formReg   = document.getElementById('mo-form-register');
+  if (tab === 'login') {
+    tabLogin.classList.add('active');  tabReg.classList.remove('active');
+    formLogin.style.display = 'flex';  formReg.style.display = 'none';
+  } else {
+    tabReg.classList.add('active');    tabLogin.classList.remove('active');
+    formReg.style.display = 'flex';    formLogin.style.display = 'none';
+  }
+}
+
+function moEnterTable(mode) {
+  moMode = mode; // 'session' | 'guest'
+  document.getElementById('mo-auth').style.display = 'none';
+  document.getElementById('mo-body-wrap').style.display = 'block';
+  document.getElementById('mo-footer').style.display = 'flex';
+
+  const bar    = document.getElementById('mo-session-bar');
+  const label  = document.getElementById('mo-session-label');
+  const btnOut = document.getElementById('mo-btn-logout');
+  const btnIn  = document.getElementById('mo-btn-login-from-guest');
+  bar.style.display = 'flex';
+
+  if (mode === 'session') {
+    label.innerHTML = 'Conectado como <strong>' + escH(moUsername) + '</strong> — tus orígenes se guardan en tu cuenta.';
+    btnOut.style.display = 'inline-block';
+    btnIn.style.display  = 'none';
+    moDraft = dbLoadOrigenesForUser(moUsername);
+  } else {
+    label.textContent = 'Modo invitado: lo que agregues acá no se va a guardar.';
+    btnOut.style.display = 'none';
+    btnIn.style.display  = 'inline-block';
+    moDraft = [];
+  }
+
+  while (moDraft.length < MO_MAX) moDraft.push({ provincia:'', localidad:'', nombre:'', lat:'', lng:'' });
+  moDraft = moDraft.slice(0, MO_MAX);
+
   document.getElementById('mo-error').textContent = '';
   moRenderTable();
-  document.getElementById('modal-origenes').style.display = 'flex';
 }
 
 function moClose(save) {
@@ -2113,8 +2347,12 @@ function moClose(save) {
         moCommitRow(i, tr);
       }
     });
-    moSaveLS();
-    // Refresh the origin dropdown if we're on the origin step
+    if (moMode === 'session' && moUsername) {
+      const toSave = moDraft.filter(function(r){ return r.nombre.trim() !== ''; });
+      dbSaveOrigenesForUser(moUsername, toSave);
+    }
+    // Modo invitado: a propósito, no se guarda nada en ningún lado.
+    if (typeof window.headerOrigenPopulate === 'function') window.headerOrigenPopulate();
     if (pickStep === 'origin') setStep('origin');
   }
   document.getElementById('modal-origenes').style.display = 'none';
@@ -2126,6 +2364,60 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('mo-btn-guardar').addEventListener('click', function() { moClose(true); });
   document.getElementById('modal-origenes').addEventListener('click', function(e) {
     if (e.target === this) moClose(false);
+  });
+
+  // Tabs Iniciar sesión / Registrarse
+  document.getElementById('mo-tab-login').addEventListener('click', function() { moSwitchTab('login'); });
+  document.getElementById('mo-tab-register').addEventListener('click', function() { moSwitchTab('register'); });
+
+  // Iniciar sesión
+  document.getElementById('mo-form-login').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const u = document.getElementById('mo-login-user').value;
+    const p = document.getElementById('mo-login-pass').value;
+    const res = dbLogin(u, p);
+    const err = document.getElementById('mo-login-error');
+    if (!res.ok) { err.textContent = res.error; return; }
+    err.textContent = '';
+    moUsername = res.username;
+    sessionSet(moUsername);
+    moEnterTable('session');
+    if (typeof window.headerOrigenPopulate === 'function') window.headerOrigenPopulate();
+  });
+
+  // Registrarse
+  document.getElementById('mo-form-register').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const u  = document.getElementById('mo-reg-user').value;
+    const p  = document.getElementById('mo-reg-pass').value;
+    const p2 = document.getElementById('mo-reg-pass2').value;
+    const err = document.getElementById('mo-reg-error');
+    if (p !== p2) { err.textContent = 'Las contraseñas no coinciden.'; return; }
+    const res = dbRegister(u, p);
+    if (!res.ok) { err.textContent = res.error; return; }
+    err.textContent = '';
+    moUsername = res.username;
+    sessionSet(moUsername);
+    moEnterTable('session');
+    if (typeof window.headerOrigenPopulate === 'function') window.headerOrigenPopulate();
+  });
+
+  // Continuar sin iniciar sesión
+  document.getElementById('mo-btn-guest').addEventListener('click', function() {
+    moEnterTable('guest');
+  });
+
+  // Cerrar sesión (desde dentro del formulario de Orígenes)
+  document.getElementById('mo-btn-logout').addEventListener('click', function() {
+    sessionClear();
+    moUsername = '';
+    if (typeof window.headerOrigenPopulate === 'function') window.headerOrigenPopulate();
+    moShowAuth();
+  });
+
+  // Desde modo invitado, volver a la pantalla de inicio de sesión
+  document.getElementById('mo-btn-login-from-guest').addEventListener('click', function() {
+    moShowAuth();
   });
 });
 
