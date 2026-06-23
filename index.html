@@ -425,6 +425,16 @@
       font-size:0.68rem; letter-spacing:0.2em; text-transform:uppercase;
       color:var(--cream); opacity:0.55;
     }
+    .visitor-counter {
+      position:absolute; bottom:28px; left:34px; z-index:2;
+      font-family:'Barlow', sans-serif;
+      font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase;
+      color:var(--cream); opacity:0.55;
+      display:none;
+    }
+    .visitor-counter strong {
+      font-weight:700; letter-spacing:0.05em;
+    }
 
     @media (prefers-reduced-motion: reduce) {
       .slide, .slide span { animation:none; }
@@ -1084,6 +1094,7 @@
   </div>
 
   <div class="caption" id="caption">Misiones · Cataratas del Iguazú</div>
+  <div class="visitor-counter" id="visitor-counter">Visitas: <strong id="visitor-num">0</strong></div>
 
   <!-- TUTORIAL MODAL -->
   <div class="tut-backdrop" id="tut-backdrop"></div>
@@ -2123,6 +2134,9 @@ async function initApp() {
 // ─── TRANSITIONS: Intro → Provincias → Mapa ───────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
 
+  // Contador de visitas (no cuenta para administradores)
+  initVisitorCounter();
+
   function fadeSwap(fromEl, toEl, toDisplay, afterShown) {
     fromEl.style.transition = 'opacity 1.1s ease';
     fromEl.style.opacity    = '0';
@@ -2385,6 +2399,33 @@ const MO_MAX    = 10;
 
 // Working copy while modal is open
 let moDraft = [];
+
+// ─── ADMINISTRADORES ──────────────────────────────────────────────────────────
+// Lista de usernames que se consideran administradores. Estos no cuentan como visita.
+const ADMIN_USERS = ['admin', 'administrador', 'admin1', 'superuser'];
+
+function isAdmin() {
+  const sess = (function() { try { return localStorage.getItem('arg_turismo_session') || ''; } catch(e) { return ''; } })();
+  if (!sess) return false;
+  return ADMIN_USERS.includes(sess.trim().toLowerCase());
+}
+
+// ─── CONTADOR DE VISITAS ──────────────────────────────────────────────────────
+const VISITS_KEY = 'arg_turismo_visits';
+
+function initVisitorCounter() {
+  if (isAdmin()) return;               // admins no cuentan ni ven el contador
+  let visits = 0;
+  try { visits = parseInt(localStorage.getItem(VISITS_KEY)) || 0; } catch(e) {}
+  visits++;
+  try { localStorage.setItem(VISITS_KEY, visits); } catch(e) {}
+  const el  = document.getElementById('visitor-counter');
+  const num = document.getElementById('visitor-num');
+  if (el && num) {
+    num.textContent = visits.toLocaleString('es-AR');
+    el.style.display = 'block';
+  }
+}
 
 // ─── CUENTAS Y SESIÓN ─────────────────────────────────────────────────────────
 // IMPORTANTE: este archivo es estático (sin servidor propio). Esto es una
