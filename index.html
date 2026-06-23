@@ -103,22 +103,22 @@
       flex:1; min-height:0;
       display:grid;
       grid-template-columns: repeat(6, 1fr);
-      grid-auto-rows: 70px;
+      grid-auto-rows: 52px;
       align-content: center;
       justify-content: center;
-      gap:16px;
+      gap:12px;
       padding:30px 40px;
     }
     .pp-grid-cat, .pp-grid-start { align-content: start; }
     .pp-item {
       display:flex; align-items:center; justify-content:center;
-      text-align:center; padding:8px 10px;
-      border-radius:10px;
+      text-align:center; padding:6px 8px;
+      border-radius:999px;
       border:1.5px solid rgba(255,255,255,0.18);
       background:var(--panel);
       color:#e8eaf2;
       font-family:'Barlow',sans-serif; font-weight:700;
-      font-size:clamp(0.825rem, 1.55vw, 1.425rem);
+      font-size:clamp(0.66rem, 1.15vw, 1.05rem);
       line-height:1.2;
       cursor:pointer; user-select:none;
       transition:background .2s ease, border-color .2s ease, color .2s ease, transform .12s ease;
@@ -134,9 +134,9 @@
       flex-shrink:0;
     }
     .btn-listo-pp {
-      padding:17px 70px;
-      background:#e8c96a; color:#0f1117; border:none; border-radius:8px;
-      font-family:'Barlow',sans-serif; font-weight:700; font-size:1rem;
+      padding:12px 50px;
+      background:#e8c96a; color:#0f1117; border:none; border-radius:999px;
+      font-family:'Barlow',sans-serif; font-weight:700; font-size:0.85rem;
       letter-spacing:0.14em; text-transform:uppercase; cursor:pointer;
       transition:opacity .2s ease, transform .1s ease;
     }
@@ -218,10 +218,10 @@
     }
 
     @media (max-width:900px) {
-      .pp-grid, .pp-grid-cat { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 62px; }
+      .pp-grid, .pp-grid-cat { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 46px; }
     }
     @media (max-width:560px) {
-      .pp-grid, .pp-grid-cat { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 52px; gap:10px; padding:20px; }
+      .pp-grid, .pp-grid-cat { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 40px; gap:8px; padding:20px; }
       .pp-header { padding:18px 20px; }
       .pp-title { font-size:1.25rem; }
     }
@@ -437,9 +437,137 @@
       .welcome   { letter-spacing:0.2em; }
       .btn-enter { padding:14px 40px; }
     }
-  
 
+    /* ── HAMBURGER BUTTON ── */
+    .tut-hamburger {
+      position:fixed; top:18px; right:20px; z-index:2000;
+      width:44px; height:44px;
+      background:rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.22);
+      border-radius:8px; cursor:pointer;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:5px;
+      transition:background .2s ease, border-color .2s ease;
+      padding:0;
+    }
+    .tut-hamburger:hover { background:rgba(0,0,0,0.68); border-color:rgba(232,201,106,0.6); }
+    .tut-hamburger span {
+      display:block; width:22px; height:2px;
+      background:#e8c96a; border-radius:2px;
+      transition:transform .2s ease, opacity .2s ease;
+    }
 
+    /* ── TUTORIAL MODAL ── */
+    .tut-backdrop {
+      display:none; position:fixed; inset:0; z-index:3000;
+      background:rgba(0,0,0,0.72); backdrop-filter:blur(3px);
+    }
+    .tut-backdrop.open { display:block; }
+
+    .tut-modal {
+      display:none; position:fixed; z-index:3001;
+      top:50%; left:50%; transform:translate(-50%,-50%);
+      width:min(780px, 92vw); max-height:85vh;
+      background:#111520; border:1px solid rgba(232,201,106,0.3);
+      border-radius:14px; overflow:hidden;
+      flex-direction:column;
+      box-shadow:0 32px 80px rgba(0,0,0,0.75);
+    }
+    .tut-modal.open { display:flex; }
+
+    .tut-modal-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 26px 16px;
+      background:#0d1018; border-bottom:1px solid rgba(232,201,106,0.18);
+      flex-shrink:0;
+    }
+    .tut-modal-title {
+      font-family:'Playfair Display',serif; font-size:1.25rem;
+      font-weight:700; color:#e8c96a; letter-spacing:0.01em;
+    }
+    .tut-close {
+      width:32px; height:32px; border:none; border-radius:6px;
+      background:rgba(255,255,255,0.07); color:#aaa;
+      font-size:1.3rem; line-height:1; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:background .15s, color .15s;
+    }
+    .tut-close:hover { background:rgba(220,38,38,0.22); color:#fca5a5; }
+
+    .tut-modal-body {
+      overflow-y:auto; padding:26px 30px 32px; flex:1;
+    }
+    .tut-modal-body::-webkit-scrollbar { width:5px; }
+    .tut-modal-body::-webkit-scrollbar-thumb { background:rgba(232,201,106,0.3); border-radius:4px; }
+
+    .tut-intro {
+      font-family:'Barlow',sans-serif; font-size:0.88rem; color:#d0d5e8;
+      line-height:1.75; margin-bottom:26px; padding:14px 16px;
+      background:rgba(232,201,106,0.06); border-left:3px solid #e8c96a;
+      border-radius:0 6px 6px 0;
+    }
+    .tut-intro strong { color:#e8c96a; }
+
+    .tut-section {
+      margin-bottom:22px; padding-bottom:22px;
+      border-bottom:1px solid rgba(255,255,255,0.07);
+    }
+    .tut-section:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+
+    .tut-h3 {
+      font-family:'Barlow',sans-serif; font-size:0.95rem; font-weight:700;
+      color:#fff; display:flex; align-items:center; gap:10px; margin-bottom:10px;
+      text-transform:uppercase; letter-spacing:0.06em;
+    }
+    .tut-num {
+      flex-shrink:0; width:26px; height:26px; border-radius:50%;
+      background:#e8c96a; color:#0f1117;
+      font-size:0.72rem; font-weight:900;
+      display:flex; align-items:center; justify-content:center;
+    }
+
+    .tut-section p {
+      font-family:'Barlow',sans-serif; font-size:0.84rem; color:#c4c9df;
+      line-height:1.72; margin-bottom:8px;
+    }
+    .tut-section p strong { color:#e8c96a; }
+
+    .tut-list {
+      font-family:'Barlow',sans-serif; font-size:0.84rem; color:#c4c9df;
+      line-height:1.72; padding-left:18px; margin:8px 0 0;
+    }
+    .tut-list li { margin-bottom:4px; }
+    .tut-list li strong { color:#e8c96a; }
+    .tut-ordered { list-style-type:decimal; }
+
+    .tut-example {
+      font-family:'Barlow',sans-serif; font-size:0.8rem; color:#888;
+      margin-top:10px; padding:8px 12px;
+      background:rgba(255,255,255,0.04); border-radius:6px;
+      font-style:italic;
+    }
+    .tut-example strong { color:#ccc; font-style:normal; }
+    .tut-example code {
+      background:rgba(232,201,106,0.12); color:#e8c96a;
+      padding:1px 5px; border-radius:4px; font-size:0.82rem;
+    }
+
+    .tut-section-tips { background:rgba(22,163,74,0.05); border-radius:8px;
+      padding:14px 16px !important; border-bottom:none !important; }
+    .tut-section-tips .tut-h3 { color:#86efac; }
+    .tut-section-tips .tut-num { background:#16a34a; color:#fff; }
+    .tut-section-tips li strong { color:#86efac; }
+
+    .tut-section-guide { background:rgba(99,102,241,0.07); border-radius:8px; padding:14px 16px; }
+    .tut-section-guide .tut-h3 { color:#a5b4fc; letter-spacing:0.06em; }
+    .tut-section-guide .tut-num { background:#6366f1; color:#fff; font-size:0.62rem; }
+    .tut-closing {
+      margin-top:14px !important; font-weight:600 !important;
+      color:#e8c96a !important; font-style:italic; text-align:center;
+    }
+    @media (max-width:560px) {
+      .tut-modal-body { padding:20px 18px 24px; }
+      .tut-modal-header { padding:14px 18px 12px; }
+    }
     :root {
       --bg:     #0f1117; --panel:  #171c27; --panel2: #1e2436;
       --border: #2a3050; --accent: #e8c96a; --text:   #e8eaf2;
@@ -461,7 +589,7 @@
     .header-right { margin-left:auto; display:flex; gap:10px; }
     .btn-volver {
       background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
-      color:var(--accent); border-radius:6px; padding:7px 14px;
+      color:var(--accent); border-radius:999px; padding:7px 14px;
       font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
       cursor:pointer; white-space:nowrap;
       transition:background .2s ease, border-color .2s ease;
@@ -472,7 +600,7 @@
     #btn-cambiar-origen { color:#ef4444; }
     .header-origen-select {
       background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
-      color:#ef4444; border-radius:6px; padding:7px 10px;
+      color:#ef4444; border-radius:999px; padding:7px 14px;
       font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
       cursor:pointer; white-space:nowrap; max-width:200px;
       transition:background .2s, border-color .2s;
@@ -483,12 +611,12 @@
       color:#ffeef2; font-family:'Barlow',sans-serif; font-size:0.78rem;
       font-weight:600; white-space:nowrap; padding:7px 14px;
       background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
-      border-radius:6px;
+      border-radius:999px;
     }
     .header-route-metric {
       display:flex; align-items:center; gap:6px;
       background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
-      border-radius:6px; padding:7px 14px; white-space:nowrap;
+      border-radius:999px; padding:7px 14px; white-space:nowrap;
       font-family:'Barlow',sans-serif;
     }
     .header-route-lbl {
@@ -501,7 +629,7 @@
     .header-count-box {
       position:absolute; left:340px; top:50%; transform:translateY(-50%);
       background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
-      color:#ffeef2; border-radius:6px; padding:7px 14px;
+      color:#ffeef2; border-radius:999px; padding:7px 14px;
       font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
       white-space:nowrap; display:flex; align-items:center; gap:5px;
     }
@@ -598,9 +726,9 @@
     .banner-title { font-family:'Playfair Display',serif; font-size:0.96rem; font-weight:700; color:var(--accent); }
     .banner-sub   { font-size:0.7rem; color:var(--muted); }
     .banner-badge { margin-left:auto; background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.3);
-                    color:var(--accent); border-radius:20px; padding:2px 11px; font-size:0.68rem; font-weight:600; white-space:nowrap; }
+                    color:var(--accent); border-radius:999px; padding:2px 11px; font-size:0.68rem; font-weight:600; white-space:nowrap; }
     .btn-cerrar { background:transparent; border:1px solid var(--border); color:var(--muted);
-                  border-radius:6px; padding:4px 11px; font-family:'Barlow',sans-serif;
+                  border-radius:999px; padding:4px 11px; font-family:'Barlow',sans-serif;
                   font-size:0.73rem; cursor:pointer; transition:color .2s; white-space:nowrap; }
     .btn-cerrar:hover { color:var(--text); border-color:var(--muted); }
 
@@ -611,7 +739,7 @@
       position:absolute; left:10px; bottom:8px; z-index:650;
       font-family:'Barlow',sans-serif; font-size:0.66rem; font-weight:600;
       color:rgba(255,255,255,0.55); background:rgba(0,0,0,0.45);
-      padding:3px 8px; border-radius:5px; pointer-events:none;
+      padding:3px 8px; border-radius:999px; pointer-events:none;
       letter-spacing:0.02em;
     }
 
@@ -639,7 +767,7 @@
     }
     .tab-info-content .tic-cat {
       font-size:0.66rem; font-weight:700; text-transform:uppercase;
-      letter-spacing:0.1em; padding:2px 9px; border-radius:20px; white-space:nowrap;
+      letter-spacing:0.1em; padding:2px 9px; border-radius:999px; white-space:nowrap;
     }
     .tab-info-content .tic-name {
       font-family:'Playfair Display',serif; font-size:0.95rem; font-weight:700; color:#fff;
@@ -665,7 +793,7 @@
     }
     .qf-row { display:flex; gap:6px; }
     .qf-box {
-      flex:1; min-width:0; padding:5px 7px; border-radius:8px;
+      flex:1; min-width:0; padding:5px 7px; border-radius:999px;
       background:rgba(255,255,255,0.04); border:1px solid var(--border);
       text-align:center;
     }
@@ -699,7 +827,7 @@
     }
     .route-metric {
       flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
-      gap:0; padding:4px 6px; border-radius:8px;
+      gap:0; padding:4px 6px; border-radius:999px;
       background:rgba(232,201,106,0.07); border:1px solid rgba(232,201,106,0.25);
     }
     .route-metric-lbl {
@@ -711,7 +839,7 @@
     }
     .route-reset {
       background:none; border:1px solid var(--border); color:#888;
-      border-radius:6px; padding:3px 10px; font-size:0.64rem;
+      border-radius:999px; padding:3px 10px; font-size:0.64rem;
       font-family:'Barlow',sans-serif; cursor:pointer; transition:color .2s, border-color .2s;
     }
     .route-reset:hover { color:#fff; border-color:#666; }
@@ -720,19 +848,14 @@
     .origin-select {
       width:100%; margin-top:8px;
       background:#0f1117; border:1px solid rgba(232,201,106,0.35);
-      border-radius:6px; color:#e8eaf2;
+      border-radius:999px; color:#e8eaf2;
       font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
-      padding:6px 10px; outline:none; cursor:pointer;
+      padding:6px 14px; outline:none; cursor:pointer;
       transition:border-color .2s;
     }
     .origin-select:hover, .origin-select:focus { border-color:#e8c96a; }
     .origin-select option { background:#171c27; color:#e8eaf2; }
 
-    /* ── SELECT inside table ── */
-    .mo-cell-select {
-      appearance:auto; cursor:pointer;
-    }
-    .mo-cell-select:disabled { appearance:none; }
     .mo-backdrop {
       position:fixed; inset:0; z-index:1100;
       background:rgba(0,0,0,0.75);
@@ -740,7 +863,7 @@
     }
     .mo-panel {
       background:#171c27; border:1px solid #2a3050; border-radius:12px;
-      width:min(900px, 96vw); max-height:90vh;
+      width:min(620px, 94vw); max-height:90vh;
       display:flex; flex-direction:column; overflow:hidden;
       box-shadow:0 24px 64px rgba(0,0,0,0.7);
       position:relative; z-index:1101; isolation:isolate;
@@ -770,7 +893,8 @@
       white-space:nowrap;
     }
     .mo-th-n       { width:28px; text-align:center; }
-    .mo-th-coord   { width:96px; }
+    .mo-th-nombre  { width:170px; }
+    .mo-th-coord   { width:90px; }
     .mo-th-actions { width:120px; }
 
     .mo-tr { border-bottom:1px solid rgba(42,48,80,0.6); }
@@ -784,13 +908,13 @@
     /* inline inputs inside the table */
     .mo-cell-input {
       width:100%; background:#0f1117; border:1px solid #2a3050; border-radius:5px;
-      color:#e8eaf2; font-family:'Barlow',sans-serif; font-size:0.78rem;
+      color:#facc15; font-family:'Barlow',sans-serif; font-size:0.78rem;
       padding:5px 8px; outline:none; transition:border-color .18s;
     }
     .mo-cell-input:focus { border-color:#e8c96a; }
     .mo-cell-input::placeholder { color:#3a4060; }
     .mo-cell-input:disabled {
-      background:transparent; border-color:transparent; color:#e8eaf2;
+      background:transparent; border-color:transparent; color:#facc15;
       cursor:default; padding:5px 4px;
     }
     .mo-cell-input:disabled::placeholder { color:transparent; }
@@ -925,6 +1049,11 @@
     <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Buenos_Aires_-_Avenida_de_Mayo_the_Congress_and_La_Inmobiliaria_-_6976.jpg?width=1920')"></span></div>
   </div>
 
+  <!-- HAMBURGER / TUTORIAL BUTTON -->
+  <button class="tut-hamburger" id="tut-hamburger" type="button" aria-label="Abrir tutorial">
+    <span></span><span></span><span></span>
+  </button>
+
   <div class="overlay"></div>
 
   <!-- CONTENT -->
@@ -955,6 +1084,148 @@
   </div>
 
   <div class="caption" id="caption">Misiones · Cataratas del Iguazú</div>
+
+  <!-- TUTORIAL MODAL -->
+  <div class="tut-backdrop" id="tut-backdrop"></div>
+  <div class="tut-modal" id="tut-modal" role="dialog" aria-modal="true" aria-label="Tutorial">
+    <div class="tut-modal-header">
+      <h2 class="tut-modal-title">Manual de Usuario</h2>
+      <button class="tut-close" id="tut-close" type="button" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="tut-modal-body">
+
+      <p class="tut-intro">Bienvenido al <strong>Mapa Interactivo de Sitios Turísticos de Argentina</strong>. Esta plataforma facilita la exploración de atractivos turísticos en todo el territorio nacional, permite consultar información histórica, geográfica y turística, visualizar imágenes, personalizar búsquedas y calcular distancias y tiempos de viaje.</p>
+
+      <div class="tut-section">
+        <h3 class="tut-h3"><span class="tut-num">1</span>Ingreso al sistema</h3>
+        <p>Al acceder al sitio visualizará la pantalla de bienvenida. Presione <strong>"Entrar"</strong> para iniciar el proceso de configuración previa.</p>
+      </div>
+
+      <div class="tut-section">
+        <h3 class="tut-h3"><span class="tut-num">2</span>Selección de provincias</h3>
+        <p>La primera pantalla permite elegir las provincias cuyos sitios desea visualizar. Cada provincia puede activarse o desactivarse individualmente.</p>
+        <ul class="tut-list">
+          <li><strong>Habilitar todo</strong> — selecciona todas las provincias con un clic.</li>
+          <li><strong>Listo</strong> — confirma la selección y avanza al siguiente paso.</li>
+        </ul>
+      </div>
+
+      <div class="tut-section">
+        <h3 class="tut-h3"><span class="tut-num">3</span>Selección de tipos de turismo</h3>
+        <p>Luego de elegir provincias, indique qué tipos de turismo desea visualizar. Cada categoría puede activarse o desactivarse en forma independiente.</p>
+        <ul class="tut-list">
+          <li><strong>Habilitar todo</strong> — activa todas las categorías disponibles.</li>
+          <li><strong>Volver a Provincias</strong> — regresa a la etapa anterior.</li>
+          <li><strong>Listo</strong> — confirma e ingresa al mapa interactivo.</li>
+        </ul>
+      </div>
+
+      <div class="tut-section">
+        <h3 class="tut-h3"><span class="tut-num">4</span>Acceso al mapa interactivo</h3>
+        <p>Finalizada la configuración, se mostrará el mapa con todos los sitios correspondientes a las provincias y categorías seleccionadas. En la parte superior encontrará las herramientas de personalización y cálculo de rutas.</p>
+      </div>
+
+      <div class="tut-section">
+        <h3 class="tut-h3"><span class="tut-num">5</span>Registro e inicio de sesión</h3>
+        <p>Para usar la administración de orígenes, presione <strong>"Origen"</strong> en la parte superior del mapa.</p>
+        <ul class="tut-list">
+          <li><strong>Registrarse</strong> — ingrese nombre de usuario y contraseña.</li>
+          <li><strong>Iniciar sesión</strong> — si ya tiene una cuenta.</li>
+          <li><strong>Invitado</strong> — puede navegar, consultar sitios y ver información, pero con funciones de personalización limitadas.</li>
+        </ul>
+      </div>
+
+      <div class="tut-section">
+        <h3 class="tut-h3"><span class="tut-num">6</span>Consulta de información turística</h3>
+        <p>Haga clic sobre cualquier sitio del mapa para ver su nombre y tipo de turismo. El panel izquierdo mostrará información ampliada según la disponibilidad del sitio:</p>
+        <ul class="tut-list">
+          <li>Nombre y tipo de turismo.</li>
+          <li>Descripción histórica, geográfica y cultural.</li>
+          <li>Fotografías ilustrativas.</li>
+        </ul>
+      </div>
+
+      <div class="tut-section">
+        <h3 class="tut-h3"><span class="tut-num">7</span>Información complementaria</h3>
+        <p>Algunos sitios incluyen datos adicionales visibles en el panel lateral:</p>
+        <ul class="tut-list">
+          <li><strong>Días de apertura</strong> — días en que recibe visitantes.</li>
+          <li><strong>Horarios de atención</strong> — horarios habilitados.</li>
+          <li><strong>Costos de ingreso</strong> — acceso gratuito o pago.</li>
+          <li><strong>Mejor época para visitar</strong> — períodos recomendados.</li>
+        </ul>
+      </div>
+
+      <div class="tut-section">
+        <h3 class="tut-h3"><span class="tut-num">8</span>Configuración de puntos de origen</h3>
+        <p>Presione <strong>"Origen"</strong> en la parte superior para abrir la administración de orígenes. Puede almacenar hasta <strong>10 ubicaciones</strong> diferentes.</p>
+      </div>
+
+      <div class="tut-section">
+        <h3 class="tut-h3"><span class="tut-num">9</span>Obtención de coordenadas (Google Maps)</h3>
+        <ol class="tut-list tut-ordered">
+          <li>Ingrese a Google Maps y busque la dirección deseada.</li>
+          <li>Localice el marcador en el mapa.</li>
+          <li>Presione el botón derecho del mouse sobre él.</li>
+          <li>Copie la <strong>latitud</strong> y <strong>longitud</strong> que aparecen en el menú emergente.</li>
+          <li>Péguelas en los campos del formulario de orígenes.</li>
+        </ol>
+        <div class="tut-example">Ej: Latitud <code>-34.603722</code> · Longitud <code>-58.381592</code></div>
+      </div>
+
+      <div class="tut-section">
+        <h3 class="tut-h3"><span class="tut-num">10</span>Creación de un origen personalizado</h3>
+        <p>Dentro de la ventana <strong>"Origen"</strong>, ingrese un nombre, la latitud, la longitud y guarde. Puede registrar hasta 10 ubicaciones.</p>
+        <div class="tut-example">Ejemplos: Mi domicilio · Casa de vacaciones · Hotel · Aeropuerto · Terminal de ómnibus</div>
+      </div>
+
+      <div class="tut-section">
+        <h3 class="tut-h3"><span class="tut-num">11</span>Cálculo de distancia y tiempo</h3>
+        <ol class="tut-list tut-ordered">
+          <li>Presione <strong>"Seleccionar un origen"</strong> y elija una ubicación guardada.</li>
+          <li>Haga clic sobre cualquier sitio turístico del mapa como destino.</li>
+          <li>El sistema calculará automáticamente la <strong>distancia aproximada por ruta</strong> y el <strong>tiempo estimado en auto</strong>, visibles en la parte superior del mapa.</li>
+        </ol>
+        <p>Para cambiar el origen, presione <strong>"Cambiar origen"</strong>, elija otra ubicación y seleccione un nuevo destino.</p>
+      </div>
+
+      <div class="tut-section">
+        <h3 class="tut-h3"><span class="tut-num">12</span>Interpretación de resultados</h3>
+        <p>Los valores de distancia y tiempo son <strong>estimativos</strong> y pueden variar según el estado de las rutas, condiciones climáticas, tránsito, obras viales o restricciones temporales.</p>
+        <div class="tut-example">Ej: <strong>120 km</strong> · <strong>2 h 15 min</strong></div>
+      </div>
+
+      <div class="tut-section tut-section-tips">
+        <h3 class="tut-h3"><span class="tut-num">✔</span>Recomendaciones</h3>
+        <ul class="tut-list">
+          <li>Verifique que las coordenadas ingresadas sean correctas.</li>
+          <li>Use nombres descriptivos para identificar sus puntos de origen.</li>
+          <li>Seleccione solo las provincias y categorías de su interés para mejorar la navegación.</li>
+          <li>Consulte la información del sitio antes de planificar una visita.</li>
+          <li>Revise horarios, días de apertura y costos antes de viajar.</li>
+          <li>Recuerde que los tiempos y distancias son aproximados.</li>
+        </ul>
+      </div>
+
+      <div class="tut-section tut-section-guide">
+        <h3 class="tut-h3">Guía rápida</h3>
+        <ol class="tut-list tut-ordered">
+          <li>Presione <strong>"Entrar"</strong>.</li>
+          <li>Seleccione las provincias de interés.</li>
+          <li>Seleccione los tipos de turismo.</li>
+          <li>Acceda al mapa interactivo.</li>
+          <li>Haga clic en un sitio para consultar su información.</li>
+          <li>Regístrese o inicie sesión.</li>
+          <li>Configure uno o más puntos de origen.</li>
+          <li>Obtenga coordenadas con Google Maps.</li>
+          <li>Seleccione un origen y un destino.</li>
+          <li>Consulte la distancia y el tiempo estimado.</li>
+        </ol>
+        <p class="tut-closing">¡Disfrute explorando los sitios turísticos de Argentina!</p>
+      </div>
+
+    </div>
+  </div>
 
   <script>
     // Sync the bottom-right caption with the visible slide
@@ -1007,6 +1278,34 @@
         });
       };
       img.src = url;
+    })();
+
+    // ── TUTORIAL (hamburger) ───────────────────────────────────────────────
+    (function() {
+      var hamburger = document.getElementById('tut-hamburger');
+      var backdrop  = document.getElementById('tut-backdrop');
+      var modal     = document.getElementById('tut-modal');
+      var closeBtn  = document.getElementById('tut-close');
+      if (!hamburger || !modal) return;
+
+      function openTut() {
+        backdrop.classList.add('open');
+        modal.classList.add('open');
+        modal.querySelector('.tut-modal-body').scrollTop = 0;
+        closeBtn.focus();
+      }
+      function closeTut() {
+        backdrop.classList.remove('open');
+        modal.classList.remove('open');
+        hamburger.focus();
+      }
+
+      hamburger.addEventListener('click', openTut);
+      closeBtn.addEventListener('click', closeTut);
+      backdrop.addEventListener('click', closeTut);
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('open')) closeTut();
+      });
     })();
   </script>
 </div>
@@ -1262,9 +1561,7 @@
         <thead>
           <tr>
             <th class="mo-th mo-th-n">#</th>
-            <th class="mo-th">Provincia</th>
-            <th class="mo-th">Localidad</th>
-            <th class="mo-th">Nombre</th>
+            <th class="mo-th mo-th-nombre">Nombre</th>
             <th class="mo-th mo-th-coord">Latitud</th>
             <th class="mo-th mo-th-coord">Longitud</th>
             <th class="mo-th mo-th-actions"></th>
@@ -1623,7 +1920,7 @@ function setStep(step) {
         if (valid.length > 0) {
           origSel.innerHTML = '<option value="">— Elegir desde Mis Orígenes —</option>';
           valid.forEach(function(o, idx) {
-            const label = [o.nombre, o.localidad, o.provincia].filter(Boolean).join(' · ');
+            const label = o.nombre || '';
             const opt = document.createElement('option');
             opt.value = idx;
             opt.dataset.lat = o.lat;
@@ -1696,6 +1993,9 @@ function showSiteInfo(s) {
   if (activeTooltip) { try { activeTooltip.remove(); } catch(e){} activeTooltip = null; }
   const m = activeMap();
   if (m) {
+    // Centrar el mapa en el sitio seleccionado
+    m.panTo([s.lat, s.lng], { animate:true });
+
     activeTooltip = L.tooltip({ permanent:true, direction:'top', offset:[0,-18], className:'site-label' })
       .setLatLng([s.lat, s.lng])
       .setContent(
@@ -1874,7 +2174,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const valid = moActiveOrigenes().filter(o => o.lat !== '' && o.lng !== '' && o.nombre);
       sel.innerHTML = '<option value="">Seleccionar un origen</option>';
       valid.forEach(function(o, idx) {
-        const lbl = [o.nombre, o.localidad, o.provincia].filter(Boolean).join(' · ');
+        const lbl = o.nombre;
         const opt = document.createElement('option');
         opt.value = idx;
         opt.dataset.lat = o.lat;
@@ -2177,15 +2477,9 @@ function escH(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function moProvOptions(selected, disabled) {
-  const provs = PROVINCIAS_LIST.map(function(p) { return p.label; });
-  let opts = '<option value="">' + (disabled ? (selected || '—') : '— Provincia —') + '</option>';
-  if (!disabled) {
-    provs.forEach(function(lbl) {
-      opts += '<option value="' + escH(lbl) + '"' + (lbl === selected ? ' selected' : '') + '>' + escH(lbl) + '</option>';
-    });
-  }
-  return opts;
+function capitalizeFirst(s) {
+  if (!s) return s;
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 function moRenderTable() {
@@ -2200,8 +2494,6 @@ function moRenderTable() {
 
     tr.innerHTML =
       '<td class="mo-td mo-td-n">' + (i + 1) + '</td>' +
-      '<td class="mo-td"><select class="mo-cell-input mo-cell-select" data-f="provincia" data-i="' + i + '" disabled>' + moProvOptions(row.provincia, true) + '</select></td>' +
-      '<td class="mo-td"><input class="mo-cell-input" data-f="localidad" data-i="' + i + '" type="text" maxlength="80" placeholder="Localidad" value="' + escH(row.localidad) + '" disabled /></td>' +
       '<td class="mo-td"><input class="mo-cell-input" data-f="nombre" data-i="' + i + '" type="text" maxlength="100" placeholder="Nombre" value="' + escH(row.nombre) + '" disabled /></td>' +
       '<td class="mo-td"><input class="mo-cell-input mo-coord" data-f="lat" data-i="' + i + '" type="number" step="any" placeholder="-38.00" value="' + escH(row.lat) + '" disabled /></td>' +
       '<td class="mo-td"><input class="mo-cell-input mo-coord" data-f="lng" data-i="' + i + '" type="number" step="any" placeholder="-57.54" value="' + escH(row.lng) + '" disabled /></td>' +
@@ -2225,7 +2517,7 @@ function moRenderTable() {
   tbody.querySelectorAll('.mo-btn-del').forEach(function(btn) {
     btn.addEventListener('click', function() {
       const i = parseInt(btn.dataset.i);
-      moDraft[i] = { provincia:'', localidad:'', nombre:'', lat:'', lng:'' };
+      moDraft[i] = { nombre:'', lat:'', lng:'' };
       document.getElementById('mo-error').textContent = '';
       moRenderTable();
     });
@@ -2240,12 +2532,6 @@ function moEnableRow(i, editBtn) {
   // Enable all regular inputs
   tr.querySelectorAll('.mo-cell-input').forEach(function(inp) { inp.disabled = false; });
 
-  // Replace the provincia select with the full options list
-  const provSel = tr.querySelector('[data-f="provincia"]');
-  const currentProv = moDraft[i].provincia || '';
-  provSel.innerHTML = moProvOptions(currentProv, false);
-  provSel.disabled = false;
-
   // Replace action buttons with OK + Eliminar
   const actDiv = tr.querySelector('.mo-td-actions');
   actDiv.innerHTML =
@@ -2256,12 +2542,12 @@ function moEnableRow(i, editBtn) {
     moCommitRow(i, tr);
   });
   actDiv.querySelector('.mo-btn-del').addEventListener('click', function() {
-    moDraft[i] = { provincia:'', localidad:'', nombre:'', lat:'', lng:'' };
+    moDraft[i] = { nombre:'', lat:'', lng:'' };
     document.getElementById('mo-error').textContent = '';
     moRenderTable();
   });
 
-  // Focus the nombre field (more useful than provincia dropdown)
+  // Focus the nombre field
   const nombreInp = tr.querySelector('[data-f="nombre"]');
   if (nombreInp) nombreInp.focus();
 }
@@ -2270,9 +2556,7 @@ function moCommitRow(i, tr) {
   const errEl = document.getElementById('mo-error');
   const get = function(f) { return tr.querySelector('[data-f="' + f + '"]').value.trim(); };
 
-  const nombre    = get('nombre');
-  const provincia = get('provincia');
-  const localidad = get('localidad');
+  const nombre    = capitalizeFirst(get('nombre'));
   const latRaw    = get('lat');
   const lngRaw    = get('lng');
 
@@ -2288,7 +2572,7 @@ function moCommitRow(i, tr) {
 
   errEl.textContent = '';
   moDraft[i] = {
-    provincia, localidad, nombre,
+    nombre,
     lat: latRaw !== '' ? parseFloat(latRaw) : '',
     lng: lngRaw !== '' ? parseFloat(lngRaw) : ''
   };
@@ -2362,7 +2646,7 @@ function moEnterTable(mode) {
     moDraft = guestSessionLoad();
   }
 
-  while (moDraft.length < MO_MAX) moDraft.push({ provincia:'', localidad:'', nombre:'', lat:'', lng:'' });
+  while (moDraft.length < MO_MAX) moDraft.push({ nombre:'', lat:'', lng:'' });
   moDraft = moDraft.slice(0, MO_MAX);
 
   document.getElementById('mo-error').textContent = '';
