@@ -757,5 +757,9 @@ function toast(msg, type='ok') {
 loadSitios();
 renderTable();
 </script>
+<!-- Marca de administrador: index.html no contabilizará visitas desde este navegador -->
+<script>
+  try { localStorage.setItem('at_is_admin', '1'); } catch(e) {}
+</script>
 </body>
 </html>

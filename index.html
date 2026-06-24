@@ -425,15 +425,18 @@
       font-size:0.68rem; letter-spacing:0.2em; text-transform:uppercase;
       color:var(--cream); opacity:0.55;
     }
+
+    /* ── VISITOR COUNTER ── */
     .visitor-counter {
       position:absolute; bottom:28px; left:34px; z-index:2;
       font-family:'Barlow', sans-serif;
       font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase;
       color:var(--cream); opacity:0.55;
-      display:none;
+      display:flex; align-items:center; gap:7px;
     }
-    .visitor-counter strong {
-      font-weight:700; letter-spacing:0.05em;
+    .visitor-counter .vc-num {
+      font-family:'Playfair Display', serif;
+      font-size:1rem; font-weight:700; opacity:1; letter-spacing:0.04em;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1094,7 +1097,10 @@
   </div>
 
   <div class="caption" id="caption">Misiones · Cataratas del Iguazú</div>
-  <div class="visitor-counter" id="visitor-counter">Visitas: <strong id="visitor-num">0</strong></div>
+  <div class="visitor-counter" id="visitor-counter" style="display:none;">
+    <span class="vc-num" id="vc-num">—</span>
+    <span>visitantes</span>
+  </div>
 
   <!-- TUTORIAL MODAL -->
   <div class="tut-backdrop" id="tut-backdrop"></div>
@@ -1317,6 +1323,57 @@
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && modal.classList.contains('open')) closeTut();
       });
+    })();
+
+    // ── CONTADOR DE VISITANTES ────────────────────────────────────────────────
+    // No se contabiliza si el navegador tiene la marca de administrador.
+    // La marca se establece al abrir admin.html.
+    (function() {
+      var IS_ADMIN_KEY = 'at_is_admin';
+      var LS_COUNT_KEY = 'at_visitor_count';
+      var API_NS       = 'ar-argentina-turismo-v1';
+      var API_KEY      = 'page-visits';
+
+      var numEl     = document.getElementById('vc-num');
+      var counterEl = document.getElementById('visitor-counter');
+      if (!numEl || !counterEl) return;
+
+      function formatNum(n) {
+        return Number(n).toLocaleString('es-AR');
+      }
+
+      function showCount(n) {
+        numEl.textContent   = formatNum(n);
+        counterEl.style.display = 'flex';
+      }
+
+      // Si soy administrador: mostrar el contador pero NO incrementar
+      var isAdmin = localStorage.getItem(IS_ADMIN_KEY) === '1';
+
+      var apiEndpoint = isAdmin
+        ? 'https://api.countapi.xyz/get/' + API_NS + '/' + API_KEY
+        : 'https://api.countapi.xyz/hit/' + API_NS + '/' + API_KEY;
+
+      fetch(apiEndpoint)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data && data.value != null) {
+            if (!isAdmin) {
+              // Guardar localmente como respaldo
+              localStorage.setItem(LS_COUNT_KEY, data.value);
+            }
+            showCount(data.value);
+          }
+        })
+        .catch(function() {
+          // API no disponible: usar conteo local como respaldo
+          var local = parseInt(localStorage.getItem(LS_COUNT_KEY) || '0', 10);
+          if (!isAdmin) {
+            local += 1;
+            localStorage.setItem(LS_COUNT_KEY, local);
+          }
+          if (local > 0) showCount(local);
+        });
     })();
   </script>
 </div>
@@ -1657,7 +1714,20 @@ let pickStep = 'origin';
 
 // ─── LOAD DATA ────────────────────────────────────────────────────────────────
 async function loadSitios() {
-  // 1) Intentar leer un archivo estático sitios.json (ideal para GitHub Pages)
+  // Prioridad 1: localStorage (datos guardados con admin.html)
+  // Se lee PRIMERO para que cualquier edición del admin aparezca inmediatamente.
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length) {
+        SITIOS = parsed;
+        return;
+      }
+    }
+  } catch(e) {}
+
+  // Prioridad 2: sitios.json estático (útil en GitHub Pages / servidor web)
   try {
     const res = await fetch('sitios.json', { cache: 'no-store' });
     if (res.ok) {
@@ -1667,12 +1737,10 @@ async function loadSitios() {
         return;
       }
     }
-  } catch (e) {
-    // sitios.json no existe o no se pudo cargar (normal en uso local) → seguir
-  }
+  } catch(e) {}
 
-  // 2) Fallback: leer desde localStorage (datos cargados con admin.html)
-  try { SITIOS = JSON.parse(localStorage.getItem(LS_KEY)) || []; } catch(e) { SITIOS = []; }
+  // Sin datos: array vacío
+  SITIOS = [];
 }
 
 // ─── PROVINCIAS INTRO (pantalla completa, antes de entrar al mapa) ────────────
@@ -2134,9 +2202,6 @@ async function initApp() {
 // ─── TRANSITIONS: Intro → Provincias → Mapa ───────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
 
-  // Contador de visitas (no cuenta para administradores)
-  initVisitorCounter();
-
   function fadeSwap(fromEl, toEl, toDisplay, afterShown) {
     fromEl.style.transition = 'opacity 1.1s ease';
     fromEl.style.opacity    = '0';
@@ -2399,33 +2464,6 @@ const MO_MAX    = 10;
 
 // Working copy while modal is open
 let moDraft = [];
-
-// ─── ADMINISTRADORES ──────────────────────────────────────────────────────────
-// Lista de usernames que se consideran administradores. Estos no cuentan como visita.
-const ADMIN_USERS = ['admin', 'administrador', 'admin1', 'superuser'];
-
-function isAdmin() {
-  const sess = (function() { try { return localStorage.getItem('arg_turismo_session') || ''; } catch(e) { return ''; } })();
-  if (!sess) return false;
-  return ADMIN_USERS.includes(sess.trim().toLowerCase());
-}
-
-// ─── CONTADOR DE VISITAS ──────────────────────────────────────────────────────
-const VISITS_KEY = 'arg_turismo_visits';
-
-function initVisitorCounter() {
-  if (isAdmin()) return;               // admins no cuentan ni ven el contador
-  let visits = 0;
-  try { visits = parseInt(localStorage.getItem(VISITS_KEY)) || 0; } catch(e) {}
-  visits++;
-  try { localStorage.setItem(VISITS_KEY, visits); } catch(e) {}
-  const el  = document.getElementById('visitor-counter');
-  const num = document.getElementById('visitor-num');
-  if (el && num) {
-    num.textContent = visits.toLocaleString('es-AR');
-    el.style.display = 'block';
-  }
-}
 
 // ─── CUENTAS Y SESIÓN ─────────────────────────────────────────────────────────
 // IMPORTANTE: este archivo es estático (sin servidor propio). Esto es una
