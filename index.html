@@ -1862,26 +1862,25 @@ let rutaPolyline      = null; // polilínea final dibujada al finalizar
 
 // ─── LOAD DATA ────────────────────────────────────────────────────────────────
 async function loadSitios() {
-  // Prioridad 1: localStorage (datos guardados con admin.html)
-  // Se lee PRIMERO para que cualquier edición del admin aparezca inmediatamente.
-  try {
-    const raw = localStorage.getItem(LS_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length) {
-        SITIOS = parsed;
-        return;
-      }
-    }
-  } catch(e) {}
-
-  // Prioridad 2: sitios.json estático (útil en GitHub Pages / servidor web)
+  // Prioridad 1: sitios.json estático (GitHub Pages / servidor web)
   try {
     const res = await fetch('sitios.json', { cache: 'no-store' });
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data) && data.length) {
         SITIOS = data;
+        return;
+      }
+    }
+  } catch(e) {}
+
+  // Prioridad 2: localStorage (fallback offline)
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length) {
+        SITIOS = parsed;
         return;
       }
     }
