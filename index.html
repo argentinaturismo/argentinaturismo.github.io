@@ -649,23 +649,11 @@
     .header-count-box span {
       font-family:'Barlow',sans-serif; font-weight:700; font-size:0.78rem;
     }
-    #btn-generar-ruta { color:#38bdf8; }
-    .header-ruta-build { display:flex; align-items:center; gap:10px; }
-    .header-ruta-badge {
-      background:rgba(56,189,248,0.1); border:1px solid rgba(56,189,248,0.4);
-      color:#38bdf8; border-radius:999px; padding:7px 14px;
-      font-family:'Barlow',sans-serif; font-size:0.74rem; font-weight:700;
-      white-space:nowrap;
-    }
-    #btn-finalizar-ruta { color:#22c55e; }
-    #btn-finalizar-ruta:disabled { opacity:0.35; cursor:not-allowed; }
-    #btn-cancelar-ruta { color:#9aa3c4; }
     @media (max-width:760px) {
       .btn-volver { font-size:0.68rem; padding:6px 10px; }
       .header-count-box { font-size:0.68rem; padding:6px 10px; left:300px; }
       .header-route-metric { padding:6px 10px; }
       .header-route-val { font-size:0.7rem; }
-      .header-ruta-badge { font-size:0.62rem; padding:6px 10px; }
     }
     .tag { background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.25);
            color:var(--accent); border-radius:20px; padding:3px 10px;
@@ -797,6 +785,10 @@
     .tab-info-content .tic-name {
       font-family:'Playfair Display',serif; font-size:0.95rem; font-weight:700; color:#fff;
     }
+    .tab-info-content .tic-location {
+      font-size:0.7rem; color:#888; margin:3px 0 8px;
+      letter-spacing:0.04em;
+    }
     .tab-info-content .tic-desc {
       font-size:0.82rem; color:#ccc; line-height:1.7;
       text-align:justify; text-justify:inter-word;
@@ -841,39 +833,6 @@
     .route-step-hint {
       font-size:0.64rem; color:#777; line-height:1.4; max-width:230px;
     }
-    /* ── PANEL DE CONSTRUCCIÓN DE RUTA (modo "Generar Ruta") ── */
-    .ruta-builder-panel { display:flex; flex-direction:column; gap:9px; }
-    .ruta-builder-hint {
-      font-family:'Barlow',sans-serif; font-size:0.68rem; color:#9aa3c4;
-      line-height:1.45; text-align:center;
-    }
-    .ruta-builder-list {
-      display:flex; flex-direction:column; gap:4px;
-      max-height:150px; overflow-y:auto; padding-right:2px;
-    }
-    .ruta-builder-list::-webkit-scrollbar { width:4px; }
-    .ruta-builder-list::-webkit-scrollbar-thumb { background:#2a3050; border-radius:4px; }
-    .ruta-li {
-      display:flex; align-items:center; gap:8px;
-      font-family:'Barlow',sans-serif; font-size:0.72rem; color:#e8eaf2;
-    }
-    .ruta-li-num {
-      flex-shrink:0; width:18px; height:18px; border-radius:50%;
-      background:rgba(232,201,106,0.15); border:1px solid rgba(232,201,106,0.4);
-      color:#e8c96a; font-size:0.6rem; font-weight:700;
-      display:flex; align-items:center; justify-content:center;
-    }
-    .ruta-li-origen .ruta-li-num { background:#e8c96a; color:#0f1117; }
-    .ruta-li-name {
-      flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
-    .ruta-builder-undo {
-      align-self:center; background:none; border:1px solid var(--border);
-      border-radius:999px; padding:5px 14px; font-size:0.68rem;
-      font-family:'Barlow',sans-serif; color:#9aa3c4; cursor:pointer;
-      transition:color .18s, border-color .18s;
-    }
-    .ruta-builder-undo:hover { color:#e8c96a; border-color:#e8c96a; }
     .route-loading {
       font-size:0.74rem; color:var(--accent); text-align:center;
     }
@@ -1072,76 +1031,7 @@
       transition:color .18s, border-color .18s;
     }
     .mo-session-link:hover { color:#e8c96a; border-color:#e8c96a; }
-
-    /* ── MODAL RESUMEN DE RUTA ── */
-    .ruta-backdrop {
-      position:fixed; inset:0; z-index:1150;
-      background:rgba(0,0,0,0.78);
-      display:flex; align-items:center; justify-content:center;
-      padding:24px;
-    }
-    .ruta-panel {
-      background:#171c27; border:1px solid #2a3050; border-radius:14px;
-      width:min(560px, 92vw); max-height:86vh;
-      display:flex; flex-direction:column; overflow:hidden;
-      box-shadow:0 24px 64px rgba(0,0,0,0.7);
-    }
-    .ruta-panel-header {
-      display:flex; align-items:center; justify-content:space-between;
-      padding:18px 24px; border-bottom:1px solid #2a3050; flex-shrink:0;
-    }
-    .ruta-panel-title {
-      font-family:'Playfair Display',serif; font-weight:700; font-size:1.12rem; color:#e8c96a;
-    }
-    .ruta-panel-close {
-      background:none; border:1px solid #2a3050; border-radius:999px;
-      width:30px; height:30px; color:#9aa3c4; cursor:pointer;
-      font-size:0.85rem; transition:color .18s, border-color .18s;
-    }
-    .ruta-panel-close:hover { color:#e8c96a; border-color:#e8c96a; }
-    .ruta-panel-body {
-      overflow-y:auto; padding:14px 24px 6px;
-      font-family:'Barlow',sans-serif;
-    }
-    .ruta-panel-body::-webkit-scrollbar { width:6px; }
-    .ruta-panel-body::-webkit-scrollbar-thumb { background:#2a3050; border-radius:4px; }
-    .ruta-leg {
-      display:flex; align-items:center; gap:12px;
-      padding:11px 2px; border-bottom:1px solid rgba(255,255,255,0.07);
-    }
-    .ruta-leg-num {
-      flex-shrink:0; width:26px; height:26px; border-radius:50%;
-      background:rgba(232,201,106,0.15); border:1px solid rgba(232,201,106,0.4);
-      color:#e8c96a; font-weight:700; font-size:0.72rem;
-      display:flex; align-items:center; justify-content:center;
-    }
-    .ruta-leg-info { flex:1; min-width:0; }
-    .ruta-leg-from-to { font-size:0.82rem; color:#e8eaf2; line-height:1.35; }
-    .ruta-leg-metrics {
-      display:flex; flex-direction:column; align-items:flex-end; gap:2px; flex-shrink:0;
-    }
-    .ruta-leg-metrics span:first-child { font-weight:700; color:#38bdf8; font-size:0.78rem; }
-    .ruta-leg-metrics span:last-child  { color:#9aa3c4; font-size:0.68rem; }
-    .ruta-leg-total {
-      border-top:2px solid rgba(232,201,106,0.4); border-bottom:none;
-      margin-top:8px; padding-top:16px;
-    }
-    .ruta-leg-total .ruta-leg-num { background:#e8c96a; color:#0f1117; border-color:#e8c96a; }
-    .ruta-leg-total .ruta-leg-from-to { font-weight:700; color:#fff; }
-    .ruta-leg-total .ruta-leg-metrics span:first-child { color:#22c55e; font-size:0.94rem; }
-    .ruta-panel-footer {
-      display:flex; justify-content:flex-end; gap:10px;
-      padding:16px 24px; border-top:1px solid #2a3050; flex-shrink:0;
-    }
-    .ruta-btn-primario, .ruta-btn-secundario {
-      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:700;
-      border-radius:999px; padding:9px 20px; cursor:pointer;
-      letter-spacing:0.04em; transition:opacity .2s ease, background .2s ease;
-    }
-    .ruta-btn-primario { background:#e8c96a; color:#0f1117; border:none; }
-    .ruta-btn-primario:hover { opacity:0.86; }
-    .ruta-btn-secundario { background:none; border:1px solid #2a3050; color:#9aa3c4; }
-    .ruta-btn-secundario:hover { color:#e8c96a; border-color:#e8c96a; }
+  
 
   </style>
   <link rel="preload" as="image" href="https://commons.wikimedia.org/wiki/Special:FilePath/Cataratas_Iguazu_vista_general.JPG?width=1920" />
@@ -1591,12 +1481,6 @@
       <span class="header-route-lbl">Tiempo</span>
       <span class="header-route-val" id="header-route-time">—</span>
     </div>
-    <button class="btn-volver" id="btn-generar-ruta" type="button">Generar Ruta</button>
-    <div class="header-ruta-build" id="header-ruta-build" style="display:none;">
-      <span class="header-ruta-badge" id="header-ruta-badge">0 / 50 sitios</span>
-      <button class="btn-volver" id="btn-finalizar-ruta" type="button" disabled>Finalizar Ruta</button>
-      <button class="btn-volver" id="btn-cancelar-ruta" type="button">Cancelar</button>
-    </div>
   </div>
   <div class="header-right">
     <button class="btn-volver" id="btn-volver-provincias" type="button">← Volver a Provincias</button>
@@ -1617,6 +1501,7 @@
           <span class="tic-cat" id="tic-cat"></span>
           <span class="tic-name" id="tic-name"></span>
         </div>
+        <div class="tic-location" id="tic-location"></div>
         <div class="tic-desc" id="tic-desc"></div>
         <div class="tic-fotos" id="tic-fotos"></div>
       </div>
@@ -1646,11 +1531,6 @@
     </div>
 
     <div class="info-panel-bottom" id="info-panel-bottom">
-      <div class="ruta-builder-panel" id="ruta-builder-panel" style="display:none;">
-        <div class="ruta-builder-hint" id="ruta-builder-hint">Elegí un origen desde el menú superior para empezar.</div>
-        <div class="ruta-builder-list" id="ruta-builder-list"></div>
-        <button class="ruta-builder-undo" id="btn-ruta-deshacer" type="button" style="display:none;">↺ Quitar último sitio</button>
-      </div>
       <div class="route-prompt" id="route-prompt">
         <span class="route-step-icon" id="route-step-icon">📍</span>
         <span class="route-step-hint" id="route-step-hint">Hacé clic en cualquier punto del mapa</span>
@@ -1772,21 +1652,6 @@
   </div>
 </div>
 
-<!-- ═══════════════════  MODAL RESUMEN DE RUTA  ═══════════════════ -->
-<div id="modal-ruta-resumen" class="ruta-backdrop" style="display:none;">
-  <div class="ruta-panel">
-    <div class="ruta-panel-header">
-      <span class="ruta-panel-title">Resumen de Ruta</span>
-      <button class="ruta-panel-close" id="ruta-resumen-close" type="button">✕</button>
-    </div>
-    <div class="ruta-panel-body" id="ruta-resumen-body"></div>
-    <div class="ruta-panel-footer">
-      <button class="ruta-btn-secundario" id="btn-ruta-nueva" type="button">Nueva Ruta</button>
-      <button class="ruta-btn-primario" id="btn-ruta-resumen-cerrar" type="button">Cerrar</button>
-    </div>
-  </div>
-</div>
-
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script>
@@ -1851,14 +1716,6 @@ let activeTooltip = null;
 
 // Step state: 'origin' | 'dest' | 'done'
 let pickStep = 'origin';
-
-// ─── MODO "GENERAR RUTA" (múltiples paradas) ──────────────────────────────────
-const RUTA_MAX = 50;
-let rutaModoActivo = false;   // true mientras se está armando una ruta de varias paradas
-let rutaOrigen      = null;   // { lat, lng, label } — punto de partida de la ruta
-let rutaPuntos       = [];    // [{ lat, lng, name }, ...] en el orden elegido (pueden repetirse)
-let rutaMarkers      = [];    // marcadores numerados en el mapa
-let rutaPolyline      = null; // polilínea final dibujada al finalizar
 
 // ─── LOAD DATA ────────────────────────────────────────────────────────────────
 async function loadSitios() {
@@ -2024,10 +1881,8 @@ function makeMarker(s) {
     L.DomEvent.stopPropagation(e);
     // Show site info always
     showSiteInfo(s);
-    if (rutaModoActivo) {
-      addRutaPunto(s);
-    } else if (originLatLng) {
-      // Select as destination if origin already set
+    // Select as destination if origin already set
+    if (originLatLng) {
       selectDestino(s);
     }
   });
@@ -2069,7 +1924,6 @@ function onProvClick(key, el) {
 function abrirProvincia(key) {
   const prov = PROVINCIAS_LIST.find(p => p.key === key);
   if (!prov) return;
-  if (rutaModoActivo) cancelarModoRuta();
   provActual = key;
   if (mapProv) { mapProv.remove(); mapProv = null; clusterProv = null; }
   document.getElementById('map-argentina').style.display = 'none';
@@ -2103,7 +1957,6 @@ function renderProvincia(key) {
 }
 
 function cerrarProvincia() {
-  if (rutaModoActivo) cancelarModoRuta();
   if (mapProv) { mapProv.remove(); mapProv = null; clusterProv = null; }
   document.getElementById('map-provincia').style.display = 'none';
   document.getElementById('map-argentina').style.display = 'block';
@@ -2218,15 +2071,13 @@ function selectDestino(s) {
 
 // ─── SHOW SITE INFO (sidebar tab 3 + map label) ───────────────────────────────
 function showSiteInfo(s) {
-  const cat = catById(s.cat) || { color:'#888', id:s.cat };
+  const cat = catById(s.cat) || { color:'#888', id: s.cat || '?' };
 
-  // Floating label on map
+  // ── Floating label on map ────────────────────────────────────────
   if (activeTooltip) { try { activeTooltip.remove(); } catch(e){} activeTooltip = null; }
   const m = activeMap();
   if (m) {
-    // Centrar el mapa en el sitio seleccionado
     m.panTo([s.lat, s.lng], { animate:true });
-
     activeTooltip = L.tooltip({ permanent:true, direction:'top', offset:[0,-18], className:'site-label' })
       .setLatLng([s.lat, s.lng])
       .setContent(
@@ -2235,13 +2086,23 @@ function showSiteInfo(s) {
       ).addTo(m);
   }
 
-  // Panel de información — tipo + nombre + descripción
+  // ── Categoría + Nombre ───────────────────────────────────────────
   document.getElementById('tic-cat').textContent  = cat.id;
   document.getElementById('tic-cat').style.cssText = `background:${cat.color};color:#000;`;
-  document.getElementById('tic-name').textContent = s.name;
+  document.getElementById('tic-name').textContent = s.name || '';
+
+  // ── Localidad / Provincia ────────────────────────────────────────
+  const provLabel = (function() {
+    const p = PROVINCIAS_LIST.find(function(p){ return p.key === s.provincia; });
+    return p ? p.label : (s.provincia || '');
+  })();
+  const locationParts = [s.localidad, provLabel].filter(Boolean);
+  document.getElementById('tic-location').textContent = locationParts.join(' · ');
+
+  // ── Descripción ──────────────────────────────────────────────────
   document.getElementById('tic-desc').textContent = s.desc || '';
 
-  // Fotos del sitio (cargadas desde el administrador) — se ocultan si no hay ninguna
+  // ── Fotos (hasta 3, cargadas desde admin) ───────────────────────
   const ticFotos = document.getElementById('tic-fotos');
   const fotos = [s.foto1, s.foto2, s.foto3].filter(Boolean);
   if (fotos.length) {
@@ -2258,7 +2119,7 @@ function showSiteInfo(s) {
   document.getElementById('tab-info-placeholder').style.display = 'none';
   document.getElementById('tab-info-content').style.display     = 'block';
 
-  // Recuadros rápidos: Días / Horarios / Costo / Mejor época
+  // ── Recuadros rápidos: Días / Horarios / Costo / Mejor época ────
   document.getElementById('qf-dias').textContent    = s.dias    || '—';
   document.getElementById('qf-horario').textContent = s.horario || '—';
   document.getElementById('qf-costo').textContent   = s.costo   || '—';
@@ -2327,247 +2188,6 @@ async function calcRoute(dLat, dLng, s) {
   }
 }
 
-// ─── FORMATO DE DISTANCIA / TIEMPO (reutilizado por ruta simple y multi-parada) ─
-function fmtDist(meters) { return Math.round(meters / 1000) + ' km'; }
-function fmtTime(seconds) {
-  const totalMin = Math.round(seconds / 60);
-  const hrs  = Math.floor(totalMin / 60);
-  const mins = totalMin % 60;
-  return hrs > 0 ? `${hrs}h ${mins}m` : `${mins} min`;
-}
-
-// ─── MODO "GENERAR RUTA" (múltiples paradas, hasta 50, con repeticiones) ──────
-function rutaNumIcon(num, esOrigen) {
-  return L.divIcon({
-    html:`<div style="width:22px;height:22px;border-radius:50%;` +
-         `background:${esOrigen ? '#e8c96a' : 'rgba(23,28,39,0.92)'};` +
-         `border:2px solid ${esOrigen ? '#fff' : '#e8c96a'};` +
-         `color:${esOrigen ? '#0f1117' : '#e8c96a'};font-weight:700;font-size:11px;` +
-         `font-family:'Barlow',sans-serif;display:flex;align-items:center;justify-content:center;` +
-         `box-shadow:0 0 8px rgba(0,0,0,0.6);">${esOrigen ? '🏁' : num}</div>`,
-    className:'', iconSize:[22,22], iconAnchor:[11,11]
-  });
-}
-
-function clearRutaVisuals() {
-  rutaMarkers.forEach(mk => { try { mk.remove(); } catch(e) {} });
-  rutaMarkers = [];
-  if (rutaPolyline) { try { rutaPolyline.remove(); } catch(e) {} rutaPolyline = null; }
-}
-
-function rebuildRutaMarkers() {
-  rutaMarkers.forEach(mk => { try { mk.remove(); } catch(e) {} });
-  rutaMarkers = [];
-  const m = activeMap();
-  if (!m) return;
-  if (rutaOrigen) {
-    rutaMarkers.push(L.marker([rutaOrigen.lat, rutaOrigen.lng], { icon:rutaNumIcon(0, true), zIndexOffset:980 }).addTo(m));
-  }
-  rutaPuntos.forEach((p, i) => {
-    rutaMarkers.push(L.marker([p.lat, p.lng], { icon:rutaNumIcon(i + 1, false), zIndexOffset:950 }).addTo(m));
-  });
-}
-
-function updateRutaHeaderUI() {
-  const badge = document.getElementById('header-ruta-badge');
-  const btnFin = document.getElementById('btn-finalizar-ruta');
-  if (badge) badge.textContent = rutaPuntos.length + ' / ' + RUTA_MAX + ' sitios';
-  if (btnFin) btnFin.disabled = !rutaOrigen || rutaPuntos.length === 0;
-}
-
-function updateRutaSidebarUI() {
-  const hint = document.getElementById('ruta-builder-hint');
-  const list = document.getElementById('ruta-builder-list');
-  const undo = document.getElementById('btn-ruta-deshacer');
-  if (!hint || !list) return;
-
-  if (!rutaOrigen) {
-    hint.textContent = 'Elegí un origen desde el menú superior para empezar.';
-    list.innerHTML = '';
-    if (undo) undo.style.display = 'none';
-    return;
-  }
-
-  hint.textContent = rutaPuntos.length >= RUTA_MAX
-    ? 'Llegaste al máximo de 50 sitios. Presioná "Finalizar Ruta" para ver el resumen.'
-    : 'Hacé clic en los sitios que quieras visitar, en el orden que prefieras (se pueden repetir).';
-
-  let html = '<div class="ruta-li ruta-li-origen"><span class="ruta-li-num">🏁</span><span class="ruta-li-name">' +
-             escH(rutaOrigen.label || 'Origen') + '</span></div>';
-  rutaPuntos.forEach((p, i) => {
-    html += '<div class="ruta-li"><span class="ruta-li-num">' + (i + 1) + '</span><span class="ruta-li-name">' + escH(p.name) + '</span></div>';
-  });
-  list.innerHTML = html;
-  if (undo) undo.style.display = rutaPuntos.length > 0 ? 'inline-block' : 'none';
-}
-
-function updateRutaUI() {
-  updateRutaHeaderUI();
-  updateRutaSidebarUI();
-}
-
-function iniciarModoRuta() {
-  // Limpiar cualquier estado de la ruta simple (origen → 1 destino)
-  clearRoute();
-  clearOriginMarker();
-  originLatLng = null;
-  if (activeTooltip) { try { activeTooltip.remove(); } catch(e) {} activeTooltip = null; }
-
-  // Reiniciar estado de ruta múltiple
-  rutaModoActivo = true;
-  rutaOrigen = null;
-  rutaPuntos = [];
-  clearRutaVisuals();
-
-  document.getElementById('btn-generar-ruta').style.display = 'none';
-  document.getElementById('header-ruta-build').style.display = 'flex';
-  document.getElementById('header-route-dist-box').style.display = 'none';
-  document.getElementById('header-route-time-box').style.display = 'none';
-
-  // El panel de armado de ruta reemplaza al prompt genérico del sidebar
-  document.getElementById('ruta-builder-panel').style.display = 'flex';
-  document.getElementById('route-prompt').style.display   = 'none';
-  document.getElementById('route-metrics').style.display  = 'none';
-  document.getElementById('route-loading').style.display  = 'none';
-  document.getElementById('route-error').style.display    = 'none';
-  document.getElementById('route-reset').style.display     = 'none';
-
-  // El origen se elige desde el menú "Seleccionar un origen" del header, igual que en la ruta simple
-  pickStep = 'origin';
-  const hint    = document.getElementById('header-origen-hint');
-  const sel     = document.getElementById('header-origen-select');
-  const cambiar = document.getElementById('btn-cambiar-origen');
-  if (hint)    hint.style.display    = 'none';
-  if (cambiar) cambiar.style.display = 'none';
-  if (sel)     { sel.value = ''; sel.style.display = 'block'; }
-
-  updateRutaUI();
-}
-
-function cancelarModoRuta() {
-  rutaModoActivo = false;
-  rutaOrigen = null;
-  rutaPuntos = [];
-  clearRutaVisuals();
-
-  document.getElementById('btn-generar-ruta').style.display = 'inline-block';
-  document.getElementById('header-ruta-build').style.display = 'none';
-  document.getElementById('ruta-builder-panel').style.display = 'none';
-
-  setStep('origin');
-}
-
-function addRutaPunto(s) {
-  if (!rutaModoActivo || !rutaOrigen) return;
-  if (rutaPuntos.length >= RUTA_MAX) { updateRutaSidebarUI(); return; }
-
-  rutaPuntos.push({ lat:s.lat, lng:s.lng, name:s.name });
-  const m = activeMap();
-  if (m) {
-    rutaMarkers.push(L.marker([s.lat, s.lng], { icon:rutaNumIcon(rutaPuntos.length, false), zIndexOffset:950 }).addTo(m));
-  }
-  updateRutaUI();
-}
-
-function deshacerUltimoRutaPunto() {
-  if (!rutaPuntos.length) return;
-  rutaPuntos.pop();
-  rebuildRutaMarkers();
-  updateRutaUI();
-}
-
-async function finalizarRuta() {
-  if (!rutaOrigen || rutaPuntos.length === 0) return;
-
-  const btnFin = document.getElementById('btn-finalizar-ruta');
-  const btnCan = document.getElementById('btn-cancelar-ruta');
-  if (btnFin) { btnFin.disabled = true; btnFin.textContent = 'Calculando…'; }
-  if (btnCan) btnCan.disabled = true;
-
-  const stops = [{ lat:rutaOrigen.lat, lng:rutaOrigen.lng, name: rutaOrigen.label || 'Origen' }]
-    .concat(rutaPuntos.map(p => ({ lat:p.lat, lng:p.lng, name:p.name })));
-  const coordsStr = stops.map(p => `${p.lng},${p.lat}`).join(';');
-
-  try {
-    const url  = `https://router.project-osrm.org/route/v1/driving/${coordsStr}?overview=full&geometries=geojson`;
-    const r    = await fetch(url);
-    const data = await r.json();
-    if (data.code !== 'Ok' || !data.routes.length) throw new Error();
-    const route = data.routes[0];
-    const legs  = route.legs || [];
-
-    // Dibujar la ruta completa en el mapa
-    clearRutaVisuals();
-    const m = activeMap();
-    if (m) {
-      if (route.geometry) {
-        rutaPolyline = L.geoJSON(route.geometry, {
-          style:{ color:'#38bdf8', weight:4, opacity:0.85, lineJoin:'round', lineCap:'round' }
-        }).addTo(m);
-      }
-      stops.forEach((p, idx) => {
-        rutaMarkers.push(L.marker([p.lat, p.lng], { icon:rutaNumIcon(idx, idx === 0), zIndexOffset: idx === 0 ? 980 : 950 }).addTo(m));
-      });
-      if (rutaPolyline) {
-        try {
-          m.fitBounds(rutaPolyline.getBounds(), { paddingTopLeft:[20,20], paddingBottomRight:[20,120] });
-        } catch(e) {}
-      }
-    }
-
-    renderRutaResumen(stops, legs, route.distance, route.duration);
-    openRutaResumenModal();
-
-  } catch(e) {
-    alert('No se pudo calcular la ruta completa. Probá quitando algún sitio o intentá nuevamente.');
-  } finally {
-    // Salir del modo de armado (los datos quedan dibujados en el mapa)
-    rutaModoActivo = false;
-    document.getElementById('btn-generar-ruta').style.display = 'inline-block';
-    document.getElementById('header-ruta-build').style.display = 'none';
-    document.getElementById('ruta-builder-panel').style.display = 'none';
-    if (btnFin) { btnFin.disabled = false; btnFin.textContent = 'Finalizar Ruta'; }
-    if (btnCan) btnCan.disabled = false;
-    setStep('origin');
-  }
-}
-
-function renderRutaResumen(stops, legs, totalDist, totalDur) {
-  const body = document.getElementById('ruta-resumen-body');
-  if (!body) return;
-  let html = '';
-  for (let i = 0; i < legs.length; i++) {
-    html += '<div class="ruta-leg">' +
-      '<div class="ruta-leg-num">' + (i + 1) + '</div>' +
-      '<div class="ruta-leg-info"><div class="ruta-leg-from-to">' + escH(stops[i].name) + ' → ' + escH(stops[i+1].name) + '</div></div>' +
-      '<div class="ruta-leg-metrics"><span>' + fmtDist(legs[i].distance) + '</span><span>' + fmtTime(legs[i].duration) + '</span></div>' +
-    '</div>';
-  }
-  html += '<div class="ruta-leg ruta-leg-total">' +
-    '<div class="ruta-leg-num">🏁</div>' +
-    '<div class="ruta-leg-info"><div class="ruta-leg-from-to">Total del recorrido (' + (stops.length - 1) + ' tramo' + (stops.length - 1 !== 1 ? 's' : '') + ')</div></div>' +
-    '<div class="ruta-leg-metrics"><span>' + fmtDist(totalDist) + '</span><span>' + fmtTime(totalDur) + '</span></div>' +
-  '</div>';
-  body.innerHTML = html;
-}
-
-function openRutaResumenModal()  { document.getElementById('modal-ruta-resumen').style.display = 'flex'; }
-function closeRutaResumenModal() { document.getElementById('modal-ruta-resumen').style.display = 'none'; }
-
-document.getElementById('btn-generar-ruta').addEventListener('click', iniciarModoRuta);
-document.getElementById('btn-cancelar-ruta').addEventListener('click', cancelarModoRuta);
-document.getElementById('btn-finalizar-ruta').addEventListener('click', finalizarRuta);
-document.getElementById('btn-ruta-deshacer').addEventListener('click', deshacerUltimoRutaPunto);
-document.getElementById('ruta-resumen-close').addEventListener('click', closeRutaResumenModal);
-document.getElementById('btn-ruta-resumen-cerrar').addEventListener('click', closeRutaResumenModal);
-document.getElementById('modal-ruta-resumen').addEventListener('click', function(e) {
-  if (e.target === this) closeRutaResumenModal();
-});
-document.getElementById('btn-ruta-nueva').addEventListener('click', function() {
-  closeRutaResumenModal();
-  iniciarModoRuta();
-});
-
 document.getElementById('route-reset').addEventListener('click', () => {
   clearRoute();
   originLatLng = null;
@@ -2591,6 +2211,21 @@ async function initApp() {
   setStep('origin');
   initMapArgentina();
 }
+
+// ── SINCRONIZACIÓN EN TIEMPO REAL ─────────────────────────────────────────────
+// Si admin.html y index.html están abiertos simultáneamente en el mismo navegador,
+// cualquier cambio guardado en admin se refleja en el mapa automáticamente.
+window.addEventListener('storage', function(e) {
+  if (e.key === LS_KEY && e.newValue) {
+    try {
+      var updated = JSON.parse(e.newValue);
+      if (Array.isArray(updated)) {
+        SITIOS = updated;
+        refresh();
+      }
+    } catch(err) {}
+  }
+});
 
 // ─── TRANSITIONS: Intro → Provincias → Mapa ───────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
@@ -2695,22 +2330,6 @@ document.addEventListener('DOMContentLoaded', function() {
       const lng = parseFloat(opt.dataset.lng);
       if (isNaN(lat) || isNaN(lng)) return;
 
-      // ── Modo "Generar Ruta": este origen es el punto de partida de la ruta ──
-      if (rutaModoActivo) {
-        rutaOrigen = { lat, lng, label: opt.textContent };
-        clearRutaVisuals();
-        const m = activeMap();
-        if (m) {
-          rutaMarkers.push(L.marker([lat, lng], { icon:rutaNumIcon(0, true), zIndexOffset:980 })
-            .bindTooltip(opt.textContent, { permanent:false, direction:'top', className:'site-label' })
-            .addTo(m));
-          m.setView([lat, lng], Math.max(m.getZoom(), 8), { animate:true });
-        }
-        updateRutaUI();
-        this.value = '';
-        return;
-      }
-
       // Place black origin marker
       clearRoute();
       clearOriginMarker();
@@ -2767,17 +2386,6 @@ document.addEventListener('DOMContentLoaded', function() {
       const lat = parseFloat(opt.dataset.lat);
       const lng = parseFloat(opt.dataset.lng);
       if (isNaN(lat) || isNaN(lng)) return;
-
-      if (rutaModoActivo) {
-        rutaOrigen = { lat, lng, label: opt.textContent };
-        clearRutaVisuals();
-        const m = activeMap();
-        if (m) rutaMarkers.push(L.marker([lat, lng], { icon:rutaNumIcon(0, true), zIndexOffset:980 }).addTo(m));
-        updateRutaUI();
-        this.value = '';
-        return;
-      }
-
       originLatLng = { lat, lng };
       placeOriginMarker(lat, lng);
       setStep('dest');
@@ -2840,7 +2448,6 @@ document.addEventListener('DOMContentLoaded', function() {
   var btnVolverProvincias = document.getElementById('btn-volver-provincias');
   if (btnVolverProvincias) {
     btnVolverProvincias.addEventListener('click', function() {
-      if (rutaModoActivo) cancelarModoRuta();
       clearRoute();
       originLatLng = null;
       clearOriginMarker();
@@ -2862,7 +2469,6 @@ document.addEventListener('DOMContentLoaded', function() {
   var btnVolverSitios = document.getElementById('btn-volver-sitios');
   if (btnVolverSitios) {
     btnVolverSitios.addEventListener('click', function() {
-      if (rutaModoActivo) cancelarModoRuta();
       clearRoute();
       originLatLng = null;
       clearOriginMarker();
