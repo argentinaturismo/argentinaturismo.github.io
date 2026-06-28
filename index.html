@@ -598,7 +598,9 @@
     .header-center-group {
       position:absolute; left:50%; transform:translateX(-50%);
       display:flex; align-items:center; gap:10px;
+      pointer-events:none;
     }
+    .header-center-group > * { pointer-events:auto; }
     .header-right { margin-left:auto; display:flex; gap:10px; }
     .btn-volver {
       background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
@@ -640,15 +642,100 @@
       font-size:0.78rem; font-weight:700; color:var(--text);
     }
     .header-count-box {
-      position:absolute; left:340px; top:50%; transform:translateY(-50%);
       background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
       color:#ffeef2; border-radius:999px; padding:7px 14px;
       font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
-      white-space:nowrap; display:flex; align-items:center; gap:5px;
+      white-space:nowrap; display:flex; align-items:center; gap:5px; flex-shrink:0;
     }
+    /* ── TARJETA PENDIENTE + BOTÓN ACEPTAR ── */
+    .header-pending-card {
+      display:flex; align-items:center; gap:8px; flex-shrink:0; margin-left:18px;
+    }
+    .header-pending-badge {
+      font-size:0.66rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.1em; padding:2px 9px; border-radius:999px;
+      white-space:nowrap; flex-shrink:0;
+    }
+    .header-pending-name {
+      font-family:'Playfair Display',serif; font-size:0.95rem; font-weight:700;
+      color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width:220px;
+    }
+    .header-btn-aceptar {
+      background:#00e676; border:none; border-radius:999px;
+      color:#003d1a; font-family:'Barlow',sans-serif; font-size:0.78rem;
+      font-weight:800; padding:6px 18px; cursor:pointer; flex-shrink:0;
+      transition:background .15s; box-shadow:0 0 8px #00e67688;
+    }
+    .header-btn-aceptar:hover { background:#69ffb0; }
+
+    .header-btn-cancelar {
+      background:#ff1744; border:none; border-radius:999px;
+      color:#fff; font-family:'Barlow',sans-serif; font-size:0.78rem;
+      font-weight:800; padding:6px 18px; cursor:pointer; flex-shrink:0;
+      transition:background .15s; box-shadow:0 0 8px #ff174488;
+    }
+    .header-btn-cancelar:hover { background:#ff616f; }
+
+    .header-btn-finalizar {
+      background:#00b0ff; border:none; border-radius:999px;
+      color:#002b3d; font-family:'Barlow',sans-serif; font-size:0.78rem;
+      font-weight:800; padding:6px 18px; cursor:pointer; flex-shrink:0;
+      transition:background .15s; box-shadow:0 0 8px #00b0ff88;
+    }
+    .header-btn-finalizar:hover { background:#64d8ff; }
+    .header-btn-finalizar:disabled { opacity:0.35; cursor:not-allowed; box-shadow:none; }
+
+    .header-btn-sep {
+      width:1px; height:20px; background:rgba(255,255,255,0.15);
+      flex-shrink:0; align-self:center;
+    }
+
+    .header-sel-origen {
+      font-family:'Barlow',sans-serif; font-size:0.82rem; font-weight:700;
+      color:#FFD700; white-space:nowrap; cursor:pointer; flex-shrink:0;
+      letter-spacing:0.03em; user-select:none;
+      transition: opacity .15s;
+      display:inline-block; width:160px; margin-left:18px;
+    }
+    .header-sel-origen:hover { opacity:0.75; }
+    .header-sel-origen.esperando-click { opacity:0.55; cursor:crosshair; }
     .header-count-box span {
       font-family:'Barlow',sans-serif; font-weight:700; font-size:0.78rem;
     }
+
+    /* ── HAMBURGER MENU: borde derecho del panel de descripción ── */
+    .map-hamburger-wrap {
+      position:relative; flex-shrink:0; margin-left:80px;
+    }
+    .map-hamburger {
+      width:36px; height:36px; border-radius:8px; border:1px solid rgba(232,201,106,0.35);
+      background:rgba(232,201,106,0.1); cursor:pointer;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;
+      padding:0; transition:background .2s, border-color .2s;
+    }
+    .map-hamburger:hover { background:rgba(232,201,106,0.2); border-color:rgba(232,201,106,0.55); }
+    .map-hamburger span {
+      display:block; width:18px; height:2px;
+      background:var(--accent); border-radius:2px; pointer-events:none;
+    }
+    .map-ham-dropdown {
+      display:none; position:absolute; top:calc(100% + 8px); left:0;
+      background:var(--panel); border:1px solid var(--border);
+      border-radius:10px; overflow:hidden; z-index:1100;
+      box-shadow:0 8px 24px rgba(0,0,0,0.5); min-width:200px;
+    }
+    .map-ham-dropdown.open { display:block; }
+    .map-ham-item {
+      width:100%; padding:12px 18px; border:none; background:transparent;
+      color:var(--text); font-family:'Barlow',sans-serif; font-size:0.84rem; font-weight:600;
+      text-align:left; cursor:pointer; display:flex; align-items:center; gap:10px;
+      transition:background .15s;
+    }
+    .map-ham-item:hover { background:rgba(255,255,255,0.07); }
+    .map-ham-item + .map-ham-item { border-top:1px solid var(--border); }
+    .map-ham-icon { font-size:1rem; flex-shrink:0; }
+
     #btn-generar-ruta { color:#38bdf8; }
     .header-ruta-build { display:flex; align-items:center; gap:10px; }
     .header-ruta-badge {
@@ -662,7 +749,7 @@
     #btn-cancelar-ruta { color:#9aa3c4; }
     @media (max-width:760px) {
       .btn-volver { font-size:0.68rem; padding:6px 10px; }
-      .header-count-box { font-size:0.68rem; padding:6px 10px; left:300px; }
+      .header-count-box { font-size:0.68rem; padding:6px 10px; }
       .header-route-metric { padding:6px 10px; }
       .header-route-val { font-size:0.7rem; }
       .header-ruta-badge { font-size:0.62rem; padding:6px 10px; }
@@ -705,6 +792,48 @@
 
     /* ── MAP AREA ── */
     .map-area { flex:1; display:flex; flex-direction:column; overflow:hidden; position:relative; }
+
+    /* ── MARCADOR DE ORIGEN: punto turquesa + nombre del usuario ── */
+    .om-wrap {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
+    }
+    .om-label {
+      position: absolute;
+      bottom: calc(100% + 4px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 178, 162, 0.92);
+      color: #fff;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.45);
+    }
+    .om-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #00b2a2;
+      border: 2.5px solid #fff;
+      box-shadow: 0 0 0 3px rgba(0,178,162,0.3), 0 0 10px rgba(0,178,162,0.7);
+    }
+
+    /* ── PUNTOS PERSONALIZADOS DEL USUARIO en el mapa ── */
+    .uo-triangle {
+      width:0; height:0;
+      border-left:8px solid transparent;
+      border-right:8px solid transparent;
+      border-bottom:14px solid #000;
+      cursor:pointer;
+      filter:drop-shadow(0 1px 3px rgba(0,0,0,0.6));
+    }
 
     /* ── MAP LABEL tooltip ── */
     .leaflet-tooltip.site-label {
@@ -797,6 +926,10 @@
     .tab-info-content .tic-name {
       font-family:'Playfair Display',serif; font-size:0.95rem; font-weight:700; color:#fff;
     }
+    .tab-info-content .tic-geo {
+      font-size:0.84rem; color:#FFD700; font-family:'Barlow',sans-serif;
+      font-weight:600; letter-spacing:0.04em; margin-bottom:6px; margin-top:-4px;
+    }
     .tab-info-content .tic-desc {
       font-size:0.82rem; color:#ccc; line-height:1.7;
       text-align:justify; text-justify:inter-word;
@@ -810,6 +943,43 @@
       cursor:zoom-in; transition:opacity .15s;
     }
     .tic-fotos img:hover { opacity:0.85; }
+
+    /* ── TOOLTIP HOVER sobre marcadores ── */
+    .map-hover-tooltip.leaflet-tooltip {
+      background:rgba(10,14,28,0.92); color:#fff;
+      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
+      padding:6px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.15);
+      box-shadow:0 3px 10px rgba(0,0,0,0.5); white-space:nowrap;
+      pointer-events:none;
+    }
+    .map-hover-tooltip.leaflet-tooltip::before { display:none; }
+    .mht-wrap { display:flex; align-items:center; gap:7px; }
+    .mht-badge {
+      display:inline-flex; align-items:center; gap:5px;
+      padding:2px 7px; border-radius:999px;
+      font-size:0.70rem; font-weight:700; letter-spacing:0.04em;
+      line-height:1.4; white-space:nowrap; flex-shrink:0;
+    }
+    .mht-dot {
+      width:8px; height:8px; border-radius:50%; flex-shrink:0;
+      border:1.5px solid rgba(255,255,255,0.55);
+      display:inline-block;
+    }
+    .mht-name { color:#fff; font-weight:600; font-size:0.80rem; }
+
+    /* ── POPUP CLICK sobre marcadores ── */
+    .map-click-popup .leaflet-popup-content-wrapper {
+      background:rgba(10,14,28,0.95); color:#fff;
+      font-family:'Barlow',sans-serif; font-size:0.8rem;
+      border-radius:8px; border:1px solid rgba(255,255,255,0.15);
+      box-shadow:0 4px 16px rgba(0,0,0,0.6); padding:0;
+    }
+    .map-click-popup .leaflet-popup-content {
+      margin:10px 14px; line-height:1.55;
+    }
+    .map-click-popup .leaflet-popup-content strong { color:#FFD700; }
+    .map-click-popup .leaflet-popup-content p { margin:4px 0 0; color:#ccc; font-size:0.75rem; }
+    .map-click-popup .leaflet-popup-tip-container { display:none; }
 
     /* ── RECUADROS RÁPIDOS: Días / Horarios / Costo / Mejor época ── */
     .info-quickfacts {
@@ -825,10 +995,11 @@
 
     .qf-lbl, .qf-val {
       font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
-      color:#ffffff; letter-spacing:normal; text-transform:none;
+      letter-spacing:normal; text-transform:none;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
-    .qf-val { margin-top:1px; }
+    .qf-lbl { color:#ffffff; }
+    .qf-val  { color:#FFD700; margin-top:1px; }
 
     /* ── PANEL DE RUTA (parte inferior de la pantalla): origen → destino → distancia/tiempo ── */
     .info-panel-bottom {
@@ -930,7 +1101,7 @@
       display:flex; align-items:center; gap:12px;
       padding:16px 22px; border-bottom:1px solid #2a3050; flex-shrink:0;
     }
-    .mo-title { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:#e8c96a; flex:1; }
+    .mo-title { font-family:'Playfair Display',serif; font-size:1.45rem; font-weight:700; color:#e8c96a; flex:1; }
     .mo-close {
       background:none; border:1px solid #2a3050; color:#7a83a6;
       border-radius:6px; padding:4px 10px; cursor:pointer; font-size:0.8rem;
@@ -951,9 +1122,11 @@
       white-space:nowrap;
     }
     .mo-th-n       { width:28px; text-align:center; }
-    .mo-th-nombre  { width:170px; }
-    .mo-th-coord   { width:90px; }
-    .mo-th-actions { width:120px; }
+    .mo-th-nombre  { width:140px; }
+    .mo-th-coord   { width:80px; }
+    .mo-th-prov    { width:110px; }
+    .mo-th-loc     { width:120px; }
+    .mo-th-actions { width:60px; }
 
     .mo-tr { border-bottom:1px solid rgba(42,48,80,0.6); }
     .mo-tr:last-child { border-bottom:none; }
@@ -987,7 +1160,7 @@
     }
     .mo-btn-edit { color:#7a83a6; }
     .mo-btn-edit:hover { color:#e8c96a; border-color:#e8c96a; background:rgba(232,201,106,0.08); }
-    .mo-btn-del  { color:#7a83a6; }
+    .mo-btn-del  { color:#7a83a6; font-size:0.9rem; padding:4px 8px; line-height:1; }
     .mo-btn-del:hover  { color:#fca5a5; border-color:rgba(220,38,38,0.5); background:rgba(220,38,38,0.08); }
     .mo-btn-ok   { color:#7a83a6; }
     .mo-btn-ok:hover   { color:#86efac; border-color:rgba(34,197,94,0.5); background:rgba(34,197,94,0.08); }
@@ -1440,13 +1613,15 @@
     })();
 
     // ── CONTADOR DE VISITANTES ────────────────────────────────────────────────
-    // No se contabiliza si el navegador tiene la marca de administrador.
-    // La marca se establece al abrir admin.html.
+    // Contador local (sin API externa). Reglas:
+    //   • No incrementa si el navegador tiene la marca de administrador
+    //     (localStorage 'at_is_admin' === '1', que pone admin.html).
+    //   • Usa sessionStorage para marcar que esta sesión de pestaña ya fue contada,
+    //     evitando incrementos dobles por recarga/hot-reload dentro de la misma sesión.
     (function() {
-      var IS_ADMIN_KEY = 'at_is_admin';
-      var LS_COUNT_KEY = 'at_visitor_count';
-      var API_NS       = 'ar-argentina-turismo-v1';
-      var API_KEY      = 'page-visits';
+      var IS_ADMIN_KEY  = 'at_is_admin';
+      var LS_COUNT_KEY  = 'at_visitor_count';
+      var SS_COUNTED    = 'at_session_counted'; // sessionStorage — se borra al cerrar la pestaña
 
       var numEl     = document.getElementById('vc-num');
       var counterEl = document.getElementById('visitor-counter');
@@ -1455,39 +1630,22 @@
       function formatNum(n) {
         return Number(n).toLocaleString('es-AR');
       }
-
       function showCount(n) {
-        numEl.textContent   = formatNum(n);
-        counterEl.style.display = 'flex';
+        numEl.textContent        = formatNum(n);
+        counterEl.style.display  = 'flex';
       }
 
-      // Si soy administrador: mostrar el contador pero NO incrementar
-      var isAdmin = localStorage.getItem(IS_ADMIN_KEY) === '1';
+      var isAdmin        = localStorage.getItem(IS_ADMIN_KEY) === '1';
+      var alreadyCounted = sessionStorage.getItem(SS_COUNTED) === '1';
+      var count          = parseInt(localStorage.getItem(LS_COUNT_KEY) || '0', 10);
 
-      var apiEndpoint = isAdmin
-        ? 'https://api.countapi.xyz/get/' + API_NS + '/' + API_KEY
-        : 'https://api.countapi.xyz/hit/' + API_NS + '/' + API_KEY;
+      if (!isAdmin && !alreadyCounted) {
+        count += 1;
+        try { localStorage.setItem(LS_COUNT_KEY, count); } catch(e) {}
+        try { sessionStorage.setItem(SS_COUNTED, '1');   } catch(e) {}
+      }
 
-      fetch(apiEndpoint)
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-          if (data && data.value != null) {
-            if (!isAdmin) {
-              // Guardar localmente como respaldo
-              localStorage.setItem(LS_COUNT_KEY, data.value);
-            }
-            showCount(data.value);
-          }
-        })
-        .catch(function() {
-          // API no disponible: usar conteo local como respaldo
-          var local = parseInt(localStorage.getItem(LS_COUNT_KEY) || '0', 10);
-          if (!isAdmin) {
-            local += 1;
-            localStorage.setItem(LS_COUNT_KEY, local);
-          }
-          if (local > 0) showCount(local);
-        });
+      showCount(count);
     })();
   </script>
 </div>
@@ -1571,31 +1729,48 @@
 <!-- HEADER -->
 <header>
   <span class="flag">🇦🇷</span>
-  <div>
+  <div style="width:190px;flex-shrink:0;">
     <h1>Argentina Turismo</h1>
     <div class="subtitle">Mapa Interactivo de Sitios Turísticos</div>
   </div>
+  <div class="map-hamburger-wrap" id="map-ham-wrap">
+    <button class="map-hamburger" id="map-hamburger" type="button" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="map-ham-dropdown" id="map-ham-dropdown">
+      <button class="map-ham-item" id="ham-btn-origenes" type="button">Puntos de Origen</button>
+      <button class="map-ham-item" id="ham-btn-rutas" type="button">Planificador de Itinerarios</button>
+    </div>
+  </div>
   <div class="header-count-box" id="header-count-box"><span id="sb-count-num">0</span> sitios</div>
-  <div class="header-center-group">
-    <button class="btn-volver" id="btn-abrir-origenes" type="button">Origen</button>
-    <select class="header-origen-select" id="header-origen-select">
+  <span class="header-sel-origen" id="header-sel-origen" style="display:none;">Seleccionar Origen</span>
+  <!-- Barra de acciones del planificador: siempre a la derecha del texto Seleccionar Origen/Destino -->
+  <div id="header-ruta-actions" style="display:none; align-items:center; gap:10px; flex-shrink:0;">
+    <button class="header-btn-aceptar"  id="header-btn-aceptar"  type="button">&#10004; Aceptar</button>
+    <button class="header-btn-cancelar" id="header-btn-cancelar" type="button">&#10005; Cancelar</button>
+    <button class="header-btn-finalizar" id="header-btn-finalizar" type="button" disabled>&#9658; Finalizar</button>
+  </div>
+  <!-- Elementos de ruta ocultos (requeridos por JS) -->
+  <div class="header-center-group" style="display:none;">
+    <button id="btn-abrir-origenes" type="button" style="display:none;">Origen</button>
+    <select id="header-origen-select" style="display:none;">
       <option value="">Seleccionar un origen</option>
     </select>
-    <span class="header-origen-hint" id="header-origen-hint" style="display:none;">Seleccionar un sitio del mapa</span>
-    <button class="btn-volver" id="btn-cambiar-origen" type="button" style="display:none;">Cambiar Origen</button>
-    <div class="header-route-metric" id="header-route-dist-box" style="display:none;">
+    <span id="header-origen-hint" style="display:none;"></span>
+    <button id="btn-cambiar-origen" type="button" style="display:none;">Cambiar Origen</button>
+    <div id="header-route-dist-box" style="display:none;">
       <span class="header-route-lbl">Distancia</span>
       <span class="header-route-val" id="header-route-dist">—</span>
     </div>
-    <div class="header-route-metric" id="header-route-time-box" style="display:none;">
+    <div id="header-route-time-box" style="display:none;">
       <span class="header-route-lbl">Tiempo</span>
       <span class="header-route-val" id="header-route-time">—</span>
     </div>
-    <button class="btn-volver" id="btn-generar-ruta" type="button">Generar Ruta</button>
-    <div class="header-ruta-build" id="header-ruta-build" style="display:none;">
-      <span class="header-ruta-badge" id="header-ruta-badge">0 / 50 sitios</span>
-      <button class="btn-volver" id="btn-finalizar-ruta" type="button" disabled>Finalizar Ruta</button>
-      <button class="btn-volver" id="btn-cancelar-ruta" type="button">Cancelar</button>
+    <button id="btn-generar-ruta" type="button" style="display:none;"></button>
+    <div id="header-ruta-build" style="display:none;">
+      <span id="header-ruta-badge">0 / 100 sitios</span>
+      <button id="btn-finalizar-ruta" type="button" disabled style="display:none;">Finalizar Ruta</button>
+      <button id="btn-cancelar-ruta" type="button" style="display:none;">Cancelar</button>
     </div>
   </div>
   <div class="header-right">
@@ -1617,6 +1792,7 @@
           <span class="tic-cat" id="tic-cat"></span>
           <span class="tic-name" id="tic-name"></span>
         </div>
+        <div class="tic-geo" id="tic-geo"></div>
         <div class="tic-desc" id="tic-desc"></div>
         <div class="tic-fotos" id="tic-fotos"></div>
       </div>
@@ -1701,7 +1877,7 @@
   <div class="mo-panel">
 
     <div class="mo-header">
-      <span class="mo-title">Orígenes</span>
+      <span class="mo-title">Puntos de Origen</span>
       <button class="mo-close" id="mo-close" type="button">✕</button>
     </div>
 
@@ -1755,8 +1931,10 @@
           <tr>
             <th class="mo-th mo-th-n">#</th>
             <th class="mo-th mo-th-nombre">Nombre</th>
-            <th class="mo-th mo-th-coord">Latitud</th>
-            <th class="mo-th mo-th-coord">Longitud</th>
+            <th class="mo-th mo-th-prov">Provincia</th>
+            <th class="mo-th mo-th-loc">Localidad</th>
+            <th class="mo-th mo-th-coord">Lat.</th>
+            <th class="mo-th mo-th-coord">Long.</th>
             <th class="mo-th mo-th-actions"></th>
           </tr>
         </thead>
@@ -1845,6 +2023,7 @@ const provEls = {}, catEls = {};
 
 // Route state
 let originLatLng  = null;  // set by clicking anywhere on map
+let originLabel   = '';   // nombre personalizado guardado por el usuario
 let originMarker  = null;
 let routePolyline = null;
 let activeTooltip = null;
@@ -1853,7 +2032,7 @@ let activeTooltip = null;
 let pickStep = 'origin';
 
 // ─── MODO "GENERAR RUTA" (múltiples paradas) ──────────────────────────────────
-const RUTA_MAX = 50;
+const RUTA_MAX = 100;
 let rutaModoActivo = false;   // true mientras se está armando una ruta de varias paradas
 let rutaOrigen      = null;   // { lat, lng, label } — punto de partida de la ruta
 let rutaPuntos       = [];    // [{ lat, lng, name }, ...] en el orden elegido (pueden repetirse)
@@ -1995,24 +2174,89 @@ function makeIcon(color) {
   });
 }
 
-function originIcon() {
-  var svg = [
-    '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="40" viewBox="0 0 32 40">',
-    '<line x1="5" y1="4" x2="5" y2="38" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>',
-    '<ellipse cx="5" cy="38" rx="4" ry="1.5" fill="rgba(0,0,0,0.3)"/>',
-    '<path d="M5 5 Q14 3 18 7 Q22 11 28 9 Q22 13 18 11 Q14 15 5 13 Z" fill="#e8c96a">',
-    '  <animateTransform attributeName="transform" type="skewX" values="0;3;-2;4;-1;2;0" dur="0.9s" repeatCount="indefinite"/>',
-    '</path>',
-    '<path d="M6 7 Q11 5.5 16 8" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none">',
-    '  <animateTransform attributeName="transform" type="skewX" values="0;3;-2;4;-1;2;0" dur="0.9s" repeatCount="indefinite"/>',
-    '</path>',
-    '</svg>'
-  ].join('');
+function userOrigenIcon() {
   return L.divIcon({
-    html: svg,
+    html: '<div class="uo-triangle"></div>',
     className: '',
-    iconSize:   [32, 40],
-    iconAnchor: [5, 38]
+    iconSize:  [16, 14],
+    iconAnchor:[8, 14]
+  });
+}
+
+function originIcon() {
+  return L.divIcon({
+    html: '<div class="om-wrap"><div class="om-dot"></div></div>',
+    className: '',
+    iconSize:   [0, 0],
+    iconAnchor: [7, 7]
+  });
+}
+
+// ─── SELECCIÓN PENDIENTE (click → tarjeta → Aceptar) ─────────────────────────
+var pendingSelection = null; // { type:'sitio'|'origen'|'user', data, cat }
+
+function showPendingCard(nombre, catId, catColor) {
+  // Muestra la barra de botones (Aceptar / Cancelar / Finalizar)
+  // El Finalizar se habilita solo si ya hay al menos un destino confirmado
+  var actions = document.getElementById('header-ruta-actions');
+  var btnFin  = document.getElementById('header-btn-finalizar');
+  if (!actions) return;
+  if (btnFin) btnFin.disabled = !(rutaOrigen && rutaPuntos.length > 0);
+  actions.style.display = 'flex';
+}
+
+function clearPendingCard() {
+  pendingSelection = null;
+  // En modo ruta mantenemos la barra visible; solo la ocultamos al salir del modo
+  // (cancelarModoRuta / finalizarRuta la ocultan explícitamente)
+}
+
+// ─── MARCADORES DE PUNTOS PERSONALIZADOS DEL USUARIO ─────────────────────────
+var userOrigenMarkers = [];
+
+function clearUserOrigenMarkers() {
+  userOrigenMarkers.forEach(function(mk) { try { mk.remove(); } catch(e){} });
+  userOrigenMarkers = [];
+}
+
+function renderUserOrigenMarkers() {
+  clearUserOrigenMarkers();
+  var m = activeMap();
+  if (!m) return;
+  var origenes = moActiveOrigenes().filter(function(o) {
+    return o.nombre && String(o.lat) !== '' && String(o.lng) !== '';
+  });
+  origenes.forEach(function(o) {
+    var lat = parseFloat(o.lat), lng = parseFloat(o.lng);
+    if (isNaN(lat) || isNaN(lng)) return;
+    var mk = L.marker([lat, lng], { icon: userOrigenIcon(), zIndexOffset:900 });
+    var origenTooltipHtml =
+      '<div class="mht-wrap">' +
+        '<span class="mht-badge" style="background:#ffee0022;border:1.5px solid #ffee00;color:#ffee00;">' +
+          '<span class="mht-dot" style="background:#ffee00;"></span>Origen' +
+        '</span>' +
+        '<span class="mht-name">' + o.nombre + '</span>' +
+      '</div>';
+    mk.bindTooltip(origenTooltipHtml, {
+      permanent:false, direction:'top', offset:[0,-14],
+      className:'map-hover-tooltip'
+    });
+
+    mk.on('click', function(e) {
+      L.DomEvent.stopPropagation(e);
+      // Mostrar info en el panel de descripción siempre
+      showOrigenInfo(o, lat, lng);
+      // Tarjeta pendiente + Aceptar solo en modo Planificador de Itinerarios
+      if (rutaModoActivo) {
+        var _o = o, _lat = lat, _lng = lng;
+        pendingSelection = { type: 'user', data: { lat:_lat, lng:_lng, nombre:_o.nombre } };
+        showPendingCard(_o.nombre, null, null);
+      } else {
+        clearPendingCard();
+      }
+    });
+    mk.addTo(m);
+    userOrigenMarkers.push(mk);
   });
 }
 
@@ -2033,16 +2277,28 @@ function pasaFiltro(s, soloKey) {
 function makeMarker(s) {
   const cat = catById(s.cat) || { color:'#888', id:s.cat };
   const m = L.marker([s.lat, s.lng], { icon:makeIcon(cat.color) });
+  // Tooltip: tipo de turismo (badge con color) + nombre al pasar el cursor
+  const tooltipHtml =
+    '<div class="mht-wrap">' +
+      '<span class="mht-badge" style="background:' + cat.color + '22;border:1.5px solid ' + cat.color + ';color:' + cat.color + ';">' +
+        '<span class="mht-dot" style="background:' + cat.color + ';"></span>' + cat.id +
+      '</span>' +
+      '<span class="mht-name">' + s.name + '</span>' +
+    '</div>';
+  m.bindTooltip(tooltipHtml, {
+    permanent:false, direction:'top', offset:[0,-10],
+    className:'map-hover-tooltip'
+  });
+  // (el popup se muestra en la tarjeta del header al hacer click)
   m.on('click', e => {
     L.DomEvent.stopPropagation(e);
-    // Show site info always
+    // Mostrar info en sidebar siempre
     showSiteInfo(s);
-    if (rutaModoActivo) {
-      addRutaPunto(s);
-    } else if (originLatLng) {
-      // Select as destination if origin already set
-      selectDestino(s);
-    }
+    // Tarjeta pendiente (Aceptar/Finalizar/Cancelar): SOLO en modo Planificador de Itinerarios
+    if (!rutaModoActivo) return;
+    const _cat = catById(s.cat) || { color:'#888', id:s.cat };
+    pendingSelection = { type: 'sitio', data: s, cat: _cat };
+    showPendingCard(null, null, null);
   });
   return m;
 }
@@ -2055,6 +2311,7 @@ function initMapArgentina() {
   mapArg.addLayer(clusterArg);
   mapArg.on('click', onMapClick);
   renderArgentina();
+  renderUserOrigenMarkers();
 }
 
 function renderArgentina() {
@@ -2097,6 +2354,7 @@ function abrirProvincia(key) {
   mapProv.addLayer(clusterProv);
   mapProv.on('click', onMapClick);
   renderProvincia(key);
+  renderUserOrigenMarkers();
   clearRoute();
   if (originLatLng) { clearOriginMarker(); placeOriginMarker(originLatLng.lat, originLatLng.lng); }
   vistaActual = 'provincia';
@@ -2202,13 +2460,21 @@ function onMapClick(e) {
 }
 
 // ─── ORIGIN MARKER ────────────────────────────────────────────────────────────
-function placeOriginMarker(lat, lng) {
+function placeOriginMarker(lat, lng, label) {
   clearOriginMarker();
+  if (label) originLabel = label;
   const m = activeMap();
   if (!m) return;
-  originMarker = L.marker([lat, lng], { icon:originIcon(), zIndexOffset:1000 })
-    .bindTooltip('📍 Origen', { permanent:false, direction:'top', className:'site-label' })
-    .addTo(m);
+  originMarker = L.marker([lat, lng], { icon: originIcon(), zIndexOffset:1000 }).addTo(m);
+  // Tooltip hover (nombre)
+  originMarker.bindTooltip(originLabel || 'Origen', {
+    permanent:false, direction:'top', offset:[0,-10],
+    className:'map-hover-tooltip'
+  });
+  // Popup click (nombre)
+  originMarker.bindPopup('<strong>' + escH(originLabel || 'Origen') + '</strong>', {
+    closeButton:false, className:'map-click-popup', offset:[0,-10]
+  });
 }
 
 function clearOriginMarker() {
@@ -2230,28 +2496,84 @@ function selectDestino(s) {
 }
 
 // ─── SHOW SITE INFO (sidebar tab 3 + map label) ───────────────────────────────
+function showOrigenInfo(o, lat, lng) {
+  const COLOR = '#ffee00';
+
+  // Centrar el mapa en el origen
+  const m = activeMap();
+  if (m) m.panTo([lat, lng], { animate:true });
+
+  // Badge "Origen" con color amarillo brillante
+  var ticCat = document.getElementById('tic-cat');
+  ticCat.textContent = 'Origen';
+  ticCat.style.cssText = 'background:' + COLOR + ';color:#000;';
+
+  // Nombre del origen
+  document.getElementById('tic-name').textContent = o.nombre;
+
+  // Provincia · Localidad (si existen), si no coordenadas
+  var geoParts = [o.provincia, o.localidad].filter(Boolean);
+  var geoText = geoParts.length > 0
+    ? geoParts.join(' · ')
+    : parseFloat(lat).toFixed(4) + ' · ' + parseFloat(lng).toFixed(4);
+  document.getElementById('tic-geo').textContent = geoText;
+
+  // Sin descripción ni fotos
+  document.getElementById('tic-desc').textContent = '';
+  var ticFotos = document.getElementById('tic-fotos');
+  if (ticFotos) { ticFotos.innerHTML = ''; ticFotos.style.display = 'none'; }
+
+  // Recuadros rápidos vacíos
+  var qfIds = ['qf-dias','qf-horario','qf-costo','qf-epoca'];
+  qfIds.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = '—';
+  });
+
+  document.getElementById('tab-info-placeholder').style.display = 'none';
+  document.getElementById('tab-info-content').style.display     = 'block';
+}
+
 function showSiteInfo(s) {
   const cat = catById(s.cat) || { color:'#888', id:s.cat };
 
-  // Floating label on map
-  if (activeTooltip) { try { activeTooltip.remove(); } catch(e){} activeTooltip = null; }
+  // Centrar el mapa en el sitio seleccionado
   const m = activeMap();
-  if (m) {
-    // Centrar el mapa en el sitio seleccionado
-    m.panTo([s.lat, s.lng], { animate:true });
-
-    activeTooltip = L.tooltip({ permanent:true, direction:'top', offset:[0,-18], className:'site-label' })
-      .setLatLng([s.lat, s.lng])
-      .setContent(
-        `<span class="site-label-cat" style="background:${cat.color};color:#000;">${cat.id}</span>` +
-        `<span class="site-label-name">${s.name}</span>`
-      ).addTo(m);
-  }
+  if (m) m.panTo([s.lat, s.lng], { animate:true });
 
   // Panel de información — tipo + nombre + descripción
   document.getElementById('tic-cat').textContent  = cat.id;
   document.getElementById('tic-cat').style.cssText = `background:${cat.color};color:#000;`;
   document.getElementById('tic-name').textContent = s.name;
+  var PROV_NAMES = {
+    'buenos_aires_prov': 'Buenos Aires',
+    'caba':              'Ciudad de Buenos Aires',
+    'catamarca':         'Catamarca',
+    'chaco':             'Chaco',
+    'chubut':            'Chubut',
+    'cordoba':           'Córdoba',
+    'corrientes':        'Corrientes',
+    'entre_rios':        'Entre Ríos',
+    'formosa':           'Formosa',
+    'jujuy':             'Jujuy',
+    'la_pampa':          'La Pampa',
+    'la_rioja':          'La Rioja',
+    'mendoza':           'Mendoza',
+    'misiones':          'Misiones',
+    'neuquen':           'Neuquén',
+    'rio_negro':         'Río Negro',
+    'salta':             'Salta',
+    'san_juan':          'San Juan',
+    'san_luis':          'San Luis',
+    'santa_cruz':        'Santa Cruz',
+    'santa_fe':          'Santa Fe',
+    'santiago_del_estero': 'Santiago del Estero',
+    'tierra_del_fuego':  'Tierra del Fuego',
+    'tucuman':           'Tucumán',
+  };
+  var provNombre = PROV_NAMES[s.provincia] || (s.provincia ? s.provincia.replace(/_/g,' ').replace(/\w/g, function(c){return c.toUpperCase();}) : '');
+  var geoParts = [provNombre, s.localidad].filter(Boolean);
+  document.getElementById('tic-geo').textContent  = geoParts.join(' · ');
   document.getElementById('tic-desc').textContent = s.desc || '';
 
   // Fotos del sitio (cargadas desde el administrador) — se ocultan si no hay ninguna
@@ -2320,7 +2642,7 @@ async function calcRoute(dLat, dLng, s) {
     const m = activeMap();
     if (m && route.geometry) {
       routePolyline = L.geoJSON(route.geometry, {
-        style:{ color:'#e63329', weight:4, opacity:0.9, lineJoin:'round', lineCap:'round' }
+        style:{ color:'#e63329', weight:2, opacity:0.9, lineJoin:'round', lineCap:'round' }
       }).addTo(m);
       // Fit map with extra bottom padding so destination doesn't hide behind info panel
       try {
@@ -2349,15 +2671,17 @@ function fmtTime(seconds) {
   return hrs > 0 ? `${hrs}h ${mins}m` : `${mins} min`;
 }
 
-// ─── MODO "GENERAR RUTA" (múltiples paradas, hasta 50, con repeticiones) ──────
-function rutaNumIcon(num, esOrigen) {
+// ─── MODO "GENERAR RUTA" (múltiples paradas, hasta 100, con repeticiones) ──────
+function rutaNumIcon(num, esOrigen, label) {
+  if (esOrigen) {
+    return originIcon();
+  }
   return L.divIcon({
-    html:`<div style="width:22px;height:22px;border-radius:50%;` +
-         `background:${esOrigen ? '#e8c96a' : 'rgba(23,28,39,0.92)'};` +
-         `border:2px solid ${esOrigen ? '#fff' : '#e8c96a'};` +
-         `color:${esOrigen ? '#0f1117' : '#e8c96a'};font-weight:700;font-size:11px;` +
-         `font-family:'Barlow',sans-serif;display:flex;align-items:center;justify-content:center;` +
-         `box-shadow:0 0 8px rgba(0,0,0,0.6);">${esOrigen ? '🏁' : num}</div>`,
+    html: '<div style="width:22px;height:22px;border-radius:50%;' +
+          'background:rgba(23,28,39,0.92);border:2px solid #e8c96a;color:#e8c96a;' +
+          'font-weight:700;font-size:11px;font-family:\'Barlow\',sans-serif;' +
+          'display:flex;align-items:center;justify-content:center;' +
+          'box-shadow:0 0 8px rgba(0,0,0,0.6);">' + num + '</div>',
     className:'', iconSize:[22,22], iconAnchor:[11,11]
   });
 }
@@ -2374,7 +2698,7 @@ function rebuildRutaMarkers() {
   const m = activeMap();
   if (!m) return;
   if (rutaOrigen) {
-    rutaMarkers.push(L.marker([rutaOrigen.lat, rutaOrigen.lng], { icon:rutaNumIcon(0, true), zIndexOffset:980 }).addTo(m));
+    rutaMarkers.push(L.marker([rutaOrigen.lat, rutaOrigen.lng], { icon: originIcon(), zIndexOffset:980 }).addTo(m));
   }
   rutaPuntos.forEach((p, i) => {
     rutaMarkers.push(L.marker([p.lat, p.lng], { icon:rutaNumIcon(i + 1, false), zIndexOffset:950 }).addTo(m));
@@ -2382,10 +2706,17 @@ function rebuildRutaMarkers() {
 }
 
 function updateRutaHeaderUI() {
-  const badge = document.getElementById('header-ruta-badge');
-  const btnFin = document.getElementById('btn-finalizar-ruta');
+  const badge        = document.getElementById('header-ruta-badge');
+  const badgeWrap    = document.getElementById('header-ruta-build');
+  const btnFin       = document.getElementById('btn-finalizar-ruta');
+  const btnFinHeader = document.getElementById('header-btn-finalizar');
+
   if (badge) badge.textContent = rutaPuntos.length + ' / ' + RUTA_MAX + ' sitios';
+  if (badgeWrap) badgeWrap.style.display = (rutaOrigen || rutaPuntos.length > 0) ? 'flex' : 'none';
   if (btnFin) btnFin.disabled = !rutaOrigen || rutaPuntos.length === 0;
+
+  // Finalizar: habilitado solo cuando hay origen + al menos 1 destino confirmado
+  if (btnFinHeader) btnFinHeader.disabled = !(rutaOrigen && rutaPuntos.length > 0);
 }
 
 function updateRutaSidebarUI() {
@@ -2402,7 +2733,7 @@ function updateRutaSidebarUI() {
   }
 
   hint.textContent = rutaPuntos.length >= RUTA_MAX
-    ? 'Llegaste al máximo de 50 sitios. Presioná "Finalizar Ruta" para ver el resumen.'
+    ? 'Llegaste al máximo de 100 sitios. Presioná "Finalizar Ruta" para ver el resumen.'
     : 'Hacé clic en los sitios que quieras visitar, en el orden que prefieras (se pueden repetir).';
 
   let html = '<div class="ruta-li ruta-li-origen"><span class="ruta-li-num">🏁</span><span class="ruta-li-name">' +
@@ -2433,7 +2764,7 @@ function iniciarModoRuta() {
   clearRutaVisuals();
 
   document.getElementById('btn-generar-ruta').style.display = 'none';
-  document.getElementById('header-ruta-build').style.display = 'flex';
+  // header-ruta-build se mantiene oculto; el badge se actualiza solo al confirmar con Aceptar
   document.getElementById('header-route-dist-box').style.display = 'none';
   document.getElementById('header-route-time-box').style.display = 'none';
 
@@ -2454,6 +2785,12 @@ function iniciarModoRuta() {
   if (cambiar) cambiar.style.display = 'none';
   if (sel)     { sel.value = ''; sel.style.display = 'block'; }
 
+  // Mostrar el texto "Seleccionar Origen" en el header; ocultar botones hasta que se presione un punto
+  var selLabel = document.getElementById('header-sel-origen');
+  if (selLabel) selLabel.style.display = 'inline';
+  var rutaActions = document.getElementById('header-ruta-actions');
+  if (rutaActions) rutaActions.style.display = 'none';
+
   updateRutaUI();
 }
 
@@ -2462,10 +2799,18 @@ function cancelarModoRuta() {
   rutaOrigen = null;
   rutaPuntos = [];
   clearRutaVisuals();
+  clearOriginMarker();
 
   document.getElementById('btn-generar-ruta').style.display = 'inline-block';
   document.getElementById('header-ruta-build').style.display = 'none';
   document.getElementById('ruta-builder-panel').style.display = 'none';
+
+  var selLabel = document.getElementById('header-sel-origen');
+  if (selLabel) { selLabel.textContent = 'Seleccionar Origen'; selLabel.style.display = 'none'; selLabel.classList.remove('esperando-click'); }
+
+  clearPendingCard();
+  var rutaActions = document.getElementById('header-ruta-actions');
+  if (rutaActions) rutaActions.style.display = 'none';
 
   setStep('origin');
 }
@@ -2515,11 +2860,14 @@ async function finalizarRuta() {
     if (m) {
       if (route.geometry) {
         rutaPolyline = L.geoJSON(route.geometry, {
-          style:{ color:'#e63329', weight:4, opacity:0.9, lineJoin:'round', lineCap:'round' }
+          style:{ color:'#1a1a1a', weight:2, opacity:0.9, lineJoin:'round', lineCap:'round' }
         }).addTo(m);
       }
       stops.forEach((p, idx) => {
-        rutaMarkers.push(L.marker([p.lat, p.lng], { icon:rutaNumIcon(idx, idx === 0), zIndexOffset: idx === 0 ? 980 : 950 }).addTo(m));
+        rutaMarkers.push(L.marker([p.lat, p.lng], {
+          icon: idx === 0 ? originIcon() : rutaNumIcon(idx, false),
+          zIndexOffset: idx === 0 ? 980 : 950
+        }).addTo(m));
       });
       if (rutaPolyline) {
         try {
@@ -2534,13 +2882,15 @@ async function finalizarRuta() {
   } catch(e) {
     alert('No se pudo calcular la ruta completa. Probá quitando algún sitio o intentá nuevamente.');
   } finally {
-    // Salir del modo de armado (los datos quedan dibujados en el mapa)
     rutaModoActivo = false;
     document.getElementById('btn-generar-ruta').style.display = 'inline-block';
     document.getElementById('header-ruta-build').style.display = 'none';
     document.getElementById('ruta-builder-panel').style.display = 'none';
     if (btnFin) { btnFin.disabled = false; btnFin.textContent = 'Finalizar Ruta'; }
     if (btnCan) btnCan.disabled = false;
+    var rutaActions = document.getElementById('header-ruta-actions');
+    if (rutaActions) rutaActions.style.display = 'none';
+    clearPendingCard();
     setStep('origin');
   }
 }
@@ -2578,6 +2928,7 @@ document.getElementById('modal-ruta-resumen').addEventListener('click', function
 });
 document.getElementById('btn-ruta-nueva').addEventListener('click', function() {
   closeRutaResumenModal();
+  cancelarModoRuta();
   iniciarModoRuta();
 });
 
@@ -2708,15 +3059,12 @@ document.addEventListener('DOMContentLoaded', function() {
       const lng = parseFloat(opt.dataset.lng);
       if (isNaN(lat) || isNaN(lng)) return;
 
-      // ── Modo "Generar Ruta": este origen es el punto de partida de la ruta ──
       if (rutaModoActivo) {
         rutaOrigen = { lat, lng, label: opt.textContent };
         clearRutaVisuals();
         const m = activeMap();
         if (m) {
-          rutaMarkers.push(L.marker([lat, lng], { icon:rutaNumIcon(0, true), zIndexOffset:980 })
-            .bindTooltip(opt.textContent, { permanent:false, direction:'top', className:'site-label' })
-            .addTo(m));
+          rutaMarkers.push(L.marker([lat, lng], { icon: originIcon(), zIndexOffset:980 }).addTo(m));
           m.setView([lat, lng], Math.max(m.getZoom(), 8), { animate:true });
         }
         updateRutaUI();
@@ -2724,16 +3072,14 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
 
-      // Place flag origin marker
+      // Place origin marker
       clearRoute();
       clearOriginMarker();
       originLatLng = { lat, lng };
-
+      originLabel  = opt.textContent;
       const m = activeMap();
       if (m) {
-        originMarker = L.marker([lat, lng], { icon: originIcon(), zIndexOffset:1000 })
-          .bindTooltip(opt.textContent, { permanent:false, direction:'top', className:'site-label' })
-          .addTo(m);
+        originMarker = L.marker([lat, lng], { icon: originIcon(), zIndexOffset:1000 }).addTo(m);
         m.setView([lat, lng], Math.max(m.getZoom(), 8), { animate:true });
       }
 
@@ -2780,14 +3126,15 @@ document.addEventListener('DOMContentLoaded', function() {
         rutaOrigen = { lat, lng, label: opt.textContent };
         clearRutaVisuals();
         const m = activeMap();
-        if (m) rutaMarkers.push(L.marker([lat, lng], { icon:rutaNumIcon(0, true), zIndexOffset:980 }).addTo(m));
+        if (m) rutaMarkers.push(L.marker([lat, lng], { icon: originIcon(), zIndexOffset:980 }).addTo(m));
         updateRutaUI();
         this.value = '';
         return;
       }
 
       originLatLng = { lat, lng };
-      placeOriginMarker(lat, lng);
+      originLabel  = opt.textContent;
+      placeOriginMarker(lat, lng, opt.textContent);
       setStep('dest');
       // Pan map to origin
       if (mapArgentina) mapArgentina.setView([lat, lng], 10, { animate:true });
@@ -3004,11 +3351,13 @@ function moRenderTable() {
     tr.innerHTML =
       '<td class="mo-td mo-td-n">' + (i + 1) + '</td>' +
       '<td class="mo-td"><input class="mo-cell-input" data-f="nombre" data-i="' + i + '" type="text" maxlength="100" placeholder="Nombre" value="' + escH(row.nombre) + '" disabled /></td>' +
+      '<td class="mo-td"><input class="mo-cell-input" data-f="provincia" data-i="' + i + '" type="text" maxlength="80" placeholder="Provincia" value="' + escH(row.provincia||'') + '" disabled /></td>' +
+      '<td class="mo-td"><input class="mo-cell-input" data-f="localidad" data-i="' + i + '" type="text" maxlength="80" placeholder="Localidad" value="' + escH(row.localidad||'') + '" disabled /></td>' +
       '<td class="mo-td"><input class="mo-cell-input mo-coord" data-f="lat" data-i="' + i + '" type="number" step="any" placeholder="-38.00" value="' + escH(row.lat) + '" disabled /></td>' +
       '<td class="mo-td"><input class="mo-cell-input mo-coord" data-f="lng" data-i="' + i + '" type="number" step="any" placeholder="-57.54" value="' + escH(row.lng) + '" disabled /></td>' +
       '<td class="mo-td"><div class="mo-td-actions">' +
         '<button class="mo-btn-edit" data-i="' + i + '" type="button">Editar</button>' +
-        '<button class="mo-btn-del"  data-i="' + i + '" type="button">Eliminar</button>' +
+        '<button class="mo-btn-del"  data-i="' + i + '" type="button" title="Eliminar">&#128465;</button>' +
       '</div></td>';
 
     tbody.appendChild(tr);
@@ -3026,7 +3375,7 @@ function moRenderTable() {
   tbody.querySelectorAll('.mo-btn-del').forEach(function(btn) {
     btn.addEventListener('click', function() {
       const i = parseInt(btn.dataset.i);
-      moDraft[i] = { nombre:'', lat:'', lng:'' };
+      moDraft[i] = { nombre:'', lat:'', lng:'', provincia:'', localidad:'' };
       document.getElementById('mo-error').textContent = '';
       moRenderTable();
     });
@@ -3041,17 +3390,17 @@ function moEnableRow(i, editBtn) {
   // Enable all regular inputs
   tr.querySelectorAll('.mo-cell-input').forEach(function(inp) { inp.disabled = false; });
 
-  // Replace action buttons with OK + Eliminar
+  // Replace action buttons with OK + trash icon
   const actDiv = tr.querySelector('.mo-td-actions');
   actDiv.innerHTML =
     '<button class="mo-btn-ok"  data-i="' + i + '" type="button">✓ OK</button>' +
-    '<button class="mo-btn-del" data-i="' + i + '" type="button">Eliminar</button>';
+    '<button class="mo-btn-del" data-i="' + i + '" type="button" title="Eliminar">&#128465;</button>';
 
   actDiv.querySelector('.mo-btn-ok').addEventListener('click', function() {
     moCommitRow(i, tr);
   });
   actDiv.querySelector('.mo-btn-del').addEventListener('click', function() {
-    moDraft[i] = { nombre:'', lat:'', lng:'' };
+    moDraft[i] = { nombre:'', lat:'', lng:'', provincia:'', localidad:'' };
     document.getElementById('mo-error').textContent = '';
     moRenderTable();
   });
@@ -3068,6 +3417,8 @@ function moCommitRow(i, tr) {
   const nombre    = capitalizeFirst(get('nombre'));
   const latRaw    = get('lat');
   const lngRaw    = get('lng');
+  const provincia = capitalizeFirst(get('provincia'));
+  const localidad = capitalizeFirst(get('localidad'));
 
   // Validate
   if (latRaw !== '') {
@@ -3083,7 +3434,9 @@ function moCommitRow(i, tr) {
   moDraft[i] = {
     nombre,
     lat: latRaw !== '' ? parseFloat(latRaw) : '',
-    lng: lngRaw !== '' ? parseFloat(lngRaw) : ''
+    lng: lngRaw !== '' ? parseFloat(lngRaw) : '',
+    provincia,
+    localidad
   };
 
   moRenderTable();
@@ -3155,7 +3508,7 @@ function moEnterTable(mode) {
     moDraft = guestSessionLoad();
   }
 
-  while (moDraft.length < MO_MAX) moDraft.push({ nombre:'', lat:'', lng:'' });
+  while (moDraft.length < MO_MAX) moDraft.push({ nombre:'', lat:'', lng:'', provincia:'', localidad:'' });
   moDraft = moDraft.slice(0, MO_MAX);
 
   document.getElementById('mo-error').textContent = '';
@@ -3181,6 +3534,7 @@ function moClose(save) {
       guestSessionSave(toSave);
     }
     if (typeof window.headerOrigenPopulate === 'function') window.headerOrigenPopulate();
+    if (typeof renderUserOrigenMarkers === 'function') renderUserOrigenMarkers();
     if (pickStep === 'origin') setStep('origin');
   }
   document.getElementById('modal-origenes').style.display = 'none';
@@ -3192,6 +3546,109 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('mo-btn-guardar').addEventListener('click', function() { moClose(true); });
   document.getElementById('modal-origenes').addEventListener('click', function(e) {
     if (e.target === this) moClose(false);
+  });
+
+  // ── HAMBURGER MENU ────────────────────────────────────────────────────────
+  var hamBtn  = document.getElementById('map-hamburger');
+  var hamDrop = document.getElementById('map-ham-dropdown');
+
+  function toggleHam(e) {
+    e.stopPropagation();
+    hamDrop.classList.toggle('open');
+  }
+  function closeHam() { hamDrop.classList.remove('open'); }
+
+  hamBtn.addEventListener('click', toggleHam);
+  document.addEventListener('click', function(e) {
+    if (!document.getElementById('map-ham-wrap').contains(e.target)) closeHam();
+  });
+
+  // "Puntos de origen" → abre el modal de gestión de orígenes
+  // ── BOTÓN ACEPTAR: confirma el punto pendiente como origen o destino ──
+  document.getElementById('header-btn-aceptar').addEventListener('click', function() {
+    if (!pendingSelection) return;
+    var ps = pendingSelection;
+    clearPendingCard();
+
+    if (ps.type === 'sitio') {
+      var s = ps.data;
+      if (rutaModoActivo) {
+        if (!rutaOrigen) {
+          rutaOrigen = { lat: s.lat, lng: s.lng, label: s.name };
+          placeOriginMarker(s.lat, s.lng, s.name);
+          var selLabel = document.getElementById('header-sel-origen');
+          if (selLabel) { selLabel.textContent = 'Seleccionar Destino'; selLabel.style.display = 'inline'; selLabel.classList.remove('esperando-click'); }
+          pendingSelection = null;
+          updateRutaUI();
+        } else {
+          addRutaPunto(s);
+          pendingSelection = null;
+          updateRutaHeaderUI();
+        }
+      } else if (originLatLng) {
+        selectDestino(s);
+      } else {
+        originLatLng = { lat: s.lat, lng: s.lng };
+        originLabel  = s.name;
+        placeOriginMarker(s.lat, s.lng, s.name);
+        setStep('dest');
+      }
+    } else if (ps.type === 'user') {
+      var o = ps.data;
+      if (rutaModoActivo) {
+        if (!rutaOrigen) {
+          rutaOrigen = { lat: o.lat, lng: o.lng, label: o.nombre };
+          placeOriginMarker(o.lat, o.lng, o.nombre);
+          var selLabel2 = document.getElementById('header-sel-origen');
+          if (selLabel2) { selLabel2.textContent = 'Seleccionar Destino'; selLabel2.style.display = 'inline'; selLabel2.classList.remove('esperando-click'); }
+          pendingSelection = null;
+          updateRutaUI();
+        } else {
+          addRutaPunto({ lat: o.lat, lng: o.lng, name: o.nombre });
+          pendingSelection = null;
+          updateRutaHeaderUI();
+        }
+      } else {
+        originLatLng = { lat: o.lat, lng: o.lng };
+        originLabel  = o.nombre;
+        placeOriginMarker(o.lat, o.lng, o.nombre);
+        setStep('dest');
+      }
+    }
+  });
+
+  // ── BOTÓN CANCELAR (barra ruta): cancela toda la ruta y vuelve a "Seleccionar Origen" ──
+  document.getElementById('header-btn-cancelar').addEventListener('click', function() {
+    if (rutaModoActivo) {
+      cancelarModoRuta();
+      iniciarModoRuta(); // re-inicia el modo para que pueda elegir nuevo origen
+    } else {
+      clearRoute();
+      originLatLng = null;
+      clearOriginMarker();
+      clearPendingCard();
+      setStep('origin');
+    }
+  });
+
+  // ── BOTÓN FINALIZAR: llama a finalizarRuta() directamente desde la tarjeta pendiente ──
+  document.getElementById('header-btn-finalizar').addEventListener('click', function() {
+    clearPendingCard();
+    finalizarRuta();
+  });
+
+  document.getElementById('ham-btn-origenes').addEventListener('click', function() {
+    closeHam();
+    moOpen();
+  });
+
+  // "Rutas" → abre directamente el formulario/panel de resumen de ruta
+  // Si ya hay una ruta en construcción la finaliza; si no, inicia el modo
+  document.getElementById('ham-btn-rutas').addEventListener('click', function() {
+    closeHam();
+    // Siempre reiniciar: cancela cualquier ruta en curso y vuelve a "Seleccionar Origen"
+    if (rutaModoActivo) cancelarModoRuta();
+    iniciarModoRuta();
   });
 
   // Tabs Iniciar sesión / Registrarse
