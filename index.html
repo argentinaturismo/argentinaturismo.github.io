@@ -427,17 +427,6 @@
     }
 
     /* ── VISITOR COUNTER ── */
-    .visitor-counter {
-      position:absolute; bottom:28px; left:34px; z-index:2;
-      font-family:'Barlow', sans-serif;
-      font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase;
-      color:var(--cream); opacity:0.55;
-      display:flex; align-items:center; gap:7px;
-    }
-    .visitor-counter .vc-num {
-      font-family:'Playfair Display', serif;
-      font-size:1rem; font-weight:700; opacity:1; letter-spacing:0.04em;
-    }
 
     @media (prefers-reduced-motion: reduce) {
       .slide, .slide span { animation:none; }
@@ -907,7 +896,7 @@
     .info-panel-top {
       flex:1; min-height:0; overflow-y:auto;
       display:flex; flex-direction:column;
-      padding:16px 14px;
+      padding:16px 14px 0;
     }
     .info-panel-top::-webkit-scrollbar { width:4px; }
     .info-panel-top::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
@@ -915,9 +904,9 @@
       font-size:0.78rem; color:#666; font-style:italic;
       line-height:1.7; text-align:center; margin-top:30px; padding:0 8px;
     }
-    .tab-info-content { display:none; }
+    .tab-info-content { display:none; flex:1; min-height:0; flex-direction:column; }
     .tab-info-content .tic-header {
-      display:flex; align-items:center; gap:8px; margin-bottom:8px; flex-wrap:wrap;
+      display:flex; align-items:center; gap:8px; margin-bottom:8px; flex-wrap:wrap; flex-shrink:0;
     }
     .tab-info-content .tic-cat {
       font-size:0.66rem; font-weight:700; text-transform:uppercase;
@@ -928,14 +917,21 @@
     }
     .tab-info-content .tic-geo {
       font-size:0.84rem; color:#FFD700; font-family:'Barlow',sans-serif;
-      font-weight:600; letter-spacing:0.04em; margin-bottom:6px; margin-top:-4px;
+      font-weight:600; letter-spacing:0.04em; margin-bottom:6px; margin-top:-4px; flex-shrink:0;
     }
     .tab-info-content .tic-desc {
-      font-size:0.82rem; color:#ccc; line-height:1.7;
+      font-size:0.88rem; color:#ccc; line-height:1.7;
       text-align:justify; text-justify:inter-word;
       hyphens:auto; -webkit-hyphens:auto;
       overflow-wrap:break-word;
+      flex:1; min-height:0; overflow-y:auto;
+      padding-right:5px;
+      padding-bottom:1.6em;
+      margin-bottom:2.8em;
     }
+    .tab-info-content .tic-desc::-webkit-scrollbar { width:3px; }
+    .tab-info-content .tic-desc::-webkit-scrollbar-track { background:transparent; }
+    .tab-info-content .tic-desc::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
     .tic-fotos { display:flex; gap:6px; margin-top:12px; }
     .tic-fotos img {
       flex:1; min-width:0; width:100%; height:78px; object-fit:cover;
@@ -984,7 +980,16 @@
     /* ── RECUADROS RÁPIDOS: Días / Horarios / Costo / Mejor época ── */
     .info-quickfacts {
       flex-shrink:0; border-top:1px solid var(--border);
-      padding:10px 14px 10px; display:flex; flex-direction:column; gap:6px;
+      padding:12px 14px 10px; display:flex; flex-direction:column; gap:6px;
+      position:relative;
+    }
+    /* Gradiente de fade sobre el borde superior de los quick facts,
+       para que el texto scrolleable no quede cortado abruptamente */
+    .info-quickfacts::before {
+      content:'';
+      position:absolute; top:-18px; left:0; right:0; height:18px;
+      background:linear-gradient(to bottom, transparent, var(--panel));
+      pointer-events:none; z-index:1;
     }
     .qf-row { display:flex; gap:6px; }
     .qf-box {
@@ -1091,87 +1096,128 @@
       display:flex; align-items:center; justify-content:center;
     }
     .mo-panel {
-      background:#171c27; border:1px solid #2a3050; border-radius:12px;
-      width:min(620px, 94vw); max-height:90vh;
+      background:#171c27; border:1px solid #2a3050; border-radius:14px;
+      width:min(980px, 96vw); max-height:90vh;
       display:flex; flex-direction:column; overflow:hidden;
       box-shadow:0 24px 64px rgba(0,0,0,0.7);
       position:relative; z-index:1101; isolation:isolate;
     }
     .mo-header {
-      display:flex; align-items:center; gap:12px;
-      padding:16px 22px; border-bottom:1px solid #2a3050; flex-shrink:0;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 24px; border-bottom:1px solid #2a3050; flex-shrink:0;
     }
-    .mo-title { font-family:'Playfair Display',serif; font-size:1.45rem; font-weight:700; color:#e8c96a; flex:1; }
+    .mo-title { font-family:'Playfair Display',serif; font-size:1.12rem; font-weight:700; color:#e8c96a; }
     .mo-close {
-      background:none; border:1px solid #2a3050; color:#7a83a6;
-      border-radius:6px; padding:4px 10px; cursor:pointer; font-size:0.8rem;
-      transition:color .2s, border-color .2s;
+      background:none; border:1px solid #2a3050; border-radius:999px;
+      width:30px; height:30px; color:#9aa3c4; cursor:pointer; font-size:0.85rem;
+      transition:color .18s, border-color .18s;
     }
-    .mo-close:hover { color:#e8eaf2; border-color:#7a83a6; }
+    .mo-close:hover { color:#e8c96a; border-color:#e8c96a; }
 
     /* ── BODY / TABLE ── */
-    .mo-body { flex:1; overflow-y:auto; padding:16px 22px; }
-    .mo-body::-webkit-scrollbar { width:4px; }
+    .mo-body { flex:1; overflow-y:auto; overflow-x:auto; padding:0; }
+    .mo-body::-webkit-scrollbar { width:6px; }
     .mo-body::-webkit-scrollbar-thumb { background:#2a3050; border-radius:4px; }
 
-    .mo-table { width:100%; border-collapse:collapse; }
+    .mo-table { width:100%; min-width:860px; border-collapse:collapse; font-family:'Barlow',sans-serif; }
     .mo-th {
-      font-family:'Barlow',sans-serif; font-size:0.62rem; font-weight:700;
-      color:#7a83a6; text-transform:uppercase; letter-spacing:0.09em;
-      padding:6px 8px; text-align:left; border-bottom:1px solid #2a3050;
-      white-space:nowrap;
+      font-family:'Barlow',sans-serif; font-size:0.72rem; font-weight:700;
+      color:#e8c96a; text-transform:uppercase; letter-spacing:0.06em;
+      padding:11px 14px; text-align:left; white-space:nowrap;
     }
-    .mo-th-n       { width:28px; text-align:center; }
-    .mo-th-nombre  { width:140px; }
-    .mo-th-coord   { width:80px; }
-    .mo-th-prov    { width:110px; }
-    .mo-th-loc     { width:120px; }
-    .mo-th-actions { width:60px; }
+    .mo-table thead tr { border-bottom:2px solid rgba(232,201,106,0.4); }
+    .mo-th-n       { width:46px; text-align:center; }
+    .mo-th-nombre  { width:130px; }
+    .mo-th-prov    { width:210px; }
+    .mo-th-loc     { width:200px; }
+    .mo-th-coord   { width:130px; }
+    .mo-th-actions { width:100px; }
 
-    .mo-tr { border-bottom:1px solid rgba(42,48,80,0.6); }
+    .mo-tr { border-bottom:1px solid rgba(255,255,255,0.07); transition:background .12s; }
     .mo-tr:last-child { border-bottom:none; }
+    .mo-tr:hover { background:rgba(255,255,255,0.03); }
 
-    .mo-td {
-      padding:5px 6px; vertical-align:middle;
+    .mo-td { padding:11px 14px; vertical-align:middle; font-size:0.82rem; color:#e8eaf2; }
+    .mo-td-n { text-align:center; }
+    .mo-num-circle {
+      display:inline-flex; align-items:center; justify-content:center;
+      flex-shrink:0; width:26px; height:26px; border-radius:50%;
+      background:rgba(232,201,106,0.15); border:1px solid rgba(232,201,106,0.4);
+      color:#e8c96a; font-weight:700; font-size:0.72rem;
+      font-family:'Barlow',sans-serif;
     }
-    .mo-td-n { text-align:center; font-size:0.68rem; color:#4a5370; font-weight:700; }
 
     /* inline inputs inside the table */
     .mo-cell-input {
       width:100%; background:#0f1117; border:1px solid #2a3050; border-radius:5px;
-      color:#facc15; font-family:'Barlow',sans-serif; font-size:0.78rem;
+      color:#ffee00; font-family:'Barlow',sans-serif; font-size:0.82rem;
       padding:5px 8px; outline:none; transition:border-color .18s;
     }
     .mo-cell-input:focus { border-color:#e8c96a; }
     .mo-cell-input::placeholder { color:#3a4060; }
     .mo-cell-input:disabled {
-      background:transparent; border-color:transparent; color:#facc15;
+      background:transparent; border-color:transparent; color:#ffee00;
       cursor:default; padding:5px 4px;
     }
     .mo-cell-input:disabled::placeholder { color:transparent; }
 
+    .mo-cell-select {
+      appearance:none; -webkit-appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a83a6'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right 8px center;
+      padding-right:24px; cursor:pointer; color:#ffee00;
+      font-family:'Barlow',sans-serif; font-size:0.82rem; font-weight:400;
+    }
+    .mo-cell-select option { background:#0f1117; color:#ffee00; }
+    .mo-cell-select:disabled {
+      background-color:transparent; border-color:transparent;
+      color:#ffee00 !important; cursor:default; padding-right:4px;
+      background-image:none; opacity:1 !important;
+      font-family:'Barlow',sans-serif; font-size:0.82rem; font-weight:400;
+    }
+
     /* action buttons per row */
     .mo-td-actions { display:flex; gap:5px; justify-content:flex-end; white-space:nowrap; }
     .mo-btn-edit, .mo-btn-del, .mo-btn-ok {
-      background:none; border:1px solid #2a3050; border-radius:5px;
-      padding:4px 9px; font-size:0.65rem; font-family:'Barlow',sans-serif;
-      font-weight:700; cursor:pointer; white-space:nowrap;
+      background:none; border:1px solid #2a3050; border-radius:999px;
+      padding:5px 12px; font-size:0.72rem; font-family:'Barlow',sans-serif;
+      font-weight:700; cursor:pointer; white-space:nowrap; letter-spacing:0.04em;
       transition:background .15s, color .15s, border-color .15s;
     }
-    .mo-btn-edit { color:#7a83a6; }
+    .mo-btn-edit { color:#9aa3c4; }
     .mo-btn-edit:hover { color:#e8c96a; border-color:#e8c96a; background:rgba(232,201,106,0.08); }
-    .mo-btn-del  { color:#7a83a6; font-size:0.9rem; padding:4px 8px; line-height:1; }
+    .mo-btn-del  { color:#9aa3c4; font-size:0.9rem; padding:4px 10px; line-height:1; }
     .mo-btn-del:hover  { color:#fca5a5; border-color:rgba(220,38,38,0.5); background:rgba(220,38,38,0.08); }
-    .mo-btn-ok   { color:#7a83a6; }
+    .mo-btn-ok   { color:#9aa3c4; }
     .mo-btn-ok:hover   { color:#86efac; border-color:rgba(34,197,94,0.5); background:rgba(34,197,94,0.08); }
 
-    .mo-error { font-size:0.72rem; color:#fca5a5; margin-top:8px; min-height:16px; }
+    .mo-error { font-size:0.72rem; color:#fca5a5; margin-top:8px; min-height:16px; padding:0 24px; }
 
     /* ── FOOTER ── */
     .mo-footer {
-      padding:14px 22px; border-top:1px solid #2a3050; flex-shrink:0;
+      padding:16px 24px; border-top:3px solid rgba(232,201,106,0.4); flex-shrink:0;
+      display:flex; justify-content:flex-end; gap:10px;
+    }
+
+    /* ── Footer "Salir" con doble línea (Itinerarios) ── */
+    .mo-footer-salir {
+      flex-shrink:0; padding:16px 24px;
+      border-top:3px solid rgba(232,201,106,0.4);
+      box-shadow:0 -7px 0 -4px rgba(232,201,106,0.4);
       display:flex; justify-content:center;
     }
+    .mo-footer-salir .ruta-btn-secundario { border-color:#2a3050; color:#9aa3c4; padding:9px 28px; }
+    .mo-footer-salir .ruta-btn-secundario:hover { color:#e8c96a; border-color:#e8c96a; background:rgba(232,201,106,0.08); }
+
+    /* ── Íconos de acción por fila (Itinerarios) ── */
+    .iti-icon-btn {
+      background:none; border:1px solid #2a3050; border-radius:7px;
+      width:26px; height:26px; cursor:pointer; font-size:0.82rem;
+      color:#9aa3c4; display:inline-flex; align-items:center; justify-content:center;
+      transition:background .15s, color .15s, border-color .15s;
+    }
+    .iti-icon-btn:hover { color:#e8c96a; border-color:#e8c96a; background:rgba(232,201,106,0.08); }
+    .iti-icon-btn.iti-del:hover { color:#fca5a5; border-color:rgba(220,38,38,0.5); background:rgba(220,38,38,0.08); }
     .mo-btn-guardar {
       background:#e8c96a; color:#0f1117; border:none; border-radius:8px;
       padding:11px 54px; font-family:'Barlow',sans-serif;
@@ -1255,7 +1301,7 @@
     }
     .ruta-panel {
       background:#171c27; border:1px solid #2a3050; border-radius:14px;
-      width:min(560px, 92vw); max-height:86vh;
+      width:min(820px, 96vw); max-height:86vh;
       display:flex; flex-direction:column; overflow:hidden;
       box-shadow:0 24px 64px rgba(0,0,0,0.7);
     }
@@ -1273,11 +1319,91 @@
     }
     .ruta-panel-close:hover { color:#e8c96a; border-color:#e8c96a; }
     .ruta-panel-body {
-      overflow-y:auto; padding:14px 24px 6px;
-      font-family:'Barlow',sans-serif;
+      overflow-y:auto; overflow-x:auto; padding:0;
+      font-family:'Barlow',sans-serif; flex:1;
     }
     .ruta-panel-body::-webkit-scrollbar { width:6px; }
     .ruta-panel-body::-webkit-scrollbar-thumb { background:#2a3050; border-radius:4px; }
+
+    .ruta-nombre-bar {
+      display:flex; align-items:center; gap:10px;
+      padding:12px 24px; border-bottom:1px solid #2a3050; flex-shrink:0;
+    }
+    .ruta-nombre-input {
+      flex:1; background:#0f1117; border:1px solid #2a3050; border-radius:8px;
+      color:#ffee00; font-family:'Barlow',sans-serif; font-size:1.4rem; font-weight:700;
+      padding:10px 14px; outline:none; transition:border-color .18s;
+    }
+    .ruta-nombre-input:focus { border-color:#e8c96a; }
+    .ruta-nombre-input::placeholder { color:#3a4060; }
+    .ruta-nombre-ok {
+      background:none; border:1px solid #e8c96a; border-radius:999px;
+      color:#e8c96a; font-family:'Barlow',sans-serif; font-size:0.75rem;
+      font-weight:700; padding:6px 16px; cursor:pointer;
+      transition:background .15s, color .15s;
+      white-space:nowrap;
+    }
+    .ruta-nombre-ok:hover { background:#e8c96a; color:#0f1117; }
+    @media print {
+      body * { visibility:hidden; }
+      #iti-ver-printarea, #iti-ver-printarea * { visibility:visible; }
+      #iti-ver-printarea {
+        position:absolute; left:0; top:0; width:100%; max-height:none;
+        box-shadow:none; border:none;
+      }
+      .ruta-panel-close, .ruta-panel-footer { display:none !important; }
+    }
+
+    .ruta-tabla { width:100%; border-collapse:collapse; font-family:'Barlow',sans-serif; }
+    .ruta-tabla thead tr {
+      border-bottom:2px solid rgba(232,201,106,0.4);
+    }
+    .ruta-tabla th {
+      padding:11px 14px; font-size:0.72rem; font-weight:700; letter-spacing:0.06em;
+      text-transform:uppercase; color:#e8c96a; text-align:left; white-space:nowrap;
+    }
+    .ruta-tabla th.col-n      { width:46px; text-align:center; }
+    .ruta-tabla th.col-tramo  { min-width:180px; }
+    .ruta-tabla th.col-dist   { width:100px; text-align:right; }
+    .ruta-tabla th.col-tiempo { width:90px; text-align:right; }
+
+    .ruta-tabla tbody tr {
+      border-bottom:1px solid rgba(255,255,255,0.07);
+      transition:background .12s;
+    }
+    .ruta-tabla tbody tr:hover { background:rgba(255,255,255,0.03); }
+    .ruta-tabla td {
+      padding:11px 14px; font-size:0.82rem; color:#e8eaf2; vertical-align:middle;
+    }
+    .ruta-tabla td.col-n { text-align:center; }
+    .ruta-tabla td.col-dist, .ruta-tabla td.col-tiempo { text-align:right; }
+    .ruta-tabla td.col-dist  { font-weight:700; color:#38bdf8; }
+    .ruta-tabla td.col-tiempo { color:#9aa3c4; font-size:0.82rem; }
+    /* Fila total */
+    .ruta-tabla tfoot tr.ruta-total-row td {
+      border-top:3px solid rgba(232,201,106,0.5);
+      padding-top:14px; padding-bottom:14px;
+      font-weight:700; font-size:0.88rem; color:#fff;
+    }
+    .ruta-tabla tfoot tr.ruta-total-row td.col-n { color:#e8c96a; font-size:0.9rem; }
+    .ruta-tabla tfoot tr.ruta-total-row td.col-dist { color:#22c55e; font-size:0.94rem; }
+    .ruta-tabla tfoot tr.ruta-total-row td.col-tiempo { color:#22c55e; font-size:0.94rem; }
+
+    .ruta-panel-footer {
+      display:flex; justify-content:flex-end; gap:10px;
+      padding:16px 24px; border-top:3px solid rgba(232,201,106,0.4); flex-shrink:0;
+    }
+    .ruta-btn-primario, .ruta-btn-secundario {
+      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:700;
+      border-radius:999px; padding:9px 20px; cursor:pointer;
+      letter-spacing:0.04em; transition:opacity .2s ease, background .2s ease;
+    }
+    .ruta-btn-primario   { background:#e8c96a; color:#0f1117; border:none; }
+    .ruta-btn-primario:hover { opacity:0.86; }
+    .ruta-btn-secundario { background:none; border:1px solid #dc2626; color:#fca5a5; }
+    .ruta-btn-secundario:hover { background:rgba(220,38,38,0.12); }
+
+    /* Leyenda de tramos */
     .ruta-leg {
       display:flex; align-items:center; gap:12px;
       padding:11px 2px; border-bottom:1px solid rgba(255,255,255,0.07);
@@ -1302,19 +1428,6 @@
     .ruta-leg-total .ruta-leg-num { background:#e8c96a; color:#0f1117; border-color:#e8c96a; }
     .ruta-leg-total .ruta-leg-from-to { font-weight:700; color:#fff; }
     .ruta-leg-total .ruta-leg-metrics span:first-child { color:#22c55e; font-size:0.94rem; }
-    .ruta-panel-footer {
-      display:flex; justify-content:flex-end; gap:10px;
-      padding:16px 24px; border-top:1px solid #2a3050; flex-shrink:0;
-    }
-    .ruta-btn-primario, .ruta-btn-secundario {
-      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:700;
-      border-radius:999px; padding:9px 20px; cursor:pointer;
-      letter-spacing:0.04em; transition:opacity .2s ease, background .2s ease;
-    }
-    .ruta-btn-primario { background:#e8c96a; color:#0f1117; border:none; }
-    .ruta-btn-primario:hover { opacity:0.86; }
-    .ruta-btn-secundario { background:none; border:1px solid #2a3050; color:#9aa3c4; }
-    .ruta-btn-secundario:hover { color:#e8c96a; border-color:#e8c96a; }
 
   </style>
   <link rel="preload" as="image" href="https://commons.wikimedia.org/wiki/Special:FilePath/Cataratas_Iguazu_vista_general.JPG?width=1920" />
@@ -1384,10 +1497,6 @@
   </div>
 
   <div class="caption" id="caption">Misiones · Cataratas del Iguazú</div>
-  <div class="visitor-counter" id="visitor-counter" style="display:none;">
-    <span class="vc-num" id="vc-num">—</span>
-    <span>visitantes</span>
-  </div>
 
   <!-- TUTORIAL MODAL -->
   <div class="tut-backdrop" id="tut-backdrop"></div>
@@ -1611,42 +1720,6 @@
         if (e.key === 'Escape' && modal.classList.contains('open')) closeTut();
       });
     })();
-
-    // ── CONTADOR DE VISITANTES ────────────────────────────────────────────────
-    // Contador local (sin API externa). Reglas:
-    //   • No incrementa si el navegador tiene la marca de administrador
-    //     (localStorage 'at_is_admin' === '1', que pone admin.html).
-    //   • Usa sessionStorage para marcar que esta sesión de pestaña ya fue contada,
-    //     evitando incrementos dobles por recarga/hot-reload dentro de la misma sesión.
-    (function() {
-      var IS_ADMIN_KEY  = 'at_is_admin';
-      var LS_COUNT_KEY  = 'at_visitor_count';
-      var SS_COUNTED    = 'at_session_counted'; // sessionStorage — se borra al cerrar la pestaña
-
-      var numEl     = document.getElementById('vc-num');
-      var counterEl = document.getElementById('visitor-counter');
-      if (!numEl || !counterEl) return;
-
-      function formatNum(n) {
-        return Number(n).toLocaleString('es-AR');
-      }
-      function showCount(n) {
-        numEl.textContent        = formatNum(n);
-        counterEl.style.display  = 'flex';
-      }
-
-      var isAdmin        = localStorage.getItem(IS_ADMIN_KEY) === '1';
-      var alreadyCounted = sessionStorage.getItem(SS_COUNTED) === '1';
-      var count          = parseInt(localStorage.getItem(LS_COUNT_KEY) || '0', 10);
-
-      if (!isAdmin && !alreadyCounted) {
-        count += 1;
-        try { localStorage.setItem(LS_COUNT_KEY, count); } catch(e) {}
-        try { sessionStorage.setItem(SS_COUNTED, '1');   } catch(e) {}
-      }
-
-      showCount(count);
-    })();
   </script>
 </div>
 
@@ -1740,15 +1813,30 @@
     <div class="map-ham-dropdown" id="map-ham-dropdown">
       <button class="map-ham-item" id="ham-btn-origenes" type="button">Puntos de Origen</button>
       <button class="map-ham-item" id="ham-btn-rutas" type="button">Planificador de Itinerarios</button>
+      <button class="map-ham-item" id="ham-btn-itinerarios" type="button">Itinerarios</button>
     </div>
   </div>
   <div class="header-count-box" id="header-count-box"><span id="sb-count-num">0</span> sitios</div>
   <span class="header-sel-origen" id="header-sel-origen" style="display:none;">Seleccionar Origen</span>
   <!-- Barra de acciones del planificador: siempre a la derecha del texto Seleccionar Origen/Destino -->
+  <!-- Botón Aceptar: aparece solo cuando hay un punto clickeado pendiente -->
+  <button class="header-btn-aceptar" id="header-btn-aceptar" type="button" style="display:none;">&#10004; Aceptar</button>
+  <!-- Barra de acciones: aparece solo cuando hay origen + al menos 1 destino confirmado -->
   <div id="header-ruta-actions" style="display:none; align-items:center; gap:10px; flex-shrink:0;">
-    <button class="header-btn-aceptar"  id="header-btn-aceptar"  type="button">&#10004; Aceptar</button>
     <button class="header-btn-cancelar" id="header-btn-cancelar" type="button">&#10005; Cancelar</button>
     <button class="header-btn-finalizar" id="header-btn-finalizar" type="button" disabled>&#9658; Finalizar</button>
+  </div>
+  <!-- Botón "Cerrar Mapa" + Distancia/Tiempo: aparece solo al ver un itinerario guardado en el mapa -->
+  <button class="header-btn-cancelar" id="header-btn-cerrar-mapa" type="button" style="display:none;">&#10005; Cerrar Mapa</button>
+  <div id="header-mapa-metrics" style="display:none; align-items:center; gap:14px; margin-left:14px; flex-shrink:0; font-family:'Barlow',sans-serif;">
+    <span style="display:flex; align-items:center; gap:5px;">
+      <span style="color:#7a83a6; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em;">Distancia</span>
+      <span id="header-mapa-dist" style="color:#38bdf8; font-weight:700; font-size:0.85rem;">—</span>
+    </span>
+    <span style="display:flex; align-items:center; gap:5px;">
+      <span style="color:#7a83a6; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em;">Tiempo</span>
+      <span id="header-mapa-tiempo" style="color:#22c55e; font-weight:700; font-size:0.85rem;">—</span>
+    </span>
   </div>
   <!-- Elementos de ruta ocultos (requeridos por JS) -->
   <div class="header-center-group" style="display:none;">
@@ -1957,10 +2045,61 @@
       <span class="ruta-panel-title">Resumen de Ruta</span>
       <button class="ruta-panel-close" id="ruta-resumen-close" type="button">✕</button>
     </div>
+    <div class="ruta-nombre-bar">
+      <input class="ruta-nombre-input" id="ruta-nombre-input" type="text" placeholder="Nombre de Ruta…" maxlength="80" />
+      <button class="ruta-nombre-ok" id="ruta-nombre-ok" type="button">Ok</button>
+    </div>
     <div class="ruta-panel-body" id="ruta-resumen-body"></div>
     <div class="ruta-panel-footer">
-      <button class="ruta-btn-secundario" id="btn-ruta-nueva" type="button">Nueva Ruta</button>
-      <button class="ruta-btn-primario" id="btn-ruta-resumen-cerrar" type="button">Cerrar</button>
+      <button class="ruta-btn-secundario" id="btn-ruta-nueva" type="button">✕ Cancelar</button>
+      <button class="ruta-btn-primario"   id="btn-ruta-guardar" type="button">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── FORMULARIO ITINERARIOS ── -->
+<div id="modal-itinerarios" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(900px, 97vw);">
+    <div class="mo-header">
+      <span class="mo-title">Itinerarios</span>
+      <button class="mo-close" id="iti-close" type="button">✕</button>
+    </div>
+    <div class="mo-body">
+      <table class="mo-table">
+        <thead>
+          <tr>
+            <th class="mo-th mo-th-n">N°</th>
+            <th class="mo-th" style="width:170px;">Nombre</th>
+            <th class="mo-th" style="width:40px; text-align:center;">Ver</th>
+            <th class="mo-th" style="width:40px; text-align:center;">Mapa</th>
+            <th class="mo-th" style="width:46px; text-align:center;">Eliminar</th>
+            <th class="mo-th" style="width:46px; text-align:center;">Imprimir</th>
+            <th class="mo-th" style="width:120px;">Fecha</th>
+          </tr>
+        </thead>
+        <tbody id="iti-tbody"></tbody>
+      </table>
+      <div id="iti-empty" style="display:none; padding:40px 24px; text-align:center; color:#7a83a6; font-family:'Barlow',sans-serif; font-size:0.85rem;">
+        Todavía no guardaste ningún itinerario.
+      </div>
+    </div>
+    <div class="mo-footer-salir">
+      <button class="ruta-btn-secundario" id="iti-btn-salir" type="button">Salir</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── VER RESUMEN (solo lectura, desde Itinerarios) ── -->
+<div id="modal-iti-ver" class="ruta-backdrop" style="display:none;">
+  <div class="ruta-panel" id="iti-ver-printarea">
+    <div class="ruta-panel-header">
+      <span class="ruta-panel-title" id="iti-ver-titulo">Resumen de Ruta</span>
+      <button class="ruta-panel-close" id="iti-ver-close" type="button">✕</button>
+    </div>
+    <div class="ruta-panel-body" id="iti-ver-body"></div>
+    <div class="ruta-panel-footer">
+      <button class="ruta-btn-secundario" id="iti-ver-cerrar" type="button">Cerrar</button>
+      <button class="ruta-btn-primario"   id="iti-ver-imprimir" type="button">Imprimir</button>
     </div>
   </div>
 </div>
@@ -2036,37 +2175,82 @@ const RUTA_MAX = 100;
 let rutaModoActivo = false;   // true mientras se está armando una ruta de varias paradas
 let rutaOrigen      = null;   // { lat, lng, label } — punto de partida de la ruta
 let rutaPuntos       = [];    // [{ lat, lng, name }, ...] en el orden elegido (pueden repetirse)
+let rutaResumenData  = null;  // { stops, legs, totalDist, totalDur } de la última ruta calculada
 let rutaMarkers      = [];    // marcadores numerados en el mapa
 let rutaPolyline      = null; // polilínea final dibujada al finalizar
 
 // ─── LOAD DATA ────────────────────────────────────────────────────────────────
+const DEFAULT_SITIOS = [
+  { id:'s11', name:'Sierra de la Ventana', provincia:'buenos_aires_prov', cat:'Aventura', desc:'Sierra de la Ventana es una localidad turística del sudoeste de la provincia de Buenos Aires, situada en el sistema serrano más importante de la provincia. Su principal atractivo es el Parque Provincial Ernesto Tornquist, que alberga el Cerro Ventana, famoso por la abertura natural de 8 metros que le da nombre. La región posee una gran riqueza paisajística y biodiversidad, con sierras, arroyos y senderos ideales para el ecoturismo y el trekking. Fundada en 1908 con la llegada del ferrocarril, se desarrolló como centro de descanso y recreación. Actualmente es uno de los destinos turísticos más visitados de la provincia de Buenos Aires.', lat:-38.1274, lng:-61.8113 },
+  { id:'s12', name:'Villa Gesell', provincia:'buenos_aires_prov', cat:'Urbano', lat:-37.2667, lng:-56.9667, desc:'Ciudad costera con pinos y ambiente bohemio en la costa atlántica.' },
+  { id:'s13', name:'Estancia La Candelaria', provincia:'buenos_aires_prov', cat:'Rural', desc:'La Estancia La Candelaria, ubicada en la localidad de Lobos, provincia de Buenos Aires, es uno de los cascos históricos más imponentes de la región pampeana, célebre por su majestuoso castillo de estilo neogótico francés. Construido a finales del siglo XIX por iniciativa de la familia Piñeiro, el palacio destaca por su torreón, sus vitrales y un mobiliario original traído directamente de Europa que evoca la opulencia de la aristocracia de la época. El imponente edificio está rodeado por un parque de más de 100 hectáreas diseñado por el reconocido paisajista Carlos Thays, el cual alberga alrededor de 240 especies botánicas, estatuas, fuentes y senderos arbolados. Actualmente, el lugar funciona como un exclusivo hotel de campo y un centro de eventos donde los visitantes pueden hospedarse tanto en las lujosas habitaciones del castillo como en sectores de estilo colonial. Su propuesta turística combina la historia y la arquitectura de élite con actividades tradicionales del campo argentino, ofreciendo días de campo con espectáculos folclóricos, partidos de polo, cabalgatas y gastronomía criolla de primer nivel.', lat:-37.1, lng:-58.5 },
+  { id:'s14', name:'Termas de Carhué', provincia:'buenos_aires_prov', cat:'Bienestar', desc:'Las Termas de Carhué, ubicadas a orillas del Lago Epecuén en el sudoeste de la provincia de Buenos Aires, son mundialmente famosas por las propiedades hipermarinas de sus aguas, cuya salinidad es solo comparable con la del Mar Muerto. Este particular espejo de agua posee una concentración mineral diez veces superior a la del océano, lo que otorga a sus aguas y fangos cualidades térmicas, curativas y una flotabilidad natural única. Tras la trágica inundación de la vecina Villa Epecuén en 1985, Carhué se consolidó como el centro termal y hotelero de la región, desarrollando modernas piscinas cubiertas y spas que aprovechan este recurso durante todo el año. El destino atrae tanto a turistas que buscan alivio para afecciones de la piel y las articulaciones como a interesados en el turismo histórico y fotográfico, quienes recorren las icónicas ruinas que emergieron tras el retroceso del agua. El paisaje se complementa con una avifauna fascinante, destacando las colonias de flamencos rosados, y una imponente arquitectura art déco diseñada por Francisco Salamone que enmarca los accesos a la zona.', lat:-37.1833, lng:-62.75 },
+  { id:'s15', name:'Fiesta de la Tradición', provincia:'buenos_aires_prov', cat:'Eventos', lat:-34.25, lng:-59.4667, desc:'Festival gaucho más importante del país, San Antonio de Areco.' },
+  { id:'s16', name:'Mar del Plata', provincia:'buenos_aires_prov', cat:'Urbano', lat:-38.0055, lng:-57.5426, desc:'La ciudad balnearia más concurrida del país.' },
+  { id:'u1780967286866', name:'Museo de la Reconquista', provincia:'buenos_aires_prov', localidad:'Tigre', cat:'Cultural', desc:'El Museo se crea el 4 de agosto de 1967. Su misión es la de fortalecer la identidad cultural a partir de la historia social de Tigre y el hecho histórico del desembarco de Santiago de Liniers, el 4 de Agosto de 1806 en el Río de Las Conchas (Hoy Reconquista) durante la 1° invasión inglesa. Liniers eligió el pueblo de Las Conchas (hoy Tigre) para iniciar su marcha hacia la liberación de Bs As. El edificio es una casa construida en 1940 con características de estilo colonial. Consta de 6 salas que muestran la historia natural y social del Partido de Tigre, objetos históricos patrimoniales, personajes e hitos importantes y una sala para muestras temporales. Cuenta además con la Biblioteca \"Lizardo Vidal Molina\" especializada en la historia de Tigre, archivo documental, fototeca, mapoteca y hemeroteca.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.4166, lng:-58.5899 },
+  { id:'u1780917786104', name:'Museo de Arte Tigre (MAT)', provincia:'buenos_aires_prov', localidad:'Tigre', cat:'Cultural', desc:'El Museo de Arte Tigre (MAT) es uno de los principales museos de arte argentino y uno de los edificios más emblemáticos del partido de Tigre. Se encuentra sobre el Paseo Victorica, frente al río Luján, y combina un importante patrimonio artístico con una destacada arquitectura de estilo francés. El edificio fue concebido en 1909 como sede del Tigre Club, una institución social y deportiva destinada a la élite porteña. Fue inaugurado en 1912 y en 1927 incorporó un casino, uno de los más importantes del país. En 1979 fue declarado Monumento Histórico Nacional. El Museo de Arte Tigre abrió sus puertas al público en 2006. Su fachada tiene influencia de la Belle Époque.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.40923, lng:-58.59104 },
+  { id:'s41', name:'Península Valdés', provincia:'chubut', cat:'Natural', desc:'La Península Valdés, ubicada en la provincia de Chubut sobre el mar Argentino, es uno de los santuarios de vida silvestre más importantes del planeta y fue declarada Patrimonio de la Humanidad por la UNESCO en 1999. Este accidente geográfico costero es mundialmente célebre por ser el principal sitio de reproducción de la ballena franca austral, atrayendo a miles de turistas que realizan avistajes embarcados desde Puerto Pirámides entre los meses de junio y diciembre. Además de los cetáceos, sus playas y acantilados albergan importantes colonias de elefantes y lobos marinos, pingüinos de Magallanes y familias de orcas que varan intencionalmente en la costa para cazar. Su paisaje estepario y árido, conectado al continente por el istmo Carlos Ameghino, resguarda también una variada fauna terrestre que incluye choiques, maras y manadas de guanacos que recorren los extensos caminos de ripio. Con una geografía singular que encierra los golfos Nuevo y San José, este ecosistema marino y costero se posiciona como un modelo global de conservación y un imán para el turismo científico y de naturaleza.', lat:-42.5, lng:-64.2 },
+  { id:'s5', name:'Caminito (La Boca)', provincia:'caba', localidad:'Barrio La Boca (Comuna 4)', cat:'Cultural', desc:'Caminito es un paseo peatonal y museo a cielo abierto ubicado en el barrio de La Boca, en Buenos Aires. Se originó sobre un antiguo trazado ferroviario recuperado por el pintor Benito Quinquela Martín en la década de 1950. Es famoso por sus coloridos conventillos, construidos por inmigrantes y pintados con sobrantes de pintura de los astilleros. Su nombre homenajea al célebre tango \"Caminito\", compuesto por Juan de Dios Filiberto en 1926. Actualmente es uno de los principales atractivos turísticos de la ciudad, con artistas, espectáculos de tango y ferias de artesanías.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.6354, lng:-58.3631 },
+  { id:'s2', name:'Casa Rosada', provincia:'caba', localidad:'Barrio Monserrat (Comuna 1)', cat:'Histórico', desc:'Sede del Poder Ejecutivo Nacional, símbolo de la historia argentina. Dentro de la misma se encuentra el despacho del presidente de la Nación Argentina y de sus distintas secretarías, y del jefe de Gabinete de Ministros. Alberga además el Museo de la Casa de Gobierno, con objetos relacionados con los presidentes del país. En 1942 fue declarada Monumento Histórico Nacional.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.6083, lng:-58.3708 },
+  { id:'s9', name:'Museo de Arte Latinoamericano de Buenos Aires', provincia:'caba', localidad:'Barrio Palermo (Comuna 14)', cat:'Cultural', desc:'El Museo de Arte Latinoamericano de Buenos Aires (MALBA) fue fundado en 2001 por el empresario y coleccionista Eduardo Costantini. Está ubicado en el barrio de Palermo y alberga una de las colecciones más importantes de arte moderno y contemporáneo de América Latina. Su patrimonio incluye obras de artistas como Frida Kahlo, Diego Rivera, Antonio Berni y Tarsila do Amaral. Además de las exposiciones permanentes y temporarias, desarrolla actividades de cine, literatura y educación. Es uno de los principales centros culturales y museos más visitados de Buenos Aires.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.5764, lng:-58.4157 },
+  { id:'s10', name:'Bosques de Palermo', provincia:'caba', localidad:'Barrio Palermo (Comuna 14)', cat:'Natural', desc:'Los Bosques de Palermo, oficialmente Parque Tres de Febrero, constituyen el espacio verde más emblemático y extenso de la Ciudad de Buenos Aires, con unas 370 hectáreas. Fueron inaugurados en 1875 por iniciativa del presidente Domingo Faustino Sarmiento y posteriormente ampliados por el paisajista francés Carlos Thays. El predio alberga lagos, plazas, el Rosedal, el Planetario y numerosos espacios recreativos y culturales. Posee una gran diversidad de árboles y aves, por lo que es considerado el principal pulmón verde de la ciudad. Actualmente es uno de los lugares más frecuentados por porteños y turistas para realizar actividades deportivas y disfrutar de la naturaleza.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.5731, lng:-58.419 },
+  { id:'u17822711612336lvr', name:'Palermo Hollywood', provincia:'caba', localidad:'Barrio Palermo (Comuna 14)', cat:'Gastronómico', desc:'Una parte del extenso barrio de Palermo se ha transformado en el polo gastronómico más activo de la Ciudad de Buenos Aires. Lo que hoy se llama Palermo Hollywood, delimitado por la Av.Juan B. Justo, Dorrego, Av.Santa Fe y Av.Córdoba, durante décadas estuvo reservado casi exclusivamente a residencias de familias de clase media y talleres de reparación de automóviles. Pero tras la llegada al barrio, a principios del actual siglo, de productoras y canales de televisión con sus respectivas pos productoras, recibió el nombre que tiene actualmente. Junto con el desembarco de las primeras empresas artísticas también comenzó a gestarse un nuevo fenómeno, el gastronómico.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.5817, lng:-58.4345 },
+  { id:'u17822712618250o0d', name:'Palermo Soho', provincia:'caba', localidad:'Barrio Palermo (Comuna 14)', cat:'Gastronómico', desc:'El nombre, que alude al barrio del Soho de las ciudades de Nueva York y Londres, se le dio por su orientación al diseño y a la moda, aunque no son pocos los restaurantes de la zona.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.58706, lng:-58.42818 },
+  { id:'u1782271042898vld6', name:'Las Cañitas', provincia:'caba', localidad:'Barrio Palermo (Comuna 14)', cat:'Gastronómico', desc:'A principios de la década de 1990, sobre la calle Báez y las calles aledañas, en el barrio de Palermo, supo nuclearse una serie de restaurantes que materializaron un pujante polo gastronómico que aún subsiste. El hecho de estar en una zona residencial lindera a las canchas de polo de Palermo le da un atractivo adicional. El reciente rediseño de las aceras y calzadas realizados por el Gobierno de la Ciudad de Buenos Aires facilitó mucho la circulación por la zona.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.57062, lng:-58.43238 },
+  { id:'s8', name:'Reserva Ecológica Costanera Sur', provincia:'caba', localidad:'Barrio Puerto Madero (Comuna 1)', cat:'Natural', desc:'La Reserva Ecológica Costanera Sur, ubicada junto a Puerto Madero, es la principal área natural protegida de la Ciudad de Buenos Aires y posee unas 350 hectáreas. Se formó de manera espontánea sobre terrenos ganados al Río de la Plata mediante rellenos realizados a fines de la década de 1970. Fue creada oficialmente en 1986 y concentra la mayor biodiversidad de la ciudad, con cientos de especies de flora y fauna. En 2005 fue declarada Sitio Ramsar por la importancia internacional de sus humedales. Actualmente constituye uno de los espacios verdes y recreativos más visitados de Buenos Aires.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.6133, lng:-58.3513 },
+  { id:'u1782271441138vu0r', name:'Puerto Madero', provincia:'caba', localidad:'Barrio Puerto Madero (Comuna 1)', cat:'Gastronómico', desc:'Los antiguos docks del puerto de Buenos Aires, creado en 1900 siguiendo el modelo inglés, supieron salir del abandono y del olvido para convertirse en un pujante centro residencial y gastronómico. Los desarrolladores inmobiliarios aprovecharon los amplios espacios, la interesante arquitectura preexistente, la ubicación céntrica y la cotizada vista para establecer viviendas e interesantes restaurantes que vale la pena visitar.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.6103, lng:-58.3622 },
+  { id:'s3', name:'Puerto Madero', provincia:'caba', localidad:'Barrio Puerto Madero (Comuna 1)', cat:'Urbano', desc:'Barrio moderno sobre el Río de la Plata con arquitectura contemporánea, ubicado en la Comuna 1 de la Ciudad Autónoma de Buenos Aires. A su vez, es uno de los cuarenta y ocho barrios oficiales en los que se subdivide la capital argentina. Su ubicación cercana a la zona este de la ciudad, lo extenso de su área y su vista al río hacen que este distrito sea uno de los más valorados de Buenos Aires.\n\nEl barrio debe su nombre a Eduardo Madero, comerciante de Buenos Aires que presentó tres proyectos para la construcción del puerto de la ciudad, el último de los cuales fue aprobado por el entonces Presidente de la Nación Julio Argentino Roca en 1882. El barrio se ubica, en su totalidad, en terrenos ganados al Río de la Plata. Por las inversiones efectuadas para localizar allí el puerto (desde 1890 en adelante), y por las obras que se hicieron después, una vez desafectada el área portuaria, desde 1990 en adelante, puede ser considerado el barrio con la mayor inversión pública y privada en la historia de la ciudad de Buenos Aires.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.618, lng:-58.362 },
+  { id:'s7', name:'Cementerio de la Recoleta', provincia:'caba', localidad:'Barrio Recoleta (Comuna 2)', cat:'Histórico', desc:'El Cementerio de la Recoleta fue inaugurado en 1822 y fue el primer cementerio público de Buenos Aires. Está ubicado en el barrio de Recoleta y se destaca por sus más de 4.500 bóvedas y mausoleos de gran valor artístico y arquitectónico. Más de 90 de sus sepulcros fueron declarados Monumento Histórico Nacional. Allí descansan numerosas personalidades de la historia argentina, entre ellas Eva Perón, presidentes, escritores y científicos. Considerado un museo a cielo abierto, es uno de los sitios históricos y turísticos más visitados de la ciudad.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.5879, lng:-58.3927 },
+  { id:'u178227150508948d0', name:'Recoleta', provincia:'caba', localidad:'Barrio Recoleta (Comuna 2)', cat:'Gastronómico', desc:'Recoleta es el primero y el más viejo de los polos gastronómicos de Buenos Aires. Supo conocer su gloria durante la década de 1970, y si bien su fisonomía culinaria ha variado y le han surgido competidores, aún se mantienen instituciones como La Biela, muy frecuentada por turistas de todas las nacionalidades.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.5867, lng:-58.3946 },
+  { id:'s4', name:'Catedral Metropolitana', provincia:'caba', localidad:'Barrio San Nicolás (Comuna 1)', cat:'Religioso', desc:'La Catedral metropolitana de la Santísima Trinidad (más conocida cómo Catedral Metropolitana de Buenos Aires y oficialmente Iglesia catedral de la Santísima Trinidad) es un templo católico de Argentina, sede de la arquidiócesis de Buenos Aires. Fue la Sede Primada de la Iglesia católica de Argentina hasta el 7 de septiembre del 2024, cuando la misma pasó a la Catedral de Santiago del Estero. Se encuentra ubicada en el barrio porteño de San Nicolás, en la intersección de la calle San Martín y la avenida Rivadavia, frente a la plaza de Mayo. En su interior se encuentra el mausoleo del Libertador José de San Martín, inaugurado en 1880.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.6086, lng:-58.3732 },
+  { id:'s1', name:'Teatro Colón', provincia:'caba', localidad:'Barrio San NIcolás (Comuna 1)', cat:'Cultural', desc:'El Teatro Colón es un teatro de ópera, ballet y conciertos de la ciudad autónoma de Buenos Aires, la capital de Argentina. Es considerado uno de los diez mejores teatros de ópera del mundo según National Geographic. Posee la sala con la mejor acústica para ópera y la segunda mejor para conciertos del mundo. El actual Colón sustituyó al teatro original, inaugurado en 1857. A finales de siglo, se hizo evidente la necesidad de construir un nuevo teatro y, tras un proceso de veinte años, el actual teatro abrió sus puertas el 25 de mayo de 1908 con Aida de Giuseppe Verdi. Fue declarado Monumento Histórico Nacional en 1991.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.6011, lng:-58.3833 },
+  { id:'u1782271582120vn4r', name:'San Telmo', provincia:'caba', localidad:'Barrio San Telmo (Comuna 1)', cat:'Gastronómico', desc:'Este es uno de los barrios más antiguos de Buenos Aires, y en su momento también supo ser el más aristocrático. Basta recorrer sus calles para gozar del antiguo esplendor de sus construcciones. Todo cambió en 1871 con la epidemia de fiebre amarilla que puso en fuga a las familias más acomodadas, que se desplazaron más al norte de la Ciudad. Pero después de varias décadas de olvido, San Telmo recuperó buena parte de su antiguo esplendor. Aquí se encuentran el refinamiento y la bohemia que perdió Palermo, junto a ese bouquet decadente que lo hace atractivo a los ojos de los turistas europeos. El barrio está reviviendo un boom inmobiliario y los restaurantes no son ajenos a ese suceso. Actualmente hay unos 150 restaurantes, varios de ellos más que interesantes y que bien ameritan una visita.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.6205, lng:-58.3717 },
+  { id:'s6', name:'Mercado de San Telmo', provincia:'caba', localidad:'Barrio San Telmo (Comuna 1)', cat:'Gastronómico', desc:'El Mercado de San Telmo, ubicado en el histórico barrio homónimo, fue inaugurado en 1897 y diseñado por el arquitecto Juan Antonio Buschiazzo. Nació para abastecer a la creciente población de inmigrantes que llegaba a Buenos Aires. Su estructura de hierro y vidrio conserva gran parte del diseño original y fue declarada Monumento Histórico Nacional. Además de puestos tradicionales de alimentos, alberga locales de antigüedades, artesanías y propuestas gastronómicas. Actualmente es uno de los sitios más emblemáticos y visitados de la ciudad. Mercado histórico con gastronomía, antigüedades y cultura porteña.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.621, lng:-58.3709 },
+  { id:'s17', name:'Manzana Jesuítica', provincia:'cordoba', cat:'Histórico', lat:-31.412, lng:-64.1888, desc:'Conjunto patrimonial Jesuítico, Patrimonio de la Humanidad UNESCO.' },
+  { id:'s18', name:'Valle de Punilla', provincia:'cordoba', cat:'Natural', lat:-31.0833, lng:-64.4833, desc:'Hermoso valle serrano con ríos, cascadas y cerros.' },
+  { id:'s19', name:'Villa Carlos Paz', provincia:'cordoba', cat:'Urbano', lat:-31.424, lng:-64.4985, desc:'Principal centro turístico serrano con lago artificial.' },
+  { id:'s20', name:'Cosquín — Folklore', provincia:'cordoba', cat:'Eventos', lat:-31.2423, lng:-64.4704, desc:'Capital nacional del folklore, festival anual cada enero.' },
+  { id:'s47', name:'Esteros del Iberá', provincia:'corrientes', cat:'Natural', desc:'Los Esteros del Iberá, ubicados en la provincia de Corrientes, Argentina, constituyen el segundo humedal más grande del mundo y uno de los reservorios de agua dulce más importantes del continente. Este inmenso ecosistema de agua brillante, formado por lagunas, embalsados y canales, se extiende sobre más de un millón de hectáreas de áreas protegidas que combinan parques nacionales y provinciales. El sitio es un verdadero santuario de vida silvestre, famoso por albergar poblaciones estables de yacarés, carpinchos, ciervos de los pantanos y más de 350 especies de aves que se pueden observar a corta distancia. Además, la región es un modelo global de conservación gracias a exitosos proyectos de reintroducción de especies extinguidas localmente, logrando el regreso de la fauna clave como el yaguareté y el oso hormiguero gigante. El acceso al parque se realiza a través de diversos portales, siendo Colonia Carlos Pellegrini el más desarrollado, donde los visitantes pueden explorar el humedal mediante paseos en lancha, caminatas y cabalgatas guiadas.', lat:-28.5, lng:-57.5 },
+  { id:'s48', name:'Carnaval de Corrientes', provincia:'corrientes', cat:'Eventos', lat:-27.4806, lng:-58.8341, desc:'Fiesta de comparsas y murgas, interés turístico nacional.' },
+  { id:'s49', name:'Termas de Federación', provincia:'entre_rios', localidad:'', cat:'Bienestar', desc:'Las Termas de Federación, ubicadas a orillas del embalse de Salto Grande en la provincia de Entre Ríos, son el complejo termal pionero y uno de los más visitados de Argentina tras el hallazgo del agua en 1994. El parque cuenta con un amplio predio con piscinas cuyas temperaturas oscilan entre los 36 y 41 grados Celsius, alimentadas por aguas que surgen desde los 1200 metros de profundidad dentro del Sistema Acuífero Guaraní. Sus aguas termales poseen propiedades terapéuticas y relajantes debido a su alta concentración de minerales, siendo ideales para combatir el estrés y afecciones óseas o musculares. El complejo se destaca por su diseño accesible y familiar, dividiéndose en sectores pasivos para el descanso y zonas recreativas que incluyen una moderna piscina con olas y un parque acuático. Su excelente infraestructura turística, sumada a la cercanía con la costanera local, convierte a este destino en un motor económico clave de la región y en un referente del bienestar termal en el litoral del país.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-30.9833, lng:-57.9167 },
+  { id:'s50', name:'Carnaval de Gualeguaychú', provincia:'entre_rios', cat:'Eventos', desc:'El Carnaval de Gualeguaychú, celebrado en la provincia de Entre Ríos, es considerado el espectáculo a cielo abierto más importante del verano argentino y uno de los carnavales de mayor calidad artística a nivel mundial. El evento se desarrolla en el Corsódromo de la ciudad, un predio inaugurado en 1997 que cuenta con una pasarela de 500 metros y capacidad para albergar a más de 25,000 espectadores por noche durante los meses de enero y febrero. Cada año, las comparsas tradicionales de los clubes locales compiten ferozmente presentando imponentes carrozas, elaborados vestuarios con miles de plumas y deslumbrantes coreografías basadas en temáticas sociales o culturales complejas. El despliegue artístico se caracteriza por el ensordecedor ritmo de las batucadas y las bandas en vivo, logrando una sincronía perfecta que contagia de baile y alegría a las tribunas. Esta enorme industria cultural no solo moviliza a cientos de apasionados integrantes de la comunidad que trabajan todo el año en los talleres, sino que también posiciona a la ciudad como un polo turístico clave del litoral argentino.', lat:-33.0128, lng:-58.5197 },
+  { id:'s30', name:'Quebrada de Humahuaca', provincia:'jujuy', cat:'Natural', lat:-23.2078, lng:-65.3526, desc:'Valle multicolor, Patrimonio de la Humanidad UNESCO.' },
+  { id:'s31', name:'Pucará de Tilcara', provincia:'jujuy', cat:'Histórico', lat:-23.5853, lng:-65.398, desc:'Fortaleza precolombina en la Quebrada de Humahuaca.' },
+  { id:'s32', name:'Laguna de los Pozuelos', provincia:'jujuy', cat:'Natural', lat:-22.4, lng:-65.9833, desc:'Reserva de biosfera con flamencos rosados en la Puna.' },
+  { id:'s21', name:'Aconcagua', provincia:'mendoza', cat:'Aventura', lat:-32.6532, lng:-70.0109, desc:'Cima más alta del hemisferio sur (6.962 msnm). Meca del andinismo.' },
+  { id:'s22', name:'Bodegas Catena Zapata', provincia:'mendoza', cat:'Gastronómico', lat:-33.0333, lng:-68.9667, desc:'Icónica bodega de arquitectura piramidal en Luján de Cuyo.' },
+  { id:'s23', name:'Fiesta Nacional de la Vendimia', provincia:'mendoza', cat:'Eventos', lat:-32.8908, lng:-68.8272, desc:'La mayor celebración vitivinícola de Argentina, cada marzo.' },
+  { id:'s24', name:'Termas de Cacheuta', provincia:'mendoza', cat:'Bienestar', lat:-33.0167, lng:-69.1333, desc:'Complejos termales en el Cañón del Mendoza.' },
+  { id:'u1781379537220e2am', name:'Cerro de la Gloria', provincia:'mendoza', cat:'Cultural', desc:'El Cerro de la Gloria se encuentra en el Parque General San Martín de la ciudad de Mendoza y es uno de los principales símbolos históricos de la provincia. En su cima se erige el Monumento al Ejército de los Andes, inaugurado en 1914 en homenaje a la gesta libertadora encabezada por el general José de San Martín. La imponente obra escultórica, realizada en bronce por el uruguayo Juan Manuel Ferrari, representa distintos episodios del Cruce de los Andes. El sitio fue declarado Patrimonio Cultural de Mendoza y constituye un importante punto de referencia histórica y artística. Además, desde sus miradores se obtienen amplias vistas de la ciudad y de la cordillera de los Andes, lo que lo convierte en uno de los lugares más visitados por turistas y mendocinos.', lat:-32.8886, lng:-68.8858 },
+  { id:'s36', name:'Cataratas del Iguazú', provincia:'misiones', cat:'Natural', desc:'Las Cataratas del Iguazú, ubicadas en la frontera entre Argentina y Brasil, son una de las Siete Maravillas Naturales del Mundo y están formadas por unos 275 saltos de agua alimentados por el río Iguazú. Su caída más imponente es la Garganta del Diablo, una espectacular garganta en forma de "U" con más de 80 metros de altura que concentra el mayor caudal del conjunto. Rodeadas por una exuberante selva subtropical protegida por parques nacionales en ambos países, albergan una asombrosa biodiversidad que incluye cientos de especies de aves y mamíferos. El lado argentino ofrece una experiencia inmersiva mediante pasarelas que recorren los saltos desde adentro, mientras que el lado brasileño brinda una vista panorámica e imponente de todo el cañón. Este destino es considerado Patrimonio de la Humanidad por la UNESCO gracias a su valor geológico excepcional y a su rol crucial en la conservación del ecosistema de la selva paranaense.', lat:-25.6953, lng:-54.4367 },
+  { id:'s37', name:'Ruinas jesuíticas de San Ignacio', provincia:'misiones', cat:'Histórico', desc:'Las Ruinas de San Ignacio Miní, ubicadas en la provincia de Misiones, Argentina, son uno de los testimonios mejor conservados de las misiones jesuíticas guaraníes de los siglos XVII y XVIII. Fundada originalmente en 1610 y reasentada en su ubicación actual en 1696, la reducción llegó a albergar a más de 3,000 indígenas bajo un singular modelo de organización comunitaria, social y cultural. Sus imponentes estructuras, construidas en piedra arenisca roja local siguiendo el estilo conocido como "barroco guaraní", destacan por los detallados relieves de motivos florales y ángeles tallados por los propios nativos. El complejo arqueológico, declarado Patrimonio de la Humanidad por la UNESCO en 1984, cuenta con una plaza central alrededor de la cual se distribuyen la majestuosa iglesia, el colegio, el cementerio y las viviendas indígenas. Hoy en día, el sitio funciona como un museo a cielo abierto que preserva la memoria de este histórico encuentro cultural e incluye un espectáculo nocturno de luces y sonidos que recrea la vida cotidiana de la misión.', lat:-27.2603, lng:-55.5372 },
+  { id:'s38', name:'Parque Teyú Cuaré', provincia:'misiones', cat:'Aventura', lat:-27.3167, lng:-55.5833, desc:'Reserva con senderos y miradores sobre el río Uruguay.' },
+  { id:'s26', name:'Parque Nacional Lanín', provincia:'neuquen', cat:'Natural', lat:-39.6333, lng:-71.5, desc:'El volcán Lanín domina este parque de lagos y bosques araucarios.' },
+  { id:'s27', name:'Las Grutas', provincia:'rio_negro', cat:'Bienestar', lat:-40.8167, lng:-65.0833, desc:'Playas de aguas cálidas en el Golfo San Matías.' },
+  { id:'s33', name:'Cachi', provincia:'salta', cat:'Rural', lat:-25.1167, lng:-66.15, desc:'Pueblo de adobe en el Valle Calchaquí.' },
+  { id:'s34', name:'Tren a las Nubes', provincia:'salta', cat:'Aventura', lat:-24.7901, lng:-65.408, desc:'Recorrido ferroviario hasta 4.220 msnm.' },
+  { id:'s35', name:'Cafayate — Bodegas', provincia:'salta', cat:'Gastronómico', lat:-26.0721, lng:-65.9755, desc:'Capital del torrontés, con bodegas en paisajes de quebrada.' },
+  { id:'s39', name:'Glaciar Perito Moreno', provincia:'santa_cruz', cat:'Natural', lat:-50.4952, lng:-73.0395, desc:'Uno de los glaciares más espectaculares del planeta.' },
+  { id:'s43', name:'Parque Nacional de Tierra del Fuego', provincia:'tierra_del_fuego', cat:'Natural', desc:'El parque más austral del mundo.', lat:-54.7333, lng:-68.5833 },
+  { id:'s45', name:'Casa histórica de la Independencia', provincia:'tucuman', cat:'Histórico', desc:'Donde se declaró la Independencia Argentina el 9 de julio de 1816.', lat:-26.8346, lng:-65.2024 }
+];
+
 async function loadSitios() {
-  // Prioridad 1: sitios.json estático (GitHub Pages / servidor web)
-  try {
-    const res = await fetch('sitios.json', { cache: 'no-store' });
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data) && data.length) {
-        SITIOS = data;
-        return;
+  // Prioridad 1: sitios.json del servidor (solo en entorno web)
+  if (location.protocol !== 'file:') {
+    try {
+      const controller = new AbortController();
+      const tid = setTimeout(() => controller.abort(), 3000);
+      const res = await fetch('sitios.json', { cache:'no-store', signal:controller.signal });
+      clearTimeout(tid);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length) { SITIOS = data; return; }
       }
-    }
-  } catch(e) {}
-
-  // Prioridad 2: localStorage (fallback offline)
-  try {
-    const raw = localStorage.getItem(LS_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length) {
-        SITIOS = parsed;
-        return;
-      }
-    }
-  } catch(e) {}
-
-  // Sin datos: array vacío
-  SITIOS = [];
+    } catch(e) {}
+  }
+  // Fallback: datos hardcodeados en el archivo (siempre 52 sitios)
+  SITIOS = DEFAULT_SITIOS.map(s => ({...s}));
 }
 
 // ─── PROVINCIAS INTRO (pantalla completa, antes de entrar al mapa) ────────────
@@ -2196,19 +2380,38 @@ function originIcon() {
 var pendingSelection = null; // { type:'sitio'|'origen'|'user', data, cat }
 
 function showPendingCard(nombre, catId, catColor) {
-  // Muestra la barra de botones (Aceptar / Cancelar / Finalizar)
-  // El Finalizar se habilita solo si ya hay al menos un destino confirmado
-  var actions = document.getElementById('header-ruta-actions');
-  var btnFin  = document.getElementById('header-btn-finalizar');
-  if (!actions) return;
-  if (btnFin) btnFin.disabled = !(rutaOrigen && rutaPuntos.length > 0);
-  actions.style.display = 'flex';
+  var btnAcep = document.getElementById('header-btn-aceptar');
+  var actions  = document.getElementById('header-ruta-actions');
+  var btnFin   = document.getElementById('header-btn-finalizar');
+  var btnCanc  = document.getElementById('header-btn-cancelar');
+
+  if (!rutaModoActivo) return;
+
+  // Aceptar: siempre visible cuando hay punto pendiente
+  if (btnAcep) btnAcep.style.display = 'inline-block';
+
+  if (!rutaOrigen) {
+    // FASE 1 — eligiendo origen: Aceptar + Cancelar, sin Finalizar
+    if (actions) actions.style.display = 'flex';
+    if (btnFin)  btnFin.style.display = 'none';
+  } else {
+    // FASE 2 — eligiendo destinos: Aceptar + Cancelar + Finalizar
+    // Finalizar deshabilitado en el primer destino (aún no hay ninguno confirmado)
+    if (actions) actions.style.display = 'flex';
+    if (btnFin)  {
+      btnFin.style.display = 'inline-block';
+      btnFin.disabled = rutaPuntos.length === 0;
+    }
+    if (btnCanc) btnCanc.style.display = 'inline-block';
+  }
 }
 
 function clearPendingCard() {
   pendingSelection = null;
-  // En modo ruta mantenemos la barra visible; solo la ocultamos al salir del modo
-  // (cancelarModoRuta / finalizarRuta la ocultan explícitamente)
+  var btnAcep = document.getElementById('header-btn-aceptar');
+  if (btnAcep) btnAcep.style.display = 'none';
+  // En fase destino, mantener la barra visible (Cancelar + Finalizar siguen ahí)
+  // Solo se oculta al cancelar/finalizar completamente (lo hace cancelarModoRuta)
 }
 
 // ─── MARCADORES DE PUNTOS PERSONALIZADOS DEL USUARIO ─────────────────────────
@@ -2531,7 +2734,7 @@ function showOrigenInfo(o, lat, lng) {
   });
 
   document.getElementById('tab-info-placeholder').style.display = 'none';
-  document.getElementById('tab-info-content').style.display     = 'block';
+  document.getElementById('tab-info-content').style.display     = 'flex';
 }
 
 function showSiteInfo(s) {
@@ -2591,7 +2794,7 @@ function showSiteInfo(s) {
   }
 
   document.getElementById('tab-info-placeholder').style.display = 'none';
-  document.getElementById('tab-info-content').style.display     = 'block';
+  document.getElementById('tab-info-content').style.display     = 'flex';
 
   // Recuadros rápidos: Días / Horarios / Costo / Mejor época
   document.getElementById('qf-dias').textContent    = s.dias    || '—';
@@ -2710,13 +2913,25 @@ function updateRutaHeaderUI() {
   const badgeWrap    = document.getElementById('header-ruta-build');
   const btnFin       = document.getElementById('btn-finalizar-ruta');
   const btnFinHeader = document.getElementById('header-btn-finalizar');
+  const rutaActions  = document.getElementById('header-ruta-actions');
 
   if (badge) badge.textContent = rutaPuntos.length + ' / ' + RUTA_MAX + ' sitios';
   if (badgeWrap) badgeWrap.style.display = (rutaOrigen || rutaPuntos.length > 0) ? 'flex' : 'none';
   if (btnFin) btnFin.disabled = !rutaOrigen || rutaPuntos.length === 0;
+  if (btnFinHeader) {
+    if (rutaModoActivo && rutaOrigen) {
+      // Fase destino: Finalizar visible, deshabilitado solo si aún no hay destinos
+      btnFinHeader.style.display = 'inline-block';
+      btnFinHeader.disabled = rutaPuntos.length === 0;
+    } else {
+      btnFinHeader.style.display = 'none';
+    }
+  }
 
-  // Finalizar: habilitado solo cuando hay origen + al menos 1 destino confirmado
-  if (btnFinHeader) btnFinHeader.disabled = !(rutaOrigen && rutaPuntos.length > 0);
+  // Barra visible solo cuando hay origen + al menos 1 destino confirmado
+  if (rutaActions) {
+    rutaActions.style.display = (rutaOrigen && rutaPuntos.length > 0) ? 'flex' : 'none';
+  }
 }
 
 function updateRutaSidebarUI() {
@@ -2785,11 +3000,15 @@ function iniciarModoRuta() {
   if (cambiar) cambiar.style.display = 'none';
   if (sel)     { sel.value = ''; sel.style.display = 'block'; }
 
-  // Mostrar el texto "Seleccionar Origen" en el header; ocultar botones hasta que se presione un punto
+  // Mostrar solo "Seleccionar Origen", sin botones
   var selLabel = document.getElementById('header-sel-origen');
   if (selLabel) selLabel.style.display = 'inline';
+  var btnAcep = document.getElementById('header-btn-aceptar');
+  if (btnAcep) btnAcep.style.display = 'none';
   var rutaActions = document.getElementById('header-ruta-actions');
   if (rutaActions) rutaActions.style.display = 'none';
+  var btnFin = document.getElementById('header-btn-finalizar');
+  if (btnFin) btnFin.style.display = 'none';
 
   updateRutaUI();
 }
@@ -2811,6 +3030,8 @@ function cancelarModoRuta() {
   clearPendingCard();
   var rutaActions = document.getElementById('header-ruta-actions');
   if (rutaActions) rutaActions.style.display = 'none';
+  var btnAcep = document.getElementById('header-btn-aceptar');
+  if (btnAcep) btnAcep.style.display = 'none';
 
   setStep('origin');
 }
@@ -2877,6 +3098,7 @@ async function finalizarRuta() {
     }
 
     renderRutaResumen(stops, legs, route.distance, route.duration);
+    rutaResumenData = { stops, legs, totalDist: route.distance, totalDur: route.duration, geometry: route.geometry || null };
     openRutaResumenModal();
 
   } catch(e) {
@@ -2895,41 +3117,266 @@ async function finalizarRuta() {
   }
 }
 
-function renderRutaResumen(stops, legs, totalDist, totalDur) {
-  const body = document.getElementById('ruta-resumen-body');
+function renderRutaResumenEnNodo(body, stops, legs, totalDist, totalDur) {
   if (!body) return;
-  let html = '';
+
+  let rows = '';
   for (let i = 0; i < legs.length; i++) {
-    html += '<div class="ruta-leg">' +
-      '<div class="ruta-leg-num">' + (i + 1) + '</div>' +
-      '<div class="ruta-leg-info"><div class="ruta-leg-from-to">' + escH(stops[i].name) + ' → ' + escH(stops[i+1].name) + '</div></div>' +
-      '<div class="ruta-leg-metrics"><span>' + fmtDist(legs[i].distance) + '</span><span>' + fmtTime(legs[i].duration) + '</span></div>' +
-    '</div>';
+    rows +=
+      '<tr>' +
+        '<td class="col-n"><div class="ruta-leg-num">' + (i + 1) + '</div></td>' +
+        '<td class="col-tramo">' + escH(stops[i].name) + ' → ' + escH(stops[i+1].name) + '</td>' +
+        '<td class="col-dist">'  + fmtDist(legs[i].distance) + '</td>' +
+        '<td class="col-tiempo">' + fmtTime(legs[i].duration) + '</td>' +
+      '</tr>';
   }
-  html += '<div class="ruta-leg ruta-leg-total">' +
-    '<div class="ruta-leg-num">🏁</div>' +
-    '<div class="ruta-leg-info"><div class="ruta-leg-from-to">Total del recorrido (' + (stops.length - 1) + ' tramo' + (stops.length - 1 !== 1 ? 's' : '') + ')</div></div>' +
-    '<div class="ruta-leg-metrics"><span>' + fmtDist(totalDist) + '</span><span>' + fmtTime(totalDur) + '</span></div>' +
-  '</div>';
-  body.innerHTML = html;
+
+  const nTramos = stops.length - 1;
+  body.innerHTML =
+    '<table class="ruta-tabla">' +
+      '<thead><tr>' +
+        '<th class="col-n">N°</th>' +
+        '<th class="col-tramo">Tramos</th>' +
+        '<th class="col-dist">Distancia</th>' +
+        '<th class="col-tiempo">Tiempo</th>' +
+      '</tr></thead>' +
+      '<tbody>' + rows + '</tbody>' +
+      '<tfoot>' +
+        '<tr class="ruta-total-row">' +
+          '<td class="col-n">T</td>' +
+          '<td class="col-tramo">Total del recorrido (' + nTramos + ' tramo' + (nTramos !== 1 ? 's' : '') + ')</td>' +
+          '<td class="col-dist">'   + fmtDist(totalDist) + '</td>' +
+          '<td class="col-tiempo">' + fmtTime(totalDur)  + '</td>' +
+        '</tr>' +
+      '</tfoot>' +
+    '</table>';
 }
 
-function openRutaResumenModal()  { document.getElementById('modal-ruta-resumen').style.display = 'flex'; }
+function renderRutaResumen(stops, legs, totalDist, totalDur) {
+  renderRutaResumenEnNodo(document.getElementById('ruta-resumen-body'), stops, legs, totalDist, totalDur);
+}
+
+function openRutaResumenModal() {
+  document.getElementById('modal-ruta-resumen').style.display = 'flex';
+  var ni  = document.getElementById('ruta-nombre-input');
+  var nok = document.getElementById('ruta-nombre-ok');
+  if (ni)  { ni.value = ''; ni.disabled = false; }
+  if (nok) { nok.textContent = 'Ok'; nok.style.cssText = ''; }
+}
 function closeRutaResumenModal() { document.getElementById('modal-ruta-resumen').style.display = 'none'; }
+
+document.getElementById('ruta-nombre-ok').addEventListener('click', function() {
+  var input = document.getElementById('ruta-nombre-input');
+  var nombre = input.value.trim();
+  if (!nombre) { input.focus(); return; }
+  // Confirma el nombre — el título queda guardado en el campo para cuando se Guarde
+  input.disabled = true;
+  this.textContent = '✓';
+  this.style.background = '#22c55e';
+  this.style.borderColor = '#22c55e';
+  this.style.color = '#0f1117';
+});
 
 document.getElementById('btn-generar-ruta').addEventListener('click', iniciarModoRuta);
 document.getElementById('btn-cancelar-ruta').addEventListener('click', cancelarModoRuta);
 document.getElementById('btn-finalizar-ruta').addEventListener('click', finalizarRuta);
 document.getElementById('btn-ruta-deshacer').addEventListener('click', deshacerUltimoRutaPunto);
 document.getElementById('ruta-resumen-close').addEventListener('click', closeRutaResumenModal);
-document.getElementById('btn-ruta-resumen-cerrar').addEventListener('click', closeRutaResumenModal);
 document.getElementById('modal-ruta-resumen').addEventListener('click', function(e) {
   if (e.target === this) closeRutaResumenModal();
 });
+// Cancelar: cierra y reinicia el planificador
 document.getElementById('btn-ruta-nueva').addEventListener('click', function() {
   closeRutaResumenModal();
   cancelarModoRuta();
-  iniciarModoRuta();
+});
+// Guardar
+document.getElementById('btn-ruta-guardar').addEventListener('click', function() {
+  if (!rutaResumenData) return;
+  var input  = document.getElementById('ruta-nombre-input');
+  var nombre = (input.value || '').trim() || 'Ruta sin nombre';
+  guardarItinerario(nombre, rutaResumenData);
+  closeRutaResumenModal();
+  openItinerariosModal();
+});
+
+// ── MODAL ITINERARIOS ───────────────────────────────────────────────────────
+function openItinerariosModal() {
+  renderItinerariosTable();
+  document.getElementById('modal-itinerarios').style.display = 'flex';
+}
+function closeItinerariosModal() {
+  document.getElementById('modal-itinerarios').style.display = 'none';
+}
+document.getElementById('iti-close').addEventListener('click', closeItinerariosModal);
+document.getElementById('modal-itinerarios').addEventListener('click', function(e) {
+  if (e.target === this) closeItinerariosModal();
+});
+document.getElementById('iti-btn-salir').addEventListener('click', function() {
+  closeItinerariosModal();
+  cerrarVerItinerario();
+  closeRutaResumenModal();
+  var modalOrigenes = document.getElementById('modal-origenes');
+  if (modalOrigenes) modalOrigenes.style.display = 'none';
+});
+
+function renderItinerariosTable() {
+  const list  = activeItinerarios().slice().sort((a,b) => a.fecha - b.fecha);
+  const tbody = document.getElementById('iti-tbody');
+  const empty = document.getElementById('iti-empty');
+  if (!tbody) return;
+
+  if (!list.length) {
+    tbody.innerHTML = '';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+
+  tbody.innerHTML = list.map(function(it, idx) {
+    const fecha = fmtFechaDDMMMAAAA(new Date(it.fecha));
+    return '<tr class="mo-tr">' +
+      '<td class="mo-td mo-td-n"><span class="mo-num-circle">' + (idx + 1) + '</span></td>' +
+      '<td class="mo-td">' + escH(it.nombre) + '</td>' +
+      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-ver" data-id="' + it.id + '" type="button" title="Ver">&#128065;</button></td>' +
+      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-map" data-id="' + it.id + '" type="button" title="Mapa">&#128506;</button></td>' +
+      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-del" data-id="' + it.id + '" type="button" title="Eliminar">&#128465;</button></td>' +
+      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-print" data-id="' + it.id + '" type="button" title="Imprimir">&#128424;</button></td>' +
+      '<td class="mo-td">' + fecha + '</td>' +
+    '</tr>';
+  }).join('');
+
+  tbody.querySelectorAll('.iti-del').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (!confirm('¿Eliminar este itinerario?')) return;
+      const id = btn.dataset.id;
+      const updated = activeItinerarios().filter(function(it) { return it.id !== id; });
+      saveActiveItinerarios(updated);
+      renderItinerariosTable();
+    });
+  });
+
+  tbody.querySelectorAll('.iti-ver').forEach(function(btn) {
+    btn.addEventListener('click', function() { abrirVerItinerario(btn.dataset.id); });
+  });
+
+  tbody.querySelectorAll('.iti-map').forEach(function(btn) {
+    btn.addEventListener('click', function() { mostrarItinerarioEnMapa(btn.dataset.id); });
+  });
+
+  tbody.querySelectorAll('.iti-print').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      abrirVerItinerario(btn.dataset.id);
+      setTimeout(function() { window.print(); }, 200);
+    });
+  });
+}
+
+function findItinerario(id) {
+  return activeItinerarios().find(function(it) { return it.id === id; }) || null;
+}
+
+// ── VER: muestra el resumen de ruta guardado, solo lectura ─────────────────
+function abrirVerItinerario(id) {
+  const it = findItinerario(id);
+  if (!it) return;
+  document.getElementById('iti-ver-titulo').textContent = it.nombre;
+  renderRutaResumenEnNodo(document.getElementById('iti-ver-body'), it.stops, it.legs, it.totalDist, it.totalDur);
+  document.getElementById('modal-iti-ver').style.display = 'flex';
+}
+function cerrarVerItinerario() { document.getElementById('modal-iti-ver').style.display = 'none'; }
+document.getElementById('iti-ver-close').addEventListener('click', cerrarVerItinerario);
+document.getElementById('iti-ver-cerrar').addEventListener('click', cerrarVerItinerario);
+document.getElementById('iti-ver-imprimir').addEventListener('click', function() { window.print(); });
+document.getElementById('modal-iti-ver').addEventListener('click', function(e) {
+  if (e.target === this) cerrarVerItinerario();
+});
+
+// ── MAPA: dibuja la ruta guardada en el mapa principal y cierra los formularios ──
+async function mostrarItinerarioEnMapa(id) {
+  const it = findItinerario(id);
+  if (!it) return;
+  closeItinerariosModal();
+  cerrarVerItinerario();
+  closeRutaResumenModal();
+
+  // Cancelar cualquier planificador activo y ocultar su UI
+  if (rutaModoActivo) cancelarModoRuta();
+  var selLabel = document.getElementById('header-sel-origen');
+  if (selLabel) selLabel.style.display = 'none';
+  var btnAcep = document.getElementById('header-btn-aceptar');
+  if (btnAcep) btnAcep.style.display = 'none';
+  var rutaActions = document.getElementById('header-ruta-actions');
+  if (rutaActions) rutaActions.style.display = 'none';
+
+  clearRutaVisuals();
+  const m = activeMap();
+
+  // Si el itinerario no tiene la geometría real guardada (itinerarios viejos),
+  // se recalcula contra OSRM exactamente igual que al planificarla — NUNCA se traza línea recta.
+  let geometry = it.geometry;
+  if (!geometry) {
+    try {
+      const coordsStr = it.stops.map(p => `${p.lng},${p.lat}`).join(';');
+      const url  = `https://router.project-osrm.org/route/v1/driving/${coordsStr}?overview=full&geometries=geojson`;
+      const r    = await fetch(url);
+      const data = await r.json();
+      if (data.code === 'Ok' && data.routes.length) {
+        geometry = data.routes[0].geometry;
+        // Guardar la geometría recalculada para no tener que recalcularla de nuevo
+        it.geometry = geometry;
+        const list = activeItinerarios().map(x => x.id === it.id ? it : x);
+        saveActiveItinerarios(list);
+      }
+    } catch(e) {}
+  }
+
+  if (m) {
+    it.stops.forEach(function(p, idx) {
+      rutaMarkers.push(L.marker([p.lat, p.lng], {
+        icon: idx === 0 ? originIcon() : rutaNumIcon(idx, false),
+        zIndexOffset: idx === 0 ? 980 : 950
+      }).addTo(m));
+    });
+
+    if (geometry) {
+      rutaPolyline = L.geoJSON(geometry, {
+        style:{ color:'#1a1a1a', weight:2, opacity:0.9, lineJoin:'round', lineCap:'round' }
+      }).addTo(m);
+    } else {
+      // OSRM no pudo recalcular la ruta (sin conexión, etc.) — se avisa en vez de simular el trazado
+      alert('No se pudo obtener el trazado real de la ruta en este momento. Se muestran solo las paradas.');
+    }
+
+    if (rutaPolyline) {
+      try {
+        m.fitBounds(rutaPolyline.getBounds(), { paddingTopLeft:[20,20], paddingBottomRight:[20,120] });
+      } catch(e) {}
+    } else {
+      try {
+        const bounds = L.latLngBounds(it.stops.map(p => [p.lat, p.lng]));
+        m.fitBounds(bounds, { paddingTopLeft:[20,20], paddingBottomRight:[20,120] });
+      } catch(e) {}
+    }
+  }
+
+  // Mostrar el botón "Cerrar Mapa" + Distancia/Tiempo
+  var btnCerrarMapa = document.getElementById('header-btn-cerrar-mapa');
+  if (btnCerrarMapa) btnCerrarMapa.style.display = 'inline-block';
+  var metrics = document.getElementById('header-mapa-metrics');
+  var mDist   = document.getElementById('header-mapa-dist');
+  var mTiempo = document.getElementById('header-mapa-tiempo');
+  if (mDist)   mDist.textContent   = fmtDist(it.totalDist);
+  if (mTiempo) mTiempo.textContent = fmtTime(it.totalDur);
+  if (metrics) metrics.style.display = 'flex';
+}
+
+document.getElementById('header-btn-cerrar-mapa').addEventListener('click', function() {
+  clearRutaVisuals();
+  this.style.display = 'none';
+  var metrics = document.getElementById('header-mapa-metrics');
+  if (metrics) metrics.style.display = 'none';
+  openItinerariosModal();
 });
 
 document.getElementById('route-reset').addEventListener('click', () => {
@@ -2959,6 +3406,7 @@ async function initApp() {
 // ─── TRANSITIONS: Intro → Provincias → Mapa ───────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
 
+  // ── TRANSITIONS ──────────────────────────────────────────────────────────────
   function fadeSwap(fromEl, toEl, toDisplay, afterShown) {
     fromEl.style.transition = 'opacity 1.1s ease';
     fromEl.style.opacity    = '0';
@@ -3007,17 +3455,39 @@ document.addEventListener('DOMContentLoaded', function() {
     const sel = document.getElementById('header-origen-select');
     if (!sel) return;
     try {
-      const valid = moActiveOrigenes().filter(o => o.lat !== '' && o.lng !== '' && o.nombre);
       sel.innerHTML = '<option value="">Seleccionar un origen</option>';
-      valid.forEach(function(o, idx) {
-        const lbl = o.nombre;
-        const opt = document.createElement('option');
-        opt.value = idx;
-        opt.dataset.lat = o.lat;
-        opt.dataset.lng = o.lng;
-        opt.textContent = lbl;
-        sel.appendChild(opt);
-      });
+
+      // ── Orígenes personalizados del usuario ──
+      const validUser = moActiveOrigenes().filter(o => o.lat !== '' && o.lng !== '' && o.nombre);
+      if (validUser.length) {
+        const grpUser = document.createElement('optgroup');
+        grpUser.label = 'Mis Orígenes';
+        validUser.forEach(function(o, idx) {
+          const opt = document.createElement('option');
+          opt.value = 'user_' + idx;
+          opt.dataset.lat = o.lat;
+          opt.dataset.lng = o.lng;
+          opt.textContent = o.nombre;
+          grpUser.appendChild(opt);
+        });
+        sel.appendChild(grpUser);
+      }
+
+      // ── Sitios del JSON ──
+      if (typeof SITIOS !== 'undefined' && SITIOS.length) {
+        const grpSitios = document.createElement('optgroup');
+        grpSitios.label = 'Destinos turísticos';
+        SITIOS.slice().sort((a,b) => a.name.localeCompare(b.name, 'es')).forEach(function(s, idx) {
+          const opt = document.createElement('option');
+          opt.value = 'sitio_' + idx;
+          opt.dataset.lat = s.lat;
+          opt.dataset.lng = s.lng;
+          opt.textContent = s.name;
+          grpSitios.appendChild(opt);
+        });
+        sel.appendChild(grpSitios);
+      }
+
       sel.style.display = 'block';
     } catch(e) { sel.style.display = 'none'; }
   }
@@ -3058,9 +3528,10 @@ document.addEventListener('DOMContentLoaded', function() {
       const lat = parseFloat(opt.dataset.lat);
       const lng = parseFloat(opt.dataset.lng);
       if (isNaN(lat) || isNaN(lng)) return;
+      const label = opt.textContent;
 
       if (rutaModoActivo) {
-        rutaOrigen = { lat, lng, label: opt.textContent };
+        rutaOrigen = { lat, lng, label };
         clearRutaVisuals();
         const m = activeMap();
         if (m) {
@@ -3237,7 +3708,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ─── ORIGEN MODAL ─────────────────────────────────────────────────────────────
-const MO_MAX    = 10;
+const MO_MAX    = 20;
 
 // Working copy while modal is open
 let moDraft = [];
@@ -3304,6 +3775,72 @@ function dbLoadOrigenesForUser(username) {
   return (users[key] && users[key].origenes) ? users[key].origenes.slice() : [];
 }
 
+// ── ITINERARIOS GUARDADOS (hasta 20 por usuario) ────────────────────────────
+const ITINERARIOS_MAX = 20;
+
+function dbSaveItinerariosForUser(username, itinerarios) {
+  const users = dbGetUsers();
+  const key = dbUserKey(username);
+  if (!users[key]) return;
+  users[key].itinerarios = itinerarios.slice(0, ITINERARIOS_MAX);
+  dbSaveUsers(users);
+}
+
+function dbLoadItinerariosForUser(username) {
+  const users = dbGetUsers();
+  const key = dbUserKey(username);
+  return (users[key] && users[key].itinerarios) ? users[key].itinerarios.slice() : [];
+}
+
+const GUEST_ITINERARIOS_KEY = 'arg_turismo_guest_itinerarios';
+function guestItinerariosLoad() {
+  try { return JSON.parse(sessionStorage.getItem(GUEST_ITINERARIOS_KEY)) || []; }
+  catch(e) { return []; }
+}
+function guestItinerariosSave(itinerarios) {
+  try { sessionStorage.setItem(GUEST_ITINERARIOS_KEY, JSON.stringify(itinerarios.slice(0, ITINERARIOS_MAX))); } catch(e) {}
+}
+
+// Itinerarios "activos": de la cuenta si hay sesión, temporales (sessionStorage) si es invitado
+function activeItinerarios() {
+  const sess = sessionGet();
+  if (sess) return dbLoadItinerariosForUser(sess);
+  return guestItinerariosLoad();
+}
+function saveActiveItinerarios(list) {
+  const sess = sessionGet();
+  if (sess) dbSaveItinerariosForUser(sess, list);
+  else      guestItinerariosSave(list);
+}
+
+function fmtFechaDDMMMAAAA(d) {
+  const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  const dd  = String(d.getDate()).padStart(2, '0');
+  const mmm = meses[d.getMonth()];
+  const aaaa = d.getFullYear();
+  return dd + '-' + mmm + '-' + aaaa;
+}
+
+function guardarItinerario(nombre, resumenData) {
+  const list = activeItinerarios();
+  const nuevo = {
+    id: 'it_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+    nombre: nombre,
+    fecha: Date.now(),
+    stops: resumenData.stops,
+    legs: resumenData.legs,
+    totalDist: resumenData.totalDist,
+    totalDur: resumenData.totalDur,
+    geometry: resumenData.geometry || null
+  };
+  list.push(nuevo);
+  // Si se supera el máximo, se descarta el más antiguo
+  list.sort((a,b) => a.fecha - b.fecha);
+  while (list.length > ITINERARIOS_MAX) list.shift();
+  saveActiveItinerarios(list);
+  return nuevo;
+}
+
 function sessionGet()   { try { return localStorage.getItem(SESSION_KEY) || ''; } catch(e) { return ''; } }
 function sessionSet(u)  { try { localStorage.setItem(SESSION_KEY, u); } catch(e) {} }
 function sessionClear() { try { localStorage.removeItem(SESSION_KEY); } catch(e) {} }
@@ -3348,10 +3885,18 @@ function moRenderTable() {
     tr.className = 'mo-tr';
     tr.dataset.idx = i;
 
+    var provOpts = '<option value=""></option>' +
+      ['Buenos Aires','Catamarca','Chaco','Chubut','CABA',
+       'Córdoba','Corrientes','Entre Ríos','Formosa','Jujuy','La Pampa','La Rioja',
+       'Mendoza','Misiones','Neuquén','Río Negro','Salta','San Juan','San Luis',
+       'Santa Cruz','Santa Fe','Santiago del Estero','Tierra del Fuego','Tucumán']
+      .map(function(p){ return '<option value="' + p + '"' + (row.provincia === p ? ' selected' : '') + '>' + p + '</option>'; })
+      .join('');
+
     tr.innerHTML =
-      '<td class="mo-td mo-td-n">' + (i + 1) + '</td>' +
+      '<td class="mo-td mo-td-n"><span class="mo-num-circle">' + (i + 1) + '</span></td>' +
       '<td class="mo-td"><input class="mo-cell-input" data-f="nombre" data-i="' + i + '" type="text" maxlength="100" placeholder="Nombre" value="' + escH(row.nombre) + '" disabled /></td>' +
-      '<td class="mo-td"><input class="mo-cell-input" data-f="provincia" data-i="' + i + '" type="text" maxlength="80" placeholder="Provincia" value="' + escH(row.provincia||'') + '" disabled /></td>' +
+      '<td class="mo-td"><select class="mo-cell-input mo-cell-select" data-f="provincia" data-i="' + i + '" disabled>' + provOpts + '</select></td>' +
       '<td class="mo-td"><input class="mo-cell-input" data-f="localidad" data-i="' + i + '" type="text" maxlength="80" placeholder="Localidad" value="' + escH(row.localidad||'') + '" disabled /></td>' +
       '<td class="mo-td"><input class="mo-cell-input mo-coord" data-f="lat" data-i="' + i + '" type="number" step="any" placeholder="-38.00" value="' + escH(row.lat) + '" disabled /></td>' +
       '<td class="mo-td"><input class="mo-cell-input mo-coord" data-f="lng" data-i="' + i + '" type="number" step="any" placeholder="-57.54" value="' + escH(row.lng) + '" disabled /></td>' +
@@ -3574,13 +4119,20 @@ document.addEventListener('DOMContentLoaded', function() {
       var s = ps.data;
       if (rutaModoActivo) {
         if (!rutaOrigen) {
+          // Acepta origen → pasa a fase destino
           rutaOrigen = { lat: s.lat, lng: s.lng, label: s.name };
           placeOriginMarker(s.lat, s.lng, s.name);
           var selLabel = document.getElementById('header-sel-origen');
-          if (selLabel) { selLabel.textContent = 'Seleccionar Destino'; selLabel.style.display = 'inline'; selLabel.classList.remove('esperando-click'); }
+          if (selLabel) { selLabel.textContent = 'Seleccionar Destino'; selLabel.classList.remove('esperando-click'); }
           pendingSelection = null;
           updateRutaUI();
+          // Solo mostrar "Seleccionar Destino" — los botones aparecen al clickear un destino
+          var actions = document.getElementById('header-ruta-actions');
+          var btnFin  = document.getElementById('header-btn-finalizar');
+          if (actions) actions.style.display = 'none';
+          if (btnFin)  { btnFin.style.display = 'none'; btnFin.disabled = true; }
         } else {
+          // Acepta destino
           addRutaPunto(s);
           pendingSelection = null;
           updateRutaHeaderUI();
@@ -3597,13 +4149,20 @@ document.addEventListener('DOMContentLoaded', function() {
       var o = ps.data;
       if (rutaModoActivo) {
         if (!rutaOrigen) {
+          // Acepta origen → pasa a fase destino
           rutaOrigen = { lat: o.lat, lng: o.lng, label: o.nombre };
           placeOriginMarker(o.lat, o.lng, o.nombre);
           var selLabel2 = document.getElementById('header-sel-origen');
-          if (selLabel2) { selLabel2.textContent = 'Seleccionar Destino'; selLabel2.style.display = 'inline'; selLabel2.classList.remove('esperando-click'); }
+          if (selLabel2) { selLabel2.textContent = 'Seleccionar Destino'; selLabel2.classList.remove('esperando-click'); }
           pendingSelection = null;
           updateRutaUI();
+          // Solo mostrar "Seleccionar Destino" — los botones aparecen al clickear un destino
+          var actions2 = document.getElementById('header-ruta-actions');
+          var btnFin2  = document.getElementById('header-btn-finalizar');
+          if (actions2) actions2.style.display = 'none';
+          if (btnFin2)  { btnFin2.style.display = 'none'; btnFin2.disabled = true; }
         } else {
+          // Acepta destino
           addRutaPunto({ lat: o.lat, lng: o.lng, name: o.nombre });
           pendingSelection = null;
           updateRutaHeaderUI();
@@ -3617,11 +4176,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // ── BOTÓN CANCELAR (barra ruta): cancela toda la ruta y vuelve a "Seleccionar Origen" ──
+  // ── BOTÓN CANCELAR: borra todo y vuelve al estado limpio (sin planificador activo) ──
   document.getElementById('header-btn-cancelar').addEventListener('click', function() {
     if (rutaModoActivo) {
       cancelarModoRuta();
-      iniciarModoRuta(); // re-inicia el modo para que pueda elegir nuevo origen
     } else {
       clearRoute();
       originLatLng = null;
@@ -3631,7 +4189,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // ── BOTÓN FINALIZAR: llama a finalizarRuta() directamente desde la tarjeta pendiente ──
+  // ── BOTÓN FINALIZAR ──
   document.getElementById('header-btn-finalizar').addEventListener('click', function() {
     clearPendingCard();
     finalizarRuta();
@@ -3649,6 +4207,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Siempre reiniciar: cancela cualquier ruta en curso y vuelve a "Seleccionar Origen"
     if (rutaModoActivo) cancelarModoRuta();
     iniciarModoRuta();
+  });
+
+  // "Itinerarios" → abre directamente el formulario de itinerarios guardados
+  document.getElementById('ham-btn-itinerarios').addEventListener('click', function() {
+    closeHam();
+    openItinerariosModal();
   });
 
   // Tabs Iniciar sesión / Registrarse
