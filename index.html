@@ -174,41 +174,17 @@
     .pp-map-svg .pp-prov.off:hover { fill:#e74c3c; filter:brightness(1.12); }
     .pp-map-svg .pp-prov.on  { fill:#1e9e52; }
     .pp-map-svg .pp-prov.on:hover  { fill:#22c55e; filter:brightness(1.1); }
-    /* Nombre de la provincia bajo el cursor, a la izquierda del mapa, en
-       tamaño grande. Aparece al pasar el mouse sobre una provincia y
-       desaparece cuando el cursor sale de ella. */
-    .pp-prov-name-panel {
-      flex:0 0 260px;
-      min-width:0;
-      display:flex; align-items:center; justify-content:center;
-      text-align:center;
-      padding:10px 14px;
-      pointer-events:none;
-      opacity:0;
-      transform:translateX(10px);
-      transition:opacity .22s ease, transform .22s ease;
-    }
-    .pp-prov-name-panel.visible { opacity:1; transform:translateX(0); }
-    .pp-prov-name-panel span {
-      font-family:'Playfair Display',serif; font-weight:700;
-      font-size:2.3rem; line-height:1.15;
-      color:#e8c96a;
-      text-shadow:0 2px 16px rgba(0,0,0,0.65);
-    }
-    @media (max-width:900px) {
-      .pp-prov-name-panel { flex-basis:180px; }
-      .pp-prov-name-panel span { font-size:1.6rem; }
+    .pp-map-hint {
+      position:absolute; left:50%; bottom:6px; transform:translateX(-50%);
+      z-index:3; pointer-events:none;
+      font-family:'Barlow',sans-serif; font-size:0.78rem; color:#c9cede;
+      background:rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.12);
+      border-radius:999px; padding:6px 16px;
+      text-align:center; white-space:nowrap;
     }
     @media (max-width:700px) {
       .pp-content-row { flex-direction:column; padding:0 12px; }
       .pp-map-wrap { flex:1 1 auto; justify-content:center; }
-      .pp-prov-name-panel {
-        flex:0 0 auto; order:-1;
-        padding:6px 12px;
-        transform:translateY(-6px);
-      }
-      .pp-prov-name-panel.visible { transform:translateY(0); }
-      .pp-prov-name-panel span { font-size:1.4rem; }
     }
 
     /* ── COLUMNA DE REGIONES (6 mini-mapas, en 2 columnas, a la izquierda del mapa) ── */
@@ -329,7 +305,7 @@
       #page-provincias .pp-header { padding:8px 16px; }
       #page-provincias .pp-footer { padding:6px 16px 10px; }
       .pp-map-wrap { padding:2px 2px; }
-      .pp-prov-name-panel span { font-size:1.2rem; }
+      .pp-map-hint { font-size:0.68rem; padding:5px 12px; bottom:4px; max-width:92%; overflow:hidden; text-overflow:ellipsis; }
     }
     .pp-footer {
       display:flex; justify-content:center;
@@ -2035,8 +2011,9 @@
   </div>
   <div class="pp-content-row">
     <div class="pp-regions-col" id="pp-regions-col"></div>
-    <div class="pp-prov-name-panel" id="pp-prov-name-panel"><span id="pp-prov-name-text"></span></div>
-    <div class="pp-map-wrap" id="pp-map-wrap"></div>
+    <div class="pp-map-wrap" id="pp-map-wrap">
+      <div class="pp-map-hint" id="pp-map-hint">Tocá una provincia para habilitarla o inhabilitarla</div>
+    </div>
     <div class="pp-cats-col">
       <div class="pp-cats-grid" id="pp-cats-grid"></div>
     </div>
@@ -2744,18 +2721,14 @@ function buildProvinciasIntro() {
   svg.setAttribute('class', 'pp-map-svg');
   svg.setAttribute('viewBox', '0 0 ' + ARG_MAP_VIEWBOX.w + ' ' + ARG_MAP_VIEWBOX.h);
 
-  // Panel con el nombre de la provincia, a la izquierda del mapa.
-  // Aparece al pasar el cursor sobre una provincia y desaparece al salir.
-  const namePanel = document.getElementById('pp-prov-name-panel');
-  const nameText  = document.getElementById('pp-prov-name-text');
+  // Etiqueta con el nombre de la provincia, superpuesta sobre el mapa.
+  // Aparece al pasar el cursor sobre una provincia y muestra el texto de
+  // ayuda por defecto cuando no hay ninguna bajo el cursor.
+  const hint = document.getElementById('pp-map-hint');
+  const DEFAULT_HINT = 'Tocá una provincia para habilitarla o inhabilitarla';
   const setHoverName = (label) => {
-    if (!namePanel || !nameText) return;
-    if (label) {
-      nameText.textContent = label;
-      namePanel.classList.add('visible');
-    } else {
-      namePanel.classList.remove('visible');
-    }
+    if (!hint) return;
+    hint.textContent = label || DEFAULT_HINT;
   };
 
   function registerEl(key, el) {
