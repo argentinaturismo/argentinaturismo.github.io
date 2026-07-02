@@ -130,8 +130,27 @@
     .pp-item.off:hover { background:#4c1d1d; color:rgba(255,255,255,0.7); }
 
     /* ── MAPA INTERACTIVO DE PROVINCIAS (lo más grande posible) ── */
-    #page-provincias .pp-header { padding:8px 28px; }
+    #page-provincias .pp-header { padding:8px 28px 4px; justify-content:center; }
     #page-provincias .pp-footer { padding:6px 40px 10px; }
+    .pp-toolbar-row {
+      flex-shrink:0;
+      display:flex; flex-direction:row; align-items:center;
+      gap:6px;
+      padding:0 10px 6px;
+    }
+    .pp-toolbar-spacer { flex:1 1 auto; }
+    .pp-toolbar-cell { display:flex; align-items:center; }
+    .pp-toolbar-cell-regions { flex:0 0 220px; justify-content:center; }
+    .pp-toolbar-cell-cats    { flex:0 0 220px; justify-content:center; }
+    @media (max-width:900px) {
+      .pp-toolbar-cell-regions { flex-basis:160px; }
+      .pp-toolbar-cell-cats    { flex-basis:160px; }
+    }
+    @media (max-width:700px) {
+      .pp-toolbar-row { flex-wrap:wrap; justify-content:center; padding:0 12px 6px; }
+      .pp-toolbar-spacer { display:none; }
+      .pp-toolbar-cell-regions, .pp-toolbar-cell-cats { flex:0 0 auto; }
+    }
     .pp-content-row {
       flex:1; min-height:0;
       display:flex; flex-direction:row; align-items:stretch;
@@ -142,7 +161,7 @@
       position:relative;
       flex:1 1 auto; min-width:0; min-height:0;
       display:flex; align-items:center; justify-content:center;
-      padding:2px 4px;
+      padding:2px 4px 2px 4px;
     }
     .pp-map-svg { width:100%; height:100%; }
     .pp-map-svg .pp-prov {
@@ -155,48 +174,41 @@
     .pp-map-svg .pp-prov.off:hover { fill:#e74c3c; filter:brightness(1.12); }
     .pp-map-svg .pp-prov.on  { fill:#1e9e52; }
     .pp-map-svg .pp-prov.on:hover  { fill:#22c55e; filter:brightness(1.1); }
-    .pp-map-hint {
-      position:absolute; left:50%; bottom:6px; transform:translateX(-50%);
-      z-index:3; pointer-events:none;
-      font-family:'Barlow',sans-serif; font-size:0.78rem; color:#c9cede;
-      background:rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.12);
-      border-radius:999px; padding:6px 16px;
-      text-align:center; white-space:nowrap;
-    }
-    /* Panel con el nombre de la provincia, a la derecha del mapa.
-       Aparece/desaparece según se pase el cursor sobre la provincia. */
+    /* Nombre de la provincia bajo el cursor, a la izquierda del mapa, en
+       tamaño grande. Aparece al pasar el mouse sobre una provincia y
+       desaparece cuando el cursor sale de ella. */
     .pp-prov-name-panel {
-      flex:0 0 300px;
+      flex:0 0 260px;
       min-width:0;
       display:flex; align-items:center; justify-content:center;
       text-align:center;
-      padding:10px 18px;
+      padding:10px 14px;
       pointer-events:none;
       opacity:0;
-      transform:translateX(-10px);
+      transform:translateX(10px);
       transition:opacity .22s ease, transform .22s ease;
     }
     .pp-prov-name-panel.visible { opacity:1; transform:translateX(0); }
     .pp-prov-name-panel span {
       font-family:'Playfair Display',serif; font-weight:700;
-      font-size:2.6rem; line-height:1.15;
+      font-size:2.3rem; line-height:1.15;
       color:#e8c96a;
       text-shadow:0 2px 16px rgba(0,0,0,0.65);
     }
     @media (max-width:900px) {
-      .pp-prov-name-panel { flex-basis:220px; }
-      .pp-prov-name-panel span { font-size:1.9rem; }
+      .pp-prov-name-panel { flex-basis:180px; }
+      .pp-prov-name-panel span { font-size:1.6rem; }
     }
     @media (max-width:700px) {
       .pp-content-row { flex-direction:column; padding:0 12px; }
-      .pp-map-wrap { flex:1 1 auto; }
+      .pp-map-wrap { flex:1 1 auto; justify-content:center; }
       .pp-prov-name-panel {
-        flex:0 0 auto;
+        flex:0 0 auto; order:-1;
         padding:6px 12px;
         transform:translateY(-6px);
       }
       .pp-prov-name-panel.visible { transform:translateY(0); }
-      .pp-prov-name-panel span { font-size:1.6rem; }
+      .pp-prov-name-panel span { font-size:1.4rem; }
     }
 
     /* ── COLUMNA DE REGIONES (6 mini-mapas, en 2 columnas, a la izquierda del mapa) ── */
@@ -249,12 +261,75 @@
     @media (max-width:560px) {
       .pp-regions-col { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); }
     }
+
+    /* ── COLUMNA DE TIPOS DE TURISMO (12 recuadros, mismo tamaño que los
+       mini-mapas de regiones), a la derecha del mapa. Cada recuadro muestra
+       un ícono propio del tipo de turismo, coloreado con su color, y su
+       nombre debajo. ── */
+    .pp-cats-col {
+      flex:0 0 220px;
+      min-height:0;
+      display:flex; flex-direction:column;
+      padding:4px 2px;
+    }
+    .pp-cats-grid {
+      flex:1; min-height:0; overflow-y:auto;
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-auto-rows: minmax(0, 1fr);
+      gap:8px;
+      align-content:center;
+      align-items:stretch;
+    }
+    .pp-cats-grid::-webkit-scrollbar { width:5px; }
+    .pp-cats-grid::-webkit-scrollbar-thumb { background:rgba(232,201,106,0.3); border-radius:4px; }
+    .pp-cat-card {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      text-align:center;
+      gap:5px;
+      padding:8px 6px;
+      border-radius:10px;
+      border:1.5px solid rgba(255,255,255,0.16);
+      background:rgba(23,28,39,0.6);
+      cursor:pointer; user-select:none;
+      transition:background .18s ease, border-color .18s ease, transform .12s ease;
+    }
+    .pp-cat-card:hover { transform:translateY(-1px); background:rgba(30,36,54,0.8); }
+    .pp-cat-card.on { border-color:var(--cat-color, #e8c96a); background:rgba(255,255,255,0.05); }
+    .pp-cat-icon-svg { width:46px; height:46px; flex-shrink:0; display:block; }
+    .pp-cat-icon-svg .pp-cat-icon-shape {
+      fill:none; stroke:rgba(255,255,255,0.28);
+      stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;
+      transition:stroke .18s ease;
+    }
+    .pp-cat-icon-svg .pp-cat-icon-shape-fill {
+      fill:rgba(255,255,255,0.28); stroke:none;
+      transition:fill .18s ease;
+    }
+    .pp-cat-card.on .pp-cat-icon-svg .pp-cat-icon-shape { stroke:var(--cat-color, #e8c96a); }
+    .pp-cat-card.on .pp-cat-icon-svg .pp-cat-icon-shape-fill { fill:var(--cat-color, #e8c96a); }
+    .pp-cat-label {
+      font-family:'Barlow',sans-serif; font-weight:700; font-size:0.66rem;
+      line-height:1.15; color:#e8eaf2;
+    }
+    .pp-cat-card.on .pp-cat-label { color:var(--cat-color, #e8c96a); }
+    @media (max-width:900px) {
+      .pp-cats-col { flex-basis:160px; }
+      .pp-cat-icon-svg { width:34px; height:34px; }
+      .pp-cat-label { font-size:0.56rem; }
+    }
+    @media (max-width:700px) {
+      .pp-cats-col {
+        flex-basis:auto; order:4;
+      }
+      .pp-cats-grid { grid-template-columns: repeat(4, 1fr); overflow-y:visible; }
+    }
     @media (max-width:560px) {
+      .pp-cats-grid { grid-template-columns: repeat(3, 1fr); }
       #page-provincias .pp-header { padding:8px 16px; }
       #page-provincias .pp-footer { padding:6px 16px 10px; }
       .pp-map-wrap { padding:2px 2px; }
-      .pp-map-hint { font-size:0.68rem; padding:5px 12px; bottom:4px; max-width:92%; overflow:hidden; text-overflow:ellipsis; }
-      .pp-prov-name-panel span { font-size:1.35rem; }
+      .pp-prov-name-panel span { font-size:1.2rem; }
     }
     .pp-footer {
       display:flex; justify-content:center;
@@ -1699,31 +1774,22 @@
       </div>
 
       <div class="tut-section">
-        <h3 class="tut-h3"><span class="tut-num">2</span>Selección de provincias</h3>
-        <p>La primera pantalla permite elegir las provincias cuyos sitios desea visualizar. Cada provincia puede activarse o desactivarse individualmente.</p>
+        <h3 class="tut-h3"><span class="tut-num">2</span>Selección de provincias y tipos de turismo</h3>
+        <p>La primera pantalla permite elegir, en el mismo lugar, las provincias y los tipos de turismo cuyos sitios desea visualizar: el mapa de la Argentina y las regiones a su izquierda controlan las provincias, y los recuadros a la derecha controlan los tipos de turismo. Cada una puede activarse o desactivarse individualmente.</p>
         <ul class="tut-list">
-          <li><strong>Habilitar todo</strong> — selecciona todas las provincias con un clic.</li>
-          <li><strong>Listo</strong> — confirma la selección y avanza al siguiente paso.</li>
+          <li><strong>Habilitar todo</strong> (provincias) — selecciona todas las provincias con un clic.</li>
+          <li><strong>Habilitar todo</strong> (tipos de turismo) — activa todas las categorías disponibles.</li>
+          <li><strong>Listo</strong> — confirma la selección e ingresa al mapa interactivo.</li>
         </ul>
       </div>
 
       <div class="tut-section">
-        <h3 class="tut-h3"><span class="tut-num">3</span>Selección de tipos de turismo</h3>
-        <p>Luego de elegir provincias, indique qué tipos de turismo desea visualizar. Cada categoría puede activarse o desactivarse en forma independiente.</p>
-        <ul class="tut-list">
-          <li><strong>Habilitar todo</strong> — activa todas las categorías disponibles.</li>
-          <li><strong>Volver a Provincias</strong> — regresa a la etapa anterior.</li>
-          <li><strong>Listo</strong> — confirma e ingresa al mapa interactivo.</li>
-        </ul>
-      </div>
-
-      <div class="tut-section">
-        <h3 class="tut-h3"><span class="tut-num">4</span>Acceso al mapa interactivo</h3>
+        <h3 class="tut-h3"><span class="tut-num">3</span>Acceso al mapa interactivo</h3>
         <p>Finalizada la configuración, se mostrará el mapa con todos los sitios correspondientes a las provincias y categorías seleccionadas. En la parte superior encontrará las herramientas de personalización y cálculo de rutas.</p>
       </div>
 
       <div class="tut-section">
-        <h3 class="tut-h3"><span class="tut-num">5</span>Registro e inicio de sesión</h3>
+        <h3 class="tut-h3"><span class="tut-num">4</span>Registro e inicio de sesión</h3>
         <p>Para usar la administración de orígenes, presione <strong>"Origen"</strong> en la parte superior del mapa.</p>
         <ul class="tut-list">
           <li><strong>Registrarse</strong> — ingrese nombre de usuario y contraseña.</li>
@@ -1733,7 +1799,7 @@
       </div>
 
       <div class="tut-section">
-        <h3 class="tut-h3"><span class="tut-num">6</span>Consulta de información turística</h3>
+        <h3 class="tut-h3"><span class="tut-num">5</span>Consulta de información turística</h3>
         <p>Haga clic sobre cualquier sitio del mapa para ver su nombre y tipo de turismo. El panel izquierdo mostrará información ampliada según la disponibilidad del sitio:</p>
         <ul class="tut-list">
           <li>Nombre y tipo de turismo.</li>
@@ -1743,7 +1809,7 @@
       </div>
 
       <div class="tut-section">
-        <h3 class="tut-h3"><span class="tut-num">7</span>Información complementaria</h3>
+        <h3 class="tut-h3"><span class="tut-num">6</span>Información complementaria</h3>
         <p>Algunos sitios incluyen datos adicionales visibles en el panel lateral:</p>
         <ul class="tut-list">
           <li><strong>Días de apertura</strong> — días en que recibe visitantes.</li>
@@ -1754,12 +1820,12 @@
       </div>
 
       <div class="tut-section">
-        <h3 class="tut-h3"><span class="tut-num">8</span>Configuración de puntos de origen</h3>
+        <h3 class="tut-h3"><span class="tut-num">7</span>Configuración de puntos de origen</h3>
         <p>Presione <strong>"Origen"</strong> en la parte superior para abrir la administración de orígenes. Puede almacenar hasta <strong>10 ubicaciones</strong> diferentes.</p>
       </div>
 
       <div class="tut-section">
-        <h3 class="tut-h3"><span class="tut-num">9</span>Obtención de coordenadas (Google Maps)</h3>
+        <h3 class="tut-h3"><span class="tut-num">8</span>Obtención de coordenadas (Google Maps)</h3>
         <ol class="tut-list tut-ordered">
           <li>Ingrese a Google Maps y busque la dirección deseada.</li>
           <li>Localice el marcador en el mapa.</li>
@@ -1771,13 +1837,13 @@
       </div>
 
       <div class="tut-section">
-        <h3 class="tut-h3"><span class="tut-num">10</span>Creación de un origen personalizado</h3>
+        <h3 class="tut-h3"><span class="tut-num">9</span>Creación de un origen personalizado</h3>
         <p>Dentro de la ventana <strong>"Origen"</strong>, ingrese un nombre, la latitud, la longitud y guarde. Puede registrar hasta 10 ubicaciones.</p>
         <div class="tut-example">Ejemplos: Mi domicilio · Casa de vacaciones · Hotel · Aeropuerto · Terminal de ómnibus</div>
       </div>
 
       <div class="tut-section">
-        <h3 class="tut-h3"><span class="tut-num">11</span>Cálculo de distancia y tiempo</h3>
+        <h3 class="tut-h3"><span class="tut-num">10</span>Cálculo de distancia y tiempo</h3>
         <ol class="tut-list tut-ordered">
           <li>Presione <strong>"Seleccionar un origen"</strong> y elija una ubicación guardada.</li>
           <li>Haga clic sobre cualquier sitio turístico del mapa como destino.</li>
@@ -1787,7 +1853,7 @@
       </div>
 
       <div class="tut-section">
-        <h3 class="tut-h3"><span class="tut-num">12</span>Interpretación de resultados</h3>
+        <h3 class="tut-h3"><span class="tut-num">11</span>Interpretación de resultados</h3>
         <p>Los valores de distancia y tiempo son <strong>estimativos</strong> y pueden variar según el estado de las rutas, condiciones climáticas, tránsito, obras viales o restricciones temporales.</p>
         <div class="tut-example">Ej: <strong>120 km</strong> · <strong>2 h 15 min</strong></div>
       </div>
@@ -1956,35 +2022,27 @@
   <span class="pp-bg-span" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Ushuaia,_Tierra_del_Fuego.jpg?width=1920')"></span>
   <div class="pp-overlay-gradient"></div>
   <div class="pp-header pp-header-noborder">
-    <div class="pp-title">Seleccione las provincias</div>
-    <button class="btn-volver btn-habilitar-prov" id="btn-all-prov-intro">Habilitar todo</button>
+    <div class="pp-title">Seleccione las provincias y tipos de turismo</div>
   </div>
-  <div class="pp-content-row">
-    <div class="pp-regions-col" id="pp-regions-col"></div>
-    <div class="pp-map-wrap" id="pp-map-wrap">
-      <div class="pp-map-hint" id="pp-map-hint">Tocá una provincia para habilitarla o inhabilitarla</div>
+  <div class="pp-toolbar-row">
+    <div class="pp-toolbar-cell pp-toolbar-cell-regions">
+      <button class="btn-volver btn-habilitar-prov" id="btn-all-prov-intro">Habilitar todo</button>
     </div>
-    <div class="pp-prov-name-panel" id="pp-prov-name-panel"><span id="pp-prov-name-text"></span></div>
-  </div>
-  <div class="pp-footer">
-    <button class="btn-listo-pp" id="btn-provincias-listo" type="button">Listo</button>
-  </div>
-</div>
-
-<!-- ═══════════════════  SELECCIÓN DE TIPOS DE TURISMO  ═══════════════════ -->
-<div id="page-categorias">
-  <span class="pp-bg-span" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Centro_civico_bariloche.jpg?width=1920')"></span>
-  <div class="pp-overlay-gradient"></div>
-  <div class="pp-header pp-header-noborder">
-    <div class="pp-title">Seleccione tipos de turismo</div>
-    <div style="display:flex; gap:10px; align-items:center;">
-      <button class="btn-volver" id="btn-cats-volver-provincias" type="button">← Volver a Provincias</button>
+    <div class="pp-toolbar-spacer"></div>
+    <div class="pp-toolbar-cell pp-toolbar-cell-cats">
       <button class="btn-volver btn-habilitar-cat" id="btn-all-cats-intro">Habilitar todo</button>
     </div>
   </div>
-  <div class="pp-grid pp-grid-cat" id="grid-categorias-intro"></div>
+  <div class="pp-content-row">
+    <div class="pp-regions-col" id="pp-regions-col"></div>
+    <div class="pp-prov-name-panel" id="pp-prov-name-panel"><span id="pp-prov-name-text"></span></div>
+    <div class="pp-map-wrap" id="pp-map-wrap"></div>
+    <div class="pp-cats-col">
+      <div class="pp-cats-grid" id="pp-cats-grid"></div>
+    </div>
+  </div>
   <div class="pp-footer">
-    <button class="btn-listo-pp" id="btn-categorias-listo" type="button">Listo</button>
+    <button class="btn-listo-pp" id="btn-provincias-listo" type="button">Listo</button>
   </div>
 </div>
 
@@ -2053,8 +2111,7 @@
     </div>
   </div>
   <div class="header-right">
-    <button class="btn-volver" id="btn-volver-provincias" type="button">← Volver a Provincias</button>
-    <button class="btn-volver" id="btn-volver-sitios" type="button">← Volver a Sitios</button>
+    <button class="btn-volver" id="btn-volver-provincias" type="button">← Volver a Selección</button>
   </div>
 </header>
 
@@ -2290,7 +2347,8 @@
             <th class="mo-th" style="width:30px; text-align:center; padding-left:4px; padding-right:4px;">Mapa</th>
             <th class="mo-th" style="width:36px; text-align:center; padding-left:4px; padding-right:4px;">Eliminar</th>
             <th class="mo-th" style="width:36px; text-align:center; padding-left:4px; padding-right:4px;">Imprimir</th>
-            <th class="mo-th" style="width:36px; text-align:center; padding-left:4px; padding-right:4px;">&#128202;</th>
+            <th class="mo-th" style="width:36px; text-align:center; padding-left:4px; padding-right:4px;" title="Estadística por tramos (Km)">&#128202;</th>
+            <th class="mo-th" style="width:36px; text-align:center; padding-left:4px; padding-right:4px;" title="Estadística por tramos (Tiempo)">&#9201;</th>
             <th class="mo-th" style="width:90px; padding-left:6px;">Fecha</th>
           </tr>
         </thead>
@@ -2301,13 +2359,16 @@
       </div>
     </div>
     <div class="mo-footer-salir" style="justify-content:space-between;">
-      <button class="ruta-btn-secundario" id="iti-btn-estadistica" type="button">Estadística</button>
+      <div style="display:flex; gap:10px;">
+        <button class="ruta-btn-secundario" id="iti-btn-estadistica" type="button" title="Estadística de Rutas (Por Distancia)">&#128202; Estadística (Por Distancia)</button>
+        <button class="ruta-btn-secundario" id="iti-btn-estadistica-tiempo" type="button" title="Estadística de Rutas (Tiempo)">&#9201; Estadística (Tiempo)</button>
+      </div>
       <button class="ruta-btn-secundario" id="iti-btn-salir" type="button">Salir</button>
     </div>
   </div>
 </div>
 
-<!-- ── ESTADÍSTICA POR TRAMOS (por itinerario) ── -->
+<!-- ── ESTADÍSTICA POR TRAMOS - KM (por itinerario) ── -->
 <div id="modal-stat-tramos" class="mo-backdrop" style="display:none;">
   <div class="mo-panel" style="width:min(720px, 95vw);">
     <div class="mo-header">
@@ -2320,16 +2381,45 @@
   </div>
 </div>
 
-<!-- ── ESTADÍSTICA DE RUTAS ── -->
+<!-- ── ESTADÍSTICA POR TRAMOS - TIEMPO (por itinerario, línea suavizada) ── -->
+<div id="modal-stat-tramos-tiempo" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(720px, 95vw);">
+    <div class="mo-header">
+      <span class="mo-title" id="stat-tramos-tiempo-titulo">Estadística de Tramos (Tiempo)</span>
+      <button class="mo-close" id="stat-tramos-tiempo-close" type="button">✕</button>
+    </div>
+    <div class="mo-body" style="padding:24px;">
+      <div id="stat-tramos-tiempo-chart"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ESTADÍSTICA DE RUTAS - KM ── -->
 <div id="modal-estadistica" class="mo-backdrop" style="display:none;">
   <div class="mo-panel" style="width:min(720px, 95vw);">
     <div class="mo-header">
-      <span class="mo-title">Estadística de Rutas</span>
+      <span class="mo-title">Estadística de Rutas (Por Distancia)</span>
       <button class="mo-close" id="est-close" type="button">✕</button>
     </div>
     <div class="mo-body" style="padding:24px;">
       <div id="est-chart-wrap"></div>
       <div id="est-empty" style="display:none; padding:40px 24px; text-align:center; color:#7a83a6; font-family:'Barlow',sans-serif; font-size:0.85rem;">
+        Todavía no guardaste ningún itinerario.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ESTADÍSTICA DE RUTAS - TIEMPO (línea suavizada) ── -->
+<div id="modal-estadistica-tiempo" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(720px, 95vw);">
+    <div class="mo-header">
+      <span class="mo-title">Estadística de Rutas (Tiempo)</span>
+      <button class="mo-close" id="est-tiempo-close" type="button">✕</button>
+    </div>
+    <div class="mo-body" style="padding:24px;">
+      <div id="est-tiempo-chart-wrap"></div>
+      <div id="est-tiempo-empty" style="display:none; padding:40px 24px; text-align:center; color:#7a83a6; font-family:'Barlow',sans-serif; font-size:0.85rem;">
         Todavía no guardaste ningún itinerario.
       </div>
     </div>
@@ -2400,6 +2490,13 @@ const PROVINCIAS_LIST = [
 // ─── MAPA SVG DE PROVINCIAS (para la pantalla de selección) ───────────────────
 const ARG_MAP_VIEWBOX = { w: 431.8, h: 888 };
 const ARG_MAP_CABA = { x: 321.6, y: 345.0, r: 4.2 };
+// Silueta simplificada de la Ciudad Autónoma de Buenos Aires (Av. Gral. Paz al oeste,
+// Riachuelo al sur, Río de la Plata / Costanera-Puerto Madero al este), a la escala
+// del mapa completo del país. No es cartografía exacta, sino una forma reconocible
+// del contorno real de la Ciudad, orientada igual que en un mapa convencional.
+const ARG_MAP_CABA_PATH = "M320.3,333.3 L324.2,334.6 L330.7,341.1 L332.0,347.6 L328.1,352.8 L319.0,354.1 L311.2,350.2 L309.9,342.4 L316.4,335.9 Z";
+// Halo (versión ampliada del mismo contorno) usado como resalte detrás de la silueta.
+const ARG_MAP_CABA_HALO_PATH = "M319.7,327.9 L325.4,329.8 L334.9,339.3 L336.8,348.8 L331.1,356.4 L317.8,358.3 L306.4,352.6 L304.5,341.2 L314.0,331.7 Z";
 const ARG_MAP_PATHS = {
   "buenos_aires_prov": "M232.3,511.2 L228.9,505.8 L224.4,503.4 L220.4,503.1 L220.1,339.6 L253.7,339.1 L270.4,318.8 L275.5,318.8 L278.4,320.5 L283.9,311.0 L288.8,316.0 L292.7,317.7 L293.6,319.4 L295.6,319.6 L296.9,321.4 L299.1,320.4 L300.4,322.6 L303.9,322.5 L304.4,324.6 L309.1,325.4 L312.4,328.3 L314.4,328.2 L316.2,330.4 L321.6,329.8 L322.2,334.9 L319.5,336.6 L320.2,339.1 L319.2,341.2 L320.1,343.3 L325.7,348.6 L331.8,351.0 L339.2,356.2 L345.7,363.6 L347.0,367.1 L342.7,373.7 L342.0,380.5 L346.8,388.1 L349.8,390.0 L355.0,389.4 L356.2,403.7 L347.0,420.1 L339.8,427.7 L338.5,435.5 L332.1,440.5 L318.7,446.9 L293.1,454.3 L271.2,458.3 L252.3,458.6 L247.1,456.8 L244.7,453.7 L242.2,453.2 L241.2,451.5 L238.0,451.5 L237.1,453.2 L237.8,454.2 L241.5,454.9 L242.2,459.6 L241.1,461.7 L241.8,463.9 L243.6,465.3 L242.0,465.9 L246.6,466.8 L248.2,468.6 L242.5,466.6 L247.4,470.4 L245.8,476.4 L246.0,480.6 L241.7,482.2 L241.7,489.3 L238.5,492.8 L240.3,497.2 L244.8,499.8 L244.9,500.9 L241.9,507.3 L232.3,511.2 Z",
   "catamarca": "M183.7,172.6 L185.6,185.5 L184.4,191.0 L184.9,192.9 L187.2,193.4 L189.7,196.2 L190.6,205.5 L191.8,207.1 L190.8,209.0 L191.9,211.0 L190.9,212.7 L191.2,214.7 L187.7,215.7 L188.8,223.2 L184.7,227.4 L178.8,229.1 L172.4,207.5 L171.0,207.5 L171.0,205.1 L165.1,198.8 L159.5,196.8 L159.1,194.9 L160.2,192.9 L157.2,190.6 L156.9,188.1 L156.1,188.1 L156.8,187.1 L155.5,182.0 L146.8,180.8 L144.1,183.8 L140.4,184.3 L133.2,182.3 L130.1,184.1 L128.0,176.8 L124.6,179.3 L123.2,176.6 L120.7,177.1 L120.6,174.8 L118.5,174.3 L117.8,175.3 L117.5,170.9 L115.5,169.2 L113.1,169.4 L110.6,167.7 L104.4,168.4 L106.4,163.4 L108.6,161.1 L105.9,160.4 L109.7,155.6 L111.3,156.3 L108.8,153.8 L111.7,150.8 L114.6,153.5 L115.5,150.0 L119.7,149.8 L121.7,147.7 L115.3,135.8 L115.5,129.7 L119.1,126.4 L116.6,114.4 L115.3,112.3 L116.8,111.5 L115.5,109.8 L116.4,105.6 L115.3,103.9 L117.5,100.5 L128.9,103.1 L154.5,102.3 L155.3,106.2 L157.6,106.7 L154.9,115.1 L150.4,114.9 L150.9,122.6 L155.3,125.9 L156.9,131.5 L160.2,133.0 L160.0,129.9 L161.8,127.1 L164.0,126.6 L165.1,132.6 L164.0,133.3 L163.7,135.4 L164.7,136.2 L163.4,137.6 L164.0,139.0 L166.6,138.3 L171.0,142.0 L169.4,144.4 L170.5,147.0 L164.6,154.7 L167.9,157.1 L168.9,165.5 L170.8,169.7 L171.7,168.3 L172.7,169.0 L173.7,172.4 L176.3,174.8 L176.9,172.1 L180.1,170.3 L183.7,172.6 Z",
@@ -2647,7 +2744,7 @@ function buildProvinciasIntro() {
   svg.setAttribute('class', 'pp-map-svg');
   svg.setAttribute('viewBox', '0 0 ' + ARG_MAP_VIEWBOX.w + ' ' + ARG_MAP_VIEWBOX.h);
 
-  // Panel con el nombre de la provincia (a la derecha del mapa).
+  // Panel con el nombre de la provincia, a la izquierda del mapa.
   // Aparece al pasar el cursor sobre una provincia y desaparece al salir.
   const namePanel = document.getElementById('pp-prov-name-panel');
   const nameText  = document.getElementById('pp-prov-name-text');
@@ -2689,11 +2786,21 @@ function buildProvinciasIntro() {
     svg.appendChild(path);
   });
 
-  // CABA: marcador circular (demasiado pequeña para verse como polígono en este mapa)
-  const caba = document.createElementNS(SVG_NS, 'circle');
-  caba.setAttribute('cx', ARG_MAP_CABA.x);
-  caba.setAttribute('cy', ARG_MAP_CABA.y);
-  caba.setAttribute('r', ARG_MAP_CABA.r);
+  // CABA: silueta real simplificada (Av. Gral. Paz / Riachuelo / Río de la Plata),
+  // con un halo dorado detrás para que la Capital se distinga claramente del resto
+  // de las provincias, incluso a la escala reducida del mapa completo.
+  const cabaHalo = document.createElementNS(SVG_NS, 'path');
+  cabaHalo.setAttribute('d', ARG_MAP_CABA_HALO_PATH);
+  cabaHalo.setAttribute('fill', 'none');
+  cabaHalo.setAttribute('stroke', '#e8c96a');
+  cabaHalo.setAttribute('stroke-width', '1.4');
+  cabaHalo.setAttribute('stroke-linejoin', 'round');
+  cabaHalo.setAttribute('opacity', '0.85');
+  cabaHalo.setAttribute('pointer-events', 'none');
+  svg.appendChild(cabaHalo);
+
+  const caba = document.createElementNS(SVG_NS, 'path');
+  caba.setAttribute('d', ARG_MAP_CABA_PATH);
   wireSvgShape(caba, 'caba', labelByKey['caba'] || 'Ciudad de Buenos Aires');
   svg.appendChild(caba);
 
@@ -2726,20 +2833,107 @@ document.getElementById('btn-all-prov-intro').addEventListener('click', () => {
 
 // ─── TIPOS DE TURISMO INTRO (pantalla completa, antes de entrar al mapa) ──────
 const catIntroEls = {};
+// Íconos simples (formas geométricas genéricas, no ligadas a ninguna marca)
+// que representan cada tipo de turismo. Cada uno es una lista de "piezas"
+// SVG en un viewBox de 24x24, dibujadas en el color propio de la categoría.
+const CAT_ICONS = {
+  Aventura: [
+    { tag:'path', d:'M3 19L9 7l4 6 3-4 5 10Z', shape:true }
+  ],
+  Bienestar: [
+    { tag:'path', d:'M12 2C8 8 5 12.5 5 15.5a7 7 0 0 0 14 0C19 12.5 16 8 12 2Z', shape:true }
+  ],
+  Cultural: [
+    { tag:'path', d:'M12 3a9 9 0 1 0 0 18h1.2a2 2 0 0 0 2-2 2 2 0 0 1 2-2H18a3 3 0 0 0 3-3 9 9 0 0 0-9-11Z', shape:true },
+    { tag:'circle', cx:8,  cy:10, r:1.3, fill:true },
+    { tag:'circle', cx:12, cy:7.5, r:1.3, fill:true },
+    { tag:'circle', cx:16, cy:10, r:1.3, fill:true },
+    { tag:'circle', cx:9,  cy:15, r:1.3, fill:true }
+  ],
+  Deportivo: [
+    { tag:'circle', cx:12, cy:12, r:8.5, shape:true },
+    { tag:'path', d:'M6 8.5c2.4 2 11.6 2 14 0M6 15.5c2.4-2 11.6-2 14 0', shape:true }
+  ],
+  Entretenimiento: [
+    { tag:'path', d:'M12 3l2.5 5.9 6.4.5-4.9 4.2 1.5 6.2L12 16.6l-5.5 3.2 1.5-6.2-4.9-4.2 6.4-.5Z', shape:true }
+  ],
+  Eventos: [
+    { tag:'rect', x:3, y:5, width:18, height:16, rx:2, shape:true },
+    { tag:'path', d:'M3 10h18M8 3v4M16 3v4', shape:true },
+    { tag:'circle', cx:12, cy:15.5, r:1.5, fill:true }
+  ],
+  Gastronómico: [
+    { tag:'path', d:'M6 2v7.5a2 2 0 0 0 4 0V2M8 9.5V22', shape:true },
+    { tag:'path', d:'M17.5 2c-2.2 1.8-2.7 4.7-2.2 7l2.2 2V22', shape:true }
+  ],
+  Histórico: [
+    { tag:'path', d:'M3 9.5 12 4l9 5.5', shape:true },
+    { tag:'path', d:'M5 9.5V20M10 9.5V20M14 9.5V20M19 9.5V20', shape:true },
+    { tag:'path', d:'M3 20h18', shape:true }
+  ],
+  Natural: [
+    { tag:'path', d:'M12 2 7.5 9.5h2.7L6 16h4.5V22h3v-6H18l-4.2-6.5h2.7Z', shape:true }
+  ],
+  Religioso: [
+    { tag:'path', d:'M12 2v20M5.5 8.5h13', shape:true }
+  ],
+  Rural: [
+    { tag:'path', d:'M3 21V10l9-6 9 6v11', shape:true },
+    { tag:'path', d:'M3 21h18M9.5 21v-6.5h5V21', shape:true },
+    { tag:'circle', cx:12, cy:10, r:1.4, shape:true }
+  ],
+  Urbano: [
+    { tag:'rect', x:3,  y:11, width:4.5, height:10, shape:true },
+    { tag:'rect', x:9.5, y:4,  width:5,   height:17, shape:true },
+    { tag:'rect', x:16.5,y:13, width:4.5, height:8,  shape:true }
+  ],
+};
+
+function buildCatIconSvg(catId) {
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('class', 'pp-cat-icon-svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  const pieces = CAT_ICONS[catId] || [];
+  pieces.forEach(p => {
+    const el = document.createElementNS(SVG_NS, p.tag);
+    Object.keys(p).forEach(k => {
+      if (k === 'tag' || k === 'shape' || k === 'fill') return;
+      el.setAttribute(k, p[k]);
+    });
+    el.setAttribute('class', p.fill ? 'pp-cat-icon-shape-fill' : 'pp-cat-icon-shape');
+    svg.appendChild(el);
+  });
+  return svg;
+}
+
+// ─── TARJETAS DE TIPOS DE TURISMO (misma columna que las provincias) ─────────
 function buildCategoriasIntro() {
-  const grid = document.getElementById('grid-categorias-intro');
+  const grid = document.getElementById('pp-cats-grid');
   if (!grid) return;
   grid.innerHTML = '';
   const sortedCats = [...CATEGORIAS].sort((a,b) => a.label.localeCompare(b.label, 'es'));
   sortedCats.forEach(c => {
     const el = document.createElement('div');
-    el.className = 'pp-item ' + (activeCats.has(c.id) ? 'on' : 'off');
-    el.textContent = c.label;
+    el.className = 'pp-cat-card ' + (activeCats.has(c.id) ? 'on' : 'off');
+    el.style.setProperty('--cat-color', c.color);
+    el.setAttribute('role', 'button');
+    el.setAttribute('title', c.label);
+
+    const svg = buildCatIconSvg(c.id);
+
+    const label = document.createElement('div');
+    label.className = 'pp-cat-label';
+    label.textContent = c.label;
+
+    el.appendChild(svg);
+    el.appendChild(label);
+
     el.addEventListener('click', () => {
       if (activeCats.has(c.id)) { activeCats.delete(c.id); el.classList.replace('on','off'); }
       else                      { activeCats.add(c.id);    el.classList.replace('off','on'); }
       updateCatIntroBtn();
     });
+
     grid.appendChild(el);
     catIntroEls[c.id] = el;
   });
@@ -3653,6 +3847,7 @@ document.getElementById('iti-btn-salir').addEventListener('click', function() {
   if (modalOrigenes) modalOrigenes.style.display = 'none';
 });
 
+// ── ESTADÍSTICA DE RUTAS — POR DISTANCIA (línea suavizada, compara todos los itinerarios) ──
 function renderEstadisticaChart() {
   const list  = activeItinerarios().slice().sort((a,b) => a.fecha - b.fecha);
   const wrap  = document.getElementById('est-chart-wrap');
@@ -3668,46 +3863,17 @@ function renderEstadisticaChart() {
   wrap.style.display = 'block';
   if (empty) empty.style.display = 'none';
 
-  const kmValues = list.map(function(it) { return Math.round((it.totalDist || 0) / 1000); });
-  const maxKm    = Math.max(1, Math.max.apply(null, kmValues));
-
-  const rowH   = 34;
-  const gapH   = 12;
-  const chartW = 620;
-  const labelW = 150;
-  const barMaxW = chartW - labelW - 70;
-  const chartH = list.length * (rowH + gapH) + 40;
-
-  function truncLabel(s, maxChars) {
-    if (s.length <= maxChars) return s;
-    return s.slice(0, maxChars - 1).trimEnd() + '…';
-  }
-
-  let bars = '';
-  let gridLines = '';
-  const ticks = 5;
-  for (let t = 0; t <= ticks; t++) {
-    const x = labelW + (barMaxW * t / ticks);
-    const val = Math.round(maxKm * t / ticks);
-    gridLines += '<line x1="' + x + '" y1="10" x2="' + x + '" y2="' + (chartH - 26) + '" stroke="#2a3050" stroke-width="1" />';
-    gridLines += '<text x="' + x + '" y="' + (chartH - 8) + '" fill="#7a83a6" font-size="11" font-family="Barlow, sans-serif" text-anchor="middle">' + val + '</text>';
-  }
-
-  list.forEach(function(it, i) {
-    const y      = 20 + i * (rowH + gapH);
-    const km     = kmValues[i];
-    const barW   = Math.max(2, (km / maxKm) * barMaxW);
-    const nombre = escH(it.nombre || ('Itinerario ' + (i + 1)));
-    const nombreCorto = escH(truncLabel(it.nombre || ('Itinerario ' + (i + 1)), 18));
-    bars += '<text x="' + (labelW - 12) + '" y="' + (y + rowH / 2 + 4) + '" fill="#e8c96a" font-size="12" font-family="Barlow, sans-serif" text-anchor="end">' + nombreCorto + '<title>' + nombre + '</title></text>';
-    bars += '<rect x="' + labelW + '" y="' + y + '" width="' + barW + '" height="' + rowH + '" rx="4" fill="' + (it.realizado ? '#00b0ff' : '#e8c96a') + '" opacity="0.85"><title>' + nombre + '</title></rect>';
-    bars += '<text x="' + (labelW + barW + 8) + '" y="' + (y + rowH / 2 + 4) + '" fill="#c8d0f0" font-size="12" font-family="Barlow, sans-serif">' + km + ' km</text>';
+  const items = list.map(function(it, i) {
+    const nombre = it.nombre || ('Itinerario ' + (i + 1));
+    return {
+      label: nombre,
+      tooltip: nombre,
+      value: Math.round((it.totalDist || 0) / 1000),
+      realizado: !!it.realizado
+    };
   });
 
-  const svg =
-    '<svg viewBox="0 0 ' + chartW + ' ' + chartH + '" width="100%" height="' + chartH + '" xmlns="http://www.w3.org/2000/svg">' +
-      gridLines + bars +
-    '</svg>';
+  const svg = statBuildSmoothedLineSVG(items, { valueFormatter: function(v) { return v + ' km'; } });
 
   wrap.innerHTML =
     '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:14px; text-align:center;">Kilómetros totales recorridos por itinerario</div>' +
@@ -3805,6 +3971,192 @@ document.getElementById('modal-stat-tramos').addEventListener('click', function(
   if (e.target === this) document.getElementById('modal-stat-tramos').style.display = 'none';
 });
 
+// ── GRÁFICOS DE LÍNEA SUAVIZADA (usados por las estadísticas de TIEMPO) ────
+// Convierte una serie de puntos [x,y] en un path SVG suavizado (Catmull-Rom → Bézier)
+function statBuildSmoothPath(points) {
+  if (points.length < 2) return '';
+  var d = 'M ' + points[0][0].toFixed(1) + ' ' + points[0][1].toFixed(1);
+  for (var i = 0; i < points.length - 1; i++) {
+    var p0 = points[i === 0 ? i : i - 1];
+    var p1 = points[i];
+    var p2 = points[i + 1];
+    var p3 = points[i + 2 < points.length ? i + 2 : i + 1];
+    var cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+    var cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+    var cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+    var cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+    d += ' C ' + cp1x.toFixed(1) + ' ' + cp1y.toFixed(1) + ', ' + cp2x.toFixed(1) + ' ' + cp2y.toFixed(1) + ', ' + p2[0].toFixed(1) + ' ' + p2[1].toFixed(1);
+  }
+  return d;
+}
+
+function statTruncLabel(s, maxChars) {
+  s = s || '';
+  return s.length <= maxChars ? s : s.slice(0, maxChars - 1).trimEnd() + '…';
+}
+
+// items: [{ label, tooltip, value, realizado }]  →  devuelve el <svg> completo (línea suavizada + área + puntos)
+function statBuildSmoothedLineSVG(items, opts) {
+  opts = opts || {};
+  var chartW = opts.width  || 620;
+  var padL = 46, padR = 20, padT = 26, padB = 64;
+  var n = items.length;
+  var plotW = chartW - padL - padR;
+  var rowSpan = opts.minColSpan || 70;
+  if (n > 1 && plotW / (n - 1) < rowSpan) plotW = rowSpan * (n - 1);
+  chartW = padL + plotW + padR;
+  var plotH = opts.plotHeight || 200;
+  var chartH = padT + plotH + padB;
+
+  var values = items.map(function(it) { return it.value; });
+  var maxV = Math.max(opts.minMax || 1, Math.max.apply(null, values));
+
+  var stepX = n > 1 ? plotW / (n - 1) : 0;
+  var points = items.map(function(it, i) {
+    var x = padL + (n > 1 ? i * stepX : plotW / 2);
+    var y = padT + plotH - (maxV > 0 ? (it.value / maxV) * plotH : 0);
+    return [x, y];
+  });
+
+  var gridLines = '';
+  var ticks = 4;
+  for (var t = 0; t <= ticks; t++) {
+    var gy  = padT + plotH - (plotH * t / ticks);
+    var val = Math.round(maxV * t / ticks);
+    gridLines += '<line x1="' + padL + '" y1="' + gy + '" x2="' + (padL + plotW) + '" y2="' + gy + '" stroke="#2a3050" stroke-width="1" />';
+    gridLines += '<text x="' + (padL - 10) + '" y="' + (gy + 4) + '" fill="#7a83a6" font-size="11" font-family="Barlow, sans-serif" text-anchor="end">' + val + '</text>';
+  }
+
+  var xLabels = '';
+  items.forEach(function(it, i) {
+    var p = points[i];
+    var label = escH(statTruncLabel(it.label, 14));
+    xLabels += '<text x="' + p[0] + '" y="' + (padT + plotH + 20) + '" fill="#9aa3c4" font-size="10" font-family="Barlow, sans-serif" text-anchor="end" transform="rotate(-32 ' + p[0] + ' ' + (padT + plotH + 20) + ')"><title>' + escH(it.tooltip || it.label) + '</title>' + label + '</text>';
+  });
+
+  var pathD = statBuildSmoothPath(points);
+  var areaD = points.length > 1
+    ? pathD + ' L ' + points[n - 1][0].toFixed(1) + ' ' + (padT + plotH) + ' L ' + points[0][0].toFixed(1) + ' ' + (padT + plotH) + ' Z'
+    : '';
+
+  var dots = '';
+  points.forEach(function(p, i) {
+    var it = items[i];
+    var color = it.realizado ? '#00b0ff' : '#e8c96a';
+    var valTxt = opts.valueFormatter ? opts.valueFormatter(it.value) : String(it.value);
+    dots += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="4.5" fill="' + color + '" stroke="#0f1117" stroke-width="1.5"><title>' + escH(it.tooltip || it.label) + ': ' + valTxt + '</title></circle>';
+    dots += '<text x="' + p[0] + '" y="' + (p[1] - 12) + '" fill="#c8d0f0" font-size="11" font-family="Barlow, sans-serif" text-anchor="middle">' + valTxt + '</text>';
+  });
+
+  var gradId = 'statgrad' + Math.random().toString(36).slice(2, 9);
+
+  var svgInner =
+    '<defs><linearGradient id="' + gradId + '" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="#e8c96a" stop-opacity="0.35" />' +
+      '<stop offset="100%" stop-color="#e8c96a" stop-opacity="0" />' +
+    '</linearGradient></defs>' +
+    gridLines +
+    (areaD ? '<path d="' + areaD + '" fill="url(#' + gradId + ')" stroke="none" />' : '') +
+    (pathD ? '<path d="' + pathD + '" fill="none" stroke="#e8c96a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />' : '') +
+    dots + xLabels;
+
+  return '<div style="overflow-x:auto; overflow-y:hidden;"><svg viewBox="0 0 ' + chartW + ' ' + chartH + '" width="' + Math.max(chartW, opts.minWidthPx || 0) + '" height="' + chartH + '" xmlns="http://www.w3.org/2000/svg" style="display:block; min-width:100%;">' + svgInner + '</svg></div>';
+}
+
+// ── ESTADÍSTICA DE RUTAS — TIEMPO (línea suavizada, compara todos los itinerarios) ──
+function renderEstadisticaChartTiempo() {
+  const list  = activeItinerarios().slice().sort((a, b) => a.fecha - b.fecha);
+  const wrap  = document.getElementById('est-tiempo-chart-wrap');
+  const empty = document.getElementById('est-tiempo-empty');
+  if (!wrap) return;
+
+  if (!list.length) {
+    wrap.innerHTML = '';
+    wrap.style.display = 'none';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  wrap.style.display = 'block';
+  if (empty) empty.style.display = 'none';
+
+  const items = list.map(function(it, i) {
+    const nombre = it.nombre || ('Itinerario ' + (i + 1));
+    return {
+      label: nombre,
+      tooltip: nombre,
+      value: Math.round((it.totalDur || 0) / 60),
+      realizado: !!it.realizado
+    };
+  });
+
+  const svg = statBuildSmoothedLineSVG(items, { valueFormatter: function(v) { return v + ' min'; } });
+
+  wrap.innerHTML =
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:14px; text-align:center;">Tiempo total estimado por itinerario</div>' +
+    svg +
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.72rem; color:#7a83a6; text-align:center; margin-top:6px;">Minutos</div>';
+}
+
+function openEstadisticaModalTiempo() {
+  renderEstadisticaChartTiempo();
+  document.getElementById('modal-estadistica-tiempo').style.display = 'flex';
+}
+function closeEstadisticaModalTiempo() {
+  document.getElementById('modal-estadistica-tiempo').style.display = 'none';
+}
+document.getElementById('iti-btn-estadistica-tiempo').addEventListener('click', openEstadisticaModalTiempo);
+document.getElementById('est-tiempo-close').addEventListener('click', closeEstadisticaModalTiempo);
+document.getElementById('modal-estadistica-tiempo').addEventListener('click', function(e) {
+  if (e.target === this) closeEstadisticaModalTiempo();
+});
+
+// ── ESTADÍSTICA POR TRAMOS — TIEMPO (individual, línea suavizada) ──────────
+function abrirEstadisticaTramosTiempo(id) {
+  const it = findItinerario(id);
+  if (!it) return;
+
+  document.getElementById('stat-tramos-tiempo-titulo').textContent = (it.nombre || 'Estadística de Tramos') + ' — Tiempo';
+
+  const wrap = document.getElementById('stat-tramos-tiempo-chart');
+  if (!wrap) return;
+
+  const legs  = it.legs || [];
+  const stops = it.stops || [];
+
+  if (!legs.length) {
+    wrap.innerHTML = '<div style="padding:40px 24px; text-align:center; color:#7a83a6; font-family:\'Barlow\',sans-serif; font-size:0.85rem;">Sin tramos disponibles.</div>';
+    document.getElementById('modal-stat-tramos-tiempo').style.display = 'flex';
+    return;
+  }
+
+  const items = legs.map(function(leg, i) {
+    const desde = stops[i]     ? (stops[i].name     || 'Parada ' + (i + 1)) : 'Parada ' + (i + 1);
+    const hasta = stops[i + 1] ? (stops[i + 1].name  || 'Parada ' + (i + 2)) : 'Parada ' + (i + 2);
+    return {
+      label: desde + ' → ' + hasta,
+      tooltip: desde + ' → ' + hasta,
+      value: Math.round((leg.duration || 0) / 60),
+      realizado: !!it.realizado
+    };
+  });
+
+  const svg = statBuildSmoothedLineSVG(items, { valueFormatter: function(v) { return v + ' min'; } });
+
+  wrap.innerHTML =
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:14px; text-align:center;">Tiempo estimado por tramo</div>' +
+    svg +
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.72rem; color:#7a83a6; text-align:center; margin-top:6px;">Minutos</div>';
+
+  document.getElementById('modal-stat-tramos-tiempo').style.display = 'flex';
+}
+
+document.getElementById('stat-tramos-tiempo-close').addEventListener('click', function() {
+  document.getElementById('modal-stat-tramos-tiempo').style.display = 'none';
+});
+document.getElementById('modal-stat-tramos-tiempo').addEventListener('click', function(e) {
+  if (e.target === this) document.getElementById('modal-stat-tramos-tiempo').style.display = 'none';
+});
+
 function renderItinerariosTable() {
   const list  = activeItinerarios().slice().sort((a,b) => a.fecha - b.fecha);
   const tbody = document.getElementById('iti-tbody');
@@ -3829,7 +4181,8 @@ function renderItinerariosTable() {
       '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-map" data-id="' + it.id + '" type="button" title="Mapa">&#128506;</button></td>' +
       '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-del" data-id="' + it.id + '" type="button" title="Eliminar">&#128465;</button></td>' +
       '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-print" data-id="' + it.id + '" type="button" title="Imprimir">&#128424;</button></td>' +
-      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-stat" data-id="' + it.id + '" type="button" title="Estadística por tramos">&#128202;</button></td>' +
+      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-stat" data-id="' + it.id + '" type="button" title="Estadística por tramos (Km)">&#128202;</button></td>' +
+      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-stat-time" data-id="' + it.id + '" type="button" title="Estadística por tramos (Tiempo)">&#9201;</button></td>' +
       '<td class="mo-td" style="padding-left:6px;">' + fecha + '</td>' +
     '</tr>';
   }).join('');
@@ -3881,6 +4234,10 @@ function renderItinerariosTable() {
 
   tbody.querySelectorAll('.iti-stat').forEach(function(btn) {
     btn.addEventListener('click', function() { abrirEstadisticaTramos(btn.dataset.id); });
+  });
+
+  tbody.querySelectorAll('.iti-stat-time').forEach(function(btn) {
+    btn.addEventListener('click', function() { abrirEstadisticaTramosTiempo(btn.dataset.id); });
   });
 
   tbody.querySelectorAll('.iti-print').forEach(function(btn) {
@@ -4264,33 +4621,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Step 2: Listo (provincias) → pantalla de tipos de turismo
+  // Step 2: Listo (provincias + tipos de turismo) → mapa
   var btnProvinciasListo = document.getElementById('btn-provincias-listo');
   if (btnProvinciasListo) {
     btnProvinciasListo.addEventListener('click', function() {
-      var pp  = document.getElementById('page-provincias');
-      var cat = document.getElementById('page-categorias');
-      fadeSwap(pp, cat, 'flex');
-    });
-  }
-
-  // Volver: tipos de turismo → provincias
-  var btnCatsVolverProv = document.getElementById('btn-cats-volver-provincias');
-  if (btnCatsVolverProv) {
-    btnCatsVolverProv.addEventListener('click', function() {
-      var cat = document.getElementById('page-categorias');
-      var pp  = document.getElementById('page-provincias');
-      fadeSwap(cat, pp, 'flex');
-    });
-  }
-
-  // Step 3: Listo (tipos de turismo) → mapa
-  var btnCategoriasListo = document.getElementById('btn-categorias-listo');
-  if (btnCategoriasListo) {
-    btnCategoriasListo.addEventListener('click', function() {
-      var cat    = document.getElementById('page-categorias');
+      var pp     = document.getElementById('page-provincias');
       var mapaEl = document.getElementById('page-mapa');
-      fadeSwap(cat, mapaEl, 'flex', function() {
+      fadeSwap(pp, mapaEl, 'flex', function() {
         // Si el mapa ya fue inicializado antes (el usuario volvió y avanzó
         // de nuevo), no se vuelve a crear el mapa de Leaflet — solo se
         // refresca el filtrado de sitios con la selección actual.
@@ -4314,7 +4651,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Volver: mapa → pantalla de provincias
+  // Volver: mapa → pantalla de provincias / tipos de turismo
   var btnVolverProvincias = document.getElementById('btn-volver-provincias');
   if (btnVolverProvincias) {
     btnVolverProvincias.addEventListener('click', function() {
@@ -4333,28 +4670,6 @@ document.addEventListener('DOMContentLoaded', function() {
       var mapaEl = document.getElementById('page-mapa');
       var pp     = document.getElementById('page-provincias');
       fadeSwap(mapaEl, pp, 'flex');
-    });
-  }
-
-  // Volver: mapa → pantalla de tipos de turismo
-  var btnVolverSitios = document.getElementById('btn-volver-sitios');
-  if (btnVolverSitios) {
-    btnVolverSitios.addEventListener('click', function() {
-      if (rutaModoActivo) cancelarModoRuta();
-      clearRoute();
-      originLatLng = null;
-      clearOriginMarker();
-      if (activeTooltip) { try { activeTooltip.remove(); } catch(e){} activeTooltip = null; }
-      setStep('origin');
-      const hint    = document.getElementById('header-origen-hint');
-      const sel     = document.getElementById('header-origen-select');
-      const cambiar = document.getElementById('btn-cambiar-origen');
-      if (hint)    hint.style.display    = 'none';
-      if (cambiar) cambiar.style.display = 'none';
-      if (sel)     { sel.value = ''; sel.style.display = 'block'; }
-      var mapaEl = document.getElementById('page-mapa');
-      var cat    = document.getElementById('page-categorias');
-      fadeSwap(mapaEl, cat, 'flex');
     });
   }
 });
