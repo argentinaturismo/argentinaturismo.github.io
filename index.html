@@ -128,6 +128,134 @@
     .pp-item.on:hover  { background:#166534; }
     .pp-item.off { background:#3a1414; border-color:#dc2626; color:rgba(255,255,255,0.5); }
     .pp-item.off:hover { background:#4c1d1d; color:rgba(255,255,255,0.7); }
+
+    /* ── MAPA INTERACTIVO DE PROVINCIAS (lo más grande posible) ── */
+    #page-provincias .pp-header { padding:8px 28px; }
+    #page-provincias .pp-footer { padding:6px 40px 10px; }
+    .pp-content-row {
+      flex:1; min-height:0;
+      display:flex; flex-direction:row; align-items:stretch;
+      gap:6px;
+      padding:0 10px;
+    }
+    .pp-map-wrap {
+      position:relative;
+      flex:1 1 auto; min-width:0; min-height:0;
+      display:flex; align-items:center; justify-content:center;
+      padding:2px 4px;
+    }
+    .pp-map-svg { width:100%; height:100%; }
+    .pp-map-svg .pp-prov {
+      cursor:pointer;
+      stroke:#0d1117; stroke-width:1;
+      stroke-linejoin:round;
+      transition:fill .15s ease, filter .15s ease;
+    }
+    .pp-map-svg .pp-prov.off { fill:#c0392b; }
+    .pp-map-svg .pp-prov.off:hover { fill:#e74c3c; filter:brightness(1.12); }
+    .pp-map-svg .pp-prov.on  { fill:#1e9e52; }
+    .pp-map-svg .pp-prov.on:hover  { fill:#22c55e; filter:brightness(1.1); }
+    .pp-map-hint {
+      position:absolute; left:50%; bottom:6px; transform:translateX(-50%);
+      z-index:3; pointer-events:none;
+      font-family:'Barlow',sans-serif; font-size:0.78rem; color:#c9cede;
+      background:rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.12);
+      border-radius:999px; padding:6px 16px;
+      text-align:center; white-space:nowrap;
+    }
+    /* Panel con el nombre de la provincia, a la derecha del mapa.
+       Aparece/desaparece según se pase el cursor sobre la provincia. */
+    .pp-prov-name-panel {
+      flex:0 0 300px;
+      min-width:0;
+      display:flex; align-items:center; justify-content:center;
+      text-align:center;
+      padding:10px 18px;
+      pointer-events:none;
+      opacity:0;
+      transform:translateX(-10px);
+      transition:opacity .22s ease, transform .22s ease;
+    }
+    .pp-prov-name-panel.visible { opacity:1; transform:translateX(0); }
+    .pp-prov-name-panel span {
+      font-family:'Playfair Display',serif; font-weight:700;
+      font-size:2.6rem; line-height:1.15;
+      color:#e8c96a;
+      text-shadow:0 2px 16px rgba(0,0,0,0.65);
+    }
+    @media (max-width:900px) {
+      .pp-prov-name-panel { flex-basis:220px; }
+      .pp-prov-name-panel span { font-size:1.9rem; }
+    }
+    @media (max-width:700px) {
+      .pp-content-row { flex-direction:column; padding:0 12px; }
+      .pp-map-wrap { flex:1 1 auto; }
+      .pp-prov-name-panel {
+        flex:0 0 auto;
+        padding:6px 12px;
+        transform:translateY(-6px);
+      }
+      .pp-prov-name-panel.visible { transform:translateY(0); }
+      .pp-prov-name-panel span { font-size:1.6rem; }
+    }
+
+    /* ── COLUMNA DE REGIONES (6 mini-mapas, en 2 columnas, a la izquierda del mapa) ── */
+    .pp-regions-col {
+      flex:0 0 220px;
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap:8px;
+      padding:4px 2px;
+      align-content:center;
+      align-items:stretch;
+    }
+    .pp-region-item {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      text-align:center;
+      gap:5px;
+      padding:8px 6px;
+      border-radius:10px;
+      border:1.5px solid rgba(255,255,255,0.16);
+      background:rgba(23,28,39,0.6);
+      cursor:pointer; user-select:none;
+      transition:background .18s ease, border-color .18s ease, transform .12s ease;
+    }
+    .pp-region-item:hover { transform:translateY(-1px); background:rgba(30,36,54,0.8); }
+    .pp-region-item.region-on { border-color:#22c55e; background:rgba(20,83,45,0.38); }
+    .pp-region-thumb-svg { width:46px; height:auto; flex-shrink:0; display:block; }
+    .pp-region-thumb-svg .pp-region-prov-on  { fill:#e8c96a; stroke:#0d1117; stroke-width:1.4; }
+    .pp-region-thumb-svg .pp-region-prov-off { fill:rgba(255,255,255,0.09); stroke:#0d1117; stroke-width:1; }
+    .pp-region-item.region-on .pp-region-thumb-svg .pp-region-prov-on { fill:#22c55e; }
+    .pp-region-label {
+      font-family:'Barlow',sans-serif; font-weight:700; font-size:0.66rem;
+      line-height:1.15; color:#e8eaf2;
+    }
+    .pp-region-item.region-on .pp-region-label { color:#bbf7d0; }
+    @media (max-width:900px) {
+      .pp-regions-col { flex-basis:160px; gap:6px; }
+      .pp-region-thumb-svg { width:34px; }
+      .pp-region-label { font-size:0.56rem; }
+    }
+    @media (max-width:700px) {
+      .pp-content-row { flex-direction:column; }
+      .pp-regions-col {
+        flex-basis:auto; order:3;
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: 1fr;
+      }
+      .pp-region-item { padding:6px 4px; }
+    }
+    @media (max-width:560px) {
+      .pp-regions-col { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); }
+    }
+    @media (max-width:560px) {
+      #page-provincias .pp-header { padding:8px 16px; }
+      #page-provincias .pp-footer { padding:6px 16px 10px; }
+      .pp-map-wrap { padding:2px 2px; }
+      .pp-map-hint { font-size:0.68rem; padding:5px 12px; bottom:4px; max-width:92%; overflow:hidden; text-overflow:ellipsis; }
+      .pp-prov-name-panel span { font-size:1.35rem; }
+    }
     .pp-footer {
       display:flex; justify-content:center;
       padding:24px 40px 36px;
@@ -440,7 +568,7 @@
       .btn-enter { padding:14px 40px; }
     }
 
-    /* ── HAMBURGER BUTTON ── */
+    /* ── HAMBURGER BUTTON (legacy, no longer used on welcome page) ── */
     .tut-hamburger {
       position:fixed; top:18px; right:20px; z-index:2000;
       width:44px; height:44px;
@@ -457,6 +585,38 @@
       background:#e8c96a; border-radius:2px;
       transition:transform .2s ease, opacity .2s ease;
     }
+
+    /* ── WELCOME PAGE TOP BAR (Quiénes somos / Tutorial / Contacto) ── */
+    .intro-topbar {
+      position:fixed; top:18px; right:20px; z-index:2000;
+      display:flex; gap:10px;
+    }
+    .intro-topbar-btn {
+      background:rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.22);
+      border-radius:999px; padding:10px 18px;
+      color:#e8c96a; font-family:'Barlow',sans-serif; font-size:0.8rem; font-weight:600;
+      letter-spacing:0.02em; white-space:nowrap; cursor:pointer;
+      transition:background .2s ease, border-color .2s ease;
+    }
+    .intro-topbar-btn:hover { background:rgba(0,0,0,0.68); border-color:rgba(232,201,106,0.6); }
+    @media (max-width:640px) {
+      .intro-topbar { top:12px; right:12px; gap:6px; }
+      .intro-topbar-btn { padding:8px 12px; font-size:0.72rem; }
+    }
+
+    /* ── CONTACTO MODAL ── */
+    .contacto-body {
+      font-family:'Barlow',sans-serif; font-size:0.9rem; color:#d0d5e8;
+      line-height:1.75; text-align:center; padding:6px 0 10px;
+    }
+    .contacto-email-link {
+      display:inline-block; margin-top:18px;
+      background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.4);
+      color:#e8c96a; border-radius:999px; padding:12px 22px;
+      font-family:'Barlow',sans-serif; font-size:0.88rem; font-weight:700;
+      text-decoration:none; transition:background .2s ease, border-color .2s ease;
+    }
+    .contacto-email-link:hover { background:rgba(232,201,106,0.2); border-color:rgba(232,201,106,0.65); }
 
     /* ── TUTORIAL MODAL ── */
     .tut-backdrop {
@@ -1091,7 +1251,7 @@
     .origin-select option { background:#171c27; color:#e8eaf2; }
 
     .mo-backdrop {
-      position:fixed; inset:0; z-index:1100;
+      position:fixed; top:0; right:0; bottom:0; left:0; z-index:1100;
       background:rgba(0,0,0,0.75);
       display:flex; align-items:center; justify-content:center;
     }
@@ -1178,18 +1338,29 @@
 
     /* action buttons per row */
     .mo-td-actions { display:flex; gap:5px; justify-content:flex-end; white-space:nowrap; }
-    .mo-btn-edit, .mo-btn-del, .mo-btn-ok {
-      background:none; border:1px solid #2a3050; border-radius:999px;
-      padding:5px 12px; font-size:0.72rem; font-family:'Barlow',sans-serif;
-      font-weight:700; cursor:pointer; white-space:nowrap; letter-spacing:0.04em;
+    /* ── Botón base unificado (estilo = botón "Entrar" de bienvenida) ── */
+    .mo-btn-base {
+      background:transparent; border:1.5px solid #e8c96a; border-radius:2px;
+      color:#e8c96a; font-family:'Barlow',sans-serif; font-weight:600;
+      font-size:0.78rem; letter-spacing:0.18em; text-transform:uppercase;
+      cursor:pointer; transition:background .3s ease, color .3s ease;
+      white-space:nowrap;
+    }
+    .mo-btn-base:hover { background:#e8c96a; color:#0f1117; }
+
+    .mo-btn-edit, .mo-btn-ok {
+      background:transparent; border:1.5px solid #e8c96a; border-radius:2px;
+      color:#e8c96a; font-family:'Barlow',sans-serif; font-weight:600;
+      font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase;
+      cursor:pointer; padding:4px 10px; white-space:nowrap;
+      transition:background .3s ease, color .3s ease;
+    }
+    .mo-btn-edit:hover, .mo-btn-ok:hover { background:#e8c96a; color:#0f1117; }
+    .mo-btn-del  { color:#9aa3c4; font-size:0.9rem; padding:4px 10px; line-height:1;
+      background:none; border:1.5px solid #2a3050; border-radius:2px; cursor:pointer;
       transition:background .15s, color .15s, border-color .15s;
     }
-    .mo-btn-edit { color:#9aa3c4; }
-    .mo-btn-edit:hover { color:#e8c96a; border-color:#e8c96a; background:rgba(232,201,106,0.08); }
-    .mo-btn-del  { color:#9aa3c4; font-size:0.9rem; padding:4px 10px; line-height:1; }
     .mo-btn-del:hover  { color:#fca5a5; border-color:rgba(220,38,38,0.5); background:rgba(220,38,38,0.08); }
-    .mo-btn-ok   { color:#9aa3c4; }
-    .mo-btn-ok:hover   { color:#86efac; border-color:rgba(34,197,94,0.5); background:rgba(34,197,94,0.08); }
 
     .mo-error { font-size:0.72rem; color:#fca5a5; margin-top:8px; min-height:16px; padding:0 24px; }
 
@@ -1206,25 +1377,34 @@
       box-shadow:0 -7px 0 -4px rgba(232,201,106,0.4);
       display:flex; justify-content:center;
     }
-    .mo-footer-salir .ruta-btn-secundario { border-color:#2a3050; color:#9aa3c4; padding:9px 28px; }
-    .mo-footer-salir .ruta-btn-secundario:hover { color:#e8c96a; border-color:#e8c96a; background:rgba(232,201,106,0.08); }
+    .mo-footer-salir .ruta-btn-secundario {
+      background:transparent; border:1.5px solid #e8c96a; border-radius:2px;
+      color:#e8c96a; font-family:'Barlow',sans-serif; font-weight:600;
+      font-size:0.78rem; letter-spacing:0.18em; text-transform:uppercase;
+      padding:9px 28px; cursor:pointer;
+      transition:background .3s ease, color .3s ease;
+    }
+    .mo-footer-salir .ruta-btn-secundario:hover { background:#e8c96a; color:#0f1117; }
 
     /* ── Íconos de acción por fila (Itinerarios) ── */
     .iti-icon-btn {
-      background:none; border:1px solid #2a3050; border-radius:7px;
-      width:26px; height:26px; cursor:pointer; font-size:0.82rem;
+      background:none; border:1px solid #2a3050; border-radius:6px;
+      width:24px; height:24px; cursor:pointer; font-size:0.76rem;
       color:#9aa3c4; display:inline-flex; align-items:center; justify-content:center;
       transition:background .15s, color .15s, border-color .15s;
     }
     .iti-icon-btn:hover { color:#e8c96a; border-color:#e8c96a; background:rgba(232,201,106,0.08); }
     .iti-icon-btn.iti-del:hover { color:#fca5a5; border-color:rgba(220,38,38,0.5); background:rgba(220,38,38,0.08); }
+    .iti-icon-btn.iti-realizado-si { color:#00b0ff; border-color:#00b0ff; background:rgba(0,176,255,0.1); }
+    .iti-icon-btn.iti-realizado-si:hover { background:rgba(0,176,255,0.2); }
     .mo-btn-guardar {
-      background:#e8c96a; color:#0f1117; border:none; border-radius:8px;
-      padding:11px 54px; font-family:'Barlow',sans-serif;
-      font-size:0.88rem; font-weight:700; letter-spacing:0.1em;
-      text-transform:uppercase; cursor:pointer; transition:opacity .2s;
+      background:transparent; border:1.5px solid #e8c96a; border-radius:2px;
+      color:#e8c96a; font-family:'Barlow',sans-serif; font-weight:600;
+      font-size:0.78rem; letter-spacing:0.18em; text-transform:uppercase;
+      padding:11px 54px; cursor:pointer;
+      transition:background .3s ease, color .3s ease;
     }
-    .mo-btn-guardar:hover { opacity:0.85; }
+    .mo-btn-guardar:hover { background:#e8c96a; color:#0f1117; }
 
     /* ── AUTENTICACIÓN (login / registro) dentro del modal de Orígenes ── */
     .mo-auth {
@@ -1260,12 +1440,13 @@
     .mo-auth-input::placeholder { color:#3a4060; }
     .mo-auth-error { font-size:0.74rem; color:#fca5a5; min-height:14px; }
     .mo-auth-submit {
-      background:#e8c96a; color:#0f1117; border:none; border-radius:8px;
-      padding:12px; font-family:'Barlow',sans-serif; font-size:0.85rem;
-      font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
-      cursor:pointer; transition:opacity .2s; margin-top:4px;
+      background:transparent; border:1.5px solid #e8c96a; border-radius:2px;
+      color:#e8c96a; font-family:'Barlow',sans-serif; font-size:0.78rem;
+      font-weight:600; letter-spacing:0.18em; text-transform:uppercase;
+      cursor:pointer; padding:12px; margin-top:4px;
+      transition:background .3s ease, color .3s ease;
     }
-    .mo-auth-submit:hover { opacity:0.86; }
+    .mo-auth-submit:hover { background:#e8c96a; color:#0f1117; }
     .mo-auth-guest {
       background:none; border:none; color:#7a83a6; text-decoration:underline;
       font-family:'Barlow',sans-serif; font-size:0.76rem; cursor:pointer;
@@ -1337,10 +1518,11 @@
     .ruta-nombre-input:focus { border-color:#e8c96a; }
     .ruta-nombre-input::placeholder { color:#3a4060; }
     .ruta-nombre-ok {
-      background:none; border:1px solid #e8c96a; border-radius:999px;
-      color:#e8c96a; font-family:'Barlow',sans-serif; font-size:0.75rem;
-      font-weight:700; padding:6px 16px; cursor:pointer;
-      transition:background .15s, color .15s;
+      background:transparent; border:1.5px solid #e8c96a; border-radius:2px;
+      color:#e8c96a; font-family:'Barlow',sans-serif; font-size:0.72rem;
+      font-weight:600; letter-spacing:0.15em; text-transform:uppercase;
+      padding:6px 16px; cursor:pointer;
+      transition:background .3s ease, color .3s ease;
       white-space:nowrap;
     }
     .ruta-nombre-ok:hover { background:#e8c96a; color:#0f1117; }
@@ -1394,14 +1576,14 @@
       padding:16px 24px; border-top:3px solid rgba(232,201,106,0.4); flex-shrink:0;
     }
     .ruta-btn-primario, .ruta-btn-secundario {
-      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:700;
-      border-radius:999px; padding:9px 20px; cursor:pointer;
-      letter-spacing:0.04em; transition:opacity .2s ease, background .2s ease;
+      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
+      border-radius:2px; padding:9px 20px; cursor:pointer;
+      letter-spacing:0.18em; text-transform:uppercase;
+      background:transparent; border:1.5px solid #e8c96a; color:#e8c96a;
+      transition:background .3s ease, color .3s ease;
     }
-    .ruta-btn-primario   { background:#e8c96a; color:#0f1117; border:none; }
-    .ruta-btn-primario:hover { opacity:0.86; }
-    .ruta-btn-secundario { background:none; border:1px solid #dc2626; color:#fca5a5; }
-    .ruta-btn-secundario:hover { background:rgba(220,38,38,0.12); }
+    .ruta-btn-primario:hover   { background:#e8c96a; color:#0f1117; }
+    .ruta-btn-secundario:hover { background:#e8c96a; color:#0f1117; }
 
     /* Leyenda de tramos */
     .ruta-leg {
@@ -1462,10 +1644,12 @@
     <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Buenos_Aires_-_Avenida_de_Mayo_the_Congress_and_La_Inmobiliaria_-_6976.jpg?width=1920')"></span></div>
   </div>
 
-  <!-- HAMBURGER / TUTORIAL BUTTON -->
-  <button class="tut-hamburger" id="tut-hamburger" type="button" aria-label="Abrir tutorial">
-    <span></span><span></span><span></span>
-  </button>
+  <!-- TOP BAR: Quiénes somos / Tutorial / Contacto -->
+  <div class="intro-topbar">
+    <button class="intro-topbar-btn" id="intro-btn-quienes"  type="button">Quiénes somos</button>
+    <button class="intro-topbar-btn" id="intro-btn-tutorial" type="button">Tutorial</button>
+    <button class="intro-topbar-btn" id="intro-btn-contacto" type="button">Contacto</button>
+  </div>
 
   <div class="overlay"></div>
 
@@ -1640,6 +1824,45 @@
     </div>
   </div>
 
+  <!-- QUIÉNES SOMOS MODAL (accesible desde la pantalla de bienvenida) -->
+  <div class="tut-backdrop" id="qs-info-backdrop"></div>
+  <div class="tut-modal" id="qs-info-modal" role="dialog" aria-modal="true" aria-label="Quiénes somos">
+    <div class="tut-modal-header">
+      <h2 class="tut-modal-title">Quiénes somos</h2>
+      <button class="tut-close" id="qs-info-close" type="button" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="tut-modal-body">
+      <div class="tut-section">
+        <p>Argentina Turismo nace con el propósito de acercar la inmensa riqueza turística de nuestro país a viajeros, estudiantes, investigadores y amantes de los destinos que hacen de Argentina una tierra única. Nuestro objetivo es ofrecer una herramienta de consulta sencilla, visual e interactiva que permita descubrir los principales atractivos turísticos distribuidos a lo largo de todo el territorio nacional.</p>
+
+        <p>Desde los glaciares de la Patagonia hasta las selvas subtropicales del noreste, desde las montañas andinas hasta las extensas llanuras pampeanas, Argentina reúne una diversidad natural, cultural e histórica excepcional. A través de esta plataforma buscamos facilitar el acceso a información relevante sobre cada destino, promoviendo el conocimiento y la valoración del patrimonio turístico argentino.</p>
+
+        <p>Inspirados en la misión de difusión y promoción turística que caracteriza a los organismos oficiales de turismo del país, trabajamos para brindar una visión integral de los atractivos, experiencias y actividades que pueden encontrarse en cada provincia. Nuestro compromiso es contribuir a que más personas descubran la diversidad de paisajes, tradiciones, gastronomía, festividades y expresiones culturales que conforman la identidad argentina.</p>
+
+        <p>Esta plataforma integra información geográfica, descripciones de sitios de interés y herramientas de exploración interactiva que permiten planificar recorridos y conocer mejor cada destino. Creemos que el turismo no solo impulsa el desarrollo económico y regional, sino que también fortalece el intercambio cultural y el reconocimiento de la riqueza natural e histórica de nuestro país.</p>
+
+        <p>Argentina es un territorio de contrastes y experiencias inolvidables. Nuestro deseo es que cada visitante encuentre aquí una puerta de entrada para explorar sus maravillas, descubrir nuevos destinos y valorar la extraordinaria diversidad que distingue a la República Argentina ante el mundo.</p>
+
+        <p>Bienvenidos a Argentina Turismo, una invitación permanente a conocer, recorrer y disfrutar cada rincón de nuestro país.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACTO MODAL -->
+  <div class="tut-backdrop" id="contacto-backdrop"></div>
+  <div class="tut-modal" id="contacto-modal" role="dialog" aria-modal="true" aria-label="Contacto" style="width:min(480px, 92vw);">
+    <div class="tut-modal-header">
+      <h2 class="tut-modal-title">Contacto</h2>
+      <button class="tut-close" id="contacto-close" type="button" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="tut-modal-body">
+      <div class="contacto-body">
+        <p>¿Tenés consultas, sugerencias o querés comunicarte con nosotros?</p>
+        <a class="contacto-email-link" href="mailto:argentina.turismo.web@gmail.com">email: argentina.turismo.web@gmail.com</a>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Sync the bottom-right caption with the visible slide
     const captions = [
@@ -1693,77 +1916,39 @@
       img.src = url;
     })();
 
-    // ── TUTORIAL (hamburger) ───────────────────────────────────────────────
-    (function() {
-      var hamburger = document.getElementById('tut-hamburger');
-      var backdrop  = document.getElementById('tut-backdrop');
-      var modal     = document.getElementById('tut-modal');
-      var closeBtn  = document.getElementById('tut-close');
-      if (!hamburger || !modal) return;
+    // ── TOP BAR MODALS: Tutorial / Quiénes somos / Contacto ─────────────────
+    function setupInfoModal(triggerId, backdropId, modalId, closeId) {
+      var trigger  = document.getElementById(triggerId);
+      var backdrop = document.getElementById(backdropId);
+      var modal    = document.getElementById(modalId);
+      var closeBtn = document.getElementById(closeId);
+      if (!trigger || !modal) return;
 
-      function openTut() {
+      function openModal() {
         backdrop.classList.add('open');
         modal.classList.add('open');
-        modal.querySelector('.tut-modal-body').scrollTop = 0;
+        var body = modal.querySelector('.tut-modal-body');
+        if (body) body.scrollTop = 0;
         closeBtn.focus();
       }
-      function closeTut() {
+      function closeModal() {
         backdrop.classList.remove('open');
         modal.classList.remove('open');
-        hamburger.focus();
+        trigger.focus();
       }
 
-      hamburger.addEventListener('click', openTut);
-      closeBtn.addEventListener('click', closeTut);
-      backdrop.addEventListener('click', closeTut);
+      trigger.addEventListener('click', openModal);
+      closeBtn.addEventListener('click', closeModal);
+      backdrop.addEventListener('click', closeModal);
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modal.classList.contains('open')) closeTut();
+        if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
       });
-    })();
+    }
+
+    setupInfoModal('intro-btn-tutorial', 'tut-backdrop',      'tut-modal',      'tut-close');
+    setupInfoModal('intro-btn-quienes',  'qs-info-backdrop',  'qs-info-modal',  'qs-info-close');
+    setupInfoModal('intro-btn-contacto', 'contacto-backdrop', 'contacto-modal', 'contacto-close');
   </script>
-</div>
-
-<!-- ═══════════════════  QUIENES SOMOS  ═══════════════════ -->
-<div id="page-quienes-somos">
-  <div class="qs-scroll">
-  <div class="qs-collage">
-    <div class="qs-photo qs-photo-1" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Cataratas_Iguazu_vista_general.JPG?width=1920')"></div>
-    <div class="qs-photo qs-photo-2" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Glaciar_Perito_Moreno26_-_Argentina.JPG?width=1920')"></div>
-    <div class="qs-photo qs-photo-3" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Bariloche-_Argentina.jpg?width=1920')"></div>
-    <div class="qs-photo qs-photo-7" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/99-Quebrada_de_Humahuaca.jpg?width=1920')"></div>
-    <div class="qs-photo qs-photo-8" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Bodega_Dante_Robino,_Mendoza.jpg?width=1920')"></div>
-    <div class="qs-photo qs-photo-9" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Esteros_del_Ibera_Laguna.JPG?width=1920')"></div>
-    <div class="qs-photo qs-photo-10" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Ushuaia,_Tierra_del_Fuego.jpg?width=1920')"></div>
-    <div class="qs-photo qs-photo-11" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Mar_del_Plata.jpg?width=1920')"></div>
-    <div class="qs-photo qs-photo-12" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Ruinas_Jesuiticas_San_Ignacio_Mini.JPG?width=1920')"></div>
-    <div class="qs-photo qs-photo-4" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/ACONCAGUA-2010.JPG?width=1920')"></div>
-    <div class="qs-photo qs-photo-5" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Buenos_Aires_Caminito_1.jpg?width=1920')"></div>
-    <div class="qs-photo qs-photo-6" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Salinas_grandes._Inmensidad.jpg?width=1920')"></div>
-    <div class="qs-overlay-gradient"></div>
-  </div>
-
-  <div class="qs-content">
-    <div class="qs-logo">Argentina Turismo</div>
-
-    <h2 class="qs-heading">Quiénes somos</h2>
-
-    <div class="qs-body">
-      <p>Argentina Turismo nace con el propósito de acercar la inmensa riqueza turística de nuestro país a viajeros, estudiantes, investigadores y amantes de los destinos que hacen de Argentina una tierra única. Nuestro objetivo es ofrecer una herramienta de consulta sencilla, visual e interactiva que permita descubrir los principales atractivos turísticos distribuidos a lo largo de todo el territorio nacional.</p>
-
-      <p>Desde los glaciares de la Patagonia hasta las selvas subtropicales del noreste, desde las montañas andinas hasta las extensas llanuras pampeanas, Argentina reúne una diversidad natural, cultural e histórica excepcional. A través de esta plataforma buscamos facilitar el acceso a información relevante sobre cada destino, promoviendo el conocimiento y la valoración del patrimonio turístico argentino.</p>
-
-      <p>Inspirados en la misión de difusión y promoción turística que caracteriza a los organismos oficiales de turismo del país, trabajamos para brindar una visión integral de los atractivos, experiencias y actividades que pueden encontrarse en cada provincia. Nuestro compromiso es contribuir a que más personas descubran la diversidad de paisajes, tradiciones, gastronomía, festividades y expresiones culturales que conforman la identidad argentina.</p>
-
-      <p>Esta plataforma integra información geográfica, descripciones de sitios de interés y herramientas de exploración interactiva que permiten planificar recorridos y conocer mejor cada destino. Creemos que el turismo no solo impulsa el desarrollo económico y regional, sino que también fortalece el intercambio cultural y el reconocimiento de la riqueza natural e histórica de nuestro país.</p>
-
-      <p>Argentina es un territorio de contrastes y experiencias inolvidables. Nuestro deseo es que cada visitante encuentre aquí una puerta de entrada para explorar sus maravillas, descubrir nuevos destinos y valorar la extraordinaria diversidad que distingue a la República Argentina ante el mundo.</p>
-
-      <p>Bienvenidos a Argentina Turismo, una invitación permanente a conocer, recorrer y disfrutar cada rincón de nuestro país.</p>
-    </div>
-
-    <button class="qs-btn-continuar" id="btn-quienes-continuar" type="button">Continuar</button>
-  </div>
-  </div>
 </div>
 
 <!-- ═══════════════════  SELECCIÓN DE PROVINCIAS  ═══════════════════ -->
@@ -1774,7 +1959,13 @@
     <div class="pp-title">Seleccione las provincias</div>
     <button class="btn-volver btn-habilitar-prov" id="btn-all-prov-intro">Habilitar todo</button>
   </div>
-  <div class="pp-grid pp-grid-start" id="grid-provincias-intro"></div>
+  <div class="pp-content-row">
+    <div class="pp-regions-col" id="pp-regions-col"></div>
+    <div class="pp-map-wrap" id="pp-map-wrap">
+      <div class="pp-map-hint" id="pp-map-hint">Tocá una provincia para habilitarla o inhabilitarla</div>
+    </div>
+    <div class="pp-prov-name-panel" id="pp-prov-name-panel"><span id="pp-prov-name-text"></span></div>
+  </div>
   <div class="pp-footer">
     <button class="btn-listo-pp" id="btn-provincias-listo" type="button">Listo</button>
   </div>
@@ -1960,18 +2151,28 @@
   </div>
 </div>
 
-<!-- ═══════════════════  MODAL ORIGEN  ═══════════════════ -->
-<div id="modal-origenes" class="mo-backdrop" style="display:none;">
-  <div class="mo-panel">
+</div> <!-- cierre de #page-mapa -->
 
+<!-- ═══════════════════  MODAL ORIGEN  ═══════════════════ -->
+<div id="modal-auth" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(420px, 94vw);">
     <div class="mo-header">
-      <span class="mo-title">Puntos de Origen</span>
-      <button class="mo-close" id="mo-close" type="button">✕</button>
+      <span class="mo-title">Bienvenido</span>
+    </div>
+
+    <!-- ── PANTALLA: SESIÓN ACTIVA ── -->
+    <div id="mo-auth-session-active" style="display:none; padding:28px 24px; font-family:'Barlow',sans-serif;">
+      <p style="color:#9aa3c4; font-size:0.85rem; margin:0 0 16px;">Sesión iniciada como:</p>
+      <p id="mo-auth-session-user" style="color:#e8c96a; font-size:1.1rem; font-weight:700; margin:0 0 28px; letter-spacing:0.05em;"></p>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="mo-auth-submit" id="mo-auth-btn-logout" type="button" style="flex:1;">Cerrar sesión</button>
+        <button class="mo-auth-submit" id="mo-auth-btn-entrar" type="button" style="flex:1;">Entrar</button>
+      </div>
     </div>
 
     <!-- ── PANTALLA DE INICIO DE SESIÓN / REGISTRO ── -->
     <div class="mo-auth" id="mo-auth">
-      <p class="mo-auth-intro">Iniciá sesión o creá una cuenta para guardar tus orígenes y usarlos desde cualquier dispositivo.</p>
+      <p class="mo-auth-intro">Iniciá sesión o creá una cuenta para guardar tus orígenes e itinerarios y usarlos desde cualquier dispositivo.</p>
 
       <div class="mo-auth-tabs">
         <button class="mo-auth-tab active" id="mo-tab-login"    type="button">Iniciar sesión</button>
@@ -2002,8 +2203,21 @@
         <div class="mo-auth-error" id="mo-reg-error"></div>
         <button class="mo-auth-submit" type="submit">Crear cuenta</button>
       </form>
+    </div>
 
-      <button class="mo-auth-guest" id="mo-btn-guest" type="button">Continuar sin iniciar sesión</button>
+    <!-- ── FOOTER: botón Cerrar ── -->
+    <div style="padding:14px 24px; border-top:1px solid #2a3050; display:flex; justify-content:center;">
+      <button class="mo-auth-submit" id="mo-auth-close" type="button" style="padding:9px 40px; letter-spacing:0.2em;">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-origenes" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel">
+
+    <div class="mo-header">
+      <span class="mo-title">Puntos de Origen</span>
+      <button class="mo-close" id="mo-close" type="button">✕</button>
     </div>
 
     <!-- ── BARRA DE ESTADO DE SESIÓN (visible una vez dentro del formulario) ── -->
@@ -2069,12 +2283,15 @@
         <thead>
           <tr>
             <th class="mo-th mo-th-n">N°</th>
-            <th class="mo-th" style="width:170px;">Nombre</th>
-            <th class="mo-th" style="width:40px; text-align:center;">Ver</th>
-            <th class="mo-th" style="width:40px; text-align:center;">Mapa</th>
-            <th class="mo-th" style="width:46px; text-align:center;">Eliminar</th>
-            <th class="mo-th" style="width:46px; text-align:center;">Imprimir</th>
-            <th class="mo-th" style="width:120px;">Fecha</th>
+            <th class="mo-th" style="width:110px;">Nombre</th>
+            <th class="mo-th" style="width:36px; text-align:center; padding-left:4px; padding-right:4px;">✓</th>
+            <th class="mo-th" style="width:30px; text-align:center; padding-left:4px; padding-right:4px;">Editar</th>
+            <th class="mo-th" style="width:30px; text-align:center; padding-left:4px; padding-right:4px;">Ver</th>
+            <th class="mo-th" style="width:30px; text-align:center; padding-left:4px; padding-right:4px;">Mapa</th>
+            <th class="mo-th" style="width:36px; text-align:center; padding-left:4px; padding-right:4px;">Eliminar</th>
+            <th class="mo-th" style="width:36px; text-align:center; padding-left:4px; padding-right:4px;">Imprimir</th>
+            <th class="mo-th" style="width:36px; text-align:center; padding-left:4px; padding-right:4px;">&#128202;</th>
+            <th class="mo-th" style="width:90px; padding-left:6px;">Fecha</th>
           </tr>
         </thead>
         <tbody id="iti-tbody"></tbody>
@@ -2083,8 +2300,38 @@
         Todavía no guardaste ningún itinerario.
       </div>
     </div>
-    <div class="mo-footer-salir">
+    <div class="mo-footer-salir" style="justify-content:space-between;">
+      <button class="ruta-btn-secundario" id="iti-btn-estadistica" type="button">Estadística</button>
       <button class="ruta-btn-secundario" id="iti-btn-salir" type="button">Salir</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ESTADÍSTICA POR TRAMOS (por itinerario) ── -->
+<div id="modal-stat-tramos" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(720px, 95vw);">
+    <div class="mo-header">
+      <span class="mo-title" id="stat-tramos-titulo">Estadística de Tramos</span>
+      <button class="mo-close" id="stat-tramos-close" type="button">✕</button>
+    </div>
+    <div class="mo-body" style="padding:24px;">
+      <div id="stat-tramos-chart"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ESTADÍSTICA DE RUTAS ── -->
+<div id="modal-estadistica" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(720px, 95vw);">
+    <div class="mo-header">
+      <span class="mo-title">Estadística de Rutas</span>
+      <button class="mo-close" id="est-close" type="button">✕</button>
+    </div>
+    <div class="mo-body" style="padding:24px;">
+      <div id="est-chart-wrap"></div>
+      <div id="est-empty" style="display:none; padding:40px 24px; text-align:center; color:#7a83a6; font-family:'Barlow',sans-serif; font-size:0.85rem;">
+        Todavía no guardaste ningún itinerario.
+      </div>
     </div>
   </div>
 </div>
@@ -2149,6 +2396,35 @@ const PROVINCIAS_LIST = [
   { key:'tierra_del_fuego',    label:'Tierra del Fuego',       lat:-54.80, lng:-68.32, zoom:7  },
   { key:'tucuman',             label:'Tucumán',                lat:-26.82, lng:-65.22, zoom:8  },
 ];
+
+// ─── MAPA SVG DE PROVINCIAS (para la pantalla de selección) ───────────────────
+const ARG_MAP_VIEWBOX = { w: 431.8, h: 888 };
+const ARG_MAP_CABA = { x: 321.6, y: 345.0, r: 4.2 };
+const ARG_MAP_PATHS = {
+  "buenos_aires_prov": "M232.3,511.2 L228.9,505.8 L224.4,503.4 L220.4,503.1 L220.1,339.6 L253.7,339.1 L270.4,318.8 L275.5,318.8 L278.4,320.5 L283.9,311.0 L288.8,316.0 L292.7,317.7 L293.6,319.4 L295.6,319.6 L296.9,321.4 L299.1,320.4 L300.4,322.6 L303.9,322.5 L304.4,324.6 L309.1,325.4 L312.4,328.3 L314.4,328.2 L316.2,330.4 L321.6,329.8 L322.2,334.9 L319.5,336.6 L320.2,339.1 L319.2,341.2 L320.1,343.3 L325.7,348.6 L331.8,351.0 L339.2,356.2 L345.7,363.6 L347.0,367.1 L342.7,373.7 L342.0,380.5 L346.8,388.1 L349.8,390.0 L355.0,389.4 L356.2,403.7 L347.0,420.1 L339.8,427.7 L338.5,435.5 L332.1,440.5 L318.7,446.9 L293.1,454.3 L271.2,458.3 L252.3,458.6 L247.1,456.8 L244.7,453.7 L242.2,453.2 L241.2,451.5 L238.0,451.5 L237.1,453.2 L237.8,454.2 L241.5,454.9 L242.2,459.6 L241.1,461.7 L241.8,463.9 L243.6,465.3 L242.0,465.9 L246.6,466.8 L248.2,468.6 L242.5,466.6 L247.4,470.4 L245.8,476.4 L246.0,480.6 L241.7,482.2 L241.7,489.3 L238.5,492.8 L240.3,497.2 L244.8,499.8 L244.9,500.9 L241.9,507.3 L232.3,511.2 Z",
+  "catamarca": "M183.7,172.6 L185.6,185.5 L184.4,191.0 L184.9,192.9 L187.2,193.4 L189.7,196.2 L190.6,205.5 L191.8,207.1 L190.8,209.0 L191.9,211.0 L190.9,212.7 L191.2,214.7 L187.7,215.7 L188.8,223.2 L184.7,227.4 L178.8,229.1 L172.4,207.5 L171.0,207.5 L171.0,205.1 L165.1,198.8 L159.5,196.8 L159.1,194.9 L160.2,192.9 L157.2,190.6 L156.9,188.1 L156.1,188.1 L156.8,187.1 L155.5,182.0 L146.8,180.8 L144.1,183.8 L140.4,184.3 L133.2,182.3 L130.1,184.1 L128.0,176.8 L124.6,179.3 L123.2,176.6 L120.7,177.1 L120.6,174.8 L118.5,174.3 L117.8,175.3 L117.5,170.9 L115.5,169.2 L113.1,169.4 L110.6,167.7 L104.4,168.4 L106.4,163.4 L108.6,161.1 L105.9,160.4 L109.7,155.6 L111.3,156.3 L108.8,153.8 L111.7,150.8 L114.6,153.5 L115.5,150.0 L119.7,149.8 L121.7,147.7 L115.3,135.8 L115.5,129.7 L119.1,126.4 L116.6,114.4 L115.3,112.3 L116.8,111.5 L115.5,109.8 L116.4,105.6 L115.3,103.9 L117.5,100.5 L128.9,103.1 L154.5,102.3 L155.3,106.2 L157.6,106.7 L154.9,115.1 L150.4,114.9 L150.9,122.6 L155.3,125.9 L156.9,131.5 L160.2,133.0 L160.0,129.9 L161.8,127.1 L164.0,126.6 L165.1,132.6 L164.0,133.3 L163.7,135.4 L164.7,136.2 L163.4,137.6 L164.0,139.0 L166.6,138.3 L171.0,142.0 L169.4,144.4 L170.5,147.0 L164.6,154.7 L167.9,157.1 L168.9,165.5 L170.8,169.7 L171.7,168.3 L172.7,169.0 L173.7,172.4 L176.3,174.8 L176.9,172.1 L180.1,170.3 L183.7,172.6 Z",
+  "chaco": "M241.3,73.0 L245.7,76.5 L250.3,77.9 L250.5,79.1 L254.4,79.9 L254.4,81.8 L256.8,82.3 L258.8,86.5 L264.6,88.0 L266.0,92.3 L270.3,96.9 L278.1,101.4 L279.9,103.6 L284.7,110.0 L284.1,111.4 L284.9,113.0 L293.5,120.4 L295.7,126.3 L301.1,127.7 L301.6,131.5 L303.8,131.6 L305.8,130.2 L308.9,132.4 L313.3,135.9 L314.2,138.3 L314.9,137.8 L317.8,140.6 L319.5,143.6 L321.7,144.6 L321.3,145.9 L319.1,146.5 L319.2,150.1 L318.3,149.6 L318.1,151.0 L316.2,151.9 L316.1,153.8 L317.6,156.4 L313.7,158.1 L311.8,160.9 L311.2,163.9 L312.9,168.2 L312.1,174.6 L254.1,174.3 L254.1,113.6 L219.6,113.5 L241.3,81.1 L241.3,73.0 Z",
+  "chubut": "M185.7,536.0 L186.4,538.2 L190.8,541.9 L198.8,542.6 L196.2,544.1 L195.6,546.3 L195.5,547.3 L198.0,547.9 L201.4,546.6 L205.8,547.3 L206.9,544.4 L205.7,542.4 L200.8,542.7 L212.4,538.3 L215.9,544.2 L216.1,552.7 L214.8,556.5 L206.0,559.0 L203.0,556.9 L202.6,555.2 L203.8,552.7 L201.1,550.1 L196.3,549.1 L190.5,552.4 L188.7,552.2 L187.7,553.6 L186.7,555.9 L188.4,557.2 L198.1,561.1 L201.1,560.6 L201.3,561.9 L187.0,569.8 L186.7,572.2 L181.1,578.5 L180.1,582.1 L181.5,582.8 L180.8,585.6 L183.5,587.4 L182.3,588.2 L182.6,588.9 L184.5,589.0 L182.9,589.6 L183.2,591.9 L181.5,593.0 L183.2,598.0 L181.3,599.7 L181.6,601.5 L179.8,602.1 L179.4,603.6 L178.4,602.7 L174.8,605.1 L173.8,608.5 L172.9,608.8 L173.8,611.3 L176.8,611.4 L174.6,613.5 L175.4,615.0 L171.1,615.2 L170.4,613.7 L169.3,615.4 L163.6,613.4 L162.9,614.6 L156.2,616.9 L157.8,618.6 L155.3,617.7 L156.7,619.9 L149.0,620.4 L146.4,622.0 L139.9,630.0 L139.7,634.4 L137.1,635.9 L135.1,639.8 L53.0,639.7 L53.5,638.4 L50.4,635.2 L51.1,633.9 L49.5,632.1 L50.6,631.6 L49.1,630.2 L51.3,629.3 L49.8,628.7 L55.2,627.5 L56.5,626.4 L55.4,625.7 L55.8,624.2 L57.2,624.5 L60.3,621.3 L56.1,617.1 L54.1,613.3 L48.7,611.9 L47.8,613.3 L44.7,610.7 L44.5,608.3 L49.4,609.3 L49.8,607.7 L53.0,608.9 L55.8,607.2 L60.3,609.3 L62.1,605.2 L61.2,603.4 L63.6,603.2 L62.1,600.0 L51.6,597.5 L50.3,599.2 L49.4,597.1 L50.3,594.1 L51.4,593.7 L48.5,591.2 L50.3,591.0 L52.7,586.7 L51.0,584.7 L54.5,581.6 L55.0,578.7 L47.6,577.1 L49.2,575.6 L46.9,572.3 L48.7,570.1 L51.0,570.5 L50.5,565.9 L48.5,566.1 L42.0,558.4 L42.5,556.4 L41.6,554.5 L43.6,554.5 L44.9,550.1 L44.7,546.9 L42.0,545.1 L41.6,539.6 L44.5,540.0 L43.8,538.7 L48.5,540.6 L50.5,539.2 L49.4,536.0 L185.7,536.0 Z",
+  "cordoba": "M229.2,339.6 L219.9,338.9 L219.9,355.2 L185.6,355.0 L184.1,308.6 L186.1,306.7 L189.3,292.8 L190.5,292.2 L188.8,285.2 L183.5,286.2 L182.7,280.8 L181.4,278.6 L175.7,274.9 L172.0,274.9 L171.9,252.7 L179.2,229.0 L184.5,227.5 L188.8,223.3 L187.6,215.8 L201.2,213.1 L208.5,214.3 L208.5,215.9 L210.2,216.1 L211.0,214.7 L212.9,216.8 L218.2,217.0 L219.1,220.5 L232.7,221.1 L232.5,223.5 L236.9,228.3 L236.6,231.8 L237.9,234.5 L244.3,234.1 L245.9,236.6 L245.4,241.5 L251.4,245.4 L246.1,267.7 L243.8,270.0 L243.7,274.4 L245.3,277.8 L244.0,281.4 L247.4,284.7 L249.7,290.1 L250.6,293.2 L249.3,295.4 L251.1,295.7 L252.5,298.1 L252.7,303.5 L250.2,306.3 L230.4,339.6 L229.2,339.6 Z",
+  "corrientes": "M332.7,245.1 L329.0,241.1 L325.1,232.9 L318.5,230.4 L315.4,230.6 L311.9,233.0 L309.3,231.7 L303.1,235.8 L300.0,234.4 L298.2,235.0 L297.5,237.7 L295.4,234.7 L298.0,225.8 L295.5,221.9 L296.6,220.1 L296.7,210.7 L298.7,207.0 L301.9,204.8 L301.1,203.6 L305.3,200.5 L304.8,198.4 L307.6,191.9 L306.6,188.5 L308.4,186.2 L306.7,180.7 L308.5,177.8 L310.4,177.3 L312.9,171.4 L311.3,163.5 L312.2,160.6 L317.2,155.9 L328.2,154.7 L339.0,159.1 L343.2,159.4 L352.0,163.5 L355.5,162.4 L356.0,160.1 L361.0,159.9 L369.3,156.7 L368.6,159.9 L373.3,169.2 L374.9,176.3 L377.7,178.3 L374.3,181.0 L376.5,182.8 L376.1,185.1 L372.4,183.6 L372.1,186.8 L369.8,187.3 L369.1,188.6 L369.9,189.3 L364.7,194.2 L363.4,198.4 L360.9,200.0 L361.0,202.2 L357.0,204.5 L355.6,209.7 L347.7,219.7 L343.2,221.7 L343.0,225.9 L338.8,229.2 L336.3,232.2 L336.3,234.7 L331.6,238.8 L333.2,242.9 L332.7,245.1 Z",
+  "entre_rios": "M295.9,234.7 L297.6,237.5 L298.7,234.6 L301.0,234.1 L304.0,235.5 L308.8,231.8 L311.9,232.8 L315.9,230.3 L318.3,230.3 L325.5,233.6 L328.5,241.0 L332.7,244.6 L333.3,248.3 L333.1,250.1 L331.2,250.1 L332.2,253.1 L331.4,253.8 L331.2,258.3 L327.9,263.7 L330.1,268.0 L327.6,273.5 L326.2,273.1 L325.4,275.1 L326.5,279.3 L325.7,281.6 L327.4,285.0 L325.6,290.5 L327.9,303.5 L325.4,305.8 L321.5,306.3 L321.5,309.8 L319.6,314.7 L319.5,322.4 L321.6,329.5 L315.7,330.4 L314.5,328.3 L312.7,328.8 L309.5,325.2 L304.4,324.5 L304.3,322.6 L300.6,322.5 L299.1,320.4 L297.1,321.0 L292.9,318.8 L292.8,317.8 L284.2,311.2 L282.9,309.6 L282.9,307.8 L280.0,308.2 L275.1,301.0 L275.9,299.2 L274.3,298.0 L274.7,296.0 L273.2,291.2 L273.9,286.5 L275.4,285.1 L274.5,282.2 L275.9,271.7 L277.1,270.0 L281.2,268.5 L281.7,266.2 L284.0,265.3 L286.7,262.2 L287.2,261.1 L286.5,259.6 L288.9,257.8 L296.2,243.8 L294.7,237.2 L295.9,234.7 Z",
+  "formosa": "M336.7,106.7 L332.1,99.1 L329.9,98.8 L324.5,95.0 L322.7,96.6 L320.2,93.5 L316.1,92.3 L304.0,84.7 L288.2,71.2 L281.9,71.4 L269.0,66.1 L267.1,63.6 L266.7,60.8 L258.7,55.8 L256.4,52.4 L255.1,52.4 L249.6,46.4 L241.3,32.4 L241.4,73.0 L245.7,76.5 L250.2,77.8 L250.6,79.2 L253.1,79.0 L254.5,81.8 L256.9,82.3 L258.8,86.5 L264.6,88.1 L266.0,92.1 L270.3,96.8 L275.6,100.8 L278.2,101.3 L284.6,109.9 L284.8,113.0 L290.8,117.1 L293.5,120.6 L295.3,123.4 L295.6,126.3 L301.1,127.7 L301.5,131.5 L305.3,131.2 L305.8,130.2 L314.1,136.7 L314.3,138.0 L317.8,140.6 L319.6,143.6 L323.0,145.1 L322.5,143.4 L324.1,142.3 L324.1,139.2 L325.5,139.2 L324.6,134.8 L325.5,134.5 L325.0,133.1 L326.2,131.2 L326.0,129.5 L327.2,128.7 L327.1,126.4 L332.3,122.8 L331.6,121.3 L332.7,120.2 L332.1,118.9 L335.0,115.0 L334.2,114.6 L336.3,112.3 L337.3,112.9 L338.1,111.0 L338.4,108.5 L336.7,106.7 Z",
+  "jujuy": "M143.8,63.8 L148.4,71.1 L149.1,69.2 L150.2,72.6 L156.9,74.9 L158.5,74.4 L160.2,70.8 L159.4,69.2 L160.5,66.9 L159.4,62.7 L161.4,61.2 L163.8,56.2 L166.3,56.5 L167.6,57.5 L168.0,59.9 L167.4,68.5 L169.6,71.1 L171.1,71.1 L174.0,76.5 L174.5,79.3 L176.5,81.2 L183.4,83.0 L188.3,86.8 L189.8,86.6 L190.1,81.9 L193.0,85.3 L196.7,85.6 L197.2,83.2 L201.2,81.9 L204.8,78.3 L204.8,58.6 L201.0,58.6 L199.6,59.4 L199.6,61.2 L195.0,57.0 L191.4,57.5 L190.1,56.2 L189.4,52.6 L186.5,50.7 L186.3,47.4 L184.9,45.0 L182.1,41.9 L180.9,38.7 L182.5,37.1 L180.3,35.0 L181.4,29.8 L182.9,27.4 L183.6,22.2 L172.0,22.2 L168.7,18.0 L165.8,17.4 L166.5,14.8 L163.4,14.0 L162.0,16.1 L161.1,21.9 L151.6,25.9 L151.1,30.1 L146.9,32.7 L145.6,36.9 L143.1,40.0 L147.1,42.9 L147.6,44.5 L142.7,60.9 L142.4,63.0 L143.8,63.8 Z",
+  "la_pampa": "M220.3,467.3 L217.0,466.4 L213.2,463.6 L212.1,461.4 L211.0,462.3 L207.8,459.2 L200.1,455.4 L185.6,453.3 L180.1,455.0 L175.6,452.8 L173.7,454.5 L165.6,451.6 L161.0,452.7 L156.7,452.0 L154.0,450.0 L154.9,446.3 L145.8,443.4 L143.3,438.5 L140.7,439.8 L134.0,438.2 L132.4,434.7 L130.4,434.7 L129.3,433.3 L129.5,431.5 L131.3,431.1 L132.6,428.8 L130.6,423.7 L121.5,421.9 L120.8,380.2 L186.1,381.1 L186.1,355.2 L219.9,355.5 L220.3,467.3 Z",
+  "la_rioja": "M179.2,229.2 L171.9,252.6 L171.8,275.0 L157.5,277.3 L154.0,275.8 L151.0,273.1 L149.4,268.3 L148.1,268.2 L144.7,262.0 L145.4,258.4 L144.4,256.1 L145.1,249.6 L136.6,239.3 L135.1,236.3 L135.2,233.7 L124.6,222.8 L123.0,222.4 L123.2,220.3 L121.5,220.3 L117.4,216.7 L109.2,216.6 L109.0,215.5 L107.9,217.0 L106.4,216.8 L105.8,214.1 L107.1,211.9 L106.5,210.6 L107.3,208.5 L106.4,204.9 L108.3,203.3 L108.4,201.0 L107.3,199.1 L108.3,196.7 L103.2,194.1 L100.1,185.0 L97.7,186.0 L96.8,184.8 L93.5,184.5 L96.0,182.5 L97.2,179.1 L98.6,180.1 L101.4,173.6 L103.8,172.5 L104.5,168.4 L110.6,167.3 L113.2,169.2 L115.8,169.2 L115.8,170.3 L117.7,171.2 L117.8,175.2 L120.2,174.3 L120.6,177.0 L123.4,176.6 L124.7,179.1 L127.4,176.5 L130.3,184.3 L133.2,182.1 L140.3,184.2 L144.3,183.7 L146.3,181.0 L155.5,181.7 L156.9,187.0 L156.0,188.3 L157.0,188.0 L157.2,190.3 L160.6,193.8 L158.8,195.2 L159.7,197.1 L165.0,198.7 L171.6,205.3 L170.8,207.7 L173.3,207.7 L172.8,211.1 L179.2,229.2 Z",
+  "mendoza": "M77.4,385.3 L79.0,379.1 L77.0,377.9 L81.0,375.8 L77.9,373.1 L78.6,370.3 L77.4,368.4 L77.4,364.0 L75.9,363.4 L74.5,360.1 L77.2,360.1 L79.2,358.2 L79.2,353.1 L81.9,350.3 L80.6,349.4 L81.9,344.3 L85.7,340.7 L85.2,335.8 L87.7,336.5 L90.3,334.6 L89.7,327.6 L88.1,328.0 L89.2,326.2 L88.3,324.7 L89.2,321.4 L88.3,316.9 L90.8,313.1 L90.8,311.2 L88.3,308.9 L86.8,311.0 L85.0,310.5 L85.0,304.6 L87.2,302.2 L83.4,296.2 L83.0,292.9 L84.8,293.6 L86.6,290.5 L87.9,292.2 L92.6,289.8 L91.5,287.4 L95.2,280.9 L96.8,279.2 L98.6,279.2 L99.9,280.9 L100.8,279.0 L103.3,278.0 L105.9,280.2 L108.2,280.4 L108.2,285.7 L111.9,286.2 L117.3,283.5 L117.7,281.4 L121.3,280.4 L122.6,281.4 L126.4,279.4 L126.9,281.1 L130.6,283.3 L136.6,283.5 L137.3,286.2 L140.2,285.9 L141.8,291.8 L141.2,292.9 L142.5,293.2 L141.8,294.8 L143.9,296.2 L143.3,299.2 L142.0,300.4 L143.7,307.2 L143.8,314.1 L149.6,325.5 L151.0,325.6 L153.8,328.6 L150.7,338.3 L154.6,348.7 L153.6,348.9 L155.6,350.0 L156.9,353.8 L156.3,354.9 L157.9,361.7 L156.9,362.7 L157.8,363.5 L156.5,365.6 L157.0,368.9 L154.5,380.7 L120.8,380.2 L121.7,421.9 L119.5,422.1 L111.7,416.7 L106.4,417.6 L106.6,414.9 L105.5,412.6 L102.4,410.8 L95.2,412.8 L91.9,409.2 L91.2,404.9 L83.2,396.5 L81.4,390.5 L78.6,391.4 L78.3,385.7 L77.4,385.3 Z",
+  "misiones": "M369.9,157.3 L371.8,157.3 L374.9,160.4 L378.2,157.3 L377.5,152.2 L378.7,153.0 L378.9,150.4 L381.2,151.3 L381.8,148.2 L388.1,146.6 L387.5,144.6 L390.8,142.7 L391.3,140.1 L393.0,140.2 L394.7,138.6 L394.0,136.8 L396.2,134.1 L397.4,130.5 L396.9,129.4 L398.2,128.0 L396.9,123.2 L397.0,122.0 L398.3,122.2 L398.5,118.5 L397.2,113.5 L398.1,113.9 L399.0,111.8 L399.5,113.2 L400.0,112.1 L401.8,114.9 L402.5,112.3 L404.5,111.0 L406.8,111.9 L406.4,110.3 L408.2,109.4 L408.2,112.7 L410.4,111.7 L411.5,113.7 L412.7,113.0 L413.6,114.4 L413.9,122.2 L416.0,124.0 L415.6,125.5 L417.8,128.3 L415.4,138.9 L415.5,141.6 L417.2,145.7 L415.0,149.4 L415.8,150.4 L414.7,150.1 L414.0,152.8 L413.2,151.8 L411.5,152.6 L408.4,156.3 L406.5,155.4 L404.5,160.1 L403.4,158.8 L403.1,160.5 L402.0,159.0 L400.9,159.5 L401.4,160.9 L398.5,160.4 L397.6,162.6 L396.7,161.7 L396.7,163.3 L394.9,163.6 L394.0,162.3 L393.4,164.8 L392.2,164.8 L391.5,168.3 L388.5,168.9 L389.6,170.6 L385.9,170.7 L384.7,172.5 L383.4,172.4 L382.6,175.4 L380.9,177.1 L380.1,176.5 L379.0,178.6 L378.0,177.2 L377.5,178.1 L375.4,175.8 L375.0,176.5 L373.2,169.2 L368.9,160.5 L369.1,157.1 L369.9,157.3 Z",
+  "neuquen": "M121.5,421.9 L121.3,450.2 L126.9,457.1 L116.6,460.6 L114.6,464.8 L111.9,465.9 L108.2,470.8 L102.4,474.1 L101.3,476.5 L97.7,479.3 L86.8,484.1 L87.2,488.4 L84.6,491.0 L84.6,494.1 L83.0,496.5 L83.4,498.2 L75.0,497.8 L73.2,500.4 L67.9,500.4 L65.6,501.9 L65.9,503.6 L63.9,504.4 L65.0,508.5 L64.3,510.7 L59.2,513.5 L55.8,511.1 L48.5,510.7 L48.9,507.9 L46.7,504.0 L49.8,499.9 L48.1,499.5 L49.2,495.6 L51.2,495.6 L53.0,493.4 L52.1,491.7 L50.7,490.6 L50.5,491.9 L49.6,490.6 L49.4,486.5 L53.6,487.1 L52.1,484.7 L53.8,480.2 L52.3,479.7 L51.8,478.2 L53.4,476.7 L50.7,472.7 L55.4,476.2 L57.4,474.7 L57.0,473.0 L55.2,472.5 L59.2,466.2 L57.4,463.7 L56.3,456.9 L60.1,454.9 L59.9,452.7 L61.9,454.0 L63.4,452.5 L68.8,450.9 L69.4,447.4 L68.5,445.4 L66.5,444.7 L65.9,442.2 L66.5,439.8 L65.0,436.0 L67.2,435.8 L63.6,431.7 L63.0,429.1 L61.9,429.3 L63.9,426.8 L61.9,424.1 L63.4,419.2 L61.2,416.0 L64.5,410.8 L62.5,406.3 L63.9,406.0 L62.7,403.1 L63.9,400.1 L65.9,399.4 L65.6,397.4 L64.1,396.0 L66.3,393.3 L68.8,391.4 L71.4,392.6 L72.5,391.7 L71.7,388.2 L75.4,385.0 L77.0,386.4 L77.9,384.8 L78.6,390.8 L81.4,390.1 L82.3,394.4 L91.5,405.6 L91.0,409.0 L94.1,410.3 L95.5,412.4 L100.6,410.8 L103.0,411.5 L105.7,413.3 L105.5,417.1 L109.9,416.7 L118.8,421.6 L121.5,421.9 Z",
+  "rio_negro": "M121.5,421.4 L131.1,423.7 L133.1,428.6 L132.0,430.6 L129.5,430.4 L130.6,435.1 L132.9,434.0 L134.2,438.0 L139.8,440.2 L143.3,438.0 L146.0,442.7 L149.8,445.1 L155.6,446.5 L154.0,450.5 L158.7,452.7 L162.2,452.9 L165.8,450.9 L173.4,454.9 L176.5,452.7 L182.1,455.3 L183.8,454.2 L184.3,452.2 L189.6,454.9 L196.7,454.5 L213.0,461.5 L213.2,463.5 L220.1,467.0 L220.6,503.4 L226.6,503.8 L232.6,510.2 L224.3,514.7 L213.0,514.5 L209.7,513.8 L205.5,509.8 L204.9,511.0 L194.1,505.9 L190.4,506.2 L189.7,505.4 L192.2,504.8 L191.5,503.7 L186.0,505.0 L184.5,508.9 L184.3,513.9 L188.0,525.2 L187.1,526.4 L187.4,531.6 L186.5,531.6 L186.4,536.1 L50.2,535.9 L49.8,532.4 L50.7,530.2 L48.3,526.5 L49.2,525.0 L48.9,521.9 L47.5,517.2 L48.6,516.0 L47.7,514.7 L48.9,513.7 L48.3,510.7 L54.7,511.1 L58.7,513.0 L62.8,512.2 L65.4,509.3 L63.5,504.4 L66.5,501.5 L70.9,499.5 L73.3,499.8 L75.9,497.5 L77.7,498.4 L82.8,497.1 L82.5,495.8 L84.3,494.3 L84.6,490.6 L87.2,488.7 L86.1,484.3 L89.0,482.1 L97.5,479.3 L102.4,474.1 L109.9,468.6 L117.1,460.4 L126.7,458.2 L123.3,451.8 L121.3,450.2 L121.5,421.4 Z",
+  "salta": "M118.8,100.8 L127.3,102.8 L155.3,103.3 L158.0,107.2 L154.9,115.6 L151.3,115.6 L151.3,121.8 L154.9,125.1 L156.9,130.5 L160.2,133.0 L160.2,130.2 L163.8,126.4 L172.5,131.7 L174.7,124.6 L180.9,124.3 L183.6,127.7 L186.5,128.7 L187.4,131.2 L198.1,127.1 L203.2,115.6 L207.4,115.6 L207.7,113.6 L219.0,114.9 L241.0,80.9 L241.5,32.4 L232.1,22.4 L231.9,19.8 L214.8,19.3 L214.3,20.9 L213.4,18.7 L209.2,19.8 L204.0,31.4 L201.2,42.8 L201.0,38.5 L199.1,35.6 L199.5,32.9 L196.7,30.5 L196.2,27.2 L197.3,26.2 L194.5,23.7 L191.5,23.6 L191.4,22.4 L184.2,21.2 L180.3,34.9 L181.9,36.0 L181.1,38.2 L181.9,42.1 L186.2,47.0 L186.5,50.9 L189.1,52.5 L190.5,57.6 L194.0,56.8 L198.9,61.4 L200.4,58.8 L204.8,58.2 L204.5,76.9 L202.9,80.1 L200.4,82.1 L199.1,81.3 L194.9,86.3 L190.7,82.5 L189.5,86.3 L185.7,85.3 L183.4,83.0 L181.1,83.7 L179.8,82.3 L176.6,82.2 L174.0,79.6 L171.7,71.6 L168.3,70.9 L167.2,69.3 L167.3,58.5 L163.7,55.7 L159.6,63.0 L160.0,70.7 L160.6,70.5 L159.7,73.8 L158.8,73.8 L157.6,76.2 L150.2,72.9 L149.4,70.2 L148.3,70.5 L142.7,62.9 L140.3,71.8 L121.5,81.2 L120.5,83.7 L118.7,83.4 L118.1,86.7 L116.7,86.6 L115.3,91.6 L117.9,94.5 L119.6,99.7 L118.8,100.8 Z",
+  "san_juan": "M94.1,185.0 L99.5,185.5 L102.6,189.7 L102.8,192.9 L108.4,196.6 L107.5,199.2 L108.7,201.5 L108.5,203.8 L107.9,204.9 L107.2,203.9 L106.3,204.8 L107.2,206.2 L106.6,206.9 L107.5,206.9 L106.4,216.8 L107.6,217.4 L109.5,215.3 L109.4,216.4 L117.4,216.8 L121.5,220.1 L123.2,220.0 L123.0,222.4 L125.0,222.9 L135.2,233.7 L135.3,236.6 L138.4,242.2 L142.0,244.6 L145.4,249.4 L144.9,262.2 L148.2,268.2 L149.4,268.2 L151.0,272.8 L153.5,275.3 L144.0,273.3 L142.0,274.7 L138.1,274.1 L137.4,280.6 L142.1,287.3 L140.3,285.8 L137.4,286.3 L136.4,283.7 L133.9,284.1 L128.5,282.6 L126.4,280.0 L118.2,281.6 L117.5,283.8 L112.1,286.2 L108.5,285.8 L108.2,280.9 L103.6,278.4 L101.1,279.0 L100.4,280.9 L97.2,279.4 L95.5,280.9 L92.6,285.9 L92.0,287.7 L92.7,289.8 L91.4,290.7 L88.1,292.3 L86.7,290.8 L84.8,293.4 L83.2,292.9 L83.7,290.6 L81.5,288.9 L81.8,286.4 L79.6,284.5 L80.3,283.8 L80.1,281.5 L78.4,278.6 L80.2,279.1 L82.0,276.9 L80.9,274.6 L77.1,274.1 L76.8,269.4 L75.9,269.4 L74.7,266.2 L75.1,259.6 L76.9,254.1 L78.1,254.9 L77.9,256.7 L79.2,255.6 L79.0,253.4 L81.0,252.1 L79.7,250.1 L82.0,239.7 L83.7,237.1 L82.8,235.6 L84.1,235.0 L85.2,236.3 L88.5,235.3 L88.3,233.1 L89.8,230.7 L89.5,228.5 L87.5,229.3 L87.1,228.5 L88.3,224.9 L88.7,218.2 L87.5,217.3 L87.0,211.1 L86.0,210.2 L87.5,204.4 L90.7,203.6 L90.9,197.4 L92.9,194.2 L91.5,192.1 L93.2,188.2 L92.5,185.7 L94.1,185.0 Z",
+  "san_luis": "M185.7,355.2 L185.7,381.5 L154.3,381.2 L156.1,372.0 L155.6,370.8 L156.8,367.8 L156.2,366.8 L157.6,363.5 L156.6,362.8 L157.5,361.8 L156.1,354.8 L156.8,354.1 L155.3,349.9 L153.2,348.8 L154.7,348.2 L152.8,346.1 L150.9,338.4 L153.8,328.4 L151.1,325.7 L149.4,325.5 L143.9,314.2 L143.8,307.1 L142.1,300.3 L143.3,299.5 L143.7,296.4 L141.9,294.6 L142.4,293.4 L141.4,293.2 L141.8,291.7 L140.8,291.1 L140.0,286.5 L141.7,287.1 L141.4,285.8 L137.5,280.5 L137.9,274.0 L141.3,274.6 L143.9,273.3 L153.3,275.2 L157.0,277.3 L176.2,274.7 L182.5,279.4 L183.4,286.2 L189.1,285.0 L188.8,287.7 L190.6,292.2 L189.5,292.8 L186.2,307.0 L184.1,308.4 L185.7,355.2 Z",
+  "santa_cruz": "M135.0,639.7 L134.1,642.5 L134.6,645.6 L140.0,656.5 L144.5,658.4 L153.3,666.6 L164.8,668.5 L170.0,668.1 L172.5,670.7 L173.2,675.7 L172.2,680.5 L169.7,685.5 L170.7,688.9 L172.4,689.4 L171.5,690.9 L168.4,689.9 L168.9,691.4 L167.7,692.8 L168.9,693.5 L169.0,694.9 L164.9,694.4 L163.9,696.4 L159.7,699.5 L160.2,700.6 L157.8,700.7 L158.1,701.9 L150.4,704.9 L149.4,705.8 L150.1,706.5 L144.2,709.3 L142.9,712.9 L138.7,714.8 L136.0,717.5 L134.0,720.6 L134.6,722.3 L133.1,722.7 L135.1,724.3 L129.7,742.2 L122.6,746.1 L119.5,746.1 L119.3,747.7 L108.2,752.2 L103.5,759.8 L103.7,766.7 L102.1,768.1 L103.5,769.2 L107.5,782.7 L106.8,785.3 L111.3,794.1 L120.0,804.1 L110.6,802.5 L103.0,798.7 L96.4,799.2 L86.1,794.8 L46.1,794.5 L47.4,792.4 L46.3,790.3 L44.3,788.2 L40.5,787.3 L38.9,783.9 L36.5,784.1 L39.6,780.7 L39.4,779.0 L38.0,778.3 L40.3,774.3 L38.3,774.0 L37.4,772.0 L38.0,769.7 L40.0,769.5 L40.3,764.9 L38.3,762.4 L39.6,760.7 L36.3,758.8 L34.7,758.6 L34.0,761.3 L30.9,759.1 L28.9,759.1 L25.1,763.3 L20.7,764.5 L19.6,763.3 L22.5,760.4 L20.5,759.7 L16.0,753.2 L16.4,751.9 L14.2,749.2 L14.2,747.0 L16.2,745.2 L14.2,743.3 L15.6,741.7 L14.0,741.5 L15.8,738.2 L24.2,733.6 L20.5,730.5 L24.5,729.9 L22.9,727.5 L25.6,724.0 L22.2,722.1 L22.2,720.5 L24.5,719.5 L26.2,716.8 L28.2,716.0 L29.4,717.1 L31.6,713.2 L33.4,713.2 L34.7,711.5 L34.0,703.6 L36.7,704.6 L38.9,701.2 L42.5,700.0 L38.9,697.4 L38.0,690.9 L34.9,689.8 L33.1,687.5 L35.8,686.8 L34.5,684.5 L38.5,682.2 L39.6,679.3 L37.6,677.6 L40.0,675.8 L42.3,676.0 L45.6,672.8 L44.3,670.1 L47.8,672.0 L48.7,668.7 L46.3,667.0 L48.3,666.4 L46.3,664.4 L47.2,660.9 L45.6,660.2 L49.8,660.7 L52.7,657.4 L51.0,649.6 L51.6,647.3 L47.6,643.3 L51.6,642.2 L53.0,639.8 L135.0,639.7 Z",
+  "santa_fe": "M283.4,310.4 L280.4,316.1 L279.5,319.9 L277.8,320.4 L272.3,317.7 L270.6,318.4 L269.9,320.5 L254.0,339.4 L230.3,339.5 L249.8,306.9 L252.5,303.9 L252.9,301.5 L252.5,297.9 L251.2,295.8 L249.4,295.3 L250.5,293.0 L247.5,284.5 L244.7,281.9 L244.9,277.4 L243.4,270.1 L245.7,267.9 L251.2,245.1 L245.4,241.3 L253.7,174.2 L311.3,175.0 L310.6,177.1 L307.9,177.8 L306.8,180.6 L308.2,185.9 L306.8,189.4 L307.4,191.5 L305.0,201.0 L301.6,203.9 L301.6,205.6 L298.7,207.1 L298.5,209.0 L296.9,210.4 L296.2,214.1 L296.6,219.7 L295.6,221.8 L297.5,226.3 L294.9,237.1 L296.3,244.6 L287.2,259.5 L286.0,263.1 L279.5,269.9 L276.0,271.2 L274.8,276.6 L275.1,286.1 L273.9,286.9 L273.3,291.1 L274.3,297.1 L275.5,299.2 L274.9,300.7 L278.9,306.9 L282.6,308.5 L283.4,310.4 Z",
+  "santiago_del_estero": "M246.1,236.3 L244.3,234.0 L238.3,234.5 L237.1,233.3 L236.3,231.2 L237.0,228.3 L231.9,222.4 L232.7,221.0 L219.2,220.2 L218.3,216.9 L212.4,216.4 L211.7,214.4 L209.8,216.0 L208.8,215.8 L209.0,214.3 L202.1,212.9 L191.1,214.7 L189.4,207.4 L190.5,200.7 L188.3,195.4 L183.2,190.5 L185.2,188.2 L184.9,177.0 L183.2,171.4 L185.8,170.9 L187.0,168.4 L188.5,167.7 L187.0,163.6 L187.6,157.8 L190.7,154.3 L193.4,144.4 L196.3,139.1 L197.6,139.4 L197.2,134.0 L198.1,126.9 L203.6,114.6 L207.4,115.6 L207.2,113.6 L217.9,114.9 L219.5,113.3 L254.2,113.1 L254.0,174.7 L246.1,236.3 Z",
+  "tierra_del_fuego": "M114.5,812.1 L121.0,819.5 L122.7,825.0 L120.4,820.9 L118.5,821.6 L115.1,826.7 L117.8,828.9 L124.2,829.6 L126.0,835.4 L136.1,843.0 L135.3,843.3 L135.9,845.0 L144.8,850.5 L151.9,853.2 L157.8,859.3 L174.2,864.2 L182.9,863.0 L182.5,864.1 L184.9,863.8 L183.8,864.6 L183.3,867.3 L182.2,867.4 L183.1,868.2 L179.5,871.1 L177.8,869.6 L177.3,870.8 L174.2,871.7 L171.7,870.1 L166.5,870.2 L168.0,871.2 L167.6,871.8 L159.9,872.4 L159.5,873.9 L156.6,874.0 L142.4,869.4 L138.8,869.5 L138.5,870.4 L136.4,869.6 L137.9,868.9 L132.9,869.5 L122.3,867.6 L120.6,867.6 L121.8,868.8 L115.7,868.5 L114.5,870.2 L114.5,812.1 Z M211.2,865.5 L211.9,866.2 L210.9,867.2 L206.3,867.0 L203.3,869.0 L203.0,867.0 L201.5,867.1 L200.9,868.3 L198.1,869.4 L198.2,868.1 L195.3,870.4 L193.6,870.3 L194.7,869.8 L193.9,869.0 L194.5,868.6 L192.5,868.4 L193.7,867.0 L197.2,867.5 L196.8,865.6 L199.8,866.2 L200.2,867.8 L200.9,865.3 L204.6,866.7 L205.1,865.6 L205.5,866.5 L206.9,865.7 L206.8,866.9 L211.2,865.5 Z",
+  "tucuman": "M182.9,172.2 L180.9,170.2 L179.4,170.6 L176.3,173.3 L176.0,174.7 L173.8,172.9 L172.9,169.1 L171.7,168.2 L170.6,169.2 L169.7,165.8 L168.6,165.1 L167.8,157.2 L164.5,154.8 L170.2,146.7 L169.1,144.3 L170.7,141.8 L166.4,138.2 L163.4,138.9 L165.3,128.3 L173.0,131.7 L173.6,125.6 L178.7,125.5 L180.7,124.2 L182.0,127.1 L186.8,128.6 L186.8,130.1 L188.5,130.5 L191.8,128.4 L197.8,128.3 L198.4,129.7 L197.2,134.1 L197.6,139.3 L196.4,139.0 L193.4,144.4 L190.0,156.2 L187.8,157.5 L187.0,164.6 L188.6,167.7 L182.9,172.2 Z"
+};
 
 const LS_KEY    = 'arg_turismo_sitios';
 
@@ -2253,25 +2529,177 @@ async function loadSitios() {
   SITIOS = DEFAULT_SITIOS.map(s => ({...s}));
 }
 
+// ─── REGIONES DE ARGENTINA (COFEMA) ───────────────────────────────────────────
+// Fuente: https://www.argentina.gob.ar/jefatura/turismo-y-ambiente/ambiente/articulacion-ambiental/regiones
+const REGIONES_LIST = [
+  { id:'noa',              label:'NOA (Noroeste Argentino)', keys:['catamarca','jujuy','salta','santiago_del_estero','tucuman'] },
+  { id:'nea',              label:'NEA (Noreste Argentino)',  keys:['chaco','corrientes','entre_rios','formosa','misiones','santa_fe'] },
+  { id:'centro',           label:'Centro',                   keys:['buenos_aires_prov','caba','cordoba'] },
+  { id:'cuyo',             label:'Cuyo',                      keys:['mendoza','san_juan','la_rioja','san_luis'] },
+  { id:'patagonia_norte',  label:'Patagonia Norte',          keys:['la_pampa','neuquen','rio_negro'] },
+  { id:'patagonia_sur',    label:'Patagonia Sur',            keys:['chubut','santa_cruz','tierra_del_fuego'] }
+];
+const regionThumbItemEls = {}; // id -> { item, shapeEls: [] }
+
 // ─── PROVINCIAS INTRO (pantalla completa, antes de entrar al mapa) ────────────
-const provIntroEls = {};
-function buildProvinciasIntro() {
-  const grid = document.getElementById('grid-provincias-intro');
-  if (!grid) return;
-  grid.innerHTML = '';
-  const sortedProv = [...PROVINCIAS_LIST].sort((a,b) => a.label.localeCompare(b.label, 'es'));
-  sortedProv.forEach(p => {
-    const el = document.createElement('div');
-    el.className = 'pp-item ' + (activeProv.has(p.key) ? 'on' : 'off');
-    el.textContent = p.label;
-    el.addEventListener('click', () => {
-      if (activeProv.has(p.key)) { activeProv.delete(p.key); el.classList.replace('on','off'); }
-      else                       { activeProv.add(p.key);    el.classList.replace('off','on'); }
-      updateProvIntroBtn();
-    });
-    grid.appendChild(el);
-    provIntroEls[p.key] = el;
+const provIntroEls = {}; // key -> array of elements (svg shape + list item) to keep in sync
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+function toggleProvIntro(key) {
+  const turningOn = !activeProv.has(key);
+  if (turningOn) activeProv.add(key); else activeProv.delete(key);
+  (provIntroEls[key] || []).forEach(el => {
+    el.classList.toggle('on', turningOn);
+    el.classList.toggle('off', !turningOn);
   });
+  updateProvIntroBtn();
+  updateRegionThumbStates();
+}
+
+// ─── MINI-MAPAS DE REGIONES (columna a la izquierda del mapa de provincias) ──
+function buildRegionThumbnails() {
+  const col = document.getElementById('pp-regions-col');
+  if (!col) return;
+  col.innerHTML = '';
+  Object.keys(regionThumbItemEls).forEach(k => delete regionThumbItemEls[k]);
+
+  REGIONES_LIST.forEach(region => {
+    const item = document.createElement('div');
+    item.className = 'pp-region-item';
+    item.setAttribute('role', 'button');
+    item.setAttribute('title', region.label);
+
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('class', 'pp-region-thumb-svg');
+    svg.setAttribute('viewBox', '0 0 ' + ARG_MAP_VIEWBOX.w + ' ' + ARG_MAP_VIEWBOX.h);
+
+    const shapeEls = [];
+    const regionKeySet = new Set(region.keys);
+
+    // Provincias con forma geográfica real
+    Object.keys(ARG_MAP_PATHS).forEach(key => {
+      const path = document.createElementNS(SVG_NS, 'path');
+      path.setAttribute('d', ARG_MAP_PATHS[key]);
+      path.setAttribute('class', regionKeySet.has(key) ? 'pp-region-prov-on' : 'pp-region-prov-off');
+      svg.appendChild(path);
+      if (regionKeySet.has(key)) shapeEls.push(path);
+    });
+
+    // CABA (Región Centro)
+    const caba = document.createElementNS(SVG_NS, 'circle');
+    caba.setAttribute('cx', ARG_MAP_CABA.x);
+    caba.setAttribute('cy', ARG_MAP_CABA.y);
+    caba.setAttribute('r', ARG_MAP_CABA.r * 1.8); // un poco más grande para que se note en miniatura
+    caba.setAttribute('class', regionKeySet.has('caba') ? 'pp-region-prov-on' : 'pp-region-prov-off');
+    svg.appendChild(caba);
+    if (regionKeySet.has('caba')) shapeEls.push(caba);
+
+    const label = document.createElement('div');
+    label.className = 'pp-region-label';
+    label.textContent = region.label;
+
+    item.appendChild(svg);
+    item.appendChild(label);
+    item.addEventListener('click', () => toggleRegion(region));
+    col.appendChild(item);
+
+    regionThumbItemEls[region.id] = { item, shapeEls };
+  });
+
+  updateRegionThumbStates();
+}
+
+// Activa/desactiva de una sola vez todas las provincias de una región.
+// Si ya están todas habilitadas, las inhabilita; si no, las habilita todas.
+function toggleRegion(region) {
+  const allOn = region.keys.every(key => activeProv.has(key));
+  const turnOn = !allOn;
+  region.keys.forEach(key => {
+    if (turnOn) activeProv.add(key); else activeProv.delete(key);
+    (provIntroEls[key] || []).forEach(el => {
+      el.classList.toggle('on', turnOn);
+      el.classList.toggle('off', !turnOn);
+    });
+  });
+  updateProvIntroBtn();
+  updateRegionThumbStates();
+}
+
+// Refleja en cada mini-mapa si toda su región está habilitada (borde/relleno verde)
+function updateRegionThumbStates() {
+  REGIONES_LIST.forEach(region => {
+    const entry = regionThumbItemEls[region.id];
+    if (!entry) return;
+    const allOn = region.keys.every(key => activeProv.has(key));
+    entry.item.classList.toggle('region-on', allOn);
+  });
+}
+
+function buildProvinciasIntro() {
+  const wrap = document.getElementById('pp-map-wrap');
+  if (!wrap) return;
+  const existingSvg = document.getElementById('pp-map-svg');
+  if (existingSvg) existingSvg.remove();
+  Object.keys(provIntroEls).forEach(k => delete provIntroEls[k]);
+
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('id', 'pp-map-svg');
+  svg.setAttribute('class', 'pp-map-svg');
+  svg.setAttribute('viewBox', '0 0 ' + ARG_MAP_VIEWBOX.w + ' ' + ARG_MAP_VIEWBOX.h);
+
+  // Panel con el nombre de la provincia (a la derecha del mapa).
+  // Aparece al pasar el cursor sobre una provincia y desaparece al salir.
+  const namePanel = document.getElementById('pp-prov-name-panel');
+  const nameText  = document.getElementById('pp-prov-name-text');
+  const setHoverName = (label) => {
+    if (!namePanel || !nameText) return;
+    if (label) {
+      nameText.textContent = label;
+      namePanel.classList.add('visible');
+    } else {
+      namePanel.classList.remove('visible');
+    }
+  };
+
+  function registerEl(key, el) {
+    if (!provIntroEls[key]) provIntroEls[key] = [];
+    provIntroEls[key].push(el);
+    el.classList.add(activeProv.has(key) ? 'on' : 'off');
+  }
+
+  function wireSvgShape(el, key, label) {
+    const titleEl = document.createElementNS(SVG_NS, 'title');
+    titleEl.textContent = label;
+    el.appendChild(titleEl);
+    el.classList.add('pp-prov');
+    el.addEventListener('click', () => toggleProvIntro(key));
+    el.addEventListener('mouseenter', () => setHoverName(label));
+    el.addEventListener('mouseleave', () => setHoverName(null));
+    registerEl(key, el);
+  }
+
+  const labelByKey = {};
+  PROVINCIAS_LIST.forEach(p => { labelByKey[p.key] = p.label; });
+
+  // Provincias con forma geográfica real
+  Object.keys(ARG_MAP_PATHS).forEach(key => {
+    const path = document.createElementNS(SVG_NS, 'path');
+    path.setAttribute('d', ARG_MAP_PATHS[key]);
+    wireSvgShape(path, key, labelByKey[key] || key);
+    svg.appendChild(path);
+  });
+
+  // CABA: marcador circular (demasiado pequeña para verse como polígono en este mapa)
+  const caba = document.createElementNS(SVG_NS, 'circle');
+  caba.setAttribute('cx', ARG_MAP_CABA.x);
+  caba.setAttribute('cy', ARG_MAP_CABA.y);
+  caba.setAttribute('r', ARG_MAP_CABA.r);
+  wireSvgShape(caba, 'caba', labelByKey['caba'] || 'Ciudad de Buenos Aires');
+  svg.appendChild(caba);
+
+  wrap.appendChild(svg);
+
+  setHoverName(null);
   updateProvIntroBtn();
 }
 
@@ -2283,12 +2711,17 @@ function updateProvIntroBtn() {
 }
 
 document.getElementById('btn-all-prov-intro').addEventListener('click', () => {
-  if (activeProv.size > 0) {
-    PROVINCIAS_LIST.forEach(p => { activeProv.delete(p.key); provIntroEls[p.key] && provIntroEls[p.key].classList.replace('on','off'); });
-  } else {
-    PROVINCIAS_LIST.forEach(p => { activeProv.add(p.key); provIntroEls[p.key] && provIntroEls[p.key].classList.replace('off','on'); });
-  }
+  const allKeys = PROVINCIAS_LIST.map(p => p.key);
+  const turnOn = activeProv.size === 0;
+  allKeys.forEach(key => {
+    if (turnOn) activeProv.add(key); else activeProv.delete(key);
+    (provIntroEls[key] || []).forEach(el => {
+      el.classList.toggle('on', turnOn);
+      el.classList.toggle('off', !turnOn);
+    });
+  });
   updateProvIntroBtn();
+  updateRegionThumbStates();
 });
 
 // ─── TIPOS DE TURISMO INTRO (pantalla completa, antes de entrar al mapa) ──────
@@ -3220,6 +3653,158 @@ document.getElementById('iti-btn-salir').addEventListener('click', function() {
   if (modalOrigenes) modalOrigenes.style.display = 'none';
 });
 
+function renderEstadisticaChart() {
+  const list  = activeItinerarios().slice().sort((a,b) => a.fecha - b.fecha);
+  const wrap  = document.getElementById('est-chart-wrap');
+  const empty = document.getElementById('est-empty');
+  if (!wrap) return;
+
+  if (!list.length) {
+    wrap.innerHTML = '';
+    wrap.style.display = 'none';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  wrap.style.display = 'block';
+  if (empty) empty.style.display = 'none';
+
+  const kmValues = list.map(function(it) { return Math.round((it.totalDist || 0) / 1000); });
+  const maxKm    = Math.max(1, Math.max.apply(null, kmValues));
+
+  const rowH   = 34;
+  const gapH   = 12;
+  const chartW = 620;
+  const labelW = 150;
+  const barMaxW = chartW - labelW - 70;
+  const chartH = list.length * (rowH + gapH) + 40;
+
+  function truncLabel(s, maxChars) {
+    if (s.length <= maxChars) return s;
+    return s.slice(0, maxChars - 1).trimEnd() + '…';
+  }
+
+  let bars = '';
+  let gridLines = '';
+  const ticks = 5;
+  for (let t = 0; t <= ticks; t++) {
+    const x = labelW + (barMaxW * t / ticks);
+    const val = Math.round(maxKm * t / ticks);
+    gridLines += '<line x1="' + x + '" y1="10" x2="' + x + '" y2="' + (chartH - 26) + '" stroke="#2a3050" stroke-width="1" />';
+    gridLines += '<text x="' + x + '" y="' + (chartH - 8) + '" fill="#7a83a6" font-size="11" font-family="Barlow, sans-serif" text-anchor="middle">' + val + '</text>';
+  }
+
+  list.forEach(function(it, i) {
+    const y      = 20 + i * (rowH + gapH);
+    const km     = kmValues[i];
+    const barW   = Math.max(2, (km / maxKm) * barMaxW);
+    const nombre = escH(it.nombre || ('Itinerario ' + (i + 1)));
+    const nombreCorto = escH(truncLabel(it.nombre || ('Itinerario ' + (i + 1)), 18));
+    bars += '<text x="' + (labelW - 12) + '" y="' + (y + rowH / 2 + 4) + '" fill="#e8c96a" font-size="12" font-family="Barlow, sans-serif" text-anchor="end">' + nombreCorto + '<title>' + nombre + '</title></text>';
+    bars += '<rect x="' + labelW + '" y="' + y + '" width="' + barW + '" height="' + rowH + '" rx="4" fill="' + (it.realizado ? '#00b0ff' : '#e8c96a') + '" opacity="0.85"><title>' + nombre + '</title></rect>';
+    bars += '<text x="' + (labelW + barW + 8) + '" y="' + (y + rowH / 2 + 4) + '" fill="#c8d0f0" font-size="12" font-family="Barlow, sans-serif">' + km + ' km</text>';
+  });
+
+  const svg =
+    '<svg viewBox="0 0 ' + chartW + ' ' + chartH + '" width="100%" height="' + chartH + '" xmlns="http://www.w3.org/2000/svg">' +
+      gridLines + bars +
+    '</svg>';
+
+  wrap.innerHTML =
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:14px; text-align:center;">Kilómetros totales recorridos por itinerario</div>' +
+    svg +
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.72rem; color:#7a83a6; text-align:center; margin-top:6px;">Km</div>';
+}
+
+function openEstadisticaModal() {
+  renderEstadisticaChart();
+  document.getElementById('modal-estadistica').style.display = 'flex';
+}
+function closeEstadisticaModal() {
+  document.getElementById('modal-estadistica').style.display = 'none';
+}
+document.getElementById('iti-btn-estadistica').addEventListener('click', openEstadisticaModal);
+document.getElementById('est-close').addEventListener('click', closeEstadisticaModal);
+document.getElementById('modal-estadistica').addEventListener('click', function(e) {
+  if (e.target === this) closeEstadisticaModal();
+});
+
+// ── ESTADÍSTICA POR TRAMOS (individual) ───────────────────────────────────
+function abrirEstadisticaTramos(id) {
+  const it = findItinerario(id);
+  if (!it) return;
+
+  document.getElementById('stat-tramos-titulo').textContent = it.nombre || 'Estadística de Tramos';
+
+  const wrap = document.getElementById('stat-tramos-chart');
+  if (!wrap) return;
+
+  const legs  = it.legs || [];
+  const stops = it.stops || [];
+
+  if (!legs.length) {
+    wrap.innerHTML = '<div style="padding:40px 24px; text-align:center; color:#7a83a6; font-family:\'Barlow\',sans-serif; font-size:0.85rem;">Sin tramos disponibles.</div>';
+    document.getElementById('modal-stat-tramos').style.display = 'flex';
+    return;
+  }
+
+  const kmValues = legs.map(function(l) { return Math.round((l.distance || 0) / 1000 * 10) / 10; });
+  const maxKm    = Math.max(1, Math.max.apply(null, kmValues));
+
+  const rowH    = 34;
+  const gapH    = 12;
+  const chartW  = 620;
+  const labelW  = 160;
+  const barMaxW = chartW - labelW - 70;
+  const chartH  = legs.length * (rowH + gapH) + 40;
+
+  function truncLabel(s, maxChars) {
+    return s.length <= maxChars ? s : s.slice(0, maxChars - 1).trimEnd() + '…';
+  }
+
+  let bars = '';
+  let gridLines = '';
+  const ticks = 5;
+  for (let t = 0; t <= ticks; t++) {
+    const x   = labelW + (barMaxW * t / ticks);
+    const val = Math.round(maxKm * t / ticks * 10) / 10;
+    gridLines += '<line x1="' + x + '" y1="10" x2="' + x + '" y2="' + (chartH - 26) + '" stroke="#2a3050" stroke-width="1" />';
+    gridLines += '<text x="' + x + '" y="' + (chartH - 8) + '" fill="#7a83a6" font-size="11" font-family="Barlow, sans-serif" text-anchor="middle">' + val + '</text>';
+  }
+
+  legs.forEach(function(leg, i) {
+    const y       = 20 + i * (rowH + gapH);
+    const km      = kmValues[i];
+    const barW    = Math.max(2, (km / maxKm) * barMaxW);
+    const desde   = stops[i]   ? (stops[i].name   || 'Parada ' + (i + 1))     : 'Parada ' + (i + 1);
+    const hasta   = stops[i+1] ? (stops[i+1].name || 'Parada ' + (i + 2))     : 'Parada ' + (i + 2);
+    const label   = escH(truncLabel(desde + ' → ' + hasta, 24));
+    const tooltip = escH(desde + ' → ' + hasta);
+    const color   = it.realizado ? '#00b0ff' : '#e8c96a';
+    bars += '<text x="' + (labelW - 8) + '" y="' + (y + rowH / 2 + 4) + '" fill="#e8c96a" font-size="11" font-family="Barlow, sans-serif" text-anchor="end">' + label + '<title>' + tooltip + '</title></text>';
+    bars += '<rect x="' + labelW + '" y="' + y + '" width="' + barW + '" height="' + rowH + '" rx="4" fill="' + color + '" opacity="0.85"><title>' + tooltip + '</title></rect>';
+    bars += '<text x="' + (labelW + barW + 8) + '" y="' + (y + rowH / 2 + 4) + '" fill="#c8d0f0" font-size="11" font-family="Barlow, sans-serif">' + km + ' km</text>';
+  });
+
+  const svg =
+    '<svg viewBox="0 0 ' + chartW + ' ' + chartH + '" width="100%" height="' + chartH + '" xmlns="http://www.w3.org/2000/svg">' +
+      gridLines + bars +
+    '</svg>';
+
+  wrap.innerHTML =
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:14px; text-align:center;">Kilómetros por tramo</div>' +
+    svg +
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.72rem; color:#7a83a6; text-align:center; margin-top:6px;">Km</div>';
+
+  document.getElementById('modal-stat-tramos').style.display = 'flex';
+}
+
+document.getElementById('stat-tramos-close').addEventListener('click', function() {
+  document.getElementById('modal-stat-tramos').style.display = 'none';
+});
+document.getElementById('modal-stat-tramos').addEventListener('click', function(e) {
+  if (e.target === this) document.getElementById('modal-stat-tramos').style.display = 'none';
+});
+
 function renderItinerariosTable() {
   const list  = activeItinerarios().slice().sort((a,b) => a.fecha - b.fecha);
   const tbody = document.getElementById('iti-tbody');
@@ -3238,13 +3823,43 @@ function renderItinerariosTable() {
     return '<tr class="mo-tr">' +
       '<td class="mo-td mo-td-n"><span class="mo-num-circle">' + (idx + 1) + '</span></td>' +
       '<td class="mo-td">' + escH(it.nombre) + '</td>' +
+      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-realizado' + (it.realizado ? ' iti-realizado-si' : '') + '" data-id="' + it.id + '" type="button" title="' + (it.realizado ? 'Realizado' : 'No realizado') + '">' + (it.realizado ? '&#10003;' : '&#9675;') + '</button></td>' +
+      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-edit" data-id="' + it.id + '" type="button" title="Editar nombre">&#9998;</button></td>' +
       '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-ver" data-id="' + it.id + '" type="button" title="Ver">&#128065;</button></td>' +
       '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-map" data-id="' + it.id + '" type="button" title="Mapa">&#128506;</button></td>' +
       '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-del" data-id="' + it.id + '" type="button" title="Eliminar">&#128465;</button></td>' +
       '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-print" data-id="' + it.id + '" type="button" title="Imprimir">&#128424;</button></td>' +
-      '<td class="mo-td">' + fecha + '</td>' +
+      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-stat" data-id="' + it.id + '" type="button" title="Estadística por tramos">&#128202;</button></td>' +
+      '<td class="mo-td" style="padding-left:6px;">' + fecha + '</td>' +
     '</tr>';
   }).join('');
+
+  tbody.querySelectorAll('.iti-realizado').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const id = btn.dataset.id;
+      const list = activeItinerarios().map(function(x) {
+        return x.id === id ? Object.assign({}, x, { realizado: !x.realizado }) : x;
+      });
+      saveActiveItinerarios(list);
+      renderItinerariosTable();
+    });
+  });
+
+  tbody.querySelectorAll('.iti-edit').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const id = btn.dataset.id;
+      const it = findItinerario(id);
+      if (!it) return;
+      const nuevoNombre = prompt('Nuevo nombre para la ruta:', it.nombre);
+      if (nuevoNombre === null) return; // canceló
+      const nombre = nuevoNombre.trim() || it.nombre;
+      const list = activeItinerarios().map(function(x) {
+        return x.id === id ? Object.assign({}, x, { nombre }) : x;
+      });
+      saveActiveItinerarios(list);
+      renderItinerariosTable();
+    });
+  });
 
   tbody.querySelectorAll('.iti-del').forEach(function(btn) {
     btn.addEventListener('click', function() {
@@ -3262,6 +3877,10 @@ function renderItinerariosTable() {
 
   tbody.querySelectorAll('.iti-map').forEach(function(btn) {
     btn.addEventListener('click', function() { mostrarItinerarioEnMapa(btn.dataset.id); });
+  });
+
+  tbody.querySelectorAll('.iti-stat').forEach(function(btn) {
+    btn.addEventListener('click', function() { abrirEstadisticaTramos(btn.dataset.id); });
   });
 
   tbody.querySelectorAll('.iti-print').forEach(function(btn) {
@@ -3428,27 +4047,60 @@ document.addEventListener('DOMContentLoaded', function() {
   // Build the fullscreen province/category grids as soon as the page loads
   // (they don't depend on Leaflet or sitios.json, so they're ready instantly)
   if (typeof buildProvinciasIntro === 'function') buildProvinciasIntro();
+  if (typeof buildRegionThumbnails === 'function') buildRegionThumbnails();
   if (typeof buildCategoriasIntro === 'function') buildCategoriasIntro();
 
-  // Step 1: Entrar → página "Quienes somos"
+  // Step 1: Entrar → siempre muestra el formulario de inicio de sesión / registro
   var btnEntrar = document.getElementById('btn-entrar');
   if (btnEntrar) {
     btnEntrar.addEventListener('click', function() {
-      var intro = document.getElementById('page-intro');
-      var qs    = document.getElementById('page-quienes-somos');
-      fadeSwap(intro, qs, 'block');
+      var sess = sessionGet();
+      var authModal = document.getElementById('modal-auth');
+      var sessionScreen = document.getElementById('mo-auth-session-active');
+      var loginScreen   = document.getElementById('mo-auth');
+      if (sess) {
+        // Ya hay sesión: mostrar pantalla de sesión activa
+        document.getElementById('mo-auth-session-user').textContent = sess;
+        if (sessionScreen) sessionScreen.style.display = 'block';
+        if (loginScreen)   loginScreen.style.display   = 'none';
+      } else {
+        // Sin sesión: mostrar formulario de login/registro
+        if (sessionScreen) sessionScreen.style.display = 'none';
+        if (loginScreen)   loginScreen.style.display   = 'block';
+        moShowAuth();
+      }
+      authModal.style.display = 'flex';
     });
   }
 
-  // Step 1.5: Continuar (Quienes somos) → pantalla de selección de provincias
-  var btnQuienesContinuar = document.getElementById('btn-quienes-continuar');
-  if (btnQuienesContinuar) {
-    btnQuienesContinuar.addEventListener('click', function() {
-      var qs = document.getElementById('page-quienes-somos');
-      var pp = document.getElementById('page-provincias');
-      fadeSwap(qs, pp, 'flex');
-    });
+  // Botón "Cerrar" del modal-auth
+  document.getElementById('mo-auth-close').addEventListener('click', function() {
+    document.getElementById('modal-auth').style.display = 'none';
+  });
+
+  // Botón "Cerrar sesión" dentro del modal-auth (pantalla de sesión activa)
+  document.getElementById('mo-auth-btn-logout').addEventListener('click', function() {
+    sessionClear();
+    guestSessionActive = false;
+    moUsername = '';
+    var sessionScreen = document.getElementById('mo-auth-session-active');
+    var loginScreen   = document.getElementById('mo-auth');
+    if (sessionScreen) sessionScreen.style.display = 'none';
+    if (loginScreen)   { loginScreen.style.display = 'block'; moShowAuth(); }
+  });
+
+  // Botón "Entrar" (con sesión ya activa) → va directo al mapa
+  document.getElementById('mo-auth-btn-entrar').addEventListener('click', function() {
+    document.getElementById('modal-auth').style.display = 'none';
+    irAProvincias();
+  });
+
+  function irAProvincias() {
+    var intro = document.getElementById('page-intro');
+    var pp    = document.getElementById('page-provincias');
+    fadeSwap(intro, pp, 'flex');
   }
+  window.irAProvincias = irAProvincias;
 
   // ── HEADER ORIGIN SELECT ──────────────────────────────────────────────────
   function headerOrigenPopulate() {
@@ -3989,6 +4641,7 @@ function moCommitRow(i, tr) {
 
 let moMode     = 'guest'; // 'session' | 'guest'
 let moUsername = '';
+let guestSessionActive = false; // true una vez que el usuario elige "Continuar sin iniciar sesión"
 
 function moOpen() {
   const errEl = document.getElementById('mo-error');
@@ -3996,20 +4649,16 @@ function moOpen() {
   const sess = sessionGet();
   if (sess) {
     moUsername = sess;
-    moMode = 'session';
     moEnterTable('session');
   } else {
-    moShowAuth();
+    // Si llegó hasta acá sin sesión, ya eligió "Continuar sin iniciar sesión" en la pantalla de bienvenida
+    moEnterTable('guest');
   }
   document.getElementById('modal-origenes').style.display = 'flex';
 }
 
 function moShowAuth() {
   moUsername = '';
-  document.getElementById('mo-auth').style.display        = 'flex';
-  document.getElementById('mo-session-bar').style.display  = 'none';
-  document.getElementById('mo-body-wrap').style.display     = 'none';
-  document.getElementById('mo-footer').style.display        = 'none';
   moSwitchTab('login');
   ['mo-login-error','mo-reg-error'].forEach(function(id){ document.getElementById(id).textContent = ''; });
   ['mo-login-user','mo-login-pass','mo-reg-user','mo-reg-pass','mo-reg-pass2'].forEach(function(id){ document.getElementById(id).value = ''; });
@@ -4031,7 +4680,6 @@ function moSwitchTab(tab) {
 
 function moEnterTable(mode) {
   moMode = mode; // 'session' | 'guest'
-  document.getElementById('mo-auth').style.display = 'none';
   document.getElementById('mo-body-wrap').style.display = 'block';
   document.getElementById('mo-footer').style.display = 'flex';
 
@@ -4230,8 +4878,9 @@ document.addEventListener('DOMContentLoaded', function() {
     err.textContent = '';
     moUsername = res.username;
     sessionSet(moUsername);
-    moEnterTable('session');
     if (typeof window.headerOrigenPopulate === 'function') window.headerOrigenPopulate();
+    document.getElementById('modal-auth').style.display = 'none';
+    irAProvincias();
   });
 
   // Registrarse
@@ -4247,26 +4896,35 @@ document.addEventListener('DOMContentLoaded', function() {
     err.textContent = '';
     moUsername = res.username;
     sessionSet(moUsername);
-    moEnterTable('session');
     if (typeof window.headerOrigenPopulate === 'function') window.headerOrigenPopulate();
+    document.getElementById('modal-auth').style.display = 'none';
+    irAProvincias();
   });
 
   // Continuar sin iniciar sesión
-  document.getElementById('mo-btn-guest').addEventListener('click', function() {
-    moEnterTable('guest');
+  var moBtnGuest = document.getElementById('mo-btn-guest');
+  if (moBtnGuest) moBtnGuest.addEventListener('click', function() {
+    guestSessionActive = true;
+    moMode = 'guest';
+    document.getElementById('modal-auth').style.display = 'none';
+    irAProvincias();
   });
 
-  // Cerrar sesión (desde dentro del formulario de Orígenes)
+  // Cerrar sesión (desde dentro del formulario de Orígenes) → vuelve a la pantalla de bienvenida
   document.getElementById('mo-btn-logout').addEventListener('click', function() {
     sessionClear();
     moUsername = '';
+    guestSessionActive = false;
     if (typeof window.headerOrigenPopulate === 'function') window.headerOrigenPopulate();
-    moShowAuth();
+    moClose(false);
+    var intro = document.getElementById('page-intro');
+    document.querySelectorAll('#page-provincias, #page-mapa-argentina, #page-mapa-provincia').forEach(function(p){ p.style.display = 'none'; });
+    intro.style.display = 'flex';
   });
 
-  // Desde modo invitado, volver a la pantalla de inicio de sesión
+  // Desde modo invitado, volver a la pantalla de inicio de sesión (mismo flujo: cerrar sesión)
   document.getElementById('mo-btn-login-from-guest').addEventListener('click', function() {
-    moShowAuth();
+    document.getElementById('mo-btn-logout').click();
   });
 });
 
