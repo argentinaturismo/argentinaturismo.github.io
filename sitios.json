@@ -449,6 +449,23 @@
     "lng": -71.47642
   },
   {
+    "id": "u1783108586513jmze",
+    "name": "Hotel Llao Llao",
+    "provincia": "rio_negro",
+    "localidad": "Bariloche",
+    "cat": "Histórico",
+    "desc": "El Hotel Llao Llao es uno de los establecimientos hoteleros más emblemáticos de Argentina y un ícono del turismo patagónico. Se encuentra ubicado sobre la península Llao Llao, a 25 km de la ciudad de San Carlos de Bariloche, dentro del Parque Nacional Nahuel Huapi. Su privilegiada ubicación, entre los lagos Nahuel Huapi y Moreno y rodeado por bosques andinos y montañas, le brinda algunas de las vistas panorámicas más reconocidas de la Patagonia argentina.\nDiseñado por el arquitecto Alejandro Bustillo, el hotel fue inaugurado en 1938 con el objetivo de impulsar el desarrollo turístico de la región. Tras un incendio que destruyó el edificio original en 1939, fue reconstruido respetando su diseño y reabierto en 1940. Desde entonces se ha convertido en un símbolo de la hotelería de lujo del país y en un importante referente del patrimonio arquitectónico argentino.\nSu arquitectura combina piedra, madera y grandes ventanales que se integran armoniosamente con el paisaje natural.\nConstituye uno de los principales atractivos turísticos de Bariloche, destacándose por su valor histórico, arquitectónico, paisajístico y cultural. Es considerado un referente del turismo de lujo y uno de los hoteles más prestigiosos de Sudamérica.",
+    "dias": "",
+    "horario": "",
+    "costo": "",
+    "epoca": "",
+    "foto1": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnmxMDlP4tCVzgg0Me3KovgF1c4amYSKj8Xr5MxdNXGQ&s=10",
+    "foto2": "",
+    "foto3": "",
+    "lat": -41.05776,
+    "lng": -71.53116
+  },
+  {
     "id": "u1783030994124fez6",
     "name": "Cascada de los duendes",
     "provincia": "rio_negro",
