@@ -1108,7 +1108,7 @@
     .btn-cerrar:hover { color:var(--text); border-color:var(--muted); }
 
     /* ── MAPS ── */
-    #map-argentina, #map-provincia { width:100%; flex:1; background:#0d1020; }
+    #map-argentina, #map-provincia { width:100%; flex:1; background:#cfe3ee; }
     #map-provincia { display:none; }
     .map-version-label {
       position:absolute; left:10px; bottom:8px; z-index:650;
@@ -1119,8 +1119,8 @@
     }
 
     /* ── Leaflet ── */
-    .leaflet-container { background:#0d1020; }
-    .leaflet-tile { filter:brightness(0.72) saturate(0.55) hue-rotate(200deg); }
+    .leaflet-container { background:#cfe3ee; }
+    .leaflet-tile { /* sin filtro: el estilo oscuro de CARTO ya viene con los colores correctos (agua en azul) */ }
     .leaflet-popup { display:none !important; }
     .crosshair { cursor:crosshair !important; }
 
@@ -1146,6 +1146,10 @@
     }
     .tab-info-content .tic-name {
       font-family:'Playfair Display',serif; font-size:0.95rem; font-weight:700; color:#fff;
+    }
+    .tab-info-content .tic-dir {
+      font-size:0.8rem; color:#c9cede; font-family:'Barlow',sans-serif;
+      font-weight:500; margin-bottom:4px; margin-top:-2px; flex-shrink:0;
     }
     .tab-info-content .tic-geo {
       font-size:0.84rem; color:#FFD700; font-family:'Barlow',sans-serif;
@@ -1329,7 +1333,7 @@
     }
     .mo-panel {
       background:#171c27; border:1px solid #2a3050; border-radius:14px;
-      width:min(980px, 96vw); max-height:90vh;
+      width:min(870px, 94vw); max-height:90vh;
       display:flex; flex-direction:column; overflow:hidden;
       box-shadow:0 24px 64px rgba(0,0,0,0.7);
       position:relative; z-index:1101; isolation:isolate;
@@ -1351,26 +1355,31 @@
     .mo-body::-webkit-scrollbar { width:6px; }
     .mo-body::-webkit-scrollbar-thumb { background:#2a3050; border-radius:4px; }
 
-    .mo-table { width:100%; min-width:860px; border-collapse:collapse; font-family:'Barlow',sans-serif; }
+    .mo-table { width:100%; min-width:790px; border-collapse:collapse; font-family:'Barlow',sans-serif; }
     .mo-th {
       font-family:'Barlow',sans-serif; font-size:0.72rem; font-weight:700;
       color:#e8c96a; text-transform:uppercase; letter-spacing:0.06em;
       padding:11px 14px; text-align:left; white-space:nowrap;
     }
     .mo-table thead tr { border-bottom:2px solid rgba(232,201,106,0.4); }
-    .mo-th-n       { width:46px; text-align:center; }
+    .mo-th-n       { width:36px; text-align:center; }
     .mo-th-nombre  { width:130px; }
-    .mo-th-prov    { width:210px; }
-    .mo-th-loc     { width:200px; }
+    .mo-th-dir     { width:160px; }
+    .mo-th-prov    { width:150px; }
+    .mo-th-loc     { width:180px; }
     .mo-th-coord   { width:130px; }
-    .mo-th-actions { width:100px; }
+    .mo-th-actions { width:70px; }
 
     .mo-tr { border-bottom:1px solid rgba(255,255,255,0.07); transition:background .12s; }
     .mo-tr:last-child { border-bottom:none; }
     .mo-tr:hover { background:rgba(255,255,255,0.03); }
+    .mo-tr-empty { opacity:0.45; }
+    .mo-tr-empty:hover { background:transparent; }
+    .mo-tr-empty .mo-num-circle { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.14); color:#7a83a6; }
 
     .mo-td { padding:11px 14px; vertical-align:middle; font-size:0.82rem; color:#e8eaf2; }
     .mo-td-n { text-align:center; }
+    .iti-nombre-cell { color:#ffee00; font-weight:600; }
     .mo-num-circle {
       display:inline-flex; align-items:center; justify-content:center;
       flex-shrink:0; width:26px; height:26px; border-radius:50%;
@@ -1387,6 +1396,75 @@
     }
     .mo-cell-input:focus { border-color:#e8c96a; }
     .mo-cell-input::placeholder { color:#3a4060; }
+
+    /* ── Buscador de dirección (geocoding) — Puntos de Origen ── */
+    .mo-search-row td { padding:10px 14px 16px; background:rgba(232,201,106,0.04); border-bottom:1px solid rgba(255,255,255,0.07); }
+    .mo-search-wrap { display:flex; gap:8px; }
+    .mo-search-input {
+      flex:1; background:#0f1117; border:1px solid #2a3050; border-radius:5px;
+      color:#e8eaf2; font-family:'Barlow',sans-serif; font-size:0.82rem;
+      padding:7px 10px; outline:none; transition:border-color .18s;
+    }
+    .mo-search-input:focus { border-color:#e8c96a; }
+    .mo-search-input::placeholder { color:#3a4060; }
+    .mo-search-btn {
+      background:transparent; border:1.5px solid #e8c96a; border-radius:5px;
+      color:#e8c96a; font-family:'Barlow',sans-serif; font-weight:600;
+      font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase;
+      cursor:pointer; padding:0 16px; white-space:nowrap;
+      transition:background .2s ease, color .2s ease;
+    }
+    .mo-search-btn:hover { background:#e8c96a; color:#0f1117; }
+    .mo-search-results { margin-top:8px; max-height:180px; overflow-y:auto; border-radius:6px; }
+    .mo-search-item {
+      padding:8px 10px; font-family:'Barlow',sans-serif; font-size:0.78rem;
+      color:#c9cede; cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.06);
+      transition:background .12s, color .12s;
+    }
+    .mo-search-item:last-child { border-bottom:none; }
+    .mo-search-item:hover { background:rgba(232,201,106,0.1); color:#e8c96a; }
+    .mo-search-tag {
+      display:inline-block; margin-right:8px; padding:1px 7px; border-radius:999px;
+      font-size:0.62rem; letter-spacing:0.06em; text-transform:uppercase; font-weight:700;
+      background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.4); color:#86efac;
+      vertical-align:middle;
+    }
+    .mo-search-tag-alt { background:rgba(122,131,166,0.15); border-color:rgba(122,131,166,0.4); color:#c9cede; }
+    .mo-search-tag-warn { background:rgba(232,201,106,0.15); border-color:rgba(232,201,106,0.45); color:#e8c96a; }
+    .mo-search-loading, .mo-search-empty {
+      padding:8px 10px; font-family:'Barlow',sans-serif; font-size:0.78rem; color:#7a83a6;
+    }
+    .mo-search-item-sel { background:rgba(232,201,106,0.16); color:#e8c96a; }
+
+    /* ── MODAL "Buscar dirección" (calle/localidad-CP/provincia, sin minimapa) ── */
+    .mad-backdrop { z-index:1200; }
+    .mad-panel { width:min(420px, 92vw); z-index:1201; }
+    .mad-body { padding:20px 24px 6px; display:flex; flex-direction:column; }
+    .mad-label {
+      font-family:'Barlow',sans-serif; font-size:0.72rem; font-weight:700;
+      color:#9aa3c4; text-transform:uppercase; letter-spacing:0.06em;
+      margin:12px 0 6px;
+    }
+    .mad-label:first-child { margin-top:0; }
+    .mad-input {
+      width:100%; background:#0f1117; border:1px solid #2a3050; border-radius:5px;
+      color:#e8eaf2; font-family:'Barlow',sans-serif; font-size:0.85rem;
+      padding:8px 10px; outline:none; transition:border-color .18s; box-sizing:border-box;
+    }
+    .mad-input:focus { border-color:#e8c96a; }
+    .mad-input::placeholder { color:#3a4060; }
+    .mad-select {
+      appearance:none; -webkit-appearance:none; cursor:pointer;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a83a6'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right 10px center; padding-right:26px;
+    }
+    .mad-select option { background:#0f1117; color:#e8eaf2; }
+    .mad-btn-buscar { width:100%; margin-top:16px; padding:9px 0; }
+    .mad-results { margin-top:12px; max-height:220px; }
+    .mad-footer { padding:16px 24px 20px; }
+    .mad-btn-cancelar { padding:8px 18px; }
+    #mad-btn-ok:disabled { opacity:0.4; cursor:not-allowed; }
+    #mad-btn-ok:disabled:hover { background:transparent; color:#e8c96a; }
     .mo-cell-input:disabled {
       background:transparent; border-color:transparent; color:#ffee00;
       cursor:default; padding:5px 4px;
@@ -1420,15 +1498,22 @@
     }
     .mo-btn-base:hover { background:#e8c96a; color:#0f1117; }
 
-    .mo-btn-edit, .mo-btn-ok {
+    .mo-btn-ok {
       background:transparent; border:1.5px solid #e8c96a; border-radius:2px;
       color:#e8c96a; font-family:'Barlow',sans-serif; font-weight:600;
       font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase;
       cursor:pointer; padding:4px 10px; white-space:nowrap;
       transition:background .3s ease, color .3s ease;
     }
-    .mo-btn-edit:hover, .mo-btn-ok:hover { background:#e8c96a; color:#0f1117; }
-    .mo-btn-del  { color:#9aa3c4; font-size:0.9rem; padding:4px 10px; line-height:1;
+    .mo-btn-ok:hover { background:#e8c96a; color:#0f1117; }
+    .mo-btn-edit {
+      background:none; border:1px solid #2a3050; border-radius:5px;
+      width:19px; height:19px; cursor:pointer; font-size:0.64rem;
+      color:#9aa3c4; display:inline-flex; align-items:center; justify-content:center;
+      transition:background .15s, color .15s, border-color .15s;
+    }
+    .mo-btn-edit:hover { color:#e8c96a; border-color:#e8c96a; background:rgba(232,201,106,0.08); }
+    .mo-btn-del  { color:#9aa3c4; font-size:0.72rem; padding:2px 6px; line-height:1;
       background:none; border:1.5px solid #2a3050; border-radius:2px; cursor:pointer;
       transition:background .15s, color .15s, border-color .15s;
     }
@@ -1471,7 +1556,7 @@
     .iti-icon-btn.iti-realizado-si:hover { background:rgba(0,176,255,0.2); }
     .iti-nombre-input {
       width:100%; background:#171c27; border:1.5px solid #e8c96a; border-radius:4px;
-      color:#e8eaf2; font-family:'Barlow',sans-serif; font-size:0.82rem;
+      color:#ffee00; font-family:'Barlow',sans-serif; font-size:0.82rem;
       padding:4px 7px; outline:none;
     }
     .iti-nombre-input:focus { border-color:#f4dd94; box-shadow:0 0 0 2px rgba(232,201,106,0.2); }
@@ -2132,6 +2217,7 @@
           <span class="tic-cat" id="tic-cat"></span>
           <span class="tic-name" id="tic-name"></span>
         </div>
+        <div class="tic-dir" id="tic-dir" style="display:none;"></div>
         <div class="tic-geo" id="tic-geo"></div>
         <div class="tic-desc" id="tic-desc"></div>
         <div class="tic-fotos" id="tic-fotos"></div>
@@ -2292,12 +2378,11 @@
       <table class="mo-table">
         <thead>
           <tr>
-            <th class="mo-th mo-th-n">#</th>
+            <th class="mo-th mo-th-n">N°</th>
             <th class="mo-th mo-th-nombre">Nombre</th>
-            <th class="mo-th mo-th-prov">Provincia</th>
+            <th class="mo-th mo-th-dir">Dirección (calle y N°)</th>
             <th class="mo-th mo-th-loc">Localidad</th>
-            <th class="mo-th mo-th-coord">Lat.</th>
-            <th class="mo-th mo-th-coord">Long.</th>
+            <th class="mo-th mo-th-prov">Provincia</th>
             <th class="mo-th mo-th-actions"></th>
           </tr>
         </thead>
@@ -2310,6 +2395,35 @@
       <button class="mo-btn-guardar" id="mo-btn-guardar" type="button">Guardar y Salir</button>
     </div>
 
+  </div>
+</div>
+
+<!-- ═══════════════════  MODAL BUSCAR DIRECCIÓN (sin minimapa)  ═══════════════════ -->
+<div id="modal-buscar-direccion" class="mo-backdrop mad-backdrop" style="display:none;">
+  <div class="mo-panel mad-panel">
+    <div class="mo-header">
+      <span class="mo-title">Buscar dirección</span>
+      <button class="mo-close" id="mad-close" type="button">✕</button>
+    </div>
+    <div class="mad-body">
+      <label class="mad-label" for="mad-calle">Calle y número</label>
+      <input class="mad-input" id="mad-calle" type="text" maxlength="120" placeholder="Ej: Av. Bustillo 2500" autocomplete="off" />
+
+      <label class="mad-label" for="mad-localidad">Localidad o código postal</label>
+      <input class="mad-input" id="mad-localidad" type="text" maxlength="80" placeholder="Ej: Tigre" autocomplete="off" />
+
+      <label class="mad-label" for="mad-provincia">Provincia</label>
+      <select class="mad-input mad-select" id="mad-provincia"></select>
+
+      <button class="mo-search-btn mad-btn-buscar" id="mad-btn-buscar" type="button">Buscar</button>
+
+      <div class="mo-search-results mad-results" id="mad-results"></div>
+      <div class="mo-error" id="mad-error"></div>
+    </div>
+    <div class="mo-footer mad-footer">
+      <button class="mo-btn-base mad-btn-cancelar" id="mad-btn-cancelar" type="button">Cancelar</button>
+      <button class="mo-btn-guardar" id="mad-btn-ok" type="button" disabled>OK</button>
+    </div>
   </div>
 </div>
 
@@ -2337,7 +2451,6 @@
   <div class="mo-panel" style="width:min(900px, 97vw);">
     <div class="mo-header">
       <span class="mo-title">Itinerarios</span>
-      <button class="mo-close" id="iti-close" type="button">✕</button>
     </div>
     <div class="mo-body">
       <table class="mo-table">
@@ -2346,7 +2459,7 @@
             <th class="mo-th mo-th-n">N°</th>
             <th class="mo-th" style="width:110px;">Nombre</th>
             <th class="mo-th" style="width:36px; text-align:center; padding-left:4px; padding-right:4px;">✓</th>
-            <th class="mo-th" style="width:30px; text-align:center; padding-left:4px; padding-right:4px;">Editar</th>
+            <th class="mo-th" style="width:30px; text-align:center; padding-left:4px; padding-right:4px;">&#9998;</th>
             <th class="mo-th" style="width:30px; text-align:center; padding-left:4px; padding-right:4px;">Ver</th>
             <th class="mo-th" style="width:30px; text-align:center; padding-left:4px; padding-right:4px;">Mapa</th>
             <th class="mo-th" style="width:36px; text-align:center; padding-left:4px; padding-right:4px;">Eliminar</th>
@@ -2357,53 +2470,55 @@
         </thead>
         <tbody id="iti-tbody"></tbody>
       </table>
-      <div id="iti-empty" style="display:none; padding:40px 24px; text-align:center; color:#7a83a6; font-family:'Barlow',sans-serif; font-size:0.85rem;">
-        Todavía no guardaste ningún itinerario.
-      </div>
     </div>
-    <div class="mo-footer-salir" style="justify-content:space-between;">
-      <div style="display:flex; align-items:center; gap:10px;">
-        <span style="font-family:'Barlow',sans-serif; font-weight:600; font-size:0.78rem; letter-spacing:0.06em; color:#e8eaf2;">Estadísticas</span>
+    <div class="mo-footer-salir" style="flex-direction:column; align-items:stretch; gap:14px;">
+      <div style="display:flex; align-items:center; justify-content:flex-start; gap:10px;">
+        <span style="font-family:'Barlow',sans-serif; font-weight:600; font-size:0.78rem; letter-spacing:0.18em; text-transform:uppercase; color:#e8eaf2;">Estadísticas</span>
         <button class="iti-icon-btn" id="iti-btn-estadistica" type="button" title="Estadística de Rutas (Por Distancia)"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M2 13.5 L2 9 M6 13.5 L6 6 M10 13.5 L10 3 M14 13.5 L14 7.5"/><line x1="1" y1="14.5" x2="15" y2="14.5"/></svg></button>
         <button class="iti-icon-btn" id="iti-btn-estadistica-tiempo" type="button" title="Estadística de Rutas (Tiempo)">&#9201;</button>
       </div>
-      <button class="ruta-btn-secundario" id="iti-btn-salir" type="button">Salir</button>
+      <div style="display:flex; justify-content:center;">
+        <button class="ruta-btn-secundario" id="iti-btn-salir" type="button">Cerrar</button>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- ── ESTADÍSTICA POR TRAMOS - KM (por itinerario) ── -->
 <div id="modal-stat-tramos" class="mo-backdrop" style="display:none;">
-  <div class="mo-panel" style="width:min(720px, 95vw);">
+  <div class="mo-panel" style="width:min(960px, 96vw);">
     <div class="mo-header">
       <span class="mo-title" id="stat-tramos-titulo">Estadística de Tramos</span>
-      <button class="mo-close" id="stat-tramos-close" type="button">✕</button>
     </div>
     <div class="mo-body" style="padding:24px;">
       <div id="stat-tramos-chart"></div>
+    </div>
+    <div class="mo-footer-salir" style="justify-content:center;">
+      <button class="ruta-btn-secundario" id="stat-tramos-close" type="button">Cerrar</button>
     </div>
   </div>
 </div>
 
 <!-- ── ESTADÍSTICA POR TRAMOS - TIEMPO (por itinerario, línea suavizada) ── -->
 <div id="modal-stat-tramos-tiempo" class="mo-backdrop" style="display:none;">
-  <div class="mo-panel" style="width:min(720px, 95vw);">
+  <div class="mo-panel" style="width:min(960px, 96vw);">
     <div class="mo-header">
       <span class="mo-title" id="stat-tramos-tiempo-titulo">Estadística de Tramos (Tiempo)</span>
-      <button class="mo-close" id="stat-tramos-tiempo-close" type="button">✕</button>
     </div>
     <div class="mo-body" style="padding:24px;">
       <div id="stat-tramos-tiempo-chart"></div>
+    </div>
+    <div class="mo-footer-salir" style="justify-content:center;">
+      <button class="ruta-btn-secundario" id="stat-tramos-tiempo-close" type="button">Cerrar</button>
     </div>
   </div>
 </div>
 
 <!-- ── ESTADÍSTICA DE RUTAS - KM ── -->
 <div id="modal-estadistica" class="mo-backdrop" style="display:none;">
-  <div class="mo-panel" style="width:min(720px, 95vw);">
+  <div class="mo-panel" style="width:min(960px, 96vw);">
     <div class="mo-header">
-      <span class="mo-title">Estadística de Rutas (Por Distancia)</span>
-      <button class="mo-close" id="est-close" type="button">✕</button>
+      <span class="mo-title">Rutas por distancia</span>
     </div>
     <div class="mo-body" style="padding:24px;">
       <div id="est-chart-wrap"></div>
@@ -2411,21 +2526,26 @@
         Todavía no guardaste ningún itinerario.
       </div>
     </div>
+    <div class="mo-footer-salir" style="justify-content:center;">
+      <button class="ruta-btn-secundario" id="est-close" type="button">Cerrar</button>
+    </div>
   </div>
 </div>
 
 <!-- ── ESTADÍSTICA DE RUTAS - TIEMPO (línea suavizada) ── -->
 <div id="modal-estadistica-tiempo" class="mo-backdrop" style="display:none;">
-  <div class="mo-panel" style="width:min(720px, 95vw);">
+  <div class="mo-panel" style="width:min(960px, 96vw);">
     <div class="mo-header">
-      <span class="mo-title">Estadística de Rutas (Tiempo)</span>
-      <button class="mo-close" id="est-tiempo-close" type="button">✕</button>
+      <span class="mo-title">Rutas por tiempo</span>
     </div>
     <div class="mo-body" style="padding:24px;">
       <div id="est-tiempo-chart-wrap"></div>
       <div id="est-tiempo-empty" style="display:none; padding:40px 24px; text-align:center; color:#7a83a6; font-family:'Barlow',sans-serif; font-size:0.85rem;">
         Todavía no guardaste ningún itinerario.
       </div>
+    </div>
+    <div class="mo-footer-salir" style="justify-content:center;">
+      <button class="ruta-btn-secundario" id="est-tiempo-close" type="button">Cerrar</button>
     </div>
   </div>
 </div>
@@ -3096,8 +3216,13 @@ function renderUserOrigenMarkers() {
 }
 
 function tileLayer() {
-  return L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-    attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a>', maxZoom:18
+  // OpenTopoMap: mapa topográfico gratuito y sin necesidad de API key, con
+  // estilo de relieve clásico — agua en tonos azules, curvas de nivel y
+  // sombreado de montañas en marrón, y vegetación/praderas en verde — en vez
+  // del estilo oscuro anterior.
+  return L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, SRTM | © <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)',
+    subdomains:'abc', maxNativeZoom:17, maxZoom:19
   });
 }
 
@@ -3346,6 +3471,16 @@ function showOrigenInfo(o, lat, lng) {
   // Nombre del origen
   document.getElementById('tic-name').textContent = o.nombre;
 
+  // Dirección (calle y N°) cargada en el formulario de Puntos de Origen
+  var ticDir = document.getElementById('tic-dir');
+  if (o.direccion) {
+    ticDir.textContent = o.direccion;
+    ticDir.style.display = 'block';
+  } else {
+    ticDir.textContent = '';
+    ticDir.style.display = 'none';
+  }
+
   // Provincia · Localidad (si existen), si no coordenadas
   var geoParts = [o.provincia, o.localidad].filter(Boolean);
   var geoText = geoParts.length > 0
@@ -3380,6 +3515,9 @@ function showSiteInfo(s) {
   document.getElementById('tic-cat').textContent  = cat.id;
   document.getElementById('tic-cat').style.cssText = `background:${cat.color};color:#000;`;
   document.getElementById('tic-name').textContent = s.name;
+  var ticDirSitio = document.getElementById('tic-dir');
+  ticDirSitio.textContent = '';
+  ticDirSitio.style.display = 'none';
   var PROV_NAMES = {
     'buenos_aires_prov': 'Buenos Aires',
     'caba':              'Ciudad de Buenos Aires',
@@ -3826,7 +3964,7 @@ document.getElementById('btn-ruta-nueva').addEventListener('click', function() {
 document.getElementById('btn-ruta-guardar').addEventListener('click', function() {
   if (!rutaResumenData) return;
   var input  = document.getElementById('ruta-nombre-input');
-  var nombre = (input.value || '').trim() || 'Ruta sin nombre';
+  var nombre = (input.value || '').trim() || nextRutaPersonalizadaNombre();
   guardarItinerario(nombre, rutaResumenData);
   closeRutaResumenModal();
   openItinerariosModal();
@@ -3840,7 +3978,6 @@ function openItinerariosModal() {
 function closeItinerariosModal() {
   document.getElementById('modal-itinerarios').style.display = 'none';
 }
-document.getElementById('iti-close').addEventListener('click', closeItinerariosModal);
 document.getElementById('modal-itinerarios').addEventListener('click', function(e) {
   if (e.target === this) closeItinerariosModal();
 });
@@ -3904,7 +4041,7 @@ function abrirEstadisticaTramos(id) {
   const it = findItinerario(id);
   if (!it) return;
 
-  document.getElementById('stat-tramos-titulo').textContent = it.nombre || 'Estadística de Tramos';
+  document.getElementById('stat-tramos-titulo').textContent = (it.nombre ? (it.nombre + ' por distancia') : 'Estadística de Tramos');
 
   const wrap = document.getElementById('stat-tramos-chart');
   if (!wrap) return;
@@ -3921,12 +4058,16 @@ function abrirEstadisticaTramos(id) {
   const kmValues = legs.map(function(l) { return Math.round((l.distance || 0) / 1000 * 10) / 10; });
   const maxKm    = Math.max(1, Math.max.apply(null, kmValues));
 
-  const rowH    = 34;
-  const gapH    = 12;
-  const chartW  = 620;
-  const labelW  = 160;
-  const barMaxW = chartW - labelW - 70;
-  const chartH  = legs.length * (rowH + gapH) + 40;
+  const n       = legs.length;
+  const colW    = 96;
+  const barW    = 44;
+  const plotH   = 190;
+  const topPad  = 46;
+  const bottomPad = 30;
+  const leftPad = 38;
+  const rightPad = 18;
+  const chartW  = leftPad + n * colW + rightPad;
+  const chartH  = topPad + plotH + bottomPad;
 
   function truncLabel(s, maxChars) {
     return s.length <= maxChars ? s : s.slice(0, maxChars - 1).trimEnd() + '…';
@@ -3934,36 +4075,45 @@ function abrirEstadisticaTramos(id) {
 
   let bars = '';
   let gridLines = '';
-  const ticks = 5;
+  const ticks = 4;
   for (let t = 0; t <= ticks; t++) {
-    const x   = labelW + (barMaxW * t / ticks);
+    const y   = topPad + plotH - (plotH * t / ticks);
     const val = Math.round(maxKm * t / ticks * 10) / 10;
-    gridLines += '<line x1="' + x + '" y1="10" x2="' + x + '" y2="' + (chartH - 26) + '" stroke="#2a3050" stroke-width="1" />';
-    gridLines += '<text x="' + x + '" y="' + (chartH - 8) + '" fill="#7a83a6" font-size="11" font-family="Barlow, sans-serif" text-anchor="middle">' + val + '</text>';
+    gridLines += '<line x1="' + leftPad + '" y1="' + y + '" x2="' + (chartW - rightPad) + '" y2="' + y + '" stroke="#2a3050" stroke-width="1" />';
+    gridLines += '<text x="' + (leftPad - 8) + '" y="' + (y + 4) + '" fill="#7a83a6" font-size="11" font-family="Barlow, sans-serif" text-anchor="end">' + val + '</text>';
   }
 
+  const barColor = it.realizado ? '#00b0ff' : '#e8c96a';
+  const gradId   = 'tramoDistGrad' + Math.random().toString(36).slice(2, 9);
+  const gradDefs = '<defs><linearGradient id="' + gradId + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
+    '<stop offset="0%" stop-color="' + barColor + '" stop-opacity="0.35" />' +
+    '<stop offset="100%" stop-color="' + barColor + '" stop-opacity="0.95" />' +
+  '</linearGradient></defs>';
+
   legs.forEach(function(leg, i) {
-    const y       = 20 + i * (rowH + gapH);
+    const colX    = leftPad + i * colW + colW / 2;
     const km      = kmValues[i];
-    const barW    = Math.max(2, (km / maxKm) * barMaxW);
+    const barH    = Math.max(2, (km / maxKm) * plotH);
+    const barTop  = topPad + plotH - barH;
     const desde   = stops[i]   ? (stops[i].name   || 'Parada ' + (i + 1))     : 'Parada ' + (i + 1);
     const hasta   = stops[i+1] ? (stops[i+1].name || 'Parada ' + (i + 2))     : 'Parada ' + (i + 2);
-    const label   = escH(truncLabel(desde + ' → ' + hasta, 24));
+    const origLbl = escH(truncLabel(desde, 14));
+    const destLbl = escH(truncLabel(hasta, 14));
     const tooltip = escH(desde + ' → ' + hasta);
-    const color   = it.realizado ? '#00b0ff' : '#e8c96a';
-    bars += '<text x="' + (labelW - 8) + '" y="' + (y + rowH / 2 + 4) + '" fill="#e8c96a" font-size="11" font-family="Barlow, sans-serif" text-anchor="end">' + label + '<title>' + tooltip + '</title></text>';
-    bars += '<rect x="' + labelW + '" y="' + y + '" width="' + barW + '" height="' + rowH + '" rx="4" fill="' + color + '" opacity="0.85"><title>' + tooltip + '</title></rect>';
-    bars += '<text x="' + (labelW + barW + 8) + '" y="' + (y + rowH / 2 + 4) + '" fill="#c8d0f0" font-size="11" font-family="Barlow, sans-serif">' + km + ' km</text>';
+    bars += '<text x="' + colX + '" y="' + (barTop - 32) + '" fill="#e8c96a" font-size="10.5" font-family="Barlow, sans-serif" text-anchor="middle">' + origLbl + '<title>' + tooltip + '</title></text>';
+    bars += '<text x="' + colX + '" y="' + (barTop - 18) + '" fill="#9aa3c4" font-size="10.5" font-family="Barlow, sans-serif" text-anchor="middle">' + destLbl + '<title>' + tooltip + '</title></text>';
+    bars += '<text x="' + colX + '" y="' + (barTop - 5) + '" fill="#c8d0f0" font-size="11" font-family="Barlow, sans-serif" text-anchor="middle">' + km + ' km</text>';
+    bars += '<rect x="' + (colX - barW / 2) + '" y="' + barTop + '" width="' + barW + '" height="' + barH + '" rx="4" fill="url(#' + gradId + ')"><title>' + tooltip + '</title></rect>';
   });
 
   const svg =
-    '<svg viewBox="0 0 ' + chartW + ' ' + chartH + '" width="100%" height="' + chartH + '" xmlns="http://www.w3.org/2000/svg">' +
-      gridLines + bars +
+    '<svg viewBox="0 0 ' + chartW + ' ' + chartH + '" width="' + chartW + '" height="' + chartH + '" xmlns="http://www.w3.org/2000/svg" style="display:block; max-width:100%; height:auto;">' +
+      gradDefs + gridLines + bars +
     '</svg>';
 
   wrap.innerHTML =
-    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:14px; text-align:center;">Kilómetros por tramo</div>' +
-    svg +
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:10px; text-align:center;">Kilómetros por tramo</div>' +
+    '<div style="width:100%; overflow:hidden; text-align:center;">' + svg + '</div>' +
     '<div style="font-family:\'Barlow\',sans-serif; font-size:0.72rem; color:#7a83a6; text-align:center; margin-top:6px;">Km</div>';
 
   document.getElementById('modal-stat-tramos').style.display = 'flex';
@@ -4000,14 +4150,30 @@ function statTruncLabel(s, maxChars) {
   return s.length <= maxChars ? s : s.slice(0, maxChars - 1).trimEnd() + '…';
 }
 
+// Divide una etiqueta larga en hasta 2 líneas horizontales, cortando en un
+// espacio o en la flecha "→" lo más cerca posible del límite de caracteres.
+function statWrapLabel(s, maxChars) {
+  s = (s || '').trim();
+  if (s.length <= maxChars) return [s];
+  var idx = -1;
+  for (var i = Math.min(maxChars, s.length - 1); i > 0; i--) {
+    if (s[i] === ' ' || s[i] === '→') { idx = i; break; }
+  }
+  if (idx === -1) idx = maxChars;
+  var line1 = s.slice(0, idx).trim();
+  var line2 = s.slice(idx).trim();
+  if (line2.length > maxChars) line2 = line2.slice(0, maxChars - 1).trimEnd() + '…';
+  return [line1, line2];
+}
+
 // items: [{ label, tooltip, value, realizado }]  →  devuelve el <svg> completo (línea suavizada + área + puntos)
 function statBuildSmoothedLineSVG(items, opts) {
   opts = opts || {};
   var chartW = opts.width  || 620;
-  var padL = 46, padR = 20, padT = 26, padB = 64;
+  var padL = 46, padR = 20, padT = 26, padB = 54;
   var n = items.length;
   var plotW = chartW - padL - padR;
-  var rowSpan = opts.minColSpan || 70;
+  var rowSpan = opts.minColSpan || 108;
   if (n > 1 && plotW / (n - 1) < rowSpan) plotW = rowSpan * (n - 1);
   chartW = padL + plotW + padR;
   var plotH = opts.plotHeight || 200;
@@ -4035,8 +4201,11 @@ function statBuildSmoothedLineSVG(items, opts) {
   var xLabels = '';
   items.forEach(function(it, i) {
     var p = points[i];
-    var label = escH(statTruncLabel(it.label, 14));
-    xLabels += '<text x="' + p[0] + '" y="' + (padT + plotH + 20) + '" fill="#9aa3c4" font-size="10" font-family="Barlow, sans-serif" text-anchor="end" transform="rotate(-32 ' + p[0] + ' ' + (padT + plotH + 20) + ')"><title>' + escH(it.tooltip || it.label) + '</title>' + label + '</text>';
+    var lines = statWrapLabel(it.label, 15);
+    var tspans = lines.map(function(ln, li) {
+      return '<tspan x="' + p[0] + '" dy="' + (li === 0 ? 0 : 12) + '">' + escH(ln) + '</tspan>';
+    }).join('');
+    xLabels += '<text x="' + p[0] + '" y="' + (padT + plotH + 18) + '" fill="#9aa3c4" font-size="10" font-family="Barlow, sans-serif" text-anchor="middle"><title>' + escH(it.tooltip || it.label) + '</title>' + tspans + '</text>';
   });
 
   var pathD = statBuildSmoothPath(points);
@@ -4065,7 +4234,7 @@ function statBuildSmoothedLineSVG(items, opts) {
     (pathD ? '<path d="' + pathD + '" fill="none" stroke="#e8c96a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />' : '') +
     dots + xLabels;
 
-  return '<div style="overflow-x:auto; overflow-y:hidden;"><svg viewBox="0 0 ' + chartW + ' ' + chartH + '" width="' + Math.max(chartW, opts.minWidthPx || 0) + '" height="' + chartH + '" xmlns="http://www.w3.org/2000/svg" style="display:block; min-width:100%;">' + svgInner + '</svg></div>';
+  return '<div style="width:100%; overflow:hidden; text-align:center;"><svg viewBox="0 0 ' + chartW + ' ' + chartH + '" width="' + chartW + '" height="' + chartH + '" xmlns="http://www.w3.org/2000/svg" style="display:inline-block; max-width:100%; height:auto;">' + svgInner + '</svg></div>';
 }
 
 // ── ESTADÍSTICA DE RUTAS — TIEMPO (línea suavizada, compara todos los itinerarios) ──
@@ -4115,12 +4284,12 @@ document.getElementById('modal-estadistica-tiempo').addEventListener('click', fu
   if (e.target === this) closeEstadisticaModalTiempo();
 });
 
-// ── ESTADÍSTICA POR TRAMOS — TIEMPO (individual, línea suavizada) ──────────
+// ── ESTADÍSTICA POR TRAMOS — TIEMPO (individual, barras verticales) ────────
 function abrirEstadisticaTramosTiempo(id) {
   const it = findItinerario(id);
   if (!it) return;
 
-  document.getElementById('stat-tramos-tiempo-titulo').textContent = (it.nombre || 'Estadística de Tramos') + ' — Tiempo';
+  document.getElementById('stat-tramos-tiempo-titulo').textContent = (it.nombre ? (it.nombre + ' por tiempo') : 'Estadística de Tramos');
 
   const wrap = document.getElementById('stat-tramos-tiempo-chart');
   if (!wrap) return;
@@ -4134,22 +4303,65 @@ function abrirEstadisticaTramosTiempo(id) {
     return;
   }
 
-  const items = legs.map(function(leg, i) {
-    const desde = stops[i]     ? (stops[i].name     || 'Parada ' + (i + 1)) : 'Parada ' + (i + 1);
-    const hasta = stops[i + 1] ? (stops[i + 1].name  || 'Parada ' + (i + 2)) : 'Parada ' + (i + 2);
-    return {
-      label: desde + ' → ' + hasta,
-      tooltip: desde + ' → ' + hasta,
-      value: Math.round((leg.duration || 0) / 60),
-      realizado: !!it.realizado
-    };
+  const minValues = legs.map(function(l) { return Math.round((l.duration || 0) / 60); });
+  const maxMin    = Math.max(1, Math.max.apply(null, minValues));
+
+  const n       = legs.length;
+  const colW    = 96;
+  const barW    = 44;
+  const plotH   = 190;
+  const topPad  = 46;
+  const bottomPad = 30;
+  const leftPad = 38;
+  const rightPad = 18;
+  const chartW  = leftPad + n * colW + rightPad;
+  const chartH  = topPad + plotH + bottomPad;
+
+  function truncLabel(s, maxChars) {
+    return s.length <= maxChars ? s : s.slice(0, maxChars - 1).trimEnd() + '…';
+  }
+
+  let bars = '';
+  let gridLines = '';
+  const ticks = 4;
+  for (let t = 0; t <= ticks; t++) {
+    const y   = topPad + plotH - (plotH * t / ticks);
+    const val = Math.round(maxMin * t / ticks);
+    gridLines += '<line x1="' + leftPad + '" y1="' + y + '" x2="' + (chartW - rightPad) + '" y2="' + y + '" stroke="#2a3050" stroke-width="1" />';
+    gridLines += '<text x="' + (leftPad - 8) + '" y="' + (y + 4) + '" fill="#7a83a6" font-size="11" font-family="Barlow, sans-serif" text-anchor="end">' + val + '</text>';
+  }
+
+  const barColor = it.realizado ? '#00b0ff' : '#e8c96a';
+  const gradId   = 'tramoTiempoGrad' + Math.random().toString(36).slice(2, 9);
+  const gradDefs = '<defs><linearGradient id="' + gradId + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
+    '<stop offset="0%" stop-color="' + barColor + '" stop-opacity="0.35" />' +
+    '<stop offset="100%" stop-color="' + barColor + '" stop-opacity="0.95" />' +
+  '</linearGradient></defs>';
+
+  legs.forEach(function(leg, i) {
+    const colX    = leftPad + i * colW + colW / 2;
+    const min     = minValues[i];
+    const barH    = Math.max(2, (min / maxMin) * plotH);
+    const barTop  = topPad + plotH - barH;
+    const desde   = stops[i]   ? (stops[i].name   || 'Parada ' + (i + 1))     : 'Parada ' + (i + 1);
+    const hasta   = stops[i+1] ? (stops[i+1].name || 'Parada ' + (i + 2))     : 'Parada ' + (i + 2);
+    const origLbl = escH(truncLabel(desde, 14));
+    const destLbl = escH(truncLabel(hasta, 14));
+    const tooltip = escH(desde + ' → ' + hasta);
+    bars += '<text x="' + colX + '" y="' + (barTop - 32) + '" fill="#e8c96a" font-size="10.5" font-family="Barlow, sans-serif" text-anchor="middle">' + origLbl + '<title>' + tooltip + '</title></text>';
+    bars += '<text x="' + colX + '" y="' + (barTop - 18) + '" fill="#9aa3c4" font-size="10.5" font-family="Barlow, sans-serif" text-anchor="middle">' + destLbl + '<title>' + tooltip + '</title></text>';
+    bars += '<text x="' + colX + '" y="' + (barTop - 5) + '" fill="#c8d0f0" font-size="11" font-family="Barlow, sans-serif" text-anchor="middle">' + min + ' min</text>';
+    bars += '<rect x="' + (colX - barW / 2) + '" y="' + barTop + '" width="' + barW + '" height="' + barH + '" rx="4" fill="url(#' + gradId + ')"><title>' + tooltip + '</title></rect>';
   });
 
-  const svg = statBuildSmoothedLineSVG(items, { valueFormatter: function(v) { return v + ' min'; } });
+  const svg =
+    '<svg viewBox="0 0 ' + chartW + ' ' + chartH + '" width="' + chartW + '" height="' + chartH + '" xmlns="http://www.w3.org/2000/svg" style="display:block; max-width:100%; height:auto;">' +
+      gradDefs + gridLines + bars +
+    '</svg>';
 
   wrap.innerHTML =
-    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:14px; text-align:center;">Tiempo estimado por tramo</div>' +
-    svg +
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:10px; text-align:center;">Tiempo estimado por tramo</div>' +
+    '<div style="width:100%; overflow:hidden; text-align:center;">' + svg + '</div>' +
     '<div style="font-family:\'Barlow\',sans-serif; font-size:0.72rem; color:#7a83a6; text-align:center; margin-top:6px;">Minutos</div>';
 
   document.getElementById('modal-stat-tramos-tiempo').style.display = 'flex';
@@ -4168,28 +4380,46 @@ function renderItinerariosTable() {
   const empty = document.getElementById('iti-empty');
   if (!tbody) return;
 
-  if (!list.length) {
-    tbody.innerHTML = '';
-    if (empty) empty.style.display = 'block';
-    return;
-  }
   if (empty) empty.style.display = 'none';
 
-  tbody.innerHTML = list.map(function(it, idx) {
-    const fecha = fmtFechaDDMMMAAAA(new Date(it.fecha));
-    return '<tr class="mo-tr">' +
-      '<td class="mo-td mo-td-n"><span class="mo-num-circle">' + (idx + 1) + '</span></td>' +
-      '<td class="mo-td iti-nombre-cell" data-id="' + it.id + '">' + escH(it.nombre) + '</td>' +
-      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-realizado' + (it.realizado ? ' iti-realizado-si' : '') + '" data-id="' + it.id + '" type="button" title="' + (it.realizado ? 'Realizado' : 'No realizado') + '">' + (it.realizado ? '&#10003;' : '&#9675;') + '</button></td>' +
-      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-edit" data-id="' + it.id + '" type="button" title="Editar nombre">&#9998;</button></td>' +
-      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-ver" data-id="' + it.id + '" type="button" title="Ver">&#128065;</button></td>' +
-      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-map" data-id="' + it.id + '" type="button" title="Mapa">&#128506;</button></td>' +
-      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-del" data-id="' + it.id + '" type="button" title="Eliminar">&#128465;</button></td>' +
-      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-print" data-id="' + it.id + '" type="button" title="Imprimir">&#128424;</button></td>' +
-      '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><div style="display:flex; align-items:center; justify-content:center; gap:4px;"><button class="iti-icon-btn iti-stat" data-id="' + it.id + '" type="button" title="Estadística por tramos (Km)"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M2 13.5 L2 9 M6 13.5 L6 6 M10 13.5 L10 3 M14 13.5 L14 7.5"/><line x1="1" y1="14.5" x2="15" y2="14.5"/></svg></button><button class="iti-icon-btn iti-stat-time" data-id="' + it.id + '" type="button" title="Estadística por tramos (Tiempo)">&#9201;</button></div></td>' +
-      '<td class="mo-td" style="padding-left:6px;">' + fecha + '</td>' +
-    '</tr>';
-  }).join('');
+  const filas = [];
+  for (let idx = 0; idx < ITINERARIOS_MAX; idx++) {
+    const it = list[idx];
+    if (it) {
+      const fecha = fmtFechaDDMMMAAAA(new Date(it.fecha));
+      filas.push(
+        '<tr class="mo-tr">' +
+        '<td class="mo-td mo-td-n"><span class="mo-num-circle">' + (idx + 1) + '</span></td>' +
+        '<td class="mo-td iti-nombre-cell" data-id="' + it.id + '">' + escH(it.nombre) + '</td>' +
+        '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-realizado' + (it.realizado ? ' iti-realizado-si' : '') + '" data-id="' + it.id + '" type="button" title="' + (it.realizado ? 'Realizado' : 'No realizado') + '">' + (it.realizado ? '&#10003;' : '&#9675;') + '</button></td>' +
+        '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-edit" data-id="' + it.id + '" type="button" title="Editar nombre">&#9998;</button></td>' +
+        '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-ver" data-id="' + it.id + '" type="button" title="Ver">&#128065;</button></td>' +
+        '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-map" data-id="' + it.id + '" type="button" title="Mapa">&#128506;</button></td>' +
+        '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-del" data-id="' + it.id + '" type="button" title="Eliminar">&#128465;</button></td>' +
+        '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-print" data-id="' + it.id + '" type="button" title="Imprimir">&#128424;</button></td>' +
+        '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><div style="display:flex; align-items:center; justify-content:center; gap:4px;"><button class="iti-icon-btn iti-stat" data-id="' + it.id + '" type="button" title="Estadística por tramos (Km)"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M2 13.5 L2 9 M6 13.5 L6 6 M10 13.5 L10 3 M14 13.5 L14 7.5"/><line x1="1" y1="14.5" x2="15" y2="14.5"/></svg></button><button class="iti-icon-btn iti-stat-time" data-id="' + it.id + '" type="button" title="Estadística por tramos (Tiempo)">&#9201;</button></div></td>' +
+        '<td class="mo-td" style="padding-left:6px;">' + fecha + '</td>' +
+        '</tr>'
+      );
+    } else {
+      // Fila vacía: mantiene visible el número de slot (1 a 20), sin acciones ni datos
+      filas.push(
+        '<tr class="mo-tr mo-tr-empty">' +
+        '<td class="mo-td mo-td-n"><span class="mo-num-circle">' + (idx + 1) + '</span></td>' +
+        '<td class="mo-td" style="color:#3a4060;">—</td>' +
+        '<td class="mo-td"></td>' +
+        '<td class="mo-td"></td>' +
+        '<td class="mo-td"></td>' +
+        '<td class="mo-td"></td>' +
+        '<td class="mo-td"></td>' +
+        '<td class="mo-td"></td>' +
+        '<td class="mo-td"></td>' +
+        '<td class="mo-td" style="color:#3a4060;">—</td>' +
+        '</tr>'
+      );
+    }
+  }
+  tbody.innerHTML = filas.join('');
 
   tbody.querySelectorAll('.iti-realizado').forEach(function(btn) {
     btn.addEventListener('click', function() {
@@ -4817,6 +5047,23 @@ function fmtFechaDDMMMAAAA(d) {
   return dd + '-' + mmm + '-' + aaaa;
 }
 
+// Devuelve el próximo nombre disponible "Ruta personalizada N" (N entre 1 y 20,
+// el mismo límite que ITINERARIOS_MAX) para usarlo como nombre por defecto
+// cuando el usuario guarda una ruta sin escribir un nombre propio.
+function nextRutaPersonalizadaNombre() {
+  const list = activeItinerarios();
+  const usados = new Set();
+  list.forEach(function(it) {
+    const m = /^Ruta personalizada (\d+)$/.exec(it.nombre || '');
+    if (m) usados.add(parseInt(m[1], 10));
+  });
+  for (let n = 1; n <= ITINERARIOS_MAX; n++) {
+    if (!usados.has(n)) return 'Ruta personalizada ' + n;
+  }
+  // Si los 20 números ya están en uso, se reutiliza el más antiguo disponible
+  return 'Ruta personalizada ' + ITINERARIOS_MAX;
+}
+
 function guardarItinerario(nombre, resumenData) {
   const list = activeItinerarios();
   const nuevo = {
@@ -4871,33 +5118,60 @@ function capitalizeFirst(s) {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+// Pone en mayúscula la primera letra de cada palabra de una calle (ej. "santa
+// rita" -> "Santa Rita"), salvo preposiciones y artículos cortos que van en
+// minúscula cuando no son la primera palabra (ej. "Av. de la Costa").
+const MO_MINUSCULAS_CALLE = ['de','del','la','las','el','los','y','a','en','con','al','e','o'];
+function capitalizarCalle(s) {
+  if (!s) return s;
+  return s.split(/\s+/).map(function(palabra, idx) {
+    if (!palabra) return palabra;
+    const lower = palabra.toLowerCase();
+    if (idx > 0 && MO_MINUSCULAS_CALLE.indexOf(lower) !== -1) return lower;
+    return lower.charAt(0).toUpperCase() + lower.slice(1);
+  }).join(' ');
+}
+
+// Lista de nombres de provincia reutilizada tanto en la tabla de orígenes como
+// en el modal de búsqueda de dirección, para que ambos selects queden siempre
+// sincronizados. (Distinta de PROVINCIAS_LIST, usada para el mapa SVG.)
+const MO_PROVINCIAS_NOMBRES = ['Buenos Aires','Catamarca','Chaco','Chubut','CABA',
+  'Córdoba','Corrientes','Entre Ríos','Formosa','Jujuy','La Pampa','La Rioja',
+  'Mendoza','Misiones','Neuquén','Río Negro','Salta','San Juan','San Luis',
+  'Santa Cruz','Santa Fe','Santiago del Estero','Tierra del Fuego','Tucumán'];
+
+function provinciaOptionsHtml(selected) {
+  return '<option value=""></option>' + MO_PROVINCIAS_NOMBRES.map(function(p) {
+    return '<option value="' + p + '"' + (selected === p ? ' selected' : '') + '>' + p + '</option>';
+  }).join('');
+}
+
 function moRenderTable() {
   const tbody = document.getElementById('mo-tbody');
   if (!tbody) return;
+  moRemoveSearchRow(); // limpia el mini-mapa antes de reconstruir la tabla
   tbody.innerHTML = '';
 
   moDraft.forEach(function(row, i) {
     const tr = document.createElement('tr');
-    tr.className = 'mo-tr';
+    const vacia = !row.nombre || !row.nombre.trim();
+    tr.className = 'mo-tr' + (vacia ? ' mo-tr-empty' : '');
     tr.dataset.idx = i;
 
-    var provOpts = '<option value=""></option>' +
-      ['Buenos Aires','Catamarca','Chaco','Chubut','CABA',
-       'Córdoba','Corrientes','Entre Ríos','Formosa','Jujuy','La Pampa','La Rioja',
-       'Mendoza','Misiones','Neuquén','Río Negro','Salta','San Juan','San Luis',
-       'Santa Cruz','Santa Fe','Santiago del Estero','Tierra del Fuego','Tucumán']
-      .map(function(p){ return '<option value="' + p + '"' + (row.provincia === p ? ' selected' : '') + '>' + p + '</option>'; })
-      .join('');
+    var provOpts = provinciaOptionsHtml(row.provincia);
 
     tr.innerHTML =
       '<td class="mo-td mo-td-n"><span class="mo-num-circle">' + (i + 1) + '</span></td>' +
       '<td class="mo-td"><input class="mo-cell-input" data-f="nombre" data-i="' + i + '" type="text" maxlength="100" placeholder="Nombre" value="' + escH(row.nombre) + '" disabled /></td>' +
-      '<td class="mo-td"><select class="mo-cell-input mo-cell-select" data-f="provincia" data-i="' + i + '" disabled>' + provOpts + '</select></td>' +
+      '<td class="mo-td"><input class="mo-cell-input" data-f="direccion" data-i="' + i + '" type="text" maxlength="120" placeholder="Ej: Av. Bustillo 2500" value="' + escH(row.direccion||'') + '" disabled /></td>' +
       '<td class="mo-td"><input class="mo-cell-input" data-f="localidad" data-i="' + i + '" type="text" maxlength="80" placeholder="Localidad" value="' + escH(row.localidad||'') + '" disabled /></td>' +
-      '<td class="mo-td"><input class="mo-cell-input mo-coord" data-f="lat" data-i="' + i + '" type="number" step="any" placeholder="-38.00" value="' + escH(row.lat) + '" disabled /></td>' +
-      '<td class="mo-td"><input class="mo-cell-input mo-coord" data-f="lng" data-i="' + i + '" type="number" step="any" placeholder="-57.54" value="' + escH(row.lng) + '" disabled /></td>' +
+      '<td class="mo-td"><select class="mo-cell-input mo-cell-select" data-f="provincia" data-i="' + i + '" disabled>' + provOpts + '</select></td>' +
+      '<td class="mo-td" style="display:none;">' +
+        '<input type="hidden" data-f="lat" data-i="' + i + '" value="' + escH(row.lat) + '" />' +
+        '<input type="hidden" data-f="lng" data-i="' + i + '" value="' + escH(row.lng) + '" />' +
+      '</td>' +
       '<td class="mo-td"><div class="mo-td-actions">' +
-        '<button class="mo-btn-edit" data-i="' + i + '" type="button">Editar</button>' +
+        '<button class="mo-btn-edit" data-i="' + i + '" type="button" title="Editar">&#9998;</button>' +
         '<button class="mo-btn-del"  data-i="' + i + '" type="button" title="Eliminar">&#128465;</button>' +
       '</div></td>';
 
@@ -4916,7 +5190,7 @@ function moRenderTable() {
   tbody.querySelectorAll('.mo-btn-del').forEach(function(btn) {
     btn.addEventListener('click', function() {
       const i = parseInt(btn.dataset.i);
-      moDraft[i] = { nombre:'', lat:'', lng:'', provincia:'', localidad:'' };
+      moDraft[i] = { nombre:'', direccion:'', lat:'', lng:'', provincia:'', localidad:'' };
       document.getElementById('mo-error').textContent = '';
       moRenderTable();
     });
@@ -4928,8 +5202,14 @@ function moEnableRow(i, editBtn) {
   const tr = tbody.querySelector('tr[data-idx="' + i + '"]');
   if (!tr) return;
 
+  // Al editar, se quita el estilo atenuado de "número no utilizado"
+  tr.classList.remove('mo-tr-empty');
+
   // Enable all regular inputs
   tr.querySelectorAll('.mo-cell-input').forEach(function(inp) { inp.disabled = false; });
+
+  // Buscador de dirección: se abre como ventana emergente (modal), sin minimapa
+  moOpenAddressModal(i);
 
   // Replace action buttons with OK + trash icon
   const actDiv = tr.querySelector('.mo-td-actions');
@@ -4941,7 +5221,7 @@ function moEnableRow(i, editBtn) {
     moCommitRow(i, tr);
   });
   actDiv.querySelector('.mo-btn-del').addEventListener('click', function() {
-    moDraft[i] = { nombre:'', lat:'', lng:'', provincia:'', localidad:'' };
+    moDraft[i] = { nombre:'', direccion:'', lat:'', lng:'', provincia:'', localidad:'' };
     document.getElementById('mo-error').textContent = '';
     moRenderTable();
   });
@@ -4951,11 +5231,509 @@ function moEnableRow(i, editBtn) {
   if (nombreInp) nombreInp.focus();
 }
 
+// ── BUSCADOR DE DIRECCIÓN (geocoding gratuito, sin API key, con varios
+//    motores en cascada: Georef → Nominatim estructurado → Nominatim libre
+//    → Photon) ──
+// Se abre como una pequeña ventana modal al presionar "Editar": el usuario
+// busca por calle y altura, localidad (o código postal) y provincia —sin
+// ningún minimapa— y al presionar "OK" esos datos se cargan en la fila
+// de punto de origen correspondiente.
+
+// Georef: API oficial argentina (Ministerio de Gobierno) — la más precisa
+// para direcciones con calle y altura, ya que usa el nomenclador oficial del INDEC.
+function georefFetchDireccion(direccion, extra, max) {
+  let url = 'https://apis.datos.gob.ar/georef/api/direcciones?direccion=' + encodeURIComponent(direccion) + '&max=' + (max || 5);
+  Object.keys(extra || {}).forEach(function(k) {
+    if (extra[k]) url += '&' + k + '=' + encodeURIComponent(extra[k]);
+  });
+  return fetch(url).then(function(r) { return r.json(); }).then(function(data) {
+    return ((data && data.direcciones) || []).map(function(d) {
+      return {
+        display_name: d.nomenclatura,
+        lat: d.ubicacion && d.ubicacion.lat,
+        lon: d.ubicacion && d.ubicacion.lon,
+        address: {
+          state: d.provincia && d.provincia.nombre,
+          city: d.localidad_censal && d.localidad_censal.nombre
+        },
+        _fuente: 'georef'
+      };
+    });
+  }).catch(function() { return []; });
+}
+
+// Resuelve un código postal al nombre de localidad y provincia correspondiente,
+// para poder usarlo como filtro de Georef igual que si el usuario hubiera
+// escrito el nombre de la localidad. Acepta tanto el código postal clásico de
+// 4 dígitos (ej. "1648") como el CPA nuevo de 8 caracteres (ej. "B1648AKG"),
+// del cual se extraen los 4 dígitos centrales que Georef sí reconoce.
+function moGeorefResolverCP(cpRaw) {
+  const m = cpRaw.match(/\d{4}/);
+  const cp = m ? m[0] : cpRaw;
+  const url = 'https://apis.datos.gob.ar/georef/api/localidades?codigo_postal=' + encodeURIComponent(cp) + '&max=1&campos=nombre,provincia';
+  return fetch(url).then(function(r) { return r.json(); }).then(function(data) {
+    const loc = data && data.localidades && data.localidades[0];
+    if (!loc) return null;
+    return { nombre: loc.nombre, provincia: loc.provincia && loc.provincia.nombre };
+  }).catch(function() { return null; });
+}
+
+// Nominatim (OpenStreetMap): respaldo para lugares/puntos de interés sin
+// dirección formal (plazas, monumentos, atractivos turísticos, etc.)
+function moNominatimBuscar(q, limit) {
+  const url = 'https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=' + (limit || 5) + '&countrycodes=ar&accept-language=es&q=' + encodeURIComponent(q);
+  return fetch(url).then(function(r) { return r.json(); }).then(function(data) {
+    return (data || []).map(function(place) {
+      return {
+        display_name: place.display_name,
+        lat: parseFloat(place.lat),
+        lon: parseFloat(place.lon),
+        address: place.address || {},
+        _fuente: 'nominatim'
+      };
+    });
+  }).catch(function() { return []; });
+}
+
+// Nominatim ESTRUCTURADO: en vez de mandar todo el texto junto (que es lo que
+// hace fallar búsquedas de calle+altura cuando el orden de las palabras no es
+// exactamente el que Nominatim espera), se envían la calle, la localidad y la
+// provincia como parámetros separados (street=/city=/state=). Esto es
+// muchísimo más confiable para encontrar una altura puntual que la búsqueda
+// libre, y gratis, sin necesidad de ninguna API key.
+//
+// campo permite elegir si la localidad se manda como "city" o como "county":
+// en el conurbano bonaerense un partido (ej. "Tigre") suele contener varias
+// localidades/barrios reales (Don Torcuato, Rincón de Milberg, General
+// Pacheco, etc.) y muchas direcciones en OpenStreetMap están etiquetadas con
+// esa localidad puntual, no con el nombre del partido — por eso conviene
+// probar primero como "city" y, si no aparece nada, reintentar como "county"
+// (que es el campo que mejor representa un partido/departamento).
+function moNominatimEstructurado(calle, localidad, provincia, limit, campo) {
+  let url = 'https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=' + (limit || 5) + '&countrycodes=ar&accept-language=es';
+  if (calle)     url += '&street=' + encodeURIComponent(calle);
+  if (localidad) url += '&' + (campo || 'city') + '=' + encodeURIComponent(localidad);
+  if (provincia) url += '&state='  + encodeURIComponent(provincia);
+  return fetch(url).then(function(r) { return r.json(); }).then(function(data) {
+    return (data || []).map(function(place) {
+      return {
+        display_name: place.display_name,
+        lat: parseFloat(place.lat),
+        lon: parseFloat(place.lon),
+        address: place.address || {},
+        _fuente: 'nominatim'
+      };
+    });
+  }).catch(function() { return []; });
+}
+
+// Prueba Nominatim estructurado con "city" y, si no encuentra nada, reintenta
+// con "county" (ver comentario de moNominatimEstructurado más arriba).
+function moNominatimConLocalidad(calle, localidad, provincia, limit) {
+  return moNominatimEstructurado(calle, localidad, provincia, limit, 'city').then(function(r) {
+    return r.length ? r : moNominatimEstructurado(calle, localidad, provincia, limit, 'county');
+  });
+}
+
+// Photon (Komoot): motor de geocoding gratuito y sin API key, construido
+// sobre los mismos datos de OpenStreetMap pero con búsqueda difusa (tolera
+// errores de tipeo, abreviaturas como "Av." vs "Avenida", falta de tildes,
+// etc.). Se usa como último recurso cuando ni Georef ni Nominatim encontraron
+// nada, ya que suele resolver casos que los anteriores no encuentran.
+function moPhotonBuscar(q, limit) {
+  const url = 'https://photon.komoot.io/api/?lang=es&limit=' + (limit || 5) + '&q=' + encodeURIComponent(q + ', Argentina');
+  return fetch(url).then(function(r) { return r.json(); }).then(function(data) {
+    return ((data && data.features) || []).map(function(f) {
+      const p = f.properties || {};
+      const coords = (f.geometry && f.geometry.coordinates) || [];
+      const partes = [
+        [p.street, p.housenumber].filter(Boolean).join(' '),
+        p.name && p.name !== p.street ? p.name : null,
+        p.city || p.county,
+        p.state
+      ].filter(Boolean);
+      return {
+        display_name: partes.join(', ') || q,
+        lat: coords[1],
+        lon: coords[0],
+        address: { state: p.state, city: p.city || p.county },
+        _fuente: 'photon'
+      };
+    }).filter(function(r) { return typeof r.lat === 'number' && !isNaN(r.lat) && typeof r.lon === 'number' && !isNaN(r.lon); });
+  }).catch(function() { return []; });
+}
+
+// Búsqueda combinada: recibe la calle+altura, la localidad-o-CP y la provincia
+// como campos SEPARADOS (ya no se intenta adivinar dónde termina la calle y
+// dónde empieza la localidad partiendo un único texto por comas).
+//
+// El filtro de localidad se intenta primero con "departamento" (partido) y
+// luego con el parámetro oficial "localidad_censal" —el nombre correcto según
+// la documentación de Georef; el parámetro "localidad" que se usaba antes no
+// existe en la API y por lo tanto Georef lo ignoraba silenciosamente—.
+//
+// Si con la altura exacta no aparece nada DENTRO de la localidad pedida (esto
+// puede pasar cuando el nomenclador oficial del INDEC todavía no tiene
+// digitalizado ese tramo puntual de la calle), se vuelve a intentar la misma
+// calle pero sin el número, para al menos ubicar la calle correcta dentro de
+// la localidad pedida en vez de devolver directamente una coincidencia de
+// otra localidad. Solo si ninguna de las búsquedas acotadas a la localidad da
+// resultado se amplía la búsqueda a todo el país (marcando esas coincidencias
+// con una etiqueta distinta, para que quede claro que podrían no ser el lugar
+// buscado en vez de mostrarlas como si fueran la misma dirección).
+// Distancia aproximada en km entre dos coordenadas (fórmula de Haversine).
+// Se usa para detectar cuando dos fuentes de geocoding "encuentran" la misma
+// altura pero en puntos muy alejados entre sí (interpolación poco confiable
+// en rutas largas y poco densas, como Av. Bustillo en Bariloche).
+function moDistanciaKm(lat1, lon1, lat2, lon2) {
+  function toRad(d) { return d * Math.PI / 180; }
+  const R = 6371;
+  const dLat = toRad(lat2 - lat1), dLon = toRad(lon2 - lon1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// GOOGLE MAPS — GEOCODING API v4 (Maps Demo Key: gratis, sin tarjeta)
+// ═══════════════════════════════════════════════════════════════════════
+// Para activar Google como buscador principal (mucho más preciso que los
+// gratuitos de abajo para direcciones argentinas), conseguí una "Maps Demo
+// Key" gratis, sin tarjeta de crédito ni cuenta de facturación:
+//   1. Entrá a https://developers.google.com/maps/demo-key
+//   2. Iniciá sesión con tu cuenta de Google.
+//   3. Hacé clic en "Obtener una clave de demostración".
+//   4. Aceptá las condiciones: la clave aparece al instante.
+//   5. Pegala acá abajo, entre las comillas.
+// Tiene un tope de uso diario (se renueva solo, sin cobrar nada si se
+// alcanza), más que suficiente para cargar puntos de origen.
+// Si dejás esto vacío, la app sigue funcionando con las fuentes gratuitas
+// (Georef + Nominatim + Photon) como hasta ahora.
+const GOOGLE_MAPS_API_KEY = 'AIzaSyDcn60io0nec_ArMb452FyPcshgAXt16sE';
+
+function moGoogleGeocode(calle, localidadOCP, provincia) {
+  if (!GOOGLE_MAPS_API_KEY) return Promise.resolve([]);
+
+  const locTrim = (localidadOCP || '').trim();
+  const esCP = /^\d{4}$/.test(locTrim) || /^[A-Za-z]?\d{4}[A-Za-z]{0,3}$/.test(locTrim);
+
+  let url = 'https://geocode.googleapis.com/v4/geocode/address?address.regionCode=AR';
+  url += '&address.addressLines=' + encodeURIComponent(calle);
+  if (esCP) {
+    url += '&address.postalCode=' + encodeURIComponent(locTrim.match(/\d{4}/) ? locTrim.match(/\d{4}/)[0] : locTrim);
+  } else if (locTrim) {
+    url += '&address.locality=' + encodeURIComponent(locTrim);
+  }
+  if (provincia) url += '&address.administrativeArea=' + encodeURIComponent(provincia);
+
+  return fetch(url, { headers: { 'X-Goog-Api-Key': GOOGLE_MAPS_API_KEY } })
+    .then(function(r) {
+      if (!r.ok) throw new Error('Google Geocoding HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function(data) {
+      return ((data && data.results) || []).map(function(res) {
+        const pa = res.postalAddress || {};
+        const loc = res.location || {};
+        const comps = res.addressComponents || [];
+        // IMPORTANTE: postalAddress.administrativeArea suele venir en formato
+        // corto/postal (ej. "B" para Buenos Aires, como en las direcciones de
+        // EE.UU. donde llega "CA" en vez de "California"). Por eso la
+        // provincia nunca se copiaba a la fila: ese código corto no coincide
+        // con ningún nombre del desplegable de provincias. Se busca en cambio
+        // el nombre completo dentro de addressComponents.
+        function nombreCompleto(tipo) {
+          const c = comps.find(function(c) { return c.types && c.types.indexOf(tipo) !== -1; });
+          return c && c.longText;
+        }
+        return {
+          display_name: res.formattedAddress,
+          lat: loc.latitude,
+          lon: loc.longitude,
+          address: {
+            state: nombreCompleto('administrative_area_level_1') || pa.administrativeArea,
+            city: nombreCompleto('locality') || pa.locality
+          },
+          _fuente: 'google'
+        };
+      });
+    })
+    .catch(function() { return []; });
+}
+
+// Búsqueda maestra: si hay una clave de Google configurada, se prueba
+// primero ahí (mejor calidad de datos para direcciones argentinas). Si no
+// hay clave, o Google no encuentra nada, se cae automáticamente a la
+// cascada gratuita de Georef + Nominatim + Photon (sin costo, sin clave).
+function moBuscarDireccion(calle, loc, prov) {
+  return moGoogleGeocode(calle, loc, prov).then(function(list) {
+    if (list.length) return list;
+    return moGeorefBuscarDireccion(calle, loc, prov);
+  });
+}
+
+// Georef: API oficial argentina (Ministerio de Gobierno) — respaldo gratuito
+// cuando no hay clave de Google configurada, o Google no encontró nada.
+function moGeorefBuscarDireccion(calle, localidadOCP, provincia) {
+  function soloCalle(direccionConAltura) {
+    return direccionConAltura.replace(/\s*\d+\s*$/, '').trim() || direccionConAltura;
+  }
+
+  function intentarAcotadoALocalidad(locNombre, prov) {
+    if (!locNombre) return Promise.resolve([]);
+    // Con una altura EXACTA solo puede haber UNA dirección real: se le pide
+    // a cada fuente su mejor (y único) candidato con max=1/limit=1. Georef y
+    // Nominatim se consultan EN PARALELO para poder comparar sus respuestas:
+    // si ambas "encuentran" la altura pero en ubicaciones muy distintas, es
+    // señal de que alguna interpoló mal.
+    const pGeoref = georefFetchDireccion(calle, { departamento: locNombre, provincia: prov }, 1)
+      .then(function(list) {
+        return list.length ? list : georefFetchDireccion(calle, { localidad_censal: locNombre, provincia: prov }, 1);
+      });
+    const pNominatim = moNominatimConLocalidad(calle, locNombre, prov, 1);
+
+    return Promise.all([pGeoref, pNominatim]).then(function(res) {
+      const georefRes = res[0] || [];
+      const nominatimRes = res[1] || [];
+      if (georefRes.length && nominatimRes.length) {
+        const g = georefRes[0], n = nominatimRes[0];
+        const dKm = moDistanciaKm(parseFloat(g.lat), parseFloat(g.lon), parseFloat(n.lat), parseFloat(n.lon));
+        if (!isNaN(dKm) && dKm > 3) {
+          return [Object.assign({}, g, { _discrepancia: true }), Object.assign({}, n, { _discrepancia: true })];
+        }
+        return georefRes;
+      }
+      const combinado = georefRes.concat(nominatimRes);
+      if (combinado.length) return combinado;
+      // Ninguna de las dos fuentes encontró la altura exacta dentro de la
+      // localidad: se reintenta la misma calle sin el número (por si esa
+      // altura puntual todavía no está digitalizada), pidiendo un único
+      // resultado (el más cercano/relevante).
+      const calleSinAltura = soloCalle(calle);
+      if (calleSinAltura === calle) return [];
+      return georefFetchDireccion(calleSinAltura, { departamento: locNombre, provincia: prov }, 1).then(function(aprox) {
+        return aprox.map(function(r) { return Object.assign({}, r, { _aproximado: true }); });
+      });
+    });
+  }
+
+  const locTrim = (localidadOCP || '').trim();
+  const provTrim = (provincia || '').trim();
+  const esCP = /^\d{4}$/.test(locTrim) || /^[A-Za-z]?\d{4}[A-Za-z]{0,3}$/.test(locTrim);
+
+  let locNombreResuelto = locTrim;
+
+  let dentroDeLocalidad;
+  if (esCP) {
+    dentroDeLocalidad = moGeorefResolverCP(locTrim).then(function(loc) {
+      const locNombre = loc && loc.nombre;
+      if (locNombre) locNombreResuelto = locNombre;
+      const prov = provTrim || (loc && loc.provincia) || '';
+      return intentarAcotadoALocalidad(locNombre, prov);
+    });
+  } else {
+    dentroDeLocalidad = intentarAcotadoALocalidad(locTrim, provTrim);
+  }
+
+  return dentroDeLocalidad.then(function(list) {
+    if (list.length) return list;
+    // Ni Georef ni Nominatim estructurado encontraron nada dentro de la
+    // localidad. Antes de resignarse a una búsqueda NACIONAL sin filtro, se
+    // prueba primero con texto libre —Nominatim y Photon— incluyendo siempre
+    // la localidad pedida en el texto de búsqueda.
+    const texto = [calle, locNombreResuelto, provTrim].filter(Boolean).join(', ');
+    return moNominatimBuscar(texto, 1).then(function(libre) {
+      if (libre.length) return libre;
+      return moPhotonBuscar(texto, 1).then(function(photon) {
+        if (photon.length) return photon;
+        // Último recurso: Georef a nivel país sin filtro de localidad,
+        // marcando el resultado como "no confirmado".
+        return georefFetchDireccion(calle, { provincia: provTrim }, 1).then(function(nacional) {
+          return nacional.map(function(r) { return Object.assign({}, r, { _fueraDeLocalidad: true }); });
+        });
+      });
+    });
+  });
+}
+
+
+// ── Estado y control del modal de búsqueda de dirección ──
+let moAddrModalIdx    = null; // índice de la fila de origen que se está editando
+let moAddrLastResults = [];   // últimos resultados listados
+let moAddrSelected    = null; // resultado elegido por el usuario, pendiente de aplicar
+
+function moOpenAddressModal(i) {
+  moAddrModalIdx    = i;
+  moAddrSelected    = null;
+  moAddrLastResults = [];
+
+  const row = moDraft[i] || { provincia:'', localidad:'' };
+
+  document.getElementById('mad-calle').value = row.direccion || '';
+  document.getElementById('mad-localidad').value = row.localidad || '';
+  document.getElementById('mad-provincia').innerHTML = provinciaOptionsHtml(row.provincia || '');
+  document.getElementById('mad-results').innerHTML = '';
+  document.getElementById('mad-error').textContent = '';
+  document.getElementById('mad-btn-ok').disabled = true;
+
+  document.getElementById('modal-buscar-direccion').style.display = 'flex';
+  document.getElementById('mad-calle').focus();
+}
+
+function moCloseAddressModal() {
+  const modal = document.getElementById('modal-buscar-direccion');
+  if (modal) modal.style.display = 'none';
+  moAddrModalIdx = null;
+}
+
+// Se mantiene este nombre por compatibilidad con las llamadas existentes
+// (moRenderTable / moClose): ahora simplemente cierra el modal de búsqueda.
+function moRemoveSearchRow() {
+  moCloseAddressModal();
+}
+
+function moAddrDoSearch() {
+  const calle = document.getElementById('mad-calle').value.trim();
+  const loc   = document.getElementById('mad-localidad').value.trim();
+  const prov  = document.getElementById('mad-provincia').value.trim();
+  const results = document.getElementById('mad-results');
+  const okBtn    = document.getElementById('mad-btn-ok');
+  const errEl    = document.getElementById('mad-error');
+
+  errEl.textContent = '';
+  okBtn.disabled = true;
+  moAddrSelected = null;
+
+  if (!calle) {
+    results.innerHTML = '<div class="mo-search-empty">Ingresá al menos la calle y altura para buscar.</div>';
+    return;
+  }
+
+  results.innerHTML = '<div class="mo-search-loading">Buscando…</div>';
+
+  moBuscarDireccion(calle, loc, prov).then(function(list) {
+    // Deduplicar: varias fuentes (o la misma fuente con varias entradas
+    // administrativas) pueden devolver la MISMA dirección repetida. Se
+    // agrupa por coordenadas redondeadas + nombre para no mostrarla más de
+    // una vez en la lista.
+    const vistos = {};
+    list = list.filter(function(place) {
+      const lat = parseFloat(place.lat), lon = parseFloat(place.lon);
+      const key = (isNaN(lat) ? '' : lat.toFixed(4)) + '|' + (isNaN(lon) ? '' : lon.toFixed(4)) + '|' + (place.display_name || '');
+      if (vistos[key]) return false;
+      vistos[key] = true;
+      return true;
+    });
+    moAddrLastResults = list;
+    if (!list.length) {
+      results.innerHTML = '<div class="mo-search-empty">Sin resultados. Probá con otro texto, o cargá la latitud/longitud manualmente si la conocés.</div>';
+      return;
+    }
+    results.innerHTML = list.map(function(place, idx) {
+      let tag;
+      if (place._discrepancia) {
+        tag = '<span class="mo-search-tag mo-search-tag-warn">Verificar ubicación</span>';
+      } else if (place._fueraDeLocalidad) {
+        tag = '<span class="mo-search-tag mo-search-tag-warn">Verificar localidad</span>';
+      } else if (place._aproximado) {
+        tag = '<span class="mo-search-tag mo-search-tag-warn">Calle aproximada</span>';
+      } else if (place._fuente === 'google') {
+        tag = '<span class="mo-search-tag">Google Maps</span>';
+      } else if (place._fuente === 'georef') {
+        tag = '<span class="mo-search-tag">Dirección oficial</span>';
+      } else if (place._fuente === 'photon') {
+        tag = '<span class="mo-search-tag mo-search-tag-warn">Búsqueda aproximada</span>';
+      } else {
+        tag = '<span class="mo-search-tag mo-search-tag-alt">Lugar</span>';
+      }
+      return '<div class="mo-search-item" data-idx="' + idx + '">' + tag + escH(place.display_name) + '</div>';
+    }).join('');
+    results.querySelectorAll('.mo-search-item').forEach(function(item) {
+      item.addEventListener('click', function() {
+        results.querySelectorAll('.mo-search-item').forEach(function(el) { el.classList.remove('mo-search-item-sel'); });
+        item.classList.add('mo-search-item-sel');
+        moAddrSelected = moAddrLastResults[parseInt(item.dataset.idx)];
+        okBtn.disabled = false;
+        // Un solo click aplica directamente el resultado a la fila de
+        // origen y cierra la ventana (no hace falta un segundo click en OK).
+        moAddrAplicarSeleccion();
+      });
+    });
+  }).catch(function(err) {
+    results.innerHTML = '<div class="mo-search-empty">No se pudo buscar (' + escH(err && err.message || 'error de red') + '). Revisá tu conexión e intentá de nuevo.</div>';
+  });
+}
+
+// Aplica el resultado elegido en el modal a la fila de origen correspondiente
+// y la confirma directamente (como si se presionara "✓ OK" en la fila), para
+// que quede guardada al toque y no dependa de un segundo click que antes se
+// perdía de vista.
+function moAddrAplicarSeleccion() {
+  if (!moAddrSelected || moAddrModalIdx === null) return;
+  const i = moAddrModalIdx;
+  const tbody = document.getElementById('mo-tbody');
+  const tr = tbody && tbody.querySelector('tr[data-idx="' + i + '"]');
+  if (!tr) { moCloseAddressModal(); return; }
+
+  const dirInp  = tr.querySelector('[data-f="direccion"]');
+  const latInp  = tr.querySelector('[data-f="lat"]');
+  const lngInp  = tr.querySelector('[data-f="lng"]');
+  const provSel = tr.querySelector('[data-f="provincia"]');
+  const locInp  = tr.querySelector('[data-f="localidad"]');
+
+  // Se usa la dirección tal como la devolvió el resultado elegido por el
+  // usuario en la lista de "Buscar" (no lo que haya escrito en el campo de
+  // búsqueda), tomando la primera parte antes de la coma (calle y número),
+  // ya que el resto del texto ya se completa en las columnas Localidad/Provincia.
+  if (dirInp) {
+    const nombreCompleto = (moAddrSelected.display_name || '').split(',')[0].trim();
+    dirInp.value = capitalizarCalle(nombreCompleto || document.getElementById('mad-calle').value.trim());
+  }
+
+  const lat = parseFloat(moAddrSelected.lat);
+  const lng = parseFloat(moAddrSelected.lon);
+  if (latInp && !isNaN(lat)) latInp.value = lat.toFixed(5);
+  if (lngInp && !isNaN(lng)) lngInp.value = lng.toFixed(5);
+
+  const addr = moAddrSelected.address || {};
+  const provinciaRaw = addr.state || document.getElementById('mad-provincia').value || '';
+  const localidadRaw = addr.city || addr.town || addr.village || addr.municipality || addr.county ||
+                        document.getElementById('mad-localidad').value || '';
+
+  if (provSel && provinciaRaw) {
+    const norm = function(s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim(); };
+    // Alias comunes que Google/otras fuentes devuelven con un nombre distinto
+    // al que usa el desplegable (ej. "CABA" en vez de "Ciudad Autónoma de
+    // Buenos Aires"). Se normaliza antes de comparar.
+    const alias = {
+      'ciudad autonoma de buenos aires': 'caba',
+      'ciudad de buenos aires': 'caba',
+      'capital federal': 'caba',
+      'provincia de buenos aires': 'buenos aires'
+    };
+    let target = norm(provinciaRaw);
+    target = alias[target] || target;
+    Array.from(provSel.options).forEach(function(opt) {
+      if (!opt.value) return;
+      const ov = norm(opt.value), ot = norm(opt.textContent);
+      if (ov === target || ot === target || target.indexOf(ov) !== -1 || ov.indexOf(target) !== -1) {
+        provSel.value = opt.value;
+      }
+    });
+  }
+  if (locInp && localidadRaw) locInp.value = capitalizeFirst(localidadRaw);
+
+  // Confirmar la fila ya mismo: esto guarda los datos en moDraft, vuelve a
+  // renderizar la tabla (con el botón "✎ Editar" de nuevo, no solo "OK") y
+  // cierra el modal de búsqueda.
+  moCommitRow(i, tr);
+}
+
 function moCommitRow(i, tr) {
   const errEl = document.getElementById('mo-error');
   const get = function(f) { return tr.querySelector('[data-f="' + f + '"]').value.trim(); };
 
   const nombre    = capitalizeFirst(get('nombre'));
+  const direccion = capitalizarCalle(get('direccion'));
   const latRaw    = get('lat');
   const lngRaw    = get('lng');
   const provincia = capitalizeFirst(get('provincia'));
@@ -4974,6 +5752,7 @@ function moCommitRow(i, tr) {
   errEl.textContent = '';
   moDraft[i] = {
     nombre,
+    direccion,
     lat: latRaw !== '' ? parseFloat(latRaw) : '',
     lng: lngRaw !== '' ? parseFloat(lngRaw) : '',
     provincia,
@@ -5045,7 +5824,7 @@ function moEnterTable(mode) {
     moDraft = guestSessionLoad();
   }
 
-  while (moDraft.length < MO_MAX) moDraft.push({ nombre:'', lat:'', lng:'', provincia:'', localidad:'' });
+  while (moDraft.length < MO_MAX) moDraft.push({ nombre:'', direccion:'', lat:'', lng:'', provincia:'', localidad:'' });
   moDraft = moDraft.slice(0, MO_MAX);
 
   document.getElementById('mo-error').textContent = '';
@@ -5074,6 +5853,7 @@ function moClose(save) {
     if (typeof renderUserOrigenMarkers === 'function') renderUserOrigenMarkers();
     if (pickStep === 'origin') setStep('origin');
   }
+  moRemoveSearchRow();
   document.getElementById('modal-origenes').style.display = 'none';
 }
 
@@ -5083,6 +5863,20 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('mo-btn-guardar').addEventListener('click', function() { moClose(true); });
   document.getElementById('modal-origenes').addEventListener('click', function(e) {
     if (e.target === this) moClose(false);
+  });
+
+  // ── MODAL "Buscar dirección" (calle/localidad-CP/provincia, sin minimapa) ──
+  document.getElementById('mad-btn-buscar').addEventListener('click', moAddrDoSearch);
+  ['mad-calle','mad-localidad','mad-provincia'].forEach(function(id) {
+    document.getElementById(id).addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); moAddrDoSearch(); }
+    });
+  });
+  document.getElementById('mad-btn-ok').addEventListener('click', moAddrAplicarSeleccion);
+  document.getElementById('mad-btn-cancelar').addEventListener('click', moCloseAddressModal);
+  document.getElementById('mad-close').addEventListener('click', moCloseAddressModal);
+  document.getElementById('modal-buscar-direccion').addEventListener('click', function(e) {
+    if (e.target === this) moCloseAddressModal();
   });
 
   // ── HAMBURGER MENU ────────────────────────────────────────────────────────
