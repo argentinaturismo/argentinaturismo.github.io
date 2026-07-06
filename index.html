@@ -1333,7 +1333,7 @@
     }
     .mo-panel {
       background:#171c27; border:1px solid #2a3050; border-radius:14px;
-      width:min(870px, 94vw); max-height:90vh;
+      width:min(895px, 94vw); max-height:90vh;
       display:flex; flex-direction:column; overflow:hidden;
       box-shadow:0 24px 64px rgba(0,0,0,0.7);
       position:relative; z-index:1101; isolation:isolate;
@@ -1355,7 +1355,7 @@
     .mo-body::-webkit-scrollbar { width:6px; }
     .mo-body::-webkit-scrollbar-thumb { background:#2a3050; border-radius:4px; }
 
-    .mo-table { width:100%; min-width:790px; border-collapse:collapse; font-family:'Barlow',sans-serif; }
+    .mo-table { width:100%; min-width:815px; border-collapse:collapse; font-family:'Barlow',sans-serif; }
     .mo-th {
       font-family:'Barlow',sans-serif; font-size:0.72rem; font-weight:700;
       color:#e8c96a; text-transform:uppercase; letter-spacing:0.06em;
@@ -1368,7 +1368,7 @@
     .mo-th-prov    { width:150px; }
     .mo-th-loc     { width:180px; }
     .mo-th-coord   { width:130px; }
-    .mo-th-actions { width:70px; }
+    .mo-th-actions { width:95px; }
 
     .mo-tr { border-bottom:1px solid rgba(255,255,255,0.07); transition:background .12s; }
     .mo-tr:last-child { border-bottom:none; }
@@ -1459,12 +1459,9 @@
       background-repeat:no-repeat; background-position:right 10px center; padding-right:26px;
     }
     .mad-select option { background:#0f1117; color:#e8eaf2; }
-    .mad-btn-buscar { width:100%; margin-top:16px; padding:9px 0; }
     .mad-results { margin-top:12px; max-height:220px; }
     .mad-footer { padding:16px 24px 20px; }
-    .mad-btn-cancelar { padding:8px 18px; }
-    #mad-btn-ok:disabled { opacity:0.4; cursor:not-allowed; }
-    #mad-btn-ok:disabled:hover { background:transparent; color:#e8c96a; }
+    .mad-btn-cancelar { padding:8px 28px; min-width:120px; text-align:center; }
     .mo-cell-input:disabled {
       background:transparent; border-color:transparent; color:#ffee00;
       cursor:default; padding:5px 4px;
@@ -1568,6 +1565,7 @@
       transition:background .3s ease, color .3s ease;
     }
     .mo-btn-guardar:hover { background:#e8c96a; color:#0f1117; }
+    .mo-footer-salir .mo-btn-guardar { padding:9px 28px; }
 
     /* ── AUTENTICACIÓN (login / registro) dentro del modal de Orígenes ── */
     .mo-auth {
@@ -1747,6 +1745,7 @@
     }
     .ruta-btn-primario:hover   { background:#e8c96a; color:#0f1117; }
     .ruta-btn-secundario:hover { background:#e8c96a; color:#0f1117; }
+    #modal-ruta-resumen .ruta-panel-footer button { min-width:150px; text-align:center; }
 
     /* Leyenda de tramos */
     .ruta-leg {
@@ -2165,7 +2164,7 @@
     <button class="header-btn-finalizar" id="header-btn-finalizar" type="button" disabled>&#9658; Finalizar</button>
   </div>
   <!-- Botón "Cerrar Mapa" + Distancia/Tiempo: aparece solo al ver un itinerario guardado en el mapa -->
-  <button class="header-btn-cancelar" id="header-btn-cerrar-mapa" type="button" style="display:none;">&#10005; Cerrar Mapa</button>
+  <button class="header-btn-cancelar" id="header-btn-cerrar-mapa" type="button" style="display:none;">Cerrar Mapa</button>
   <div id="header-mapa-metrics" style="display:none; align-items:center; gap:14px; margin-left:14px; flex-shrink:0; font-family:'Barlow',sans-serif;">
     <span style="display:flex; align-items:center; gap:5px;">
       <span style="color:#7a83a6; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em;">Distancia</span>
@@ -2364,13 +2363,11 @@
 
     <div class="mo-header">
       <span class="mo-title">Puntos de Origen</span>
-      <button class="mo-close" id="mo-close" type="button">✕</button>
     </div>
 
     <!-- ── BARRA DE ESTADO DE SESIÓN (visible una vez dentro del formulario) ── -->
     <div class="mo-session-bar" id="mo-session-bar" style="display:none;">
       <span class="mo-session-label" id="mo-session-label"></span>
-      <button class="mo-session-link" id="mo-btn-logout"          type="button" style="display:none;">Cerrar sesión</button>
       <button class="mo-session-link" id="mo-btn-login-from-guest" type="button" style="display:none;">Iniciar sesión</button>
     </div>
 
@@ -2391,8 +2388,8 @@
       <div class="mo-error" id="mo-error"></div>
     </div>
 
-    <div class="mo-footer" id="mo-footer" style="display:none;">
-      <button class="mo-btn-guardar" id="mo-btn-guardar" type="button">Guardar y Salir</button>
+    <div class="mo-footer-salir" id="mo-footer" style="display:none;">
+      <button class="mo-btn-guardar" id="mo-btn-guardar" type="button">Guardar y cerrar</button>
     </div>
 
   </div>
@@ -2403,7 +2400,6 @@
   <div class="mo-panel mad-panel">
     <div class="mo-header">
       <span class="mo-title">Buscar dirección</span>
-      <button class="mo-close" id="mad-close" type="button">✕</button>
     </div>
     <div class="mad-body">
       <label class="mad-label" for="mad-calle">Calle y número</label>
@@ -2415,14 +2411,12 @@
       <label class="mad-label" for="mad-provincia">Provincia</label>
       <select class="mad-input mad-select" id="mad-provincia"></select>
 
-      <button class="mo-search-btn mad-btn-buscar" id="mad-btn-buscar" type="button">Buscar</button>
-
       <div class="mo-search-results mad-results" id="mad-results"></div>
       <div class="mo-error" id="mad-error"></div>
     </div>
-    <div class="mo-footer mad-footer">
+    <div class="mo-footer mad-footer" style="justify-content:center;">
       <button class="mo-btn-base mad-btn-cancelar" id="mad-btn-cancelar" type="button">Cancelar</button>
-      <button class="mo-btn-guardar" id="mad-btn-ok" type="button" disabled>OK</button>
+      <button class="mo-btn-base mad-btn-cancelar" id="mad-btn-buscar" type="button">Buscar</button>
     </div>
   </div>
 </div>
@@ -2432,16 +2426,15 @@
   <div class="ruta-panel">
     <div class="ruta-panel-header">
       <span class="ruta-panel-title">Resumen de Ruta</span>
-      <button class="ruta-panel-close" id="ruta-resumen-close" type="button">✕</button>
     </div>
     <div class="ruta-nombre-bar">
       <input class="ruta-nombre-input" id="ruta-nombre-input" type="text" placeholder="Nombre de Ruta…" maxlength="80" />
       <button class="ruta-nombre-ok" id="ruta-nombre-ok" type="button">Ok</button>
     </div>
     <div class="ruta-panel-body" id="ruta-resumen-body"></div>
-    <div class="ruta-panel-footer">
-      <button class="ruta-btn-secundario" id="btn-ruta-nueva" type="button">✕ Cancelar</button>
-      <button class="ruta-btn-primario"   id="btn-ruta-guardar" type="button">Guardar</button>
+    <div class="ruta-panel-footer" style="justify-content:center;">
+      <button class="ruta-btn-secundario" id="btn-ruta-nueva" type="button">Cancelar</button>
+      <button class="ruta-btn-primario"   id="btn-ruta-guardar" type="button">Guardar y cerrar</button>
     </div>
   </div>
 </div>
@@ -2555,10 +2548,9 @@
   <div class="ruta-panel" id="iti-ver-printarea">
     <div class="ruta-panel-header">
       <span class="ruta-panel-title" id="iti-ver-titulo">Resumen de Ruta</span>
-      <button class="ruta-panel-close" id="iti-ver-close" type="button">✕</button>
     </div>
     <div class="ruta-panel-body" id="iti-ver-body"></div>
-    <div class="ruta-panel-footer">
+    <div class="ruta-panel-footer" style="justify-content:center;">
       <button class="ruta-btn-secundario" id="iti-ver-cerrar" type="button">Cerrar</button>
       <button class="ruta-btn-primario"   id="iti-ver-imprimir" type="button">Imprimir</button>
     </div>
@@ -2655,6 +2647,7 @@ const activeCats  = new Set();
 let SITIOS = [];
 let vistaActual = 'argentina', provActual = null;
 let mapArg = null, mapProv = null, clusterArg = null, clusterProv = null;
+let capaProvinciasGeoJSON = null; // caché: se pide una sola vez a Georef y se reutiliza en ambos mapas
 const provEls = {}, catEls = {};
 
 // Route state
@@ -3215,6 +3208,83 @@ function renderUserOrigenMarkers() {
   });
 }
 
+// ── CAPA: división política de provincias (límites oficiales, API Georef) ──
+// Se pide UNA sola vez (son ~24 polígonos, no cambian) y se reutiliza el
+// mismo GeoJSON en el mapa de Argentina y en el de cada provincia.
+function agregarCapaProvincias(map) {
+  function dibujar(geojson) {
+    L.geoJSON(geojson, {
+      style: { color:'#e8c96a', weight:1.4, fill:false, dashArray:'5,4', opacity:0.8 },
+      interactive: false
+    }).addTo(map);
+  }
+  if (capaProvinciasGeoJSON) { dibujar(capaProvinciasGeoJSON); return; }
+  fetch('https://apis.datos.gob.ar/georef/api/provincias?campos=completo&max=24')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      const features = ((data && data.provincias) || []).map(function(p) {
+        return { type:'Feature', properties:{ nombre:p.nombre }, geometry:p.geometria };
+      });
+      capaProvinciasGeoJSON = { type:'FeatureCollection', features };
+      dibujar(capaProvinciasGeoJSON);
+    })
+    .catch(function() { /* sin límites políticos si falla, no rompe el mapa */ });
+}
+
+// ── CAPAS: ríos y rutas nacionales (datos de OpenStreetMap vía Overpass) ──
+// A diferencia de los límites de provincia (fijos), estas capas se piden
+// según la zona visible del mapa, para no descargar todos los ríos/rutas del
+// país de una sola vez. Se actualizan al mover o hacer zoom (con una espera
+// corta para no saturar el servicio mientras el usuario todavía se mueve).
+function overpassFetch(query) {
+  const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
+  return fetch(url).then(function(r) { return r.json(); }).catch(function() { return null; });
+}
+
+function dibujarLineasOSM(data, capa, estilo) {
+  capa.clearLayers();
+  if (!data) return;
+  (data.elements || []).forEach(function(el) {
+    if (!el.geometry || !el.geometry.length) return;
+    const latlngs = el.geometry.map(function(g) { return [g.lat, g.lon]; });
+    L.polyline(latlngs, estilo).addTo(capa);
+  });
+}
+
+function agregarCapasDinamicas(map) {
+  const capaRios  = L.layerGroup().addTo(map);
+  const capaRutas = L.layerGroup().addTo(map);
+  let debounceId  = null;
+
+  function actualizar() {
+    // Por debajo de este zoom el área visible es demasiado grande (toda una
+    // región o el país entero): se evita la consulta para no sobrecargar el
+    // servicio gratuito de Overpass con una descarga enorme.
+    if (map.getZoom() < 7) { capaRios.clearLayers(); capaRutas.clearLayers(); return; }
+
+    const b = map.getBounds();
+    const bbox = b.getSouth() + ',' + b.getWest() + ',' + b.getNorth() + ',' + b.getEast();
+
+    overpassFetch('[out:json][timeout:25];(way["waterway"="river"](' + bbox + '););out geom;')
+      .then(function(data) { dibujarLineasOSM(data, capaRios, { color:'#3b82f6', weight:2, opacity:0.85 }); });
+
+    overpassFetch('[out:json][timeout:25];(way["highway"]["network"="AR:national"](' + bbox + '););out geom;')
+      .then(function(data) { dibujarLineasOSM(data, capaRutas, { color:'#e85d3d', weight:2.5, opacity:0.9 }); });
+  }
+
+  map.on('moveend', function() {
+    clearTimeout(debounceId);
+    debounceId = setTimeout(actualizar, 700);
+  });
+  actualizar();
+}
+
+function agregarCapasReferencia(map) {
+  agregarCapaProvincias(map);
+  agregarCapasDinamicas(map);
+}
+
+
 function tileLayer() {
   // OpenTopoMap: mapa topográfico gratuito y sin necesidad de API key, con
   // estilo de relieve clásico — agua en tonos azules, curvas de nivel y
@@ -3267,6 +3337,7 @@ function makeMarker(s) {
 function initMapArgentina() {
   mapArg = L.map('map-argentina', { center:[-38.5,-65], zoom:4, minZoom:3 });
   tileLayer().addTo(mapArg);
+  agregarCapasReferencia(mapArg);
   clusterArg = makeCluster();
   mapArg.addLayer(clusterArg);
   mapArg.on('click', onMapClick);
@@ -3310,6 +3381,7 @@ function abrirProvincia(key) {
   document.getElementById('map-banner').classList.add('visible');
   mapProv = L.map('map-provincia', { center:[prov.lat, prov.lng], zoom:prov.zoom, minZoom:4 });
   tileLayer().addTo(mapProv);
+  agregarCapasReferencia(mapProv);
   clusterProv = makeCluster();
   mapProv.addLayer(clusterProv);
   mapProv.on('click', onMapClick);
@@ -3951,7 +4023,6 @@ document.getElementById('btn-generar-ruta').addEventListener('click', iniciarMod
 document.getElementById('btn-cancelar-ruta').addEventListener('click', cancelarModoRuta);
 document.getElementById('btn-finalizar-ruta').addEventListener('click', finalizarRuta);
 document.getElementById('btn-ruta-deshacer').addEventListener('click', deshacerUltimoRutaPunto);
-document.getElementById('ruta-resumen-close').addEventListener('click', closeRutaResumenModal);
 document.getElementById('modal-ruta-resumen').addEventListener('click', function(e) {
   if (e.target === this) closeRutaResumenModal();
 });
@@ -3964,7 +4035,7 @@ document.getElementById('btn-ruta-nueva').addEventListener('click', function() {
 document.getElementById('btn-ruta-guardar').addEventListener('click', function() {
   if (!rutaResumenData) return;
   var input  = document.getElementById('ruta-nombre-input');
-  var nombre = (input.value || '').trim() || nextRutaPersonalizadaNombre();
+  var nombre = capitalizarPalabras((input.value || '').trim()) || nextRutaPersonalizadaNombre();
   guardarItinerario(nombre, rutaResumenData);
   closeRutaResumenModal();
   openItinerariosModal();
@@ -4059,11 +4130,11 @@ function abrirEstadisticaTramos(id) {
   const maxKm    = Math.max(1, Math.max.apply(null, kmValues));
 
   const n       = legs.length;
-  const colW    = 96;
-  const barW    = 44;
+  const colW    = 56;
+  const barW    = 34;
   const plotH   = 190;
   const topPad  = 46;
-  const bottomPad = 30;
+  const bottomPad = 44;
   const leftPad = 38;
   const rightPad = 18;
   const chartW  = leftPad + n * colW + rightPad;
@@ -4083,12 +4154,34 @@ function abrirEstadisticaTramos(id) {
     gridLines += '<text x="' + (leftPad - 8) + '" y="' + (y + 4) + '" fill="#7a83a6" font-size="11" font-family="Barlow, sans-serif" text-anchor="end">' + val + '</text>';
   }
 
-  const barColor = it.realizado ? '#00b0ff' : '#e8c96a';
-  const gradId   = 'tramoDistGrad' + Math.random().toString(36).slice(2, 9);
-  const gradDefs = '<defs><linearGradient id="' + gradId + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
-    '<stop offset="0%" stop-color="' + barColor + '" stop-opacity="0.35" />' +
-    '<stop offset="100%" stop-color="' + barColor + '" stop-opacity="0.95" />' +
-  '</linearGradient></defs>';
+  const baseEsRealizado = !!it.realizado;
+  const gradId    = 'tramoDistGrad' + Math.random().toString(36).slice(2, 9);
+  const gradIdMax = 'tramoDistGradMax' + Math.random().toString(36).slice(2, 9);
+  const gradIdMin = 'tramoDistGradMin' + Math.random().toString(36).slice(2, 9);
+  const gradDefs = '<defs>' +
+    // Barras normales: azul si la ruta se realizó, blanco si no.
+    '<linearGradient id="' + gradId + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
+      (baseEsRealizado
+        ? '<stop offset="0%" stop-color="#93c5fd" stop-opacity="0.4" /><stop offset="100%" stop-color="#2563eb" stop-opacity="0.95" />'
+        : '<stop offset="0%" stop-color="#ffffff" stop-opacity="0.25" /><stop offset="100%" stop-color="#ffffff" stop-opacity="0.92" />') +
+    '</linearGradient>' +
+    // Tramo de mayor distancia: siempre rojo.
+    '<linearGradient id="' + gradIdMax + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
+      '<stop offset="0%" stop-color="#fca5a5" stop-opacity="0.4" />' +
+      '<stop offset="100%" stop-color="#dc2626" stop-opacity="0.95" />' +
+    '</linearGradient>' +
+    // Tramo de menor distancia: siempre verde.
+    '<linearGradient id="' + gradIdMin + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
+      '<stop offset="0%" stop-color="#86efac" stop-opacity="0.45" />' +
+      '<stop offset="100%" stop-color="#16a34a" stop-opacity="0.95" />' +
+    '</linearGradient>' +
+  '</defs>';
+
+  let maxIdx = 0, minIdx = 0;
+  kmValues.forEach(function(v, idx) {
+    if (v > kmValues[maxIdx]) maxIdx = idx;
+    if (v < kmValues[minIdx]) minIdx = idx;
+  });
 
   legs.forEach(function(leg, i) {
     const colX    = leftPad + i * colW + colW / 2;
@@ -4097,13 +4190,18 @@ function abrirEstadisticaTramos(id) {
     const barTop  = topPad + plotH - barH;
     const desde   = stops[i]   ? (stops[i].name   || 'Parada ' + (i + 1))     : 'Parada ' + (i + 1);
     const hasta   = stops[i+1] ? (stops[i+1].name || 'Parada ' + (i + 2))     : 'Parada ' + (i + 2);
-    const origLbl = escH(truncLabel(desde, 14));
-    const destLbl = escH(truncLabel(hasta, 14));
-    const tooltip = escH(desde + ' → ' + hasta);
-    bars += '<text x="' + colX + '" y="' + (barTop - 32) + '" fill="#e8c96a" font-size="10.5" font-family="Barlow, sans-serif" text-anchor="middle">' + origLbl + '<title>' + tooltip + '</title></text>';
-    bars += '<text x="' + colX + '" y="' + (barTop - 18) + '" fill="#9aa3c4" font-size="10.5" font-family="Barlow, sans-serif" text-anchor="middle">' + destLbl + '<title>' + tooltip + '</title></text>';
-    bars += '<text x="' + colX + '" y="' + (barTop - 5) + '" fill="#c8d0f0" font-size="11" font-family="Barlow, sans-serif" text-anchor="middle">' + km + ' km</text>';
-    bars += '<rect x="' + (colX - barW / 2) + '" y="' + barTop + '" width="' + barW + '" height="' + barH + '" rx="4" fill="url(#' + gradId + ')"><title>' + tooltip + '</title></rect>';
+    const tooltip = escH(desde + ' → ' + hasta + ' (' + km + ' km)');
+    const esMax   = (i === maxIdx);
+    const esMin   = (!esMax && i === minIdx);
+    const fillId  = esMax ? gradIdMax : (esMin ? gradIdMin : gradId);
+    // Color sólido de la barra, usado luego para el texto del panel de hover.
+    const barSolidColor = esMax ? '#ef4444' : (esMin ? '#22c55e' : (baseEsRealizado ? '#2563eb' : '#ffffff'));
+    bars += '<text x="' + colX + '" y="' + (barTop - 4) + '" fill="#ffffff" font-size="12.5" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + km + ' km</text>';
+    bars += '<rect class="tramo-hover-bar" data-num="' + (i + 1) + '" data-desde="' + escH(desde) + '" data-hasta="' + escH(hasta) + '" data-km="' + km + '" data-color="' + barSolidColor + '" x="' + (colX - barW / 2) + '" y="' + barTop + '" width="' + barW + '" height="' + barH + '" rx="4" fill="url(#' + fillId + ')" style="cursor:pointer;"><title>' + tooltip + '</title></rect>';
+    // Número de tramo en el eje X, dentro de un círculo dorado (mismo
+    // estilo que la numeración de tramos en "Resumen de Ruta").
+    bars += '<circle cx="' + colX + '" cy="' + (topPad + plotH + 20) + '" r="13" fill="rgba(232,201,106,0.15)" stroke="#e8c96a" stroke-width="1.2" />';
+    bars += '<text x="' + colX + '" y="' + (topPad + plotH + 24) + '" fill="#e8c96a" font-size="11.5" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + (i + 1) + '</text>';
   });
 
   const svg =
@@ -4112,9 +4210,24 @@ function abrirEstadisticaTramos(id) {
     '</svg>';
 
   wrap.innerHTML =
-    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:10px; text-align:center;">Kilómetros por tramo</div>' +
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:10px; text-align:center;">Distancia estimada por tramo</div>' +
     '<div style="width:100%; overflow:hidden; text-align:center;">' + svg + '</div>' +
-    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.72rem; color:#7a83a6; text-align:center; margin-top:6px;">Km</div>';
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.72rem; color:#7a83a6; text-align:center; margin-top:6px;">Km</div>' +
+    '<div id="tramo-dist-hover-info" style="min-height:1.6rem; margin-top:14px; text-align:center; font-family:\'Barlow\',sans-serif; font-size:1.15rem; font-weight:700; color:#e8c96a;">&nbsp;</div>';
+
+  // Al posarse sobre una barra, muestra el número de tramo dentro de un
+  // círculo (mismo estilo que el eje X) seguido del recorrido, todo en el
+  // mismo color que la barra correspondiente.
+  const infoDist = wrap.querySelector('#tramo-dist-hover-info');
+  wrap.querySelectorAll('.tramo-hover-bar').forEach(function(rect) {
+    rect.addEventListener('mouseenter', function() {
+      const color = rect.dataset.color;
+      infoDist.innerHTML =
+        '<span style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:' + color + '26; border:1.5px solid ' + color + '; color:' + color + '; font-weight:700; font-size:0.85rem; font-family:\'Barlow\',sans-serif; vertical-align:middle; margin-right:8px;">' + rect.dataset.num + '</span>' +
+        '<span style="color:' + color + '; vertical-align:middle;">' + rect.dataset.desde + ' → ' + rect.dataset.hasta + ' — ' + rect.dataset.km + ' km</span>';
+    });
+    rect.addEventListener('mouseleave', function() { infoDist.innerHTML = '&nbsp;'; });
+  });
 
   document.getElementById('modal-stat-tramos').style.display = 'flex';
 }
@@ -4198,15 +4311,33 @@ function statBuildSmoothedLineSVG(items, opts) {
     gridLines += '<text x="' + (padL - 10) + '" y="' + (gy + 4) + '" fill="#7a83a6" font-size="11" font-family="Barlow, sans-serif" text-anchor="end">' + val + '</text>';
   }
 
+  // Eje X: se muestra el número de orden de cada ruta (1, 2, 3…) en vez del
+  // nombre completo, para no saturar el gráfico cuando hay muchos itinerarios.
   var xLabels = '';
   items.forEach(function(it, i) {
     var p = points[i];
-    var lines = statWrapLabel(it.label, 15);
-    var tspans = lines.map(function(ln, li) {
-      return '<tspan x="' + p[0] + '" dy="' + (li === 0 ? 0 : 12) + '">' + escH(ln) + '</tspan>';
-    }).join('');
-    xLabels += '<text x="' + p[0] + '" y="' + (padT + plotH + 18) + '" fill="#9aa3c4" font-size="10" font-family="Barlow, sans-serif" text-anchor="middle"><title>' + escH(it.tooltip || it.label) + '</title>' + tspans + '</text>';
+    xLabels += '<text x="' + p[0] + '" y="' + (padT + plotH + 18) + '" fill="#9aa3c4" font-size="11" font-family="Barlow, sans-serif" text-anchor="middle"><title>' + escH(it.tooltip || it.label) + '</title>' + (i + 1) + '</text>';
   });
+
+  // Ruta con el valor más alto (mayor distancia o mayor tiempo, según el
+  // gráfico): se destaca con su nombre arriba del punto, un marcador rosa, y
+  // una línea guía punteada hacia abajo.
+  var maxIdx = 0;
+  items.forEach(function(it, i) { if (it.value > items[maxIdx].value) maxIdx = i; });
+  var destacado = '';
+  if (n > 0) {
+    var pMax = points[maxIdx];
+    var itMax = items[maxIdx];
+    var nombreLines = statWrapLabel(itMax.label, 20);
+    var baseY = pMax[1] - 30 - (nombreLines.length - 1) * 12;
+    var tspansNombre = nombreLines.map(function(ln, li) {
+      return '<tspan x="' + pMax[0] + '" y="' + (baseY + li * 12) + '">' + escH(ln) + '</tspan>';
+    }).join('');
+    destacado =
+      '<line x1="' + pMax[0] + '" y1="' + pMax[1] + '" x2="' + pMax[0] + '" y2="' + (padT + plotH) + '" stroke="#ec4899" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.7" />' +
+      '<text fill="#ec4899" font-weight="700" font-size="11" font-family="Barlow, sans-serif" text-anchor="middle">' + tspansNombre + '</text>' +
+      '<circle cx="' + pMax[0] + '" cy="' + pMax[1] + '" r="6" fill="#ec4899" stroke="#0f1117" stroke-width="1.5"><title>' + escH(itMax.tooltip || itMax.label) + '</title></circle>';
+  }
 
   var pathD = statBuildSmoothPath(points);
   var areaD = points.length > 1
@@ -4232,7 +4363,7 @@ function statBuildSmoothedLineSVG(items, opts) {
     gridLines +
     (areaD ? '<path d="' + areaD + '" fill="url(#' + gradId + ')" stroke="none" />' : '') +
     (pathD ? '<path d="' + pathD + '" fill="none" stroke="#e8c96a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />' : '') +
-    dots + xLabels;
+    dots + xLabels + destacado;
 
   return '<div style="width:100%; overflow:hidden; text-align:center;"><svg viewBox="0 0 ' + chartW + ' ' + chartH + '" width="' + chartW + '" height="' + chartH + '" xmlns="http://www.w3.org/2000/svg" style="display:inline-block; max-width:100%; height:auto;">' + svgInner + '</svg></div>';
 }
@@ -4307,11 +4438,11 @@ function abrirEstadisticaTramosTiempo(id) {
   const maxMin    = Math.max(1, Math.max.apply(null, minValues));
 
   const n       = legs.length;
-  const colW    = 96;
-  const barW    = 44;
+  const colW    = 56;
+  const barW    = 34;
   const plotH   = 190;
   const topPad  = 46;
-  const bottomPad = 30;
+  const bottomPad = 44;
   const leftPad = 38;
   const rightPad = 18;
   const chartW  = leftPad + n * colW + rightPad;
@@ -4331,12 +4462,34 @@ function abrirEstadisticaTramosTiempo(id) {
     gridLines += '<text x="' + (leftPad - 8) + '" y="' + (y + 4) + '" fill="#7a83a6" font-size="11" font-family="Barlow, sans-serif" text-anchor="end">' + val + '</text>';
   }
 
-  const barColor = it.realizado ? '#00b0ff' : '#e8c96a';
-  const gradId   = 'tramoTiempoGrad' + Math.random().toString(36).slice(2, 9);
-  const gradDefs = '<defs><linearGradient id="' + gradId + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
-    '<stop offset="0%" stop-color="' + barColor + '" stop-opacity="0.35" />' +
-    '<stop offset="100%" stop-color="' + barColor + '" stop-opacity="0.95" />' +
-  '</linearGradient></defs>';
+  const baseEsRealizado = !!it.realizado;
+  const gradId    = 'tramoTiempoGrad' + Math.random().toString(36).slice(2, 9);
+  const gradIdMax = 'tramoTiempoGradMax' + Math.random().toString(36).slice(2, 9);
+  const gradIdMin = 'tramoTiempoGradMin' + Math.random().toString(36).slice(2, 9);
+  const gradDefs = '<defs>' +
+    // Barras normales: azul si la ruta se realizó, blanco si no.
+    '<linearGradient id="' + gradId + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
+      (baseEsRealizado
+        ? '<stop offset="0%" stop-color="#93c5fd" stop-opacity="0.4" /><stop offset="100%" stop-color="#2563eb" stop-opacity="0.95" />'
+        : '<stop offset="0%" stop-color="#ffffff" stop-opacity="0.25" /><stop offset="100%" stop-color="#ffffff" stop-opacity="0.92" />') +
+    '</linearGradient>' +
+    // Tramo de mayor duración: siempre rojo.
+    '<linearGradient id="' + gradIdMax + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
+      '<stop offset="0%" stop-color="#fca5a5" stop-opacity="0.4" />' +
+      '<stop offset="100%" stop-color="#dc2626" stop-opacity="0.95" />' +
+    '</linearGradient>' +
+    // Tramo de menor duración: siempre verde.
+    '<linearGradient id="' + gradIdMin + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
+      '<stop offset="0%" stop-color="#86efac" stop-opacity="0.45" />' +
+      '<stop offset="100%" stop-color="#16a34a" stop-opacity="0.95" />' +
+    '</linearGradient>' +
+  '</defs>';
+
+  let maxIdx = 0, minIdx = 0;
+  minValues.forEach(function(v, idx) {
+    if (v > minValues[maxIdx]) maxIdx = idx;
+    if (v < minValues[minIdx]) minIdx = idx;
+  });
 
   legs.forEach(function(leg, i) {
     const colX    = leftPad + i * colW + colW / 2;
@@ -4345,13 +4498,18 @@ function abrirEstadisticaTramosTiempo(id) {
     const barTop  = topPad + plotH - barH;
     const desde   = stops[i]   ? (stops[i].name   || 'Parada ' + (i + 1))     : 'Parada ' + (i + 1);
     const hasta   = stops[i+1] ? (stops[i+1].name || 'Parada ' + (i + 2))     : 'Parada ' + (i + 2);
-    const origLbl = escH(truncLabel(desde, 14));
-    const destLbl = escH(truncLabel(hasta, 14));
-    const tooltip = escH(desde + ' → ' + hasta);
-    bars += '<text x="' + colX + '" y="' + (barTop - 32) + '" fill="#e8c96a" font-size="10.5" font-family="Barlow, sans-serif" text-anchor="middle">' + origLbl + '<title>' + tooltip + '</title></text>';
-    bars += '<text x="' + colX + '" y="' + (barTop - 18) + '" fill="#9aa3c4" font-size="10.5" font-family="Barlow, sans-serif" text-anchor="middle">' + destLbl + '<title>' + tooltip + '</title></text>';
-    bars += '<text x="' + colX + '" y="' + (barTop - 5) + '" fill="#c8d0f0" font-size="11" font-family="Barlow, sans-serif" text-anchor="middle">' + min + ' min</text>';
-    bars += '<rect x="' + (colX - barW / 2) + '" y="' + barTop + '" width="' + barW + '" height="' + barH + '" rx="4" fill="url(#' + gradId + ')"><title>' + tooltip + '</title></rect>';
+    const tooltip = escH(desde + ' → ' + hasta + ' (' + min + ' min)');
+    const esMax   = (i === maxIdx);
+    const esMin   = (!esMax && i === minIdx);
+    const fillId  = esMax ? gradIdMax : (esMin ? gradIdMin : gradId);
+    // Color sólido de la barra, usado luego para el texto del panel de hover.
+    const barSolidColor = esMax ? '#ef4444' : (esMin ? '#22c55e' : (baseEsRealizado ? '#2563eb' : '#ffffff'));
+    bars += '<text x="' + colX + '" y="' + (barTop - 4) + '" fill="#ffffff" font-size="12.5" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + min + ' min</text>';
+    bars += '<rect class="tramo-hover-bar" data-num="' + (i + 1) + '" data-desde="' + escH(desde) + '" data-hasta="' + escH(hasta) + '" data-min="' + min + '" data-color="' + barSolidColor + '" x="' + (colX - barW / 2) + '" y="' + barTop + '" width="' + barW + '" height="' + barH + '" rx="4" fill="url(#' + fillId + ')" style="cursor:pointer;"><title>' + tooltip + '</title></rect>';
+    // Número de tramo en el eje X, dentro de un círculo dorado (mismo
+    // estilo que la numeración de tramos en "Resumen de Ruta").
+    bars += '<circle cx="' + colX + '" cy="' + (topPad + plotH + 20) + '" r="13" fill="rgba(232,201,106,0.15)" stroke="#e8c96a" stroke-width="1.2" />';
+    bars += '<text x="' + colX + '" y="' + (topPad + plotH + 24) + '" fill="#e8c96a" font-size="11.5" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + (i + 1) + '</text>';
   });
 
   const svg =
@@ -4362,7 +4520,22 @@ function abrirEstadisticaTramosTiempo(id) {
   wrap.innerHTML =
     '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:10px; text-align:center;">Tiempo estimado por tramo</div>' +
     '<div style="width:100%; overflow:hidden; text-align:center;">' + svg + '</div>' +
-    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.72rem; color:#7a83a6; text-align:center; margin-top:6px;">Minutos</div>';
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.72rem; color:#7a83a6; text-align:center; margin-top:6px;">Minutos</div>' +
+    '<div id="tramo-tiempo-hover-info" style="min-height:1.6rem; margin-top:14px; text-align:center; font-family:\'Barlow\',sans-serif; font-size:1.15rem; font-weight:700; color:#e8c96a;">&nbsp;</div>';
+
+  // Al posarse sobre una barra, muestra el número de tramo dentro de un
+  // círculo (mismo estilo que el eje X) seguido del recorrido, todo en el
+  // mismo color que la barra correspondiente.
+  const infoTiempo = wrap.querySelector('#tramo-tiempo-hover-info');
+  wrap.querySelectorAll('.tramo-hover-bar').forEach(function(rect) {
+    rect.addEventListener('mouseenter', function() {
+      const color = rect.dataset.color;
+      infoTiempo.innerHTML =
+        '<span style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:' + color + '26; border:1.5px solid ' + color + '; color:' + color + '; font-weight:700; font-size:0.85rem; font-family:\'Barlow\',sans-serif; vertical-align:middle; margin-right:8px;">' + rect.dataset.num + '</span>' +
+        '<span style="color:' + color + '; vertical-align:middle;">' + rect.dataset.desde + ' → ' + rect.dataset.hasta + ' — ' + rect.dataset.min + ' min</span>';
+    });
+    rect.addEventListener('mouseleave', function() { infoTiempo.innerHTML = '&nbsp;'; });
+  });
 
   document.getElementById('modal-stat-tramos-tiempo').style.display = 'flex';
 }
@@ -4390,7 +4563,7 @@ function renderItinerariosTable() {
       filas.push(
         '<tr class="mo-tr">' +
         '<td class="mo-td mo-td-n"><span class="mo-num-circle">' + (idx + 1) + '</span></td>' +
-        '<td class="mo-td iti-nombre-cell" data-id="' + it.id + '">' + escH(it.nombre) + '</td>' +
+        '<td class="mo-td iti-nombre-cell" data-id="' + it.id + '">' + escH(capitalizarPalabras(it.nombre)) + '</td>' +
         '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-realizado' + (it.realizado ? ' iti-realizado-si' : '') + '" data-id="' + it.id + '" type="button" title="' + (it.realizado ? 'Realizado' : 'No realizado') + '">' + (it.realizado ? '&#10003;' : '&#9675;') + '</button></td>' +
         '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-edit" data-id="' + it.id + '" type="button" title="Editar nombre">&#9998;</button></td>' +
         '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-ver" data-id="' + it.id + '" type="button" title="Ver">&#128065;</button></td>' +
@@ -4452,7 +4625,7 @@ function renderItinerariosTable() {
       function guardar() {
         if (resuelto) return;
         resuelto = true;
-        const nombre = input.value.trim() || nombreActual;
+        const nombre = capitalizarPalabras(input.value.trim()) || nombreActual;
         const list = activeItinerarios().map(function(x) {
           return x.id === id ? Object.assign({}, x, { nombre }) : x;
         });
@@ -4515,12 +4688,11 @@ function findItinerario(id) {
 function abrirVerItinerario(id) {
   const it = findItinerario(id);
   if (!it) return;
-  document.getElementById('iti-ver-titulo').textContent = it.nombre;
+  document.getElementById('iti-ver-titulo').textContent = capitalizarPalabras(it.nombre);
   renderRutaResumenEnNodo(document.getElementById('iti-ver-body'), it.stops, it.legs, it.totalDist, it.totalDur);
   document.getElementById('modal-iti-ver').style.display = 'flex';
 }
 function cerrarVerItinerario() { document.getElementById('modal-iti-ver').style.display = 'none'; }
-document.getElementById('iti-ver-close').addEventListener('click', cerrarVerItinerario);
 document.getElementById('iti-ver-cerrar').addEventListener('click', cerrarVerItinerario);
 document.getElementById('iti-ver-imprimir').addEventListener('click', function() { window.print(); });
 document.getElementById('modal-iti-ver').addEventListener('click', function(e) {
@@ -5132,6 +5304,17 @@ function capitalizarCalle(s) {
   }).join(' ');
 }
 
+// Pone en mayúscula la primera letra de CADA palabra de un nombre de
+// itinerario (ej. "ruta del norte" -> "Ruta Del Norte"), sin excepciones.
+function capitalizarPalabras(s) {
+  if (!s) return s;
+  return s.split(/\s+/).map(function(palabra) {
+    if (!palabra) return palabra;
+    const lower = palabra.toLowerCase();
+    return lower.charAt(0).toUpperCase() + lower.slice(1);
+  }).join(' ');
+}
+
 // Lista de nombres de provincia reutilizada tanto en la tabla de orígenes como
 // en el modal de búsqueda de dirección, para que ambos selects queden siempre
 // sincronizados. (Distinta de PROVINCIAS_LIST, usada para el mapa SVG.)
@@ -5172,17 +5355,27 @@ function moRenderTable() {
       '</td>' +
       '<td class="mo-td"><div class="mo-td-actions">' +
         '<button class="mo-btn-edit" data-i="' + i + '" type="button" title="Editar">&#9998;</button>' +
+        '<button class="mo-btn-edit mo-btn-buscar" data-i="' + i + '" type="button" title="Buscar dirección"><svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="9.8" y1="9.8" x2="14" y2="14"/></svg></button>' +
         '<button class="mo-btn-del"  data-i="' + i + '" type="button" title="Eliminar">&#128465;</button>' +
       '</div></td>';
 
     tbody.appendChild(tr);
   });
 
-  // Wire edit buttons
-  tbody.querySelectorAll('.mo-btn-edit').forEach(function(btn) {
+  // Wire edit buttons (excluye el ícono de buscar, que tiene su propio wiring)
+  tbody.querySelectorAll('.mo-btn-edit:not(.mo-btn-buscar)').forEach(function(btn) {
     btn.addEventListener('click', function() {
       const i = parseInt(btn.dataset.i);
       moEnableRow(i, btn);
+    });
+  });
+
+  // Wire search buttons: abre "Buscar dirección" directamente, sin pasar
+  // por el modo de edición completa de la fila (nombre/provincia/localidad).
+  tbody.querySelectorAll('.mo-btn-buscar').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const i = parseInt(btn.dataset.i);
+      moOpenAddressModal(i);
     });
   });
 
@@ -5205,11 +5398,11 @@ function moEnableRow(i, editBtn) {
   // Al editar, se quita el estilo atenuado de "número no utilizado"
   tr.classList.remove('mo-tr-empty');
 
-  // Enable all regular inputs
-  tr.querySelectorAll('.mo-cell-input').forEach(function(inp) { inp.disabled = false; });
-
-  // Buscador de dirección: se abre como ventana emergente (modal), sin minimapa
-  moOpenAddressModal(i);
+  // El lápiz ahora solo sirve para agregar/modificar el Nombre del punto de
+  // origen. Los demás datos (dirección, localidad, provincia, coordenadas)
+  // se cargan aparte con el ícono de la lupa ("Buscar dirección").
+  const nombreInp = tr.querySelector('[data-f="nombre"]');
+  if (nombreInp) nombreInp.disabled = false;
 
   // Replace action buttons with OK + trash icon
   const actDiv = tr.querySelector('.mo-td-actions');
@@ -5227,7 +5420,6 @@ function moEnableRow(i, editBtn) {
   });
 
   // Focus the nombre field
-  const nombreInp = tr.querySelector('[data-f="nombre"]');
   if (nombreInp) nombreInp.focus();
 }
 
@@ -5573,7 +5765,6 @@ function moOpenAddressModal(i) {
   document.getElementById('mad-provincia').innerHTML = provinciaOptionsHtml(row.provincia || '');
   document.getElementById('mad-results').innerHTML = '';
   document.getElementById('mad-error').textContent = '';
-  document.getElementById('mad-btn-ok').disabled = true;
 
   document.getElementById('modal-buscar-direccion').style.display = 'flex';
   document.getElementById('mad-calle').focus();
@@ -5583,6 +5774,15 @@ function moCloseAddressModal() {
   const modal = document.getElementById('modal-buscar-direccion');
   if (modal) modal.style.display = 'none';
   moAddrModalIdx = null;
+}
+
+// Usado por Cancelar / la ✕ / el clic afuera del panel: a diferencia de
+// moCloseAddressModal (que solo oculta la ventana), esta además vuelve a
+// dejar la fila de origen como estaba — con el ícono de lápiz de nuevo — en
+// vez de dejarla "a mitad de editar" con el botón "✓ OK".
+function moCancelAddressModal() {
+  moCloseAddressModal();
+  moRenderTable();
 }
 
 // Se mantiene este nombre por compatibilidad con las llamadas existentes
@@ -5596,11 +5796,9 @@ function moAddrDoSearch() {
   const loc   = document.getElementById('mad-localidad').value.trim();
   const prov  = document.getElementById('mad-provincia').value.trim();
   const results = document.getElementById('mad-results');
-  const okBtn    = document.getElementById('mad-btn-ok');
   const errEl    = document.getElementById('mad-error');
 
   errEl.textContent = '';
-  okBtn.disabled = true;
   moAddrSelected = null;
 
   if (!calle) {
@@ -5652,9 +5850,8 @@ function moAddrDoSearch() {
         results.querySelectorAll('.mo-search-item').forEach(function(el) { el.classList.remove('mo-search-item-sel'); });
         item.classList.add('mo-search-item-sel');
         moAddrSelected = moAddrLastResults[parseInt(item.dataset.idx)];
-        okBtn.disabled = false;
         // Un solo click aplica directamente el resultado a la fila de
-        // origen y cierra la ventana (no hace falta un segundo click en OK).
+        // origen y cierra la ventana.
         moAddrAplicarSeleccion();
       });
     });
@@ -5808,18 +6005,15 @@ function moEnterTable(mode) {
 
   const bar    = document.getElementById('mo-session-bar');
   const label  = document.getElementById('mo-session-label');
-  const btnOut = document.getElementById('mo-btn-logout');
   const btnIn  = document.getElementById('mo-btn-login-from-guest');
   bar.style.display = 'flex';
 
   if (mode === 'session') {
     label.innerHTML = 'Conectado como <strong>' + escH(moUsername) + '</strong> — tus orígenes se guardan en tu cuenta.';
-    btnOut.style.display = 'inline-block';
     btnIn.style.display  = 'none';
     moDraft = dbLoadOrigenesForUser(moUsername);
   } else {
     label.textContent = 'Modo invitado: se mantiene mientras tengas el sitio abierto, pero no es permanente ni se sincroniza entre dispositivos.';
-    btnOut.style.display = 'none';
     btnIn.style.display  = 'inline-block';
     moDraft = guestSessionLoad();
   }
@@ -5859,7 +6053,6 @@ function moClose(save) {
 
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('btn-abrir-origenes').addEventListener('click', moOpen);
-  document.getElementById('mo-close').addEventListener('click', function() { moClose(false); });
   document.getElementById('mo-btn-guardar').addEventListener('click', function() { moClose(true); });
   document.getElementById('modal-origenes').addEventListener('click', function(e) {
     if (e.target === this) moClose(false);
@@ -5872,11 +6065,9 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.key === 'Enter') { e.preventDefault(); moAddrDoSearch(); }
     });
   });
-  document.getElementById('mad-btn-ok').addEventListener('click', moAddrAplicarSeleccion);
-  document.getElementById('mad-btn-cancelar').addEventListener('click', moCloseAddressModal);
-  document.getElementById('mad-close').addEventListener('click', moCloseAddressModal);
+  document.getElementById('mad-btn-cancelar').addEventListener('click', moCancelAddressModal);
   document.getElementById('modal-buscar-direccion').addEventListener('click', function(e) {
-    if (e.target === this) moCloseAddressModal();
+    if (e.target === this) moCancelAddressModal();
   });
 
   // ── HAMBURGER MENU ────────────────────────────────────────────────────────
@@ -6048,8 +6239,8 @@ document.addEventListener('DOMContentLoaded', function() {
     irAProvincias();
   });
 
-  // Cerrar sesión (desde dentro del formulario de Orígenes) → vuelve a la pantalla de bienvenida
-  document.getElementById('mo-btn-logout').addEventListener('click', function() {
+  // Cerrar sesión (usado también desde "Iniciar sesión" en modo invitado) → vuelve a la pantalla de bienvenida
+  function moHacerLogout() {
     sessionClear();
     moUsername = '';
     guestSessionActive = false;
@@ -6058,12 +6249,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var intro = document.getElementById('page-intro');
     document.querySelectorAll('#page-provincias, #page-mapa-argentina, #page-mapa-provincia').forEach(function(p){ p.style.display = 'none'; });
     intro.style.display = 'flex';
-  });
+  }
 
   // Desde modo invitado, volver a la pantalla de inicio de sesión (mismo flujo: cerrar sesión)
-  document.getElementById('mo-btn-login-from-guest').addEventListener('click', function() {
-    document.getElementById('mo-btn-logout').click();
-  });
+  document.getElementById('mo-btn-login-from-guest').addEventListener('click', moHacerLogout);
 });
 
 </script>
