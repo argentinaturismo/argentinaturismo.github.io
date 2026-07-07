@@ -2430,17 +2430,47 @@
     <!-- ── PANTALLA: LOGIN DE COORDINADOR ── -->
     <div id="mo-coord-login" style="display:none; padding:28px 24px; font-family:'Barlow',sans-serif;">
       <button type="button" id="mo-coord-back" style="background:none; border:none; color:#7a83a6; font-size:0.78rem; cursor:pointer; margin-bottom:16px; padding:0;">← Volver</button>
-      <p class="mo-auth-intro" style="margin-bottom:18px;">Ingresá con tu nombre y contraseña autorizados como coordinador.</p>
-      <form class="mo-auth-form" id="mo-form-coord">
-        <label class="mo-auth-label">Nombre de coordinador
-          <input class="mo-auth-input" id="mo-coord-user" type="text" autocomplete="username" maxlength="32" placeholder="Tu nombre de usuario" />
-        </label>
-        <label class="mo-auth-label">Clave de coordinador
-          <input class="mo-auth-input" id="mo-coord-pass" type="password" autocomplete="current-password" maxlength="64" placeholder="Tu contraseña" />
-        </label>
-        <div class="mo-auth-error" id="mo-coord-error"></div>
-        <button class="mo-auth-submit" type="submit">Entrar como Coordinador</button>
-      </form>
+
+      <!-- Paso 1: nombre de coordinador (se valida contra coordinadores.json) -->
+      <div id="mo-coord-step-user">
+        <p class="mo-auth-intro" style="margin-bottom:18px;">Ingresá tu nombre de coordinador autorizado.</p>
+        <form class="mo-auth-form" id="mo-form-coord-user">
+          <label class="mo-auth-label">Nombre de coordinador
+            <input class="mo-auth-input" id="mo-coord-user" type="text" autocomplete="username" maxlength="32" placeholder="Tu nombre de usuario" />
+          </label>
+          <div class="mo-auth-error" id="mo-coord-user-error"></div>
+          <button class="mo-auth-submit" type="submit">Continuar</button>
+        </form>
+      </div>
+
+      <!-- Paso 2a: ya tiene cuenta creada → solo pide la clave -->
+      <div id="mo-coord-step-login" style="display:none;">
+        <p class="mo-auth-intro" style="margin-bottom:6px;">Coordinador: <strong id="mo-coord-login-nombre" style="color:#e8c96a;"></strong></p>
+        <p class="mo-auth-intro" style="margin-bottom:18px;">Ingresá tu contraseña.</p>
+        <form class="mo-auth-form" id="mo-form-coord-login">
+          <label class="mo-auth-label">Clave de coordinador
+            <input class="mo-auth-input" id="mo-coord-pass" type="password" autocomplete="current-password" maxlength="64" placeholder="Tu contraseña" />
+          </label>
+          <div class="mo-auth-error" id="mo-coord-login-error"></div>
+          <button class="mo-auth-submit" type="submit">Entrar como Coordinador</button>
+        </form>
+      </div>
+
+      <!-- Paso 2b: primer ingreso → crea su propia contraseña -->
+      <div id="mo-coord-step-create" style="display:none;">
+        <p class="mo-auth-intro" style="margin-bottom:6px;">Coordinador: <strong id="mo-coord-create-nombre" style="color:#e8c96a;"></strong></p>
+        <p class="mo-auth-intro" style="margin-bottom:18px;">Es tu primer ingreso. Creá una contraseña para tu cuenta de coordinador.</p>
+        <form class="mo-auth-form" id="mo-form-coord-create">
+          <label class="mo-auth-label">Nueva contraseña
+            <input class="mo-auth-input" id="mo-coord-newpass" type="password" autocomplete="new-password" maxlength="64" placeholder="Elegí una contraseña (mín. 4 caracteres)" />
+          </label>
+          <label class="mo-auth-label">Repetir contraseña
+            <input class="mo-auth-input" id="mo-coord-newpass2" type="password" autocomplete="new-password" maxlength="64" placeholder="Repetí la contraseña" />
+          </label>
+          <div class="mo-auth-error" id="mo-coord-create-error"></div>
+          <button class="mo-auth-submit" type="submit">Crear cuenta y entrar</button>
+        </form>
+      </div>
     </div>
 
     <!-- ── PANTALLA DE INICIO DE SESIÓN / REGISTRO ── -->
@@ -5400,49 +5430,110 @@ document.addEventListener('DOMContentLoaded', function() {
     moShowAuth();
   });
 
-  // Elegir "Soy Coordinador" → formulario de login de coordinador
+  // Elegir "Soy Coordinador" → formulario de login de coordinador (siempre arranca en el Paso 1: nombre)
   document.getElementById('mo-role-btn-coord').addEventListener('click', function() {
     document.getElementById('mo-role-choice').style.display = 'none';
     document.getElementById('mo-coord-login').style.display = 'block';
+    moCoordShowStep('user');
     document.getElementById('mo-coord-user').value = '';
-    document.getElementById('mo-coord-pass').value = '';
-    document.getElementById('mo-coord-error').textContent = '';
+    document.getElementById('mo-coord-user-error').textContent = '';
   });
 
-  // Volver de la pantalla de coordinador a la elección de rol
+  // Guarda el nombre de coordinador ya validado, mientras se pasa del Paso 1 al Paso 2
+  let moCoordPendingUser = '';
+
+  // Muestra un único sub-paso de la pantalla de coordinador y oculta el resto
+  function moCoordShowStep(step) {
+    document.getElementById('mo-coord-step-user').style.display   = (step === 'user')   ? 'block' : 'none';
+    document.getElementById('mo-coord-step-login').style.display  = (step === 'login')  ? 'block' : 'none';
+    document.getElementById('mo-coord-step-create').style.display = (step === 'create') ? 'block' : 'none';
+  }
+
+  // Volver: desde login/create vuelve al Paso 1 (nombre); desde el Paso 1 vuelve a la elección de rol
   document.getElementById('mo-coord-back').addEventListener('click', function() {
-    document.getElementById('mo-coord-login').style.display = 'none';
-    document.getElementById('mo-role-choice').style.display = 'block';
+    var enPasoUser = document.getElementById('mo-coord-step-user').style.display !== 'none';
+    if (enPasoUser) {
+      document.getElementById('mo-coord-login').style.display = 'none';
+      document.getElementById('mo-role-choice').style.display = 'block';
+    } else {
+      moCoordShowStep('user');
+      document.getElementById('mo-coord-user-error').textContent = '';
+    }
   });
 
-  // Volver de la pantalla de usuario a la elección de rol
-  document.getElementById('mo-auth-back').addEventListener('click', function() {
-    document.getElementById('mo-auth').style.display = 'none';
-    document.getElementById('mo-role-choice').style.display = 'block';
-  });
-
-  // Login de coordinador: usa la misma cuenta (dbLogin) + valida autorización en coordinadores.json
-  document.getElementById('mo-form-coord').addEventListener('submit', async function(e) {
+  // Paso 1: valida el nombre contra coordinadores.json y decide si pide clave (ya tiene cuenta)
+  // o si lo manda a crear una contraseña nueva (primer ingreso).
+  document.getElementById('mo-form-coord-user').addEventListener('submit', async function(e) {
     e.preventDefault();
-    const u = document.getElementById('mo-coord-user').value;
-    const p = document.getElementById('mo-coord-pass').value;
-    const err = document.getElementById('mo-coord-error');
+    const err = document.getElementById('mo-coord-user-error');
     err.textContent = '';
+    const uRaw = document.getElementById('mo-coord-user').value;
+    const u = String(uRaw || '').trim();
+    if (!u) { err.textContent = 'Ingresá tu nombre de coordinador.'; return; }
 
-    const res = dbLogin(u, p);
-    if (!res.ok) { err.textContent = res.error; return; }
-
-    const autorizado = await viajesEsCoordinador(res.username);
+    const autorizado = await viajesEsCoordinador(u);
     if (!autorizado) {
       err.textContent = 'Este usuario no está autorizado como coordinador. Contactá al administrador, o ingresá como "Usuario".';
       return;
     }
+
+    moCoordPendingUser = u;
+    const yaTieneCuenta = !!dbGetUsers()[dbUserKey(u)];
+
+    if (yaTieneCuenta) {
+      document.getElementById('mo-coord-login-nombre').textContent = u;
+      document.getElementById('mo-coord-pass').value = '';
+      document.getElementById('mo-coord-login-error').textContent = '';
+      moCoordShowStep('login');
+    } else {
+      document.getElementById('mo-coord-create-nombre').textContent = u;
+      document.getElementById('mo-coord-newpass').value = '';
+      document.getElementById('mo-coord-newpass2').value = '';
+      document.getElementById('mo-coord-create-error').textContent = '';
+      moCoordShowStep('create');
+    }
+  });
+
+  // Paso 2a: ya existe la cuenta → inicia sesión con la contraseña ingresada
+  document.getElementById('mo-form-coord-login').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const err = document.getElementById('mo-coord-login-error');
+    err.textContent = '';
+    const p = document.getElementById('mo-coord-pass').value;
+
+    const res = dbLogin(moCoordPendingUser, p);
+    if (!res.ok) { err.textContent = res.error; return; }
 
     moUsername = res.username;
     sessionSet(moUsername);
     if (typeof window.headerOrigenPopulate === 'function') window.headerOrigenPopulate();
     document.getElementById('modal-auth').style.display = 'none';
     irAProvincias();
+  });
+
+  // Paso 2b: primer ingreso → crea la cuenta con la contraseña elegida e inicia sesión
+  document.getElementById('mo-form-coord-create').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const err = document.getElementById('mo-coord-create-error');
+    err.textContent = '';
+    const p  = document.getElementById('mo-coord-newpass').value;
+    const p2 = document.getElementById('mo-coord-newpass2').value;
+    if (p !== p2) { err.textContent = 'Las contraseñas no coinciden.'; return; }
+
+    const res = dbRegister(moCoordPendingUser, p);
+    if (!res.ok) { err.textContent = res.error; return; }
+
+    moUsername = res.username;
+    sessionSet(moUsername);
+    if (typeof window.headerOrigenPopulate === 'function') window.headerOrigenPopulate();
+    document.getElementById('modal-auth').style.display = 'none';
+    irAProvincias();
+  });
+
+  // Volver de la pantalla de usuario a la elección de rol
+  document.getElementById('mo-auth-back').addEventListener('click', function() {
+    document.getElementById('mo-auth').style.display = 'none';
+    document.getElementById('mo-role-choice').style.display = 'block';
   });
 
   // Botón "Cerrar" del modal-auth
