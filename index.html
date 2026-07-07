@@ -625,6 +625,18 @@
       outline-offset:4px;
     }
 
+    .version-tag {
+      display:block;
+      margin-top:22px;
+      font-family:'Barlow', sans-serif;
+      font-weight:400;
+      font-size:0.7rem;
+      letter-spacing:0.24em;
+      text-transform:uppercase;
+      color:var(--cream);
+      opacity:0.5;
+    }
+
     /* ── PROVINCE CAPTION ── */
     .caption {
       position:absolute; bottom:28px; right:34px; z-index:2;
@@ -1840,6 +1852,8 @@
 
     <button class="btn-enter" id="btn-entrar" type="button">Entrar</button>
 
+    <span class="version-tag">versión 1.0</span>
+
   </div>
 
   <div class="caption" id="caption">Misiones · Cataratas del Iguazú</div>
@@ -2451,7 +2465,6 @@
           <tr>
             <th class="mo-th mo-th-n">N°</th>
             <th class="mo-th" style="width:110px;">Nombre</th>
-            <th class="mo-th" style="width:36px; text-align:center; padding-left:4px; padding-right:4px;">✓</th>
             <th class="mo-th" style="width:30px; text-align:center; padding-left:4px; padding-right:4px;">&#9998;</th>
             <th class="mo-th" style="width:30px; text-align:center; padding-left:4px; padding-right:4px;">Ver</th>
             <th class="mo-th" style="width:30px; text-align:center; padding-left:4px; padding-right:4px;">Mapa</th>
@@ -2486,8 +2499,10 @@
     <div class="mo-body" style="padding:24px;">
       <div id="stat-tramos-chart"></div>
     </div>
-    <div class="mo-footer-salir" style="justify-content:center;">
+    <div class="mo-footer-salir" style="justify-content:center; gap:14px;">
+      <button class="ruta-btn-secundario" id="stat-tramos-prev" type="button" title="Ruta anterior">← Anterior</button>
       <button class="ruta-btn-secundario" id="stat-tramos-close" type="button">Cerrar</button>
+      <button class="ruta-btn-secundario" id="stat-tramos-next" type="button" title="Ruta siguiente">Siguiente →</button>
     </div>
   </div>
 </div>
@@ -2501,8 +2516,10 @@
     <div class="mo-body" style="padding:24px;">
       <div id="stat-tramos-tiempo-chart"></div>
     </div>
-    <div class="mo-footer-salir" style="justify-content:center;">
+    <div class="mo-footer-salir" style="justify-content:center; gap:14px;">
+      <button class="ruta-btn-secundario" id="stat-tramos-tiempo-prev" type="button" title="Ruta anterior">← Anterior</button>
       <button class="ruta-btn-secundario" id="stat-tramos-tiempo-close" type="button">Cerrar</button>
+      <button class="ruta-btn-secundario" id="stat-tramos-tiempo-next" type="button" title="Ruta siguiente">Siguiente →</button>
     </div>
   </div>
 </div>
@@ -2519,8 +2536,10 @@
         Todavía no guardaste ningún itinerario.
       </div>
     </div>
-    <div class="mo-footer-salir" style="justify-content:center;">
+    <div class="mo-footer-salir" style="justify-content:center; gap:14px;">
+      <button class="ruta-btn-secundario" id="est-prev" type="button" title="Ver gráfico anterior">← Anterior</button>
       <button class="ruta-btn-secundario" id="est-close" type="button">Cerrar</button>
+      <button class="ruta-btn-secundario" id="est-next" type="button" title="Ver gráfico siguiente">Siguiente →</button>
     </div>
   </div>
 </div>
@@ -2537,8 +2556,10 @@
         Todavía no guardaste ningún itinerario.
       </div>
     </div>
-    <div class="mo-footer-salir" style="justify-content:center;">
+    <div class="mo-footer-salir" style="justify-content:center; gap:14px;">
+      <button class="ruta-btn-secundario" id="est-tiempo-prev" type="button" title="Ver gráfico anterior">← Anterior</button>
       <button class="ruta-btn-secundario" id="est-tiempo-close" type="button">Cerrar</button>
+      <button class="ruta-btn-secundario" id="est-tiempo-next" type="button" title="Ver gráfico siguiente">Siguiente →</button>
     </div>
   </div>
 </div>
@@ -2671,39 +2692,39 @@ let rutaPolyline      = null; // polilínea final dibujada al finalizar
 
 // ─── LOAD DATA ────────────────────────────────────────────────────────────────
 const DEFAULT_SITIOS = [
-  { id:'s11', name:'Sierra de la Ventana', provincia:'buenos_aires_prov', cat:'Aventura', desc:'Sierra de la Ventana es una localidad turística del sudoeste de la provincia de Buenos Aires, situada en el sistema serrano más importante de la provincia. Su principal atractivo es el Parque Provincial Ernesto Tornquist, que alberga el Cerro Ventana, famoso por la abertura natural de 8 metros que le da nombre. La región posee una gran riqueza paisajística y biodiversidad, con sierras, arroyos y senderos ideales para el ecoturismo y el trekking. Fundada en 1908 con la llegada del ferrocarril, se desarrolló como centro de descanso y recreación. Actualmente es uno de los destinos turísticos más visitados de la provincia de Buenos Aires.', lat:-38.1274, lng:-61.8113 },
+  { id:'s11', name:'Sierra de la Ventana', provincia:'buenos_aires_prov', cat:'Aventura', lat:-38.1274, lng:-61.8113, desc:'Sierra de la Ventana es una localidad turística del sudoeste de la provincia de Buenos Aires, situada en el sistema serrano más importante de la provincia. Su principal atractivo es el Parque Provincial Ernesto Tornquist, que alberga el Cerro Ventana, famoso por la abertura natural de 8 metros que le da nombre. La región posee una gran riqueza paisajística y biodiversidad, con sierras, arroyos y senderos ideales para el ecoturismo y el trekking. Fundada en 1908 con la llegada del ferrocarril, se desarrolló como centro de descanso y recreación. Actualmente es uno de los destinos turísticos más visitados de la provincia de Buenos Aires.' },
   { id:'s12', name:'Villa Gesell', provincia:'buenos_aires_prov', cat:'Urbano', lat:-37.2667, lng:-56.9667, desc:'Ciudad costera con pinos y ambiente bohemio en la costa atlántica.' },
-  { id:'s13', name:'Estancia La Candelaria', provincia:'buenos_aires_prov', cat:'Rural', desc:'La Estancia La Candelaria, ubicada en la localidad de Lobos, provincia de Buenos Aires, es uno de los cascos históricos más imponentes de la región pampeana, célebre por su majestuoso castillo de estilo neogótico francés. Construido a finales del siglo XIX por iniciativa de la familia Piñeiro, el palacio destaca por su torreón, sus vitrales y un mobiliario original traído directamente de Europa que evoca la opulencia de la aristocracia de la época. El imponente edificio está rodeado por un parque de más de 100 hectáreas diseñado por el reconocido paisajista Carlos Thays, el cual alberga alrededor de 240 especies botánicas, estatuas, fuentes y senderos arbolados. Actualmente, el lugar funciona como un exclusivo hotel de campo y un centro de eventos donde los visitantes pueden hospedarse tanto en las lujosas habitaciones del castillo como en sectores de estilo colonial. Su propuesta turística combina la historia y la arquitectura de élite con actividades tradicionales del campo argentino, ofreciendo días de campo con espectáculos folclóricos, partidos de polo, cabalgatas y gastronomía criolla de primer nivel.', lat:-37.1, lng:-58.5 },
-  { id:'s14', name:'Termas de Carhué', provincia:'buenos_aires_prov', cat:'Bienestar', desc:'Las Termas de Carhué, ubicadas a orillas del Lago Epecuén en el sudoeste de la provincia de Buenos Aires, son mundialmente famosas por las propiedades hipermarinas de sus aguas, cuya salinidad es solo comparable con la del Mar Muerto. Este particular espejo de agua posee una concentración mineral diez veces superior a la del océano, lo que otorga a sus aguas y fangos cualidades térmicas, curativas y una flotabilidad natural única. Tras la trágica inundación de la vecina Villa Epecuén en 1985, Carhué se consolidó como el centro termal y hotelero de la región, desarrollando modernas piscinas cubiertas y spas que aprovechan este recurso durante todo el año. El destino atrae tanto a turistas que buscan alivio para afecciones de la piel y las articulaciones como a interesados en el turismo histórico y fotográfico, quienes recorren las icónicas ruinas que emergieron tras el retroceso del agua. El paisaje se complementa con una avifauna fascinante, destacando las colonias de flamencos rosados, y una imponente arquitectura art déco diseñada por Francisco Salamone que enmarca los accesos a la zona.', lat:-37.1833, lng:-62.75 },
+  { id:'s13', name:'Estancia La Candelaria', provincia:'buenos_aires_prov', cat:'Rural', lat:-37.1, lng:-58.5, desc:'La Estancia La Candelaria, ubicada en la localidad de Lobos, provincia de Buenos Aires, es uno de los cascos históricos más imponentes de la región pampeana, célebre por su majestuoso castillo de estilo neogótico francés. Construido a finales del siglo XIX por iniciativa de la familia Piñeiro, el palacio destaca por su torreón, sus vitrales y un mobiliario original traído directamente de Europa que evoca la opulencia de la aristocracia de la época. El imponente edificio está rodeado por un parque de más de 100 hectáreas diseñado por el reconocido paisajista Carlos Thays, el cual alberga alrededor de 240 especies botánicas, estatuas, fuentes y senderos arbolados. Actualmente, el lugar funciona como un exclusivo hotel de campo y un centro de eventos donde los visitantes pueden hospedarse tanto en las lujosas habitaciones del castillo como en sectores de estilo colonial. Su propuesta turística combina la historia y la arquitectura de élite con actividades tradicionales del campo argentino, ofreciendo días de campo con espectáculos folclóricos, partidos de polo, cabalgatas y gastronomía criolla de primer nivel.' },
+  { id:'s14', name:'Termas de Carhué', provincia:'buenos_aires_prov', cat:'Bienestar', lat:-37.1833, lng:-62.75, desc:'Las Termas de Carhué, ubicadas a orillas del Lago Epecuén en el sudoeste de la provincia de Buenos Aires, son mundialmente famosas por las propiedades hipermarinas de sus aguas, cuya salinidad es solo comparable con la del Mar Muerto. Este particular espejo de agua posee una concentración mineral diez veces superior a la del océano, lo que otorga a sus aguas y fangos cualidades térmicas, curativas y una flotabilidad natural única. Tras la trágica inundación de la vecina Villa Epecuén en 1985, Carhué se consolidó como el centro termal y hotelero de la región, desarrollando modernas piscinas cubiertas y spas que aprovechan este recurso durante todo el año. El destino atrae tanto a turistas que buscan alivio para afecciones de la piel y las articulaciones como a interesados en el turismo histórico y fotográfico, quienes recorren las icónicas ruinas que emergieron tras el retroceso del agua. El paisaje se complementa con una avifauna fascinante, destacando las colonias de flamencos rosados, y una imponente arquitectura art déco diseñada por Francisco Salamone que enmarca los accesos a la zona.' },
   { id:'s15', name:'Fiesta de la Tradición', provincia:'buenos_aires_prov', cat:'Eventos', lat:-34.25, lng:-59.4667, desc:'Festival gaucho más importante del país, San Antonio de Areco.' },
   { id:'s16', name:'Mar del Plata', provincia:'buenos_aires_prov', cat:'Urbano', lat:-38.0055, lng:-57.5426, desc:'La ciudad balnearia más concurrida del país.' },
-  { id:'u1780967286866', name:'Museo de la Reconquista', provincia:'buenos_aires_prov', localidad:'Tigre', cat:'Cultural', desc:'El Museo se crea el 4 de agosto de 1967. Su misión es la de fortalecer la identidad cultural a partir de la historia social de Tigre y el hecho histórico del desembarco de Santiago de Liniers, el 4 de Agosto de 1806 en el Río de Las Conchas (Hoy Reconquista) durante la 1° invasión inglesa. Liniers eligió el pueblo de Las Conchas (hoy Tigre) para iniciar su marcha hacia la liberación de Bs As. El edificio es una casa construida en 1940 con características de estilo colonial. Consta de 6 salas que muestran la historia natural y social del Partido de Tigre, objetos históricos patrimoniales, personajes e hitos importantes y una sala para muestras temporales. Cuenta además con la Biblioteca \"Lizardo Vidal Molina\" especializada en la historia de Tigre, archivo documental, fototeca, mapoteca y hemeroteca.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.4166, lng:-58.5899 },
-  { id:'u1780917786104', name:'Museo de Arte Tigre (MAT)', provincia:'buenos_aires_prov', localidad:'Tigre', cat:'Cultural', desc:'El Museo de Arte Tigre (MAT) es uno de los principales museos de arte argentino y uno de los edificios más emblemáticos del partido de Tigre. Se encuentra sobre el Paseo Victorica, frente al río Luján, y combina un importante patrimonio artístico con una destacada arquitectura de estilo francés. El edificio fue concebido en 1909 como sede del Tigre Club, una institución social y deportiva destinada a la élite porteña. Fue inaugurado en 1912 y en 1927 incorporó un casino, uno de los más importantes del país. En 1979 fue declarado Monumento Histórico Nacional. El Museo de Arte Tigre abrió sus puertas al público en 2006. Su fachada tiene influencia de la Belle Époque.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.40923, lng:-58.59104 },
-  { id:'s41', name:'Península Valdés', provincia:'chubut', cat:'Natural', desc:'La Península Valdés, ubicada en la provincia de Chubut sobre el mar Argentino, es uno de los santuarios de vida silvestre más importantes del planeta y fue declarada Patrimonio de la Humanidad por la UNESCO en 1999. Este accidente geográfico costero es mundialmente célebre por ser el principal sitio de reproducción de la ballena franca austral, atrayendo a miles de turistas que realizan avistajes embarcados desde Puerto Pirámides entre los meses de junio y diciembre. Además de los cetáceos, sus playas y acantilados albergan importantes colonias de elefantes y lobos marinos, pingüinos de Magallanes y familias de orcas que varan intencionalmente en la costa para cazar. Su paisaje estepario y árido, conectado al continente por el istmo Carlos Ameghino, resguarda también una variada fauna terrestre que incluye choiques, maras y manadas de guanacos que recorren los extensos caminos de ripio. Con una geografía singular que encierra los golfos Nuevo y San José, este ecosistema marino y costero se posiciona como un modelo global de conservación y un imán para el turismo científico y de naturaleza.', lat:-42.5, lng:-64.2 },
-  { id:'s5', name:'Caminito (La Boca)', provincia:'caba', localidad:'Barrio La Boca (Comuna 4)', cat:'Cultural', desc:'Caminito es un paseo peatonal y museo a cielo abierto ubicado en el barrio de La Boca, en Buenos Aires. Se originó sobre un antiguo trazado ferroviario recuperado por el pintor Benito Quinquela Martín en la década de 1950. Es famoso por sus coloridos conventillos, construidos por inmigrantes y pintados con sobrantes de pintura de los astilleros. Su nombre homenajea al célebre tango \"Caminito\", compuesto por Juan de Dios Filiberto en 1926. Actualmente es uno de los principales atractivos turísticos de la ciudad, con artistas, espectáculos de tango y ferias de artesanías.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.6354, lng:-58.3631 },
-  { id:'s2', name:'Casa Rosada', provincia:'caba', localidad:'Barrio Monserrat (Comuna 1)', cat:'Histórico', desc:'Sede del Poder Ejecutivo Nacional, símbolo de la historia argentina. Dentro de la misma se encuentra el despacho del presidente de la Nación Argentina y de sus distintas secretarías, y del jefe de Gabinete de Ministros. Alberga además el Museo de la Casa de Gobierno, con objetos relacionados con los presidentes del país. En 1942 fue declarada Monumento Histórico Nacional.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.6083, lng:-58.3708 },
-  { id:'s9', name:'Museo de Arte Latinoamericano de Buenos Aires', provincia:'caba', localidad:'Barrio Palermo (Comuna 14)', cat:'Cultural', desc:'El Museo de Arte Latinoamericano de Buenos Aires (MALBA) fue fundado en 2001 por el empresario y coleccionista Eduardo Costantini. Está ubicado en el barrio de Palermo y alberga una de las colecciones más importantes de arte moderno y contemporáneo de América Latina. Su patrimonio incluye obras de artistas como Frida Kahlo, Diego Rivera, Antonio Berni y Tarsila do Amaral. Además de las exposiciones permanentes y temporarias, desarrolla actividades de cine, literatura y educación. Es uno de los principales centros culturales y museos más visitados de Buenos Aires.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.5764, lng:-58.4157 },
-  { id:'s10', name:'Bosques de Palermo', provincia:'caba', localidad:'Barrio Palermo (Comuna 14)', cat:'Natural', desc:'Los Bosques de Palermo, oficialmente Parque Tres de Febrero, constituyen el espacio verde más emblemático y extenso de la Ciudad de Buenos Aires, con unas 370 hectáreas. Fueron inaugurados en 1875 por iniciativa del presidente Domingo Faustino Sarmiento y posteriormente ampliados por el paisajista francés Carlos Thays. El predio alberga lagos, plazas, el Rosedal, el Planetario y numerosos espacios recreativos y culturales. Posee una gran diversidad de árboles y aves, por lo que es considerado el principal pulmón verde de la ciudad. Actualmente es uno de los lugares más frecuentados por porteños y turistas para realizar actividades deportivas y disfrutar de la naturaleza.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.5731, lng:-58.419 },
-  { id:'u17822711612336lvr', name:'Palermo Hollywood', provincia:'caba', localidad:'Barrio Palermo (Comuna 14)', cat:'Gastronómico', desc:'Una parte del extenso barrio de Palermo se ha transformado en el polo gastronómico más activo de la Ciudad de Buenos Aires. Lo que hoy se llama Palermo Hollywood, delimitado por la Av.Juan B. Justo, Dorrego, Av.Santa Fe y Av.Córdoba, durante décadas estuvo reservado casi exclusivamente a residencias de familias de clase media y talleres de reparación de automóviles. Pero tras la llegada al barrio, a principios del actual siglo, de productoras y canales de televisión con sus respectivas pos productoras, recibió el nombre que tiene actualmente. Junto con el desembarco de las primeras empresas artísticas también comenzó a gestarse un nuevo fenómeno, el gastronómico.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.5817, lng:-58.4345 },
-  { id:'u17822712618250o0d', name:'Palermo Soho', provincia:'caba', localidad:'Barrio Palermo (Comuna 14)', cat:'Gastronómico', desc:'El nombre, que alude al barrio del Soho de las ciudades de Nueva York y Londres, se le dio por su orientación al diseño y a la moda, aunque no son pocos los restaurantes de la zona.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.58706, lng:-58.42818 },
-  { id:'u1782271042898vld6', name:'Las Cañitas', provincia:'caba', localidad:'Barrio Palermo (Comuna 14)', cat:'Gastronómico', desc:'A principios de la década de 1990, sobre la calle Báez y las calles aledañas, en el barrio de Palermo, supo nuclearse una serie de restaurantes que materializaron un pujante polo gastronómico que aún subsiste. El hecho de estar en una zona residencial lindera a las canchas de polo de Palermo le da un atractivo adicional. El reciente rediseño de las aceras y calzadas realizados por el Gobierno de la Ciudad de Buenos Aires facilitó mucho la circulación por la zona.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.57062, lng:-58.43238 },
-  { id:'s8', name:'Reserva Ecológica Costanera Sur', provincia:'caba', localidad:'Barrio Puerto Madero (Comuna 1)', cat:'Natural', desc:'La Reserva Ecológica Costanera Sur, ubicada junto a Puerto Madero, es la principal área natural protegida de la Ciudad de Buenos Aires y posee unas 350 hectáreas. Se formó de manera espontánea sobre terrenos ganados al Río de la Plata mediante rellenos realizados a fines de la década de 1970. Fue creada oficialmente en 1986 y concentra la mayor biodiversidad de la ciudad, con cientos de especies de flora y fauna. En 2005 fue declarada Sitio Ramsar por la importancia internacional de sus humedales. Actualmente constituye uno de los espacios verdes y recreativos más visitados de Buenos Aires.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.6133, lng:-58.3513 },
-  { id:'u1782271441138vu0r', name:'Puerto Madero', provincia:'caba', localidad:'Barrio Puerto Madero (Comuna 1)', cat:'Gastronómico', desc:'Los antiguos docks del puerto de Buenos Aires, creado en 1900 siguiendo el modelo inglés, supieron salir del abandono y del olvido para convertirse en un pujante centro residencial y gastronómico. Los desarrolladores inmobiliarios aprovecharon los amplios espacios, la interesante arquitectura preexistente, la ubicación céntrica y la cotizada vista para establecer viviendas e interesantes restaurantes que vale la pena visitar.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.6103, lng:-58.3622 },
-  { id:'s3', name:'Puerto Madero', provincia:'caba', localidad:'Barrio Puerto Madero (Comuna 1)', cat:'Urbano', desc:'Barrio moderno sobre el Río de la Plata con arquitectura contemporánea, ubicado en la Comuna 1 de la Ciudad Autónoma de Buenos Aires. A su vez, es uno de los cuarenta y ocho barrios oficiales en los que se subdivide la capital argentina. Su ubicación cercana a la zona este de la ciudad, lo extenso de su área y su vista al río hacen que este distrito sea uno de los más valorados de Buenos Aires.\n\nEl barrio debe su nombre a Eduardo Madero, comerciante de Buenos Aires que presentó tres proyectos para la construcción del puerto de la ciudad, el último de los cuales fue aprobado por el entonces Presidente de la Nación Julio Argentino Roca en 1882. El barrio se ubica, en su totalidad, en terrenos ganados al Río de la Plata. Por las inversiones efectuadas para localizar allí el puerto (desde 1890 en adelante), y por las obras que se hicieron después, una vez desafectada el área portuaria, desde 1990 en adelante, puede ser considerado el barrio con la mayor inversión pública y privada en la historia de la ciudad de Buenos Aires.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.618, lng:-58.362 },
-  { id:'s7', name:'Cementerio de la Recoleta', provincia:'caba', localidad:'Barrio Recoleta (Comuna 2)', cat:'Histórico', desc:'El Cementerio de la Recoleta fue inaugurado en 1822 y fue el primer cementerio público de Buenos Aires. Está ubicado en el barrio de Recoleta y se destaca por sus más de 4.500 bóvedas y mausoleos de gran valor artístico y arquitectónico. Más de 90 de sus sepulcros fueron declarados Monumento Histórico Nacional. Allí descansan numerosas personalidades de la historia argentina, entre ellas Eva Perón, presidentes, escritores y científicos. Considerado un museo a cielo abierto, es uno de los sitios históricos y turísticos más visitados de la ciudad.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.5879, lng:-58.3927 },
-  { id:'u178227150508948d0', name:'Recoleta', provincia:'caba', localidad:'Barrio Recoleta (Comuna 2)', cat:'Gastronómico', desc:'Recoleta es el primero y el más viejo de los polos gastronómicos de Buenos Aires. Supo conocer su gloria durante la década de 1970, y si bien su fisonomía culinaria ha variado y le han surgido competidores, aún se mantienen instituciones como La Biela, muy frecuentada por turistas de todas las nacionalidades.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.5867, lng:-58.3946 },
-  { id:'s4', name:'Catedral Metropolitana', provincia:'caba', localidad:'Barrio San Nicolás (Comuna 1)', cat:'Religioso', desc:'La Catedral metropolitana de la Santísima Trinidad (más conocida cómo Catedral Metropolitana de Buenos Aires y oficialmente Iglesia catedral de la Santísima Trinidad) es un templo católico de Argentina, sede de la arquidiócesis de Buenos Aires. Fue la Sede Primada de la Iglesia católica de Argentina hasta el 7 de septiembre del 2024, cuando la misma pasó a la Catedral de Santiago del Estero. Se encuentra ubicada en el barrio porteño de San Nicolás, en la intersección de la calle San Martín y la avenida Rivadavia, frente a la plaza de Mayo. En su interior se encuentra el mausoleo del Libertador José de San Martín, inaugurado en 1880.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.6086, lng:-58.3732 },
-  { id:'s1', name:'Teatro Colón', provincia:'caba', localidad:'Barrio San NIcolás (Comuna 1)', cat:'Cultural', desc:'El Teatro Colón es un teatro de ópera, ballet y conciertos de la ciudad autónoma de Buenos Aires, la capital de Argentina. Es considerado uno de los diez mejores teatros de ópera del mundo según National Geographic. Posee la sala con la mejor acústica para ópera y la segunda mejor para conciertos del mundo. El actual Colón sustituyó al teatro original, inaugurado en 1857. A finales de siglo, se hizo evidente la necesidad de construir un nuevo teatro y, tras un proceso de veinte años, el actual teatro abrió sus puertas el 25 de mayo de 1908 con Aida de Giuseppe Verdi. Fue declarado Monumento Histórico Nacional en 1991.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.6011, lng:-58.3833 },
-  { id:'u1782271582120vn4r', name:'San Telmo', provincia:'caba', localidad:'Barrio San Telmo (Comuna 1)', cat:'Gastronómico', desc:'Este es uno de los barrios más antiguos de Buenos Aires, y en su momento también supo ser el más aristocrático. Basta recorrer sus calles para gozar del antiguo esplendor de sus construcciones. Todo cambió en 1871 con la epidemia de fiebre amarilla que puso en fuga a las familias más acomodadas, que se desplazaron más al norte de la Ciudad. Pero después de varias décadas de olvido, San Telmo recuperó buena parte de su antiguo esplendor. Aquí se encuentran el refinamiento y la bohemia que perdió Palermo, junto a ese bouquet decadente que lo hace atractivo a los ojos de los turistas europeos. El barrio está reviviendo un boom inmobiliario y los restaurantes no son ajenos a ese suceso. Actualmente hay unos 150 restaurantes, varios de ellos más que interesantes y que bien ameritan una visita.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.6205, lng:-58.3717 },
-  { id:'s6', name:'Mercado de San Telmo', provincia:'caba', localidad:'Barrio San Telmo (Comuna 1)', cat:'Gastronómico', desc:'El Mercado de San Telmo, ubicado en el histórico barrio homónimo, fue inaugurado en 1897 y diseñado por el arquitecto Juan Antonio Buschiazzo. Nació para abastecer a la creciente población de inmigrantes que llegaba a Buenos Aires. Su estructura de hierro y vidrio conserva gran parte del diseño original y fue declarada Monumento Histórico Nacional. Además de puestos tradicionales de alimentos, alberga locales de antigüedades, artesanías y propuestas gastronómicas. Actualmente es uno de los sitios más emblemáticos y visitados de la ciudad. Mercado histórico con gastronomía, antigüedades y cultura porteña.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-34.621, lng:-58.3709 },
+  { id:'u1780967286866', name:'Museo de la Reconquista', provincia:'buenos_aires_prov', localidad:'Tigre', cat:'Cultural', lat:-34.4166, lng:-58.5899, desc:'El Museo se crea el 4 de agosto de 1967. Su misión es la de fortalecer la identidad cultural a partir de la historia social de Tigre y el hecho histórico del desembarco de Santiago de Liniers, el 4 de Agosto de 1806 en el Río de Las Conchas (Hoy Reconquista) durante la 1° invasión inglesa. Liniers eligió el pueblo de Las Conchas (hoy Tigre) para iniciar su marcha hacia la liberación de Bs As. El edificio es una casa construida en 1940 con características de estilo colonial. Consta de 6 salas que muestran la historia natural y social del Partido de Tigre, objetos históricos patrimoniales, personajes e hitos importantes y una sala para muestras temporales. Cuenta además con la Biblioteca “Lizardo Vidal Molina” especializada en la historia de Tigre, archivo documental, fototeca, mapoteca y hemeroteca.' },
+  { id:'u1780917786104', name:'Museo de Arte Tigre (MAT)', provincia:'buenos_aires_prov', localidad:'Tigre', cat:'Cultural', lat:-34.40923, lng:-58.59104, desc:'El Museo de Arte Tigre (MAT) es uno de los principales museos de arte argentino y uno de los edificios más emblemáticos del partido de Tigre. Se encuentra sobre el Paseo Victorica, frente al río Luján, y combina un importante patrimonio artístico con una destacada arquitectura de estilo francés. El edificio fue concebido en 1909 como sede del Tigre Club, una institución social y deportiva destinada a la élite porteña. Fue inaugurado en 1912 y en 1927 incorporó un casino, uno de los más importantes del país. En 1979 fue declarado Monumento Histórico Nacional. El Museo de Arte Tigre abrió sus puertas al público en 2006. Su fachada tiene influencia de la Belle Époque.' },
+  { id:'s41', name:'Península Valdés', provincia:'chubut', cat:'Natural', lat:-42.5, lng:-64.2, desc:'La Península Valdés, ubicada en la provincia de Chubut sobre el mar Argentino, es uno de los santuarios de vida silvestre más importantes del planeta y fue declarada Patrimonio de la Humanidad por la UNESCO en 1999. Este accidente geográfico costero es mundialmente célebre por ser el principal sitio de reproducción de la ballena franca austral, atrayendo a miles de turistas que realizan avistajes embarcados desde Puerto Pirámides entre los meses de junio y diciembre. Además de los cetáceos, sus playas y acantilados albergan importantes colonias de elefantes y lobos marinos, pingüinos de Magallanes y familias de orcas que varan intencionalmente en la costa para cazar. Su paisaje estepario y árido, conectado al continente por el istmo Carlos Ameghino, resguarda también una variada fauna terrestre que incluye choiques, maras y manadas de guanacos que recorren los extensos caminos de ripio. Con una geografía singular que encierra los golfos Nuevo y San José, este ecosistema marino y costero se posiciona como un modelo global de conservación y un imán para el turismo científico y de naturaleza.' },
+  { id:'s5', name:'Caminito (La Boca)', provincia:'caba', localidad:'Barrio La Boca (Comuna 4)', cat:'Cultural', lat:-34.6354, lng:-58.3631, desc:'Caminito es un paseo peatonal y museo a cielo abierto ubicado en el barrio de La Boca, en Buenos Aires. Se originó sobre un antiguo trazado ferroviario recuperado por el pintor Benito Quinquela Martín en la década de 1950. Es famoso por sus coloridos conventillos, construidos por inmigrantes y pintados con sobrantes de pintura de los astilleros. Su nombre homenajea al célebre tango “Caminito”, compuesto por Juan de Dios Filiberto en 1926. Actualmente es uno de los principales atractivos turísticos de la ciudad, con artistas, espectáculos de tango y ferias de artesanías.' },
+  { id:'s2', name:'Casa Rosada', provincia:'caba', localidad:'Barrio Monserrat (Comuna 1)', cat:'Histórico', lat:-34.6083, lng:-58.3708, desc:'Sede del Poder Ejecutivo Nacional, símbolo de la historia argentina. Dentro de la misma se encuentra el despacho del presidente de la Nación Argentina y de sus distintas secretarías, y del jefe de Gabinete de Ministros. Alberga además el Museo de la Casa de Gobierno, con objetos relacionados con los presidentes del país. En 1942 fue declarada Monumento Histórico Nacional.' },
+  { id:'s9', name:'Museo de Arte Latinoamericano de Buenos Aires', provincia:'caba', localidad:'Barrio Palermo (Comuna 14)', cat:'Cultural', lat:-34.5764, lng:-58.4157, desc:'El Museo de Arte Latinoamericano de Buenos Aires (MALBA) fue fundado en 2001 por el empresario y coleccionista Eduardo Costantini. Está ubicado en el barrio de Palermo y alberga una de las colecciones más importantes de arte moderno y contemporáneo de América Latina. Su patrimonio incluye obras de artistas como Frida Kahlo, Diego Rivera, Antonio Berni y Tarsila do Amaral. Además de las exposiciones permanentes y temporarias, desarrolla actividades de cine, literatura y educación. Es uno de los principales centros culturales y museos más visitados de Buenos Aires.' },
+  { id:'s10', name:'Bosques de Palermo', provincia:'caba', localidad:'Barrio Palermo (Comuna 14)', cat:'Natural', lat:-34.5731, lng:-58.419, desc:'Los Bosques de Palermo, oficialmente Parque Tres de Febrero, constituyen el espacio verde más emblemático y extenso de la Ciudad de Buenos Aires, con unas 370 hectáreas. Fueron inaugurados en 1875 por iniciativa del presidente Domingo Faustino Sarmiento y posteriormente ampliados por el paisajista francés Carlos Thays. El predio alberga lagos, plazas, el Rosedal, el Planetario y numerosos espacios recreativos y culturales. Posee una gran diversidad de árboles y aves, por lo que es considerado el principal pulmón verde de la ciudad. Actualmente es uno de los lugares más frecuentados por porteños y turistas para realizar actividades deportivas y disfrutar de la naturaleza.' },
+  { id:'u17822711612336lvr', name:'Palermo Hollywood', provincia:'caba', localidad:'Barrio Palermo (Comuna 14)', cat:'Gastronómico', lat:-34.5817, lng:-58.4345, desc:'Una parte del extenso barrio de Palermo se ha transformado en el polo gastronómico más activo de la Ciudad de Buenos Aires. Lo que hoy se llama Palermo Hollywood, delimitado por la Av.Juan B. Justo, Dorrego, Av.Santa Fe y Av.Córdoba, durante décadas estuvo reservado casi exclusivamente a residencias de familias de clase media y talleres de reparación de automóviles. Pero tras la llegada al barrio, a principios del actual siglo, de productoras y canales de televisión con sus respectivas pos productoras, recibió el nombre que tiene actualmente. Junto con el desembarco de las primeras empresas artísticas también comenzó a gestarse un nuevo fenómeno, el gastronómico.' },
+  { id:'u17822712618250o0d', name:'Palermo Soho', provincia:'caba', localidad:'Barrio Palermo (Comuna 14)', cat:'Gastronómico', lat:-34.58706, lng:-58.42818, desc:'El nombre, que alude al barrio del Soho de las ciudades de Nueva York y Londres, se le dio por su orientación al diseño y a la moda, aunque no son pocos los restaurantes de la zona.' },
+  { id:'u1782271042898vld6', name:'Las Cañitas', provincia:'caba', localidad:'Barrio Palermo (Comuna 14)', cat:'Gastronómico', lat:-34.57062, lng:-58.43238, desc:'A principios de la década de 1990, sobre la calle Báez y las calles aledañas, en el barrio de Palermo, supo nuclearse una serie de restaurantes que materializaron un pujante polo gastronómico que aún subsiste. El hecho de estar en una zona residencial lindera a las canchas de polo de Palermo le da un atractivo adicional. El reciente rediseño de las aceras y calzadas realizados por el Gobierno de la Ciudad de Buenos Aires facilitó mucho la circulación por la zona.' },
+  { id:'s8', name:'Reserva Ecológica Costanera Sur', provincia:'caba', localidad:'Barrio Puerto Madero (Comuna 1)', cat:'Natural', lat:-34.6133, lng:-58.3513, desc:'La Reserva Ecológica Costanera Sur, ubicada junto a Puerto Madero, es la principal área natural protegida de la Ciudad de Buenos Aires y posee unas 350 hectáreas. Se formó de manera espontánea sobre terrenos ganados al Río de la Plata mediante rellenos realizados a fines de la década de 1970. Fue creada oficialmente en 1986 y concentra la mayor biodiversidad de la ciudad, con cientos de especies de flora y fauna. En 2005 fue declarada Sitio Ramsar por la importancia internacional de sus humedales. Actualmente constituye uno de los espacios verdes y recreativos más visitados de Buenos Aires.' },
+  { id:'u1782271441138vu0r', name:'Puerto Madero', provincia:'caba', localidad:'Barrio Puerto Madero (Comuna 1)', cat:'Gastronómico', lat:-34.6103, lng:-58.3622, desc:'Los antiguos docks del puerto de Buenos Aires, creado en 1900 siguiendo el modelo inglés, supieron salir del abandono y del olvido para convertirse en un pujante centro residencial y gastronómico. Los desarrolladores inmobiliarios aprovecharon los amplios espacios, la interesante arquitectura preexistente, la ubicación céntrica y la cotizada vista para establecer viviendas e interesantes restaurantes que vale la pena visitar.' },
+  { id:'s3', name:'Puerto Madero', provincia:'caba', localidad:'Barrio Puerto Madero (Comuna 1)', cat:'Urbano', lat:-34.618, lng:-58.362, desc:'Barrio moderno sobre el Río de la Plata con arquitectura contemporánea, ubicado en la Comuna 1 de la Ciudad Autónoma de Buenos Aires. A su vez, es uno de los cuarenta y ocho barrios oficiales en los que se subdivide la capital argentina. Su ubicación cercana a la zona este de la ciudad, lo extenso de su área y su vista al río hacen que este distrito sea uno de los más valorados de Buenos Aires.  El barrio debe su nombre a Eduardo Madero, comerciante de Buenos Aires que presentó tres proyectos para la construcción del puerto de la ciudad, el último de los cuales fue aprobado por el entonces Presidente de la Nación Julio Argentino Roca en 1882. El barrio se ubica, en su totalidad, en terrenos ganados al Río de la Plata. Por las inversiones efectuadas para localizar allí el puerto (desde 1890 en adelante), y por las obras que se hicieron después, una vez desafectada el área portuaria, desde 1990 en adelante, puede ser considerado el barrio con la mayor inversión pública y privada en la historia de la ciudad de Buenos Aires.' },
+  { id:'s7', name:'Cementerio de la Recoleta', provincia:'caba', localidad:'Barrio Recoleta (Comuna 2)', cat:'Histórico', lat:-34.5879, lng:-58.3927, desc:'El Cementerio de la Recoleta fue inaugurado en 1822 y fue el primer cementerio público de Buenos Aires. Está ubicado en el barrio de Recoleta y se destaca por sus más de 4.500 bóvedas y mausoleos de gran valor artístico y arquitectónico. Más de 90 de sus sepulcros fueron declarados Monumento Histórico Nacional. Allí descansan numerosas personalidades de la historia argentina, entre ellas Eva Perón, presidentes, escritores y científicos. Considerado un museo a cielo abierto, es uno de los sitios históricos y turísticos más visitados de la ciudad.' },
+  { id:'u178227150508948d0', name:'Recoleta', provincia:'caba', localidad:'Barrio Recoleta (Comuna 2)', cat:'Gastronómico', lat:-34.5867, lng:-58.3946, desc:'Recoleta es el primero y el más viejo de los polos gastronómicos de Buenos Aires. Supo conocer su gloria durante la década de 1970, y si bien su fisonomía culinaria ha variado y le han surgido competidores, aún se mantienen instituciones como La Biela, muy frecuentada por turistas de todas las nacionalidades.' },
+  { id:'s4', name:'Catedral Metropolitana', provincia:'caba', localidad:'Barrio San Nicolás (Comuna 1)', cat:'Religioso', lat:-34.6086, lng:-58.3732, desc:'La Catedral metropolitana de la Santísima Trinidad (más conocida cómo Catedral Metropolitana de Buenos Aires y oficialmente Iglesia catedral de la Santísima Trinidad) es un templo católico de Argentina, sede de la arquidiócesis de Buenos Aires. Fue la Sede Primada de la Iglesia católica de Argentina hasta el 7 de septiembre del 2024, cuando la misma pasó a la Catedral de Santiago del Estero. Se encuentra ubicada en el barrio porteño de San Nicolás, en la intersección de la calle San Martín y la avenida Rivadavia, frente a la plaza de Mayo. En su interior se encuentra el mausoleo del Libertador José de San Martín, inaugurado en 1880.' },
+  { id:'s1', name:'Teatro Colón', provincia:'caba', localidad:'Barrio San NIcolás (Comuna 1)', cat:'Cultural', lat:-34.6011, lng:-58.3833, desc:'El Teatro Colón es un teatro de ópera, ballet y conciertos de la ciudad autónoma de Buenos Aires, la capital de Argentina. Es considerado uno de los diez mejores teatros de ópera del mundo según National Geographic. Posee la sala con la mejor acústica para ópera y la segunda mejor para conciertos del mundo. El actual Colón sustituyó al teatro original, inaugurado en 1857. A finales de siglo, se hizo evidente la necesidad de construir un nuevo teatro y, tras un proceso de veinte años, el actual teatro abrió sus puertas el 25 de mayo de 1908 con Aida de Giuseppe Verdi. Fue declarado Monumento Histórico Nacional en 1991.' },
+  { id:'u1782271582120vn4r', name:'San Telmo', provincia:'caba', localidad:'Barrio San Telmo (Comuna 1)', cat:'Gastronómico', lat:-34.6205, lng:-58.3717, desc:'Este es uno de los barrios más antiguos de Buenos Aires, y en su momento también supo ser el más aristocrático. Basta recorrer sus calles para gozar del antiguo esplendor de sus construcciones. Todo cambió en 1871 con la epidemia de fiebre amarilla que puso en fuga a las familias más acomodadas, que se desplazaron más al norte de la Ciudad. Pero después de varias décadas de olvido, San Telmo recuperó buena parte de su antiguo esplendor. Aquí se encuentran el refinamiento y la bohemia que perdió Palermo, junto a ese bouquet decadente que lo hace atractivo a los ojos de los turistas europeos. El barrio está reviviendo un boom inmobiliario y los restaurantes no son ajenos a ese suceso. Actualmente hay unos 150 restaurantes, varios de ellos más que interesantes y que bien ameritan una visita.' },
+  { id:'s6', name:'Mercado de San Telmo', provincia:'caba', localidad:'Barrio San Telmo (Comuna 1)', cat:'Gastronómico', lat:-34.621, lng:-58.3709, desc:'El Mercado de San Telmo, ubicado en el histórico barrio homónimo, fue inaugurado en 1897 y diseñado por el arquitecto Juan Antonio Buschiazzo. Nació para abastecer a la creciente población de inmigrantes que llegaba a Buenos Aires. Su estructura de hierro y vidrio conserva gran parte del diseño original y fue declarada Monumento Histórico Nacional. Además de puestos tradicionales de alimentos, alberga locales de antigüedades, artesanías y propuestas gastronómicas. Actualmente es uno de los sitios más emblemáticos y visitados de la ciudad. Mercado histórico con gastronomía, antigüedades y cultura porteña.' },
   { id:'s17', name:'Manzana Jesuítica', provincia:'cordoba', cat:'Histórico', lat:-31.412, lng:-64.1888, desc:'Conjunto patrimonial Jesuítico, Patrimonio de la Humanidad UNESCO.' },
   { id:'s18', name:'Valle de Punilla', provincia:'cordoba', cat:'Natural', lat:-31.0833, lng:-64.4833, desc:'Hermoso valle serrano con ríos, cascadas y cerros.' },
   { id:'s19', name:'Villa Carlos Paz', provincia:'cordoba', cat:'Urbano', lat:-31.424, lng:-64.4985, desc:'Principal centro turístico serrano con lago artificial.' },
   { id:'s20', name:'Cosquín — Folklore', provincia:'cordoba', cat:'Eventos', lat:-31.2423, lng:-64.4704, desc:'Capital nacional del folklore, festival anual cada enero.' },
-  { id:'s47', name:'Esteros del Iberá', provincia:'corrientes', cat:'Natural', desc:'Los Esteros del Iberá, ubicados en la provincia de Corrientes, Argentina, constituyen el segundo humedal más grande del mundo y uno de los reservorios de agua dulce más importantes del continente. Este inmenso ecosistema de agua brillante, formado por lagunas, embalsados y canales, se extiende sobre más de un millón de hectáreas de áreas protegidas que combinan parques nacionales y provinciales. El sitio es un verdadero santuario de vida silvestre, famoso por albergar poblaciones estables de yacarés, carpinchos, ciervos de los pantanos y más de 350 especies de aves que se pueden observar a corta distancia. Además, la región es un modelo global de conservación gracias a exitosos proyectos de reintroducción de especies extinguidas localmente, logrando el regreso de la fauna clave como el yaguareté y el oso hormiguero gigante. El acceso al parque se realiza a través de diversos portales, siendo Colonia Carlos Pellegrini el más desarrollado, donde los visitantes pueden explorar el humedal mediante paseos en lancha, caminatas y cabalgatas guiadas.', lat:-28.5, lng:-57.5 },
+  { id:'s47', name:'Esteros del Iberá', provincia:'corrientes', cat:'Natural', lat:-28.5, lng:-57.5, desc:'Los Esteros del Iberá, ubicados en la provincia de Corrientes, Argentina, constituyen el segundo humedal más grande del mundo y uno de los reservorios de agua dulce más importantes del continente. Este inmenso ecosistema de agua brillante, formado por lagunas, embalsados y canales, se extiende sobre más de un millón de hectáreas de áreas protegidas que combinan parques nacionales y provinciales. El sitio es un verdadero santuario de vida silvestre, famoso por albergar poblaciones estables de yacarés, carpinchos, ciervos de los pantanos y más de 350 especies de aves que se pueden observar a corta distancia. Además, la región es un modelo global de conservación gracias a exitosos proyectos de reintroducción de especies extinguidas localmente, logrando el regreso de la fauna clave como el yaguareté y el oso hormiguero gigante. El acceso al parque se realiza a través de diversos portales, siendo Colonia Carlos Pellegrini el más desarrollado, donde los visitantes pueden explorar el humedal mediante paseos en lancha, caminatas y cabalgatas guiadas.' },
   { id:'s48', name:'Carnaval de Corrientes', provincia:'corrientes', cat:'Eventos', lat:-27.4806, lng:-58.8341, desc:'Fiesta de comparsas y murgas, interés turístico nacional.' },
-  { id:'s49', name:'Termas de Federación', provincia:'entre_rios', localidad:'', cat:'Bienestar', desc:'Las Termas de Federación, ubicadas a orillas del embalse de Salto Grande en la provincia de Entre Ríos, son el complejo termal pionero y uno de los más visitados de Argentina tras el hallazgo del agua en 1994. El parque cuenta con un amplio predio con piscinas cuyas temperaturas oscilan entre los 36 y 41 grados Celsius, alimentadas por aguas que surgen desde los 1200 metros de profundidad dentro del Sistema Acuífero Guaraní. Sus aguas termales poseen propiedades terapéuticas y relajantes debido a su alta concentración de minerales, siendo ideales para combatir el estrés y afecciones óseas o musculares. El complejo se destaca por su diseño accesible y familiar, dividiéndose en sectores pasivos para el descanso y zonas recreativas que incluyen una moderna piscina con olas y un parque acuático. Su excelente infraestructura turística, sumada a la cercanía con la costanera local, convierte a este destino en un motor económico clave de la región y en un referente del bienestar termal en el litoral del país.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-30.9833, lng:-57.9167 },
-  { id:'s50', name:'Carnaval de Gualeguaychú', provincia:'entre_rios', cat:'Eventos', desc:'El Carnaval de Gualeguaychú, celebrado en la provincia de Entre Ríos, es considerado el espectáculo a cielo abierto más importante del verano argentino y uno de los carnavales de mayor calidad artística a nivel mundial. El evento se desarrolla en el Corsódromo de la ciudad, un predio inaugurado en 1997 que cuenta con una pasarela de 500 metros y capacidad para albergar a más de 25,000 espectadores por noche durante los meses de enero y febrero. Cada año, las comparsas tradicionales de los clubes locales compiten ferozmente presentando imponentes carrozas, elaborados vestuarios con miles de plumas y deslumbrantes coreografías basadas en temáticas sociales o culturales complejas. El despliegue artístico se caracteriza por el ensordecedor ritmo de las batucadas y las bandas en vivo, logrando una sincronía perfecta que contagia de baile y alegría a las tribunas. Esta enorme industria cultural no solo moviliza a cientos de apasionados integrantes de la comunidad que trabajan todo el año en los talleres, sino que también posiciona a la ciudad como un polo turístico clave del litoral argentino.', lat:-33.0128, lng:-58.5197 },
+  { id:'s49', name:'Termas de Federación', provincia:'entre_rios', cat:'Bienestar', lat:-30.9833, lng:-57.9167, desc:'Las Termas de Federación, ubicadas a orillas del embalse de Salto Grande en la provincia de Entre Ríos, son el complejo termal pionero y uno de los más visitados de Argentina tras el hallazgo del agua en 1994. El parque cuenta con un amplio predio con piscinas cuyas temperaturas oscilan entre los 36 y 41 grados Celsius, alimentadas por aguas que surgen desde los 1200 metros de profundidad dentro del Sistema Acuífero Guaraní. Sus aguas termales poseen propiedades terapéuticas y relajantes debido a su alta concentración de minerales, siendo ideales para combatir el estrés y afecciones óseas o musculares. El complejo se destaca por su diseño accesible y familiar, dividiéndose en sectores pasivos para el descanso y zonas recreativas que incluyen una moderna piscina con olas y un parque acuático. Su excelente infraestructura turística, sumada a la cercanía con la costanera local, convierte a este destino en un motor económico clave de la región y en un referente del bienestar termal en el litoral del país.' },
+  { id:'s50', name:'Carnaval de Gualeguaychú', provincia:'entre_rios', cat:'Eventos', lat:-33.0128, lng:-58.5197, desc:'El Carnaval de Gualeguaychú, celebrado en la provincia de Entre Ríos, es considerado el espectáculo a cielo abierto más importante del verano argentino y uno de los carnavales de mayor calidad artística a nivel mundial. El evento se desarrolla en el Corsódromo de la ciudad, un predio inaugurado en 1997 que cuenta con una pasarela de 500 metros y capacidad para albergar a más de 25,000 espectadores por noche durante los meses de enero y febrero. Cada año, las comparsas tradicionales de los clubes locales compiten ferozmente presentando imponentes carrozas, elaborados vestuarios con miles de plumas y deslumbrantes coreografías basadas en temáticas sociales o culturales complejas. El despliegue artístico se caracteriza por el ensordecedor ritmo de las batucadas y las bandas en vivo, logrando una sincronía perfecta que contagia de baile y alegría a las tribunas. Esta enorme industria cultural no solo moviliza a cientos de apasionados integrantes de la comunidad que trabajan todo el año en los talleres, sino que también posiciona a la ciudad como un polo turístico clave del litoral argentino.' },
   { id:'s30', name:'Quebrada de Humahuaca', provincia:'jujuy', cat:'Natural', lat:-23.2078, lng:-65.3526, desc:'Valle multicolor, Patrimonio de la Humanidad UNESCO.' },
   { id:'s31', name:'Pucará de Tilcara', provincia:'jujuy', cat:'Histórico', lat:-23.5853, lng:-65.398, desc:'Fortaleza precolombina en la Quebrada de Humahuaca.' },
   { id:'s32', name:'Laguna de los Pozuelos', provincia:'jujuy', cat:'Natural', lat:-22.4, lng:-65.9833, desc:'Reserva de biosfera con flamencos rosados en la Puna.' },
@@ -2711,18 +2732,22 @@ const DEFAULT_SITIOS = [
   { id:'s22', name:'Bodegas Catena Zapata', provincia:'mendoza', cat:'Gastronómico', lat:-33.0333, lng:-68.9667, desc:'Icónica bodega de arquitectura piramidal en Luján de Cuyo.' },
   { id:'s23', name:'Fiesta Nacional de la Vendimia', provincia:'mendoza', cat:'Eventos', lat:-32.8908, lng:-68.8272, desc:'La mayor celebración vitivinícola de Argentina, cada marzo.' },
   { id:'s24', name:'Termas de Cacheuta', provincia:'mendoza', cat:'Bienestar', lat:-33.0167, lng:-69.1333, desc:'Complejos termales en el Cañón del Mendoza.' },
-  { id:'u1781379537220e2am', name:'Cerro de la Gloria', provincia:'mendoza', cat:'Cultural', desc:'El Cerro de la Gloria se encuentra en el Parque General San Martín de la ciudad de Mendoza y es uno de los principales símbolos históricos de la provincia. En su cima se erige el Monumento al Ejército de los Andes, inaugurado en 1914 en homenaje a la gesta libertadora encabezada por el general José de San Martín. La imponente obra escultórica, realizada en bronce por el uruguayo Juan Manuel Ferrari, representa distintos episodios del Cruce de los Andes. El sitio fue declarado Patrimonio Cultural de Mendoza y constituye un importante punto de referencia histórica y artística. Además, desde sus miradores se obtienen amplias vistas de la ciudad y de la cordillera de los Andes, lo que lo convierte en uno de los lugares más visitados por turistas y mendocinos.', lat:-32.8886, lng:-68.8858 },
-  { id:'s36', name:'Cataratas del Iguazú', provincia:'misiones', cat:'Natural', desc:'Las Cataratas del Iguazú, ubicadas en la frontera entre Argentina y Brasil, son una de las Siete Maravillas Naturales del Mundo y están formadas por unos 275 saltos de agua alimentados por el río Iguazú. Su caída más imponente es la Garganta del Diablo, una espectacular garganta en forma de "U" con más de 80 metros de altura que concentra el mayor caudal del conjunto. Rodeadas por una exuberante selva subtropical protegida por parques nacionales en ambos países, albergan una asombrosa biodiversidad que incluye cientos de especies de aves y mamíferos. El lado argentino ofrece una experiencia inmersiva mediante pasarelas que recorren los saltos desde adentro, mientras que el lado brasileño brinda una vista panorámica e imponente de todo el cañón. Este destino es considerado Patrimonio de la Humanidad por la UNESCO gracias a su valor geológico excepcional y a su rol crucial en la conservación del ecosistema de la selva paranaense.', lat:-25.6953, lng:-54.4367 },
-  { id:'s37', name:'Ruinas jesuíticas de San Ignacio', provincia:'misiones', cat:'Histórico', desc:'Las Ruinas de San Ignacio Miní, ubicadas en la provincia de Misiones, Argentina, son uno de los testimonios mejor conservados de las misiones jesuíticas guaraníes de los siglos XVII y XVIII. Fundada originalmente en 1610 y reasentada en su ubicación actual en 1696, la reducción llegó a albergar a más de 3,000 indígenas bajo un singular modelo de organización comunitaria, social y cultural. Sus imponentes estructuras, construidas en piedra arenisca roja local siguiendo el estilo conocido como "barroco guaraní", destacan por los detallados relieves de motivos florales y ángeles tallados por los propios nativos. El complejo arqueológico, declarado Patrimonio de la Humanidad por la UNESCO en 1984, cuenta con una plaza central alrededor de la cual se distribuyen la majestuosa iglesia, el colegio, el cementerio y las viviendas indígenas. Hoy en día, el sitio funciona como un museo a cielo abierto que preserva la memoria de este histórico encuentro cultural e incluye un espectáculo nocturno de luces y sonidos que recrea la vida cotidiana de la misión.', lat:-27.2603, lng:-55.5372 },
+  { id:'u1781379537220e2am', name:'Cerro de la Gloria', provincia:'mendoza', cat:'Cultural', lat:-32.8886, lng:-68.8858, desc:'El Cerro de la Gloria se encuentra en el Parque General San Martín de la ciudad de Mendoza y es uno de los principales símbolos históricos de la provincia. En su cima se erige el Monumento al Ejército de los Andes, inaugurado en 1914 en homenaje a la gesta libertadora encabezada por el general José de San Martín. La imponente obra escultórica, realizada en bronce por el uruguayo Juan Manuel Ferrari, representa distintos episodios del Cruce de los Andes. El sitio fue declarado Patrimonio Cultural de Mendoza y constituye un importante punto de referencia histórica y artística. Además, desde sus miradores se obtienen amplias vistas de la ciudad y de la cordillera de los Andes, lo que lo convierte en uno de los lugares más visitados por turistas y mendocinos.' },
+  { id:'s36', name:'Cataratas del Iguazú', provincia:'misiones', cat:'Natural', lat:-25.6953, lng:-54.4367, desc:'Las Cataratas del Iguazú, ubicadas en la frontera entre Argentina y Brasil, son una de las Siete Maravillas Naturales del Mundo y están formadas por unos 275 saltos de agua alimentados por el río Iguazú. Su caída más imponente es la Garganta del Diablo, una espectacular garganta en forma de "U" con más de 80 metros de altura que concentra el mayor caudal del conjunto. Rodeadas por una exuberante selva subtropical protegida por parques nacionales en ambos países, albergan una asombrosa biodiversidad que incluye cientos de especies de aves y mamíferos. El lado argentino ofrece una experiencia inmersiva mediante pasarelas que recorren los saltos desde adentro, mientras que el lado brasileño brinda una vista panorámica e imponente de todo el cañón. Este destino es considerado Patrimonio de la Humanidad por la UNESCO gracias a su valor geológico excepcional y a su rol crucial en la conservación del ecosistema de la selva paranaense.' },
+  { id:'s37', name:'Ruinas jesuíticas de San Ignacio', provincia:'misiones', cat:'Histórico', lat:-27.2603, lng:-55.5372, desc:'Las Ruinas de San Ignacio Miní, ubicadas en la provincia de Misiones, Argentina, son uno de los testimonios mejor conservados de las misiones jesuíticas guaraníes de los siglos XVII y XVIII. Fundada originalmente en 1610 y reasentada en su ubicación actual en 1696, la reducción llegó a albergar a más de 3,000 indígenas bajo un singular modelo de organización comunitaria, social y cultural. Sus imponentes estructuras, construidas en piedra arenisca roja local siguiendo el estilo conocido como "barroco guaraní", destacan por los detallados relieves de motivos florales y ángeles tallados por los propios nativos. El complejo arqueológico, declarado Patrimonio de la Humanidad por la UNESCO en 1984, cuenta con una plaza central alrededor de la cual se distribuyen la majestuosa iglesia, el colegio, el cementerio y las viviendas indígenas. Hoy en día, el sitio funciona como un museo a cielo abierto que preserva la memoria de este histórico encuentro cultural e incluye un espectáculo nocturno de luces y sonidos que recrea la vida cotidiana de la misión.' },
   { id:'s38', name:'Parque Teyú Cuaré', provincia:'misiones', cat:'Aventura', lat:-27.3167, lng:-55.5833, desc:'Reserva con senderos y miradores sobre el río Uruguay.' },
   { id:'s26', name:'Parque Nacional Lanín', provincia:'neuquen', cat:'Natural', lat:-39.6333, lng:-71.5, desc:'El volcán Lanín domina este parque de lagos y bosques araucarios.' },
   { id:'s27', name:'Las Grutas', provincia:'rio_negro', cat:'Bienestar', lat:-40.8167, lng:-65.0833, desc:'Playas de aguas cálidas en el Golfo San Matías.' },
+  { id:'u1783031404491tf9r', name:'Cerro Campanario', provincia:'rio_negro', localidad:'Barilloche', cat:'Natural', desc:'El Cerro Campanario, ubicado en San Carlos de Bariloche, se eleva a 1.050 metros sobre el nivel del mar. Es famoso por tener una de las mejores vistas panorámicas del mundo, ofreciendo una postal de 360 grados de los lagos Nahuel Huapi y Moreno, la península San Pedro y la Isla Victoria. \nEn la cima hay un complejo con terrazas, miradores y una confitería.\nSe puede subir por medio de aerosillas (tarda unos 7 minutos en llegar a la cumbre) o haciendo trekking, por un sendero de dificultad media que toma entre 30 y 45 minutos por el bosque', dias:'Todo el año', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-41.07575, lng:-71.47642 },
+  { id:'u1783108586513jmze', name:'Hotel Llao Llao', provincia:'rio_negro', localidad:'Bariloche', cat:'Histórico', desc:'El Hotel Llao Llao es uno de los establecimientos hoteleros más emblemáticos de Argentina y un ícono del turismo patagónico. Se encuentra ubicado sobre la península Llao Llao, a 25 km de la ciudad de San Carlos de Bariloche, dentro del Parque Nacional Nahuel Huapi. Su privilegiada ubicación, entre los lagos Nahuel Huapi y Moreno y rodeado por bosques andinos y montañas, le brinda algunas de las vistas panorámicas más reconocidas de la Patagonia argentina.\nDiseñado por el arquitecto Alejandro Bustillo, el hotel fue inaugurado en 1938 con el objetivo de impulsar el desarrollo turístico de la región. Tras un incendio que destruyó el edificio original en 1939, fue reconstruido respetando su diseño y reabierto en 1940. Desde entonces se ha convertido en un símbolo de la hotelería de lujo del país y en un importante referente del patrimonio arquitectónico argentino.\nSu arquitectura combina piedra, madera y grandes ventanales que se integran armoniosamente con el paisaje natural.\nConstituye uno de los principales atractivos turísticos de Bariloche, destacándose por su valor histórico, arquitectónico, paisajístico y cultural. Es considerado un referente del turismo de lujo y uno de los hoteles más prestigiosos de Sudamérica.', dias:'', horario:'', costo:'', epoca:'', foto1:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnmxMDlP4tCVzgg0Me3KovgF1c4amYSKj8Xr5MxdNXGQ&s=10', foto2:'', foto3:'', lat:-41.05776, lng:-71.53116 },
+  { id:'u1783030994124fez6', name:'Cascada de los duendes', provincia:'rio_negro', localidad:'Bariloche (Villa Los Coihues)', cat:'Natural', desc:'La Cascada de los Duendes es un atractivo natural de baja dificultad ubicado a 16 km del centro de San Carlos de Bariloche, dentro del Parque Nacional Nahuel Huapi. Se accede desde Villa Los Coihues tras una caminata de apenas 400 metros por un bosque de coihues. \nLa cascada es una caída de agua pequeña alimentada por un arroyo de montaña, caracterizada por su entorno boscoso y el sonido del agua cristalina. Al estar cerca de la seccional de guardaparques, es una excursión muy popular y accesible, ideal para hacer en familia o como punto de partida para otros trekkings más exigentes hacia el Refugio Frey y Playa Muñoz.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-41.1823, lng:-71.41882 },
+  { id:'u17830307959263jok', name:'Playa Tacul', provincia:'rio_negro', localidad:'Bariloche (Villa Tacul)', cat:'Natural', desc:'Ubicada dentro del Parque Nacional Nahuel Huapi, a 25 kilómetros de San Carlos de Bariloche, Villa Tacul es un verdadero refugio natural. Rodeada de bosques nativos, con aguas cristalinas y un entorno sereno. \nAntigua reserva privada, hoy es parte del patrimonio natural de todos y está protegida dentro del primer parque nacional de Argentina desde 1934. Sus senderos conducen a playas secretas y vistas panorámicas, y en su entorno habitan especies únicas como pudúes, huillines y carpinteros gigantes. Un escenario ideal para quienes buscan una experiencia de desconexión total. Elegida cómo una de las 100 mejores playas del mundo.', dias:'', horario:'', costo:'', epoca:'', foto1:'', foto2:'', foto3:'', lat:-41.04492, lng:-71.57258 },
   { id:'s33', name:'Cachi', provincia:'salta', cat:'Rural', lat:-25.1167, lng:-66.15, desc:'Pueblo de adobe en el Valle Calchaquí.' },
   { id:'s34', name:'Tren a las Nubes', provincia:'salta', cat:'Aventura', lat:-24.7901, lng:-65.408, desc:'Recorrido ferroviario hasta 4.220 msnm.' },
   { id:'s35', name:'Cafayate — Bodegas', provincia:'salta', cat:'Gastronómico', lat:-26.0721, lng:-65.9755, desc:'Capital del torrontés, con bodegas en paisajes de quebrada.' },
   { id:'s39', name:'Glaciar Perito Moreno', provincia:'santa_cruz', cat:'Natural', lat:-50.4952, lng:-73.0395, desc:'Uno de los glaciares más espectaculares del planeta.' },
-  { id:'s43', name:'Parque Nacional de Tierra del Fuego', provincia:'tierra_del_fuego', cat:'Natural', desc:'El parque más austral del mundo.', lat:-54.7333, lng:-68.5833 },
-  { id:'s45', name:'Casa histórica de la Independencia', provincia:'tucuman', cat:'Histórico', desc:'Donde se declaró la Independencia Argentina el 9 de julio de 1816.', lat:-26.8346, lng:-65.2024 }
+  { id:'s43', name:'Parque Nacional de Tierra del Fuego', provincia:'tierra_del_fuego', cat:'Natural', lat:-54.7333, lng:-68.5833, desc:'El parque más austral del mundo.' },
+  { id:'s45', name:'Casa histórica de la Independencia', provincia:'tucuman', cat:'Histórico', lat:-26.8346, lng:-65.2024, desc:'Donde se declaró la Independencia Argentina el 9 de julio de 1816.' }
 ];
 
 async function loadSitios() {
@@ -3553,8 +3578,8 @@ function showOrigenInfo(o, lat, lng) {
     ticDir.style.display = 'none';
   }
 
-  // Provincia · Localidad (si existen), si no coordenadas
-  var geoParts = [o.provincia, o.localidad].filter(Boolean);
+  // Localidad · Provincia (si existen), si no coordenadas
+  var geoParts = [o.localidad, o.provincia].filter(Boolean);
   var geoText = geoParts.length > 0
     ? geoParts.join(' · ')
     : parseFloat(lat).toFixed(4) + ' · ' + parseFloat(lng).toFixed(4);
@@ -3617,7 +3642,7 @@ function showSiteInfo(s) {
     'tucuman':           'Tucumán',
   };
   var provNombre = PROV_NAMES[s.provincia] || (s.provincia ? s.provincia.replace(/_/g,' ').replace(/\w/g, function(c){return c.toUpperCase();}) : '');
-  var geoParts = [provNombre, s.localidad].filter(Boolean);
+  var geoParts = [s.localidad, provNombre].filter(Boolean);
   document.getElementById('tic-geo').textContent  = geoParts.join(' · ');
   document.getElementById('tic-desc').textContent = s.desc || '';
 
@@ -4076,22 +4101,92 @@ function renderEstadisticaChart() {
   wrap.style.display = 'block';
   if (empty) empty.style.display = 'none';
 
-  const items = list.map(function(it, i) {
-    const nombre = it.nombre || ('Itinerario ' + (i + 1));
-    return {
-      label: nombre,
-      tooltip: nombre,
-      value: Math.round((it.totalDist || 0) / 1000),
-      realizado: !!it.realizado
-    };
+  const kmValues = list.map(function(it) { return Math.round((it.totalDist || 0) / 1000 * 10) / 10; });
+  const maxKm    = Math.max(1, Math.max.apply(null, kmValues));
+
+  const n       = list.length;
+  const TOTAL_SLOTS = 20;
+  const totalCols = Math.max(n, TOTAL_SLOTS);
+  const colW    = 56;
+  const plotH   = 190;
+  const topPad  = 50;
+  const bottomPad = 44;
+  const leftPad = 38;
+  const rightPad = 18;
+  const chartW  = leftPad + totalCols * colW + rightPad;
+  const chartH  = topPad + plotH + bottomPad;
+
+  let bars = '';
+  let gridLines = '';
+  const ticks = 4;
+  for (let t = 0; t <= ticks; t++) {
+    const y   = topPad + plotH - (plotH * t / ticks);
+    const val = Math.round(maxKm * t / ticks * 10) / 10;
+    gridLines += '<line x1="' + leftPad + '" y1="' + y + '" x2="' + (chartW - rightPad) + '" y2="' + y + '" stroke="#2a3050" stroke-width="1" />';
+    gridLines += '<text x="' + (leftPad - 8) + '" y="' + (y + 4) + '" fill="#7a83a6" font-size="11" font-family="Barlow, sans-serif" text-anchor="end">' + val + '</text>';
+  }
+
+  const baseColor  = '#ffffff';
+  const barW = colW - 18;
+
+  let maxIdx = 0;
+  kmValues.forEach(function(v, idx) { if (v > kmValues[maxIdx]) maxIdx = idx; });
+
+  const axisY = topPad + plotH;
+  const points = kmValues.map(function(km, i) {
+    const colX = leftPad + i * colW + colW / 2;
+    const y    = topPad + plotH - (km / maxKm) * plotH;
+    return [colX, y];
   });
 
-  const svg = statBuildSmoothedLineSVG(items, { valueFormatter: function(v) { return v + ' km'; } });
+  list.forEach(function(it, i) {
+    const colX    = points[i][0];
+    const y       = points[i][1];
+    const km      = kmValues[i];
+    const nombre  = it.nombre || ('Itinerario ' + (i + 1));
+    const tooltip = escH(nombre + ' (' + km + ' km)');
+    const esMax   = (i === maxIdx);
+    const barSolidColor = esMax ? '#ef4444' : baseColor;
+    const barHeight = Math.max(axisY - y, 2);
+
+    bars += '<rect x="' + (colX - barW / 2) + '" y="' + y + '" width="' + barW + '" height="' + barHeight + '" rx="3" fill="' + barSolidColor + '" />';
+
+    bars += '<text x="' + colX + '" y="' + (y - 14) + '" fill="#ffea00" font-size="14.5" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + km + ' km</text>';
+
+    bars += '<rect class="est-dist-hover-bar" data-num="' + (i + 1) + '" data-nombre="' + escH(nombre) + '" data-km="' + km + '" data-color="' + barSolidColor + '" x="' + (colX - colW / 2) + '" y="' + topPad + '" width="' + colW + '" height="' + plotH + '" fill="transparent" style="cursor:pointer;"><title>' + tooltip + '</title></rect>';
+
+    bars += '<circle cx="' + colX + '" cy="' + (topPad + plotH + 20) + '" r="15" fill="rgba(232,201,106,0.15)" stroke="#e8c96a" stroke-width="1.2" />';
+    bars += '<text x="' + colX + '" y="' + (topPad + plotH + 24) + '" fill="#e8c96a" font-size="13" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + (i + 1) + '</text>';
+  });
+
+  // Columnas placeholder (sin itinerario real) hasta completar 20 en el eje X
+  for (let i = n; i < totalCols; i++) {
+    const colX = leftPad + i * colW + colW / 2;
+    bars += '<circle cx="' + colX + '" cy="' + (topPad + plotH + 20) + '" r="15" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.14)" stroke-width="1.2" />';
+    bars += '<text x="' + colX + '" y="' + (topPad + plotH + 24) + '" fill="#7a83a6" font-size="13" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + (i + 1) + '</text>';
+  }
+
+  const svg =
+    '<svg viewBox="0 0 ' + chartW + ' ' + chartH + '" width="' + chartW + '" height="' + chartH + '" xmlns="http://www.w3.org/2000/svg" style="display:block; max-width:100%; height:auto;">' +
+      gridLines + bars +
+    '</svg>';
 
   wrap.innerHTML =
-    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:14px; text-align:center;">Kilómetros totales recorridos por itinerario</div>' +
-    svg +
-    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.72rem; color:#7a83a6; text-align:center; margin-top:6px;">Km</div>';
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:10px; text-align:center;">Distancia total estimada por itinerario</div>' +
+    '<div style="width:100%; overflow:hidden; text-align:center;">' + svg + '</div>' +
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.72rem; color:#7a83a6; text-align:center; margin-top:6px;">Km</div>' +
+    '<div id="est-dist-hover-info" style="min-height:1.6rem; margin-top:14px; text-align:center; font-family:\'Barlow\',sans-serif; font-size:1.15rem; font-weight:700; color:#e8c96a;">&nbsp;</div>';
+
+  const infoDist = wrap.querySelector('#est-dist-hover-info');
+  wrap.querySelectorAll('.est-dist-hover-bar').forEach(function(rect) {
+    rect.addEventListener('mouseenter', function() {
+      const color = rect.dataset.color;
+      infoDist.innerHTML =
+        '<span style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:' + color + '26; border:1.5px solid ' + color + '; color:' + color + '; font-weight:700; font-size:0.85rem; font-family:\'Barlow\',sans-serif; vertical-align:middle; margin-right:8px;">' + rect.dataset.num + '</span>' +
+        '<span style="color:' + color + '; vertical-align:middle;">' + rect.dataset.nombre + ' — ' + rect.dataset.km + ' km</span>';
+    });
+    rect.addEventListener('mouseleave', function() { infoDist.innerHTML = '&nbsp;'; });
+  });
 }
 
 function openEstadisticaModal() {
@@ -4106,11 +4201,22 @@ document.getElementById('est-close').addEventListener('click', closeEstadisticaM
 document.getElementById('modal-estadistica').addEventListener('click', function(e) {
   if (e.target === this) closeEstadisticaModal();
 });
+document.getElementById('est-prev').addEventListener('click', function() {
+  closeEstadisticaModal();
+  openEstadisticaModalTiempo();
+});
+document.getElementById('est-next').addEventListener('click', function() {
+  closeEstadisticaModal();
+  openEstadisticaModalTiempo();
+});
 
 // ── ESTADÍSTICA POR TRAMOS (individual) ───────────────────────────────────
+let statTramosCurrentId = null;
 function abrirEstadisticaTramos(id) {
   const it = findItinerario(id);
   if (!it) return;
+
+  statTramosCurrentId = id;
 
   document.getElementById('stat-tramos-titulo').textContent = (it.nombre ? (it.nombre + ' por distancia') : 'Estadística de Tramos');
 
@@ -4130,14 +4236,15 @@ function abrirEstadisticaTramos(id) {
   const maxKm    = Math.max(1, Math.max.apply(null, kmValues));
 
   const n       = legs.length;
+  const TOTAL_SLOTS = 20;
+  const totalCols = Math.max(n, TOTAL_SLOTS);
   const colW    = 56;
-  const barW    = 34;
   const plotH   = 190;
-  const topPad  = 46;
+  const topPad  = 50;
   const bottomPad = 44;
   const leftPad = 38;
   const rightPad = 18;
-  const chartW  = leftPad + n * colW + rightPad;
+  const chartW  = leftPad + totalCols * colW + rightPad;
   const chartH  = topPad + plotH + bottomPad;
 
   function truncLabel(s, maxChars) {
@@ -4154,26 +4261,12 @@ function abrirEstadisticaTramos(id) {
     gridLines += '<text x="' + (leftPad - 8) + '" y="' + (y + 4) + '" fill="#7a83a6" font-size="11" font-family="Barlow, sans-serif" text-anchor="end">' + val + '</text>';
   }
 
-  const baseEsRealizado = !!it.realizado;
-  const gradId    = 'tramoDistGrad' + Math.random().toString(36).slice(2, 9);
-  const gradIdMax = 'tramoDistGradMax' + Math.random().toString(36).slice(2, 9);
-  const gradIdMin = 'tramoDistGradMin' + Math.random().toString(36).slice(2, 9);
+  const baseColor  = '#ffffff';
+  const areaGradId = 'tramoDistAreaGrad' + Math.random().toString(36).slice(2, 9);
   const gradDefs = '<defs>' +
-    // Barras normales: azul si la ruta se realizó, blanco si no.
-    '<linearGradient id="' + gradId + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
-      (baseEsRealizado
-        ? '<stop offset="0%" stop-color="#93c5fd" stop-opacity="0.4" /><stop offset="100%" stop-color="#2563eb" stop-opacity="0.95" />'
-        : '<stop offset="0%" stop-color="#ffffff" stop-opacity="0.25" /><stop offset="100%" stop-color="#ffffff" stop-opacity="0.92" />') +
-    '</linearGradient>' +
-    // Tramo de mayor distancia: siempre rojo.
-    '<linearGradient id="' + gradIdMax + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
-      '<stop offset="0%" stop-color="#fca5a5" stop-opacity="0.4" />' +
-      '<stop offset="100%" stop-color="#dc2626" stop-opacity="0.95" />' +
-    '</linearGradient>' +
-    // Tramo de menor distancia: siempre verde.
-    '<linearGradient id="' + gradIdMin + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
-      '<stop offset="0%" stop-color="#86efac" stop-opacity="0.45" />' +
-      '<stop offset="100%" stop-color="#16a34a" stop-opacity="0.95" />' +
+    '<linearGradient id="' + areaGradId + '" x1="0%" y1="0%" x2="0%" y2="100%">' +
+      '<stop offset="0%" stop-color="' + baseColor + '" stop-opacity="0.35" />' +
+      '<stop offset="100%" stop-color="' + baseColor + '" stop-opacity="0" />' +
     '</linearGradient>' +
   '</defs>';
 
@@ -4183,26 +4276,60 @@ function abrirEstadisticaTramos(id) {
     if (v < kmValues[minIdx]) minIdx = idx;
   });
 
+  // Puntos de la línea suavizada: uno por tramo, según su distancia
+  const points = kmValues.map(function(km, i) {
+    const colX = leftPad + i * colW + colW / 2;
+    const y    = topPad + plotH - (km / maxKm) * plotH;
+    return [colX, y];
+  });
+  const pathD = statBuildSmoothPath(points);
+  const areaD = points.length > 1
+    ? pathD + ' L ' + points[points.length - 1][0].toFixed(1) + ' ' + (topPad + plotH) + ' L ' + points[0][0].toFixed(1) + ' ' + (topPad + plotH) + ' Z'
+    : '';
+
+  if (areaD) bars += '<path d="' + areaD + '" fill="url(#' + areaGradId + ')" stroke="none" />';
+  if (pathD) bars += '<path d="' + pathD + '" fill="none" stroke="' + baseColor + '" stroke-width="2.5" stroke-linecap="round" />';
+
+  // Línea gruesa vertical roja desde el punto de máxima distancia hasta la abscisa (eje X)
+  (function() {
+    const maxX    = points[maxIdx][0];
+    const maxYTop = points[maxIdx][1];
+    const axisY   = topPad + plotH;
+    bars += '<line x1="' + maxX + '" y1="' + maxYTop + '" x2="' + maxX + '" y2="' + axisY + '" stroke="#ef4444" stroke-width="4" stroke-linecap="round" />';
+  })();
+
   legs.forEach(function(leg, i) {
-    const colX    = leftPad + i * colW + colW / 2;
+    const colX    = points[i][0];
+    const y       = points[i][1];
     const km      = kmValues[i];
-    const barH    = Math.max(2, (km / maxKm) * plotH);
-    const barTop  = topPad + plotH - barH;
     const desde   = stops[i]   ? (stops[i].name   || 'Parada ' + (i + 1))     : 'Parada ' + (i + 1);
     const hasta   = stops[i+1] ? (stops[i+1].name || 'Parada ' + (i + 2))     : 'Parada ' + (i + 2);
     const tooltip = escH(desde + ' → ' + hasta + ' (' + km + ' km)');
     const esMax   = (i === maxIdx);
-    const esMin   = (!esMax && i === minIdx);
-    const fillId  = esMax ? gradIdMax : (esMin ? gradIdMin : gradId);
-    // Color sólido de la barra, usado luego para el texto del panel de hover.
-    const barSolidColor = esMax ? '#ef4444' : (esMin ? '#22c55e' : (baseEsRealizado ? '#2563eb' : '#ffffff'));
-    bars += '<text x="' + colX + '" y="' + (barTop - 4) + '" fill="#ffffff" font-size="12.5" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + km + ' km</text>';
-    bars += '<rect class="tramo-hover-bar" data-num="' + (i + 1) + '" data-desde="' + escH(desde) + '" data-hasta="' + escH(hasta) + '" data-km="' + km + '" data-color="' + barSolidColor + '" x="' + (colX - barW / 2) + '" y="' + barTop + '" width="' + barW + '" height="' + barH + '" rx="4" fill="url(#' + fillId + ')" style="cursor:pointer;"><title>' + tooltip + '</title></rect>';
+    // Color sólido del punto, usado luego para el texto del panel de hover.
+    const barSolidColor = esMax ? '#ef4444' : baseColor;
+
+    // Valor (km) arriba del punto
+    bars += '<text x="' + colX + '" y="' + (y - 14) + '" fill="#ffea00" font-size="14.5" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + km + ' km</text>';
+
+    // Punto de la línea
+    bars += '<circle cx="' + colX + '" cy="' + y + '" r="5" fill="' + barSolidColor + '" stroke="#0f1117" stroke-width="1.5" />';
+
+    // Área de hover invisible que cubre toda la columna
+    bars += '<rect class="tramo-hover-bar" data-num="' + (i + 1) + '" data-desde="' + escH(desde) + '" data-hasta="' + escH(hasta) + '" data-km="' + km + '" data-color="' + barSolidColor + '" x="' + (colX - colW / 2) + '" y="' + topPad + '" width="' + colW + '" height="' + plotH + '" fill="transparent" style="cursor:pointer;"><title>' + tooltip + '</title></rect>';
+
     // Número de tramo en el eje X, dentro de un círculo dorado (mismo
     // estilo que la numeración de tramos en "Resumen de Ruta").
-    bars += '<circle cx="' + colX + '" cy="' + (topPad + plotH + 20) + '" r="13" fill="rgba(232,201,106,0.15)" stroke="#e8c96a" stroke-width="1.2" />';
-    bars += '<text x="' + colX + '" y="' + (topPad + plotH + 24) + '" fill="#e8c96a" font-size="11.5" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + (i + 1) + '</text>';
+    bars += '<circle cx="' + colX + '" cy="' + (topPad + plotH + 20) + '" r="15" fill="rgba(232,201,106,0.15)" stroke="#e8c96a" stroke-width="1.2" />';
+    bars += '<text x="' + colX + '" y="' + (topPad + plotH + 24) + '" fill="#e8c96a" font-size="13" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + (i + 1) + '</text>';
   });
+
+  // Columnas placeholder (sin tramo real) hasta completar 20 en el eje X
+  for (let i = n; i < totalCols; i++) {
+    const colX = leftPad + i * colW + colW / 2;
+    bars += '<circle cx="' + colX + '" cy="' + (topPad + plotH + 20) + '" r="15" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.14)" stroke-width="1.2" />';
+    bars += '<text x="' + colX + '" y="' + (topPad + plotH + 24) + '" fill="#7a83a6" font-size="13" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + (i + 1) + '</text>';
+  }
 
   const svg =
     '<svg viewBox="0 0 ' + chartW + ' ' + chartH + '" width="' + chartW + '" height="' + chartH + '" xmlns="http://www.w3.org/2000/svg" style="display:block; max-width:100%; height:auto;">' +
@@ -4238,9 +4365,33 @@ document.getElementById('stat-tramos-close').addEventListener('click', function(
 document.getElementById('modal-stat-tramos').addEventListener('click', function(e) {
   if (e.target === this) document.getElementById('modal-stat-tramos').style.display = 'none';
 });
+document.getElementById('stat-tramos-prev').addEventListener('click', function() {
+  const list = activeItinerarios();
+  if (!list.length) return;
+  const idx = list.findIndex(function(it) { return it.id === statTramosCurrentId; });
+  if (idx === -1) return;
+  const newIdx = (idx - 1 + list.length) % list.length;
+  abrirEstadisticaTramos(list[newIdx].id);
+});
+document.getElementById('stat-tramos-next').addEventListener('click', function() {
+  const list = activeItinerarios();
+  if (!list.length) return;
+  const idx = list.findIndex(function(it) { return it.id === statTramosCurrentId; });
+  if (idx === -1) return;
+  const newIdx = (idx + 1) % list.length;
+  abrirEstadisticaTramos(list[newIdx].id);
+});
 
 // ── GRÁFICOS DE LÍNEA SUAVIZADA (usados por las estadísticas de TIEMPO) ────
 // Convierte una serie de puntos [x,y] en un path SVG suavizado (Catmull-Rom → Bézier)
+// Formatea minutos totales como "Xh Ym" (o solo "Ym" si dura menos de una hora)
+function statFormatHM(totalMin) {
+  totalMin = Math.max(0, Math.round(totalMin));
+  const h = Math.floor(totalMin / 60);
+  const m = totalMin % 60;
+  return h > 0 ? (h + 'h ' + m + ' m') : (m + ' m');
+}
+
 function statBuildSmoothPath(points) {
   if (points.length < 2) return '';
   var d = 'M ' + points[0][0].toFixed(1) + ' ' + points[0][1].toFixed(1);
@@ -4384,22 +4535,93 @@ function renderEstadisticaChartTiempo() {
   wrap.style.display = 'block';
   if (empty) empty.style.display = 'none';
 
-  const items = list.map(function(it, i) {
-    const nombre = it.nombre || ('Itinerario ' + (i + 1));
-    return {
-      label: nombre,
-      tooltip: nombre,
-      value: Math.round((it.totalDur || 0) / 60),
-      realizado: !!it.realizado
-    };
+  const minValues = list.map(function(it) { return Math.round((it.totalDur || 0) / 60); });
+  const maxMin    = Math.max(1, Math.max.apply(null, minValues));
+
+  const n       = list.length;
+  const TOTAL_SLOTS = 20;
+  const totalCols = Math.max(n, TOTAL_SLOTS);
+  const colW    = 56;
+  const plotH   = 190;
+  const topPad  = 50;
+  const bottomPad = 44;
+  const leftPad = 38;
+  const rightPad = 18;
+  const chartW  = leftPad + totalCols * colW + rightPad;
+  const chartH  = topPad + plotH + bottomPad;
+
+  let bars = '';
+  let gridLines = '';
+  const ticks = 4;
+  for (let t = 0; t <= ticks; t++) {
+    const y   = topPad + plotH - (plotH * t / ticks);
+    const val = Math.round(maxMin * t / ticks);
+    gridLines += '<line x1="' + leftPad + '" y1="' + y + '" x2="' + (chartW - rightPad) + '" y2="' + y + '" stroke="#2a3050" stroke-width="1" />';
+    gridLines += '<text x="' + (leftPad - 8) + '" y="' + (y + 4) + '" fill="#7a83a6" font-size="11" font-family="Barlow, sans-serif" text-anchor="end">' + val + '</text>';
+  }
+
+  const baseColor  = '#ffffff';
+  const barW = colW - 18;
+
+  let maxIdx = 0;
+  minValues.forEach(function(v, idx) { if (v > minValues[maxIdx]) maxIdx = idx; });
+
+  const axisY = topPad + plotH;
+  const points = minValues.map(function(min, i) {
+    const colX = leftPad + i * colW + colW / 2;
+    const y    = topPad + plotH - (min / maxMin) * plotH;
+    return [colX, y];
   });
 
-  const svg = statBuildSmoothedLineSVG(items, { valueFormatter: function(v) { return v + ' min'; } });
+  list.forEach(function(it, i) {
+    const colX    = points[i][0];
+    const y       = points[i][1];
+    const min     = minValues[i];
+    const minTxt  = statFormatHM(min);
+    const nombre  = it.nombre || ('Itinerario ' + (i + 1));
+    const tooltip = escH(nombre + ' (' + minTxt + ')');
+    const esMax   = (i === maxIdx);
+    const barSolidColor = esMax ? '#ef4444' : baseColor;
+    const barHeight = Math.max(axisY - y, 2);
+
+    bars += '<rect x="' + (colX - barW / 2) + '" y="' + y + '" width="' + barW + '" height="' + barHeight + '" rx="3" fill="' + barSolidColor + '" />';
+
+    bars += '<text x="' + colX + '" y="' + (y - 14) + '" fill="#ffea00" font-size="14.5" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + minTxt + '</text>';
+
+    bars += '<rect class="est-tiempo-hover-bar" data-num="' + (i + 1) + '" data-nombre="' + escH(nombre) + '" data-min="' + escH(minTxt) + '" data-color="' + barSolidColor + '" x="' + (colX - colW / 2) + '" y="' + topPad + '" width="' + colW + '" height="' + plotH + '" fill="transparent" style="cursor:pointer;"><title>' + tooltip + '</title></rect>';
+
+    bars += '<circle cx="' + colX + '" cy="' + (topPad + plotH + 20) + '" r="15" fill="rgba(232,201,106,0.15)" stroke="#e8c96a" stroke-width="1.2" />';
+    bars += '<text x="' + colX + '" y="' + (topPad + plotH + 24) + '" fill="#e8c96a" font-size="13" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + (i + 1) + '</text>';
+  });
+
+  // Columnas placeholder (sin itinerario real) hasta completar 20 en el eje X
+  for (let i = n; i < totalCols; i++) {
+    const colX = leftPad + i * colW + colW / 2;
+    bars += '<circle cx="' + colX + '" cy="' + (topPad + plotH + 20) + '" r="15" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.14)" stroke-width="1.2" />';
+    bars += '<text x="' + colX + '" y="' + (topPad + plotH + 24) + '" fill="#7a83a6" font-size="13" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + (i + 1) + '</text>';
+  }
+
+  const svg =
+    '<svg viewBox="0 0 ' + chartW + ' ' + chartH + '" width="' + chartW + '" height="' + chartH + '" xmlns="http://www.w3.org/2000/svg" style="display:block; max-width:100%; height:auto;">' +
+      gridLines + bars +
+    '</svg>';
 
   wrap.innerHTML =
-    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:14px; text-align:center;">Tiempo total estimado por itinerario</div>' +
-    svg +
-    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.72rem; color:#7a83a6; text-align:center; margin-top:6px;">Minutos</div>';
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.8rem; color:#9aa3c4; margin-bottom:10px; text-align:center;">Tiempo total estimado por itinerario</div>' +
+    '<div style="width:100%; overflow:hidden; text-align:center;">' + svg + '</div>' +
+    '<div style="font-family:\'Barlow\',sans-serif; font-size:0.72rem; color:#7a83a6; text-align:center; margin-top:6px;">Minutos</div>' +
+    '<div id="est-tiempo-hover-info" style="min-height:1.6rem; margin-top:14px; text-align:center; font-family:\'Barlow\',sans-serif; font-size:1.15rem; font-weight:700; color:#e8c96a;">&nbsp;</div>';
+
+  const infoTiempo = wrap.querySelector('#est-tiempo-hover-info');
+  wrap.querySelectorAll('.est-tiempo-hover-bar').forEach(function(rect) {
+    rect.addEventListener('mouseenter', function() {
+      const color = rect.dataset.color;
+      infoTiempo.innerHTML =
+        '<span style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:' + color + '26; border:1.5px solid ' + color + '; color:' + color + '; font-weight:700; font-size:0.85rem; font-family:\'Barlow\',sans-serif; vertical-align:middle; margin-right:8px;">' + rect.dataset.num + '</span>' +
+        '<span style="color:' + color + '; vertical-align:middle;">' + rect.dataset.nombre + ' — ' + rect.dataset.min + '</span>';
+    });
+    rect.addEventListener('mouseleave', function() { infoTiempo.innerHTML = '&nbsp;'; });
+  });
 }
 
 function openEstadisticaModalTiempo() {
@@ -4414,11 +4636,22 @@ document.getElementById('est-tiempo-close').addEventListener('click', closeEstad
 document.getElementById('modal-estadistica-tiempo').addEventListener('click', function(e) {
   if (e.target === this) closeEstadisticaModalTiempo();
 });
+document.getElementById('est-tiempo-prev').addEventListener('click', function() {
+  closeEstadisticaModalTiempo();
+  openEstadisticaModal();
+});
+document.getElementById('est-tiempo-next').addEventListener('click', function() {
+  closeEstadisticaModalTiempo();
+  openEstadisticaModal();
+});
 
 // ── ESTADÍSTICA POR TRAMOS — TIEMPO (individual, barras verticales) ────────
+let statTramosTiempoCurrentId = null;
 function abrirEstadisticaTramosTiempo(id) {
   const it = findItinerario(id);
   if (!it) return;
+
+  statTramosTiempoCurrentId = id;
 
   document.getElementById('stat-tramos-tiempo-titulo').textContent = (it.nombre ? (it.nombre + ' por tiempo') : 'Estadística de Tramos');
 
@@ -4438,14 +4671,15 @@ function abrirEstadisticaTramosTiempo(id) {
   const maxMin    = Math.max(1, Math.max.apply(null, minValues));
 
   const n       = legs.length;
+  const TOTAL_SLOTS = 20;
+  const totalCols = Math.max(n, TOTAL_SLOTS);
   const colW    = 56;
-  const barW    = 34;
   const plotH   = 190;
-  const topPad  = 46;
+  const topPad  = 50;
   const bottomPad = 44;
   const leftPad = 38;
   const rightPad = 18;
-  const chartW  = leftPad + n * colW + rightPad;
+  const chartW  = leftPad + totalCols * colW + rightPad;
   const chartH  = topPad + plotH + bottomPad;
 
   function truncLabel(s, maxChars) {
@@ -4462,26 +4696,12 @@ function abrirEstadisticaTramosTiempo(id) {
     gridLines += '<text x="' + (leftPad - 8) + '" y="' + (y + 4) + '" fill="#7a83a6" font-size="11" font-family="Barlow, sans-serif" text-anchor="end">' + val + '</text>';
   }
 
-  const baseEsRealizado = !!it.realizado;
-  const gradId    = 'tramoTiempoGrad' + Math.random().toString(36).slice(2, 9);
-  const gradIdMax = 'tramoTiempoGradMax' + Math.random().toString(36).slice(2, 9);
-  const gradIdMin = 'tramoTiempoGradMin' + Math.random().toString(36).slice(2, 9);
+  const baseColor  = '#ffffff';
+  const areaGradId = 'tramoTiempoAreaGrad' + Math.random().toString(36).slice(2, 9);
   const gradDefs = '<defs>' +
-    // Barras normales: azul si la ruta se realizó, blanco si no.
-    '<linearGradient id="' + gradId + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
-      (baseEsRealizado
-        ? '<stop offset="0%" stop-color="#93c5fd" stop-opacity="0.4" /><stop offset="100%" stop-color="#2563eb" stop-opacity="0.95" />'
-        : '<stop offset="0%" stop-color="#ffffff" stop-opacity="0.25" /><stop offset="100%" stop-color="#ffffff" stop-opacity="0.92" />') +
-    '</linearGradient>' +
-    // Tramo de mayor duración: siempre rojo.
-    '<linearGradient id="' + gradIdMax + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
-      '<stop offset="0%" stop-color="#fca5a5" stop-opacity="0.4" />' +
-      '<stop offset="100%" stop-color="#dc2626" stop-opacity="0.95" />' +
-    '</linearGradient>' +
-    // Tramo de menor duración: siempre verde.
-    '<linearGradient id="' + gradIdMin + '" x1="0%" y1="100%" x2="0%" y2="0%">' +
-      '<stop offset="0%" stop-color="#86efac" stop-opacity="0.45" />' +
-      '<stop offset="100%" stop-color="#16a34a" stop-opacity="0.95" />' +
+    '<linearGradient id="' + areaGradId + '" x1="0%" y1="0%" x2="0%" y2="100%">' +
+      '<stop offset="0%" stop-color="' + baseColor + '" stop-opacity="0.35" />' +
+      '<stop offset="100%" stop-color="' + baseColor + '" stop-opacity="0" />' +
     '</linearGradient>' +
   '</defs>';
 
@@ -4491,26 +4711,61 @@ function abrirEstadisticaTramosTiempo(id) {
     if (v < minValues[minIdx]) minIdx = idx;
   });
 
+  // Puntos de la línea suavizada: uno por tramo, según su duración
+  const points = minValues.map(function(min, i) {
+    const colX = leftPad + i * colW + colW / 2;
+    const y    = topPad + plotH - (min / maxMin) * plotH;
+    return [colX, y];
+  });
+  const pathD = statBuildSmoothPath(points);
+  const areaD = points.length > 1
+    ? pathD + ' L ' + points[points.length - 1][0].toFixed(1) + ' ' + (topPad + plotH) + ' L ' + points[0][0].toFixed(1) + ' ' + (topPad + plotH) + ' Z'
+    : '';
+
+  if (areaD) bars += '<path d="' + areaD + '" fill="url(#' + areaGradId + ')" stroke="none" />';
+  if (pathD) bars += '<path d="' + pathD + '" fill="none" stroke="' + baseColor + '" stroke-width="2.5" stroke-linecap="round" />';
+
+  // Línea gruesa vertical roja desde el punto de máximo tiempo hasta la abscisa (eje X)
+  (function() {
+    const maxX    = points[maxIdx][0];
+    const maxYTop = points[maxIdx][1];
+    const axisY   = topPad + plotH;
+    bars += '<line x1="' + maxX + '" y1="' + maxYTop + '" x2="' + maxX + '" y2="' + axisY + '" stroke="#ef4444" stroke-width="4" stroke-linecap="round" />';
+  })();
+
   legs.forEach(function(leg, i) {
-    const colX    = leftPad + i * colW + colW / 2;
+    const colX    = points[i][0];
+    const y       = points[i][1];
     const min     = minValues[i];
-    const barH    = Math.max(2, (min / maxMin) * plotH);
-    const barTop  = topPad + plotH - barH;
+    const minTxt  = statFormatHM(min);
     const desde   = stops[i]   ? (stops[i].name   || 'Parada ' + (i + 1))     : 'Parada ' + (i + 1);
     const hasta   = stops[i+1] ? (stops[i+1].name || 'Parada ' + (i + 2))     : 'Parada ' + (i + 2);
-    const tooltip = escH(desde + ' → ' + hasta + ' (' + min + ' min)');
+    const tooltip = escH(desde + ' → ' + hasta + ' (' + minTxt + ')');
     const esMax   = (i === maxIdx);
-    const esMin   = (!esMax && i === minIdx);
-    const fillId  = esMax ? gradIdMax : (esMin ? gradIdMin : gradId);
-    // Color sólido de la barra, usado luego para el texto del panel de hover.
-    const barSolidColor = esMax ? '#ef4444' : (esMin ? '#22c55e' : (baseEsRealizado ? '#2563eb' : '#ffffff'));
-    bars += '<text x="' + colX + '" y="' + (barTop - 4) + '" fill="#ffffff" font-size="12.5" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + min + ' min</text>';
-    bars += '<rect class="tramo-hover-bar" data-num="' + (i + 1) + '" data-desde="' + escH(desde) + '" data-hasta="' + escH(hasta) + '" data-min="' + min + '" data-color="' + barSolidColor + '" x="' + (colX - barW / 2) + '" y="' + barTop + '" width="' + barW + '" height="' + barH + '" rx="4" fill="url(#' + fillId + ')" style="cursor:pointer;"><title>' + tooltip + '</title></rect>';
+    // Color sólido del punto, usado luego para el texto del panel de hover.
+    const barSolidColor = esMax ? '#ef4444' : baseColor;
+
+    // Valor (h/min) arriba del punto
+    bars += '<text x="' + colX + '" y="' + (y - 14) + '" fill="#ffea00" font-size="14.5" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + minTxt + '</text>';
+
+    // Punto de la línea
+    bars += '<circle cx="' + colX + '" cy="' + y + '" r="5" fill="' + barSolidColor + '" stroke="#0f1117" stroke-width="1.5" />';
+
+    // Área de hover invisible que cubre toda la columna
+    bars += '<rect class="tramo-hover-bar" data-num="' + (i + 1) + '" data-desde="' + escH(desde) + '" data-hasta="' + escH(hasta) + '" data-min="' + escH(minTxt) + '" data-color="' + barSolidColor + '" x="' + (colX - colW / 2) + '" y="' + topPad + '" width="' + colW + '" height="' + plotH + '" fill="transparent" style="cursor:pointer;"><title>' + tooltip + '</title></rect>';
+
     // Número de tramo en el eje X, dentro de un círculo dorado (mismo
     // estilo que la numeración de tramos en "Resumen de Ruta").
-    bars += '<circle cx="' + colX + '" cy="' + (topPad + plotH + 20) + '" r="13" fill="rgba(232,201,106,0.15)" stroke="#e8c96a" stroke-width="1.2" />';
-    bars += '<text x="' + colX + '" y="' + (topPad + plotH + 24) + '" fill="#e8c96a" font-size="11.5" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + (i + 1) + '</text>';
+    bars += '<circle cx="' + colX + '" cy="' + (topPad + plotH + 20) + '" r="15" fill="rgba(232,201,106,0.15)" stroke="#e8c96a" stroke-width="1.2" />';
+    bars += '<text x="' + colX + '" y="' + (topPad + plotH + 24) + '" fill="#e8c96a" font-size="13" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + (i + 1) + '</text>';
   });
+
+  // Columnas placeholder (sin tramo real) hasta completar 20 en el eje X
+  for (let i = n; i < totalCols; i++) {
+    const colX = leftPad + i * colW + colW / 2;
+    bars += '<circle cx="' + colX + '" cy="' + (topPad + plotH + 20) + '" r="15" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.14)" stroke-width="1.2" />';
+    bars += '<text x="' + colX + '" y="' + (topPad + plotH + 24) + '" fill="#7a83a6" font-size="13" font-weight="700" font-family="Barlow, sans-serif" text-anchor="middle">' + (i + 1) + '</text>';
+  }
 
   const svg =
     '<svg viewBox="0 0 ' + chartW + ' ' + chartH + '" width="' + chartW + '" height="' + chartH + '" xmlns="http://www.w3.org/2000/svg" style="display:block; max-width:100%; height:auto;">' +
@@ -4532,7 +4787,7 @@ function abrirEstadisticaTramosTiempo(id) {
       const color = rect.dataset.color;
       infoTiempo.innerHTML =
         '<span style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:' + color + '26; border:1.5px solid ' + color + '; color:' + color + '; font-weight:700; font-size:0.85rem; font-family:\'Barlow\',sans-serif; vertical-align:middle; margin-right:8px;">' + rect.dataset.num + '</span>' +
-        '<span style="color:' + color + '; vertical-align:middle;">' + rect.dataset.desde + ' → ' + rect.dataset.hasta + ' — ' + rect.dataset.min + ' min</span>';
+        '<span style="color:' + color + '; vertical-align:middle;">' + rect.dataset.desde + ' → ' + rect.dataset.hasta + ' — ' + rect.dataset.min + '</span>';
     });
     rect.addEventListener('mouseleave', function() { infoTiempo.innerHTML = '&nbsp;'; });
   });
@@ -4545,6 +4800,22 @@ document.getElementById('stat-tramos-tiempo-close').addEventListener('click', fu
 });
 document.getElementById('modal-stat-tramos-tiempo').addEventListener('click', function(e) {
   if (e.target === this) document.getElementById('modal-stat-tramos-tiempo').style.display = 'none';
+});
+document.getElementById('stat-tramos-tiempo-prev').addEventListener('click', function() {
+  const list = activeItinerarios();
+  if (!list.length) return;
+  const idx = list.findIndex(function(it) { return it.id === statTramosTiempoCurrentId; });
+  if (idx === -1) return;
+  const newIdx = (idx - 1 + list.length) % list.length;
+  abrirEstadisticaTramosTiempo(list[newIdx].id);
+});
+document.getElementById('stat-tramos-tiempo-next').addEventListener('click', function() {
+  const list = activeItinerarios();
+  if (!list.length) return;
+  const idx = list.findIndex(function(it) { return it.id === statTramosTiempoCurrentId; });
+  if (idx === -1) return;
+  const newIdx = (idx + 1) % list.length;
+  abrirEstadisticaTramosTiempo(list[newIdx].id);
 });
 
 function renderItinerariosTable() {
@@ -4564,7 +4835,6 @@ function renderItinerariosTable() {
         '<tr class="mo-tr">' +
         '<td class="mo-td mo-td-n"><span class="mo-num-circle">' + (idx + 1) + '</span></td>' +
         '<td class="mo-td iti-nombre-cell" data-id="' + it.id + '">' + escH(capitalizarPalabras(it.nombre)) + '</td>' +
-        '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-realizado' + (it.realizado ? ' iti-realizado-si' : '') + '" data-id="' + it.id + '" type="button" title="' + (it.realizado ? 'Realizado' : 'No realizado') + '">' + (it.realizado ? '&#10003;' : '&#9675;') + '</button></td>' +
         '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-edit" data-id="' + it.id + '" type="button" title="Editar nombre">&#9998;</button></td>' +
         '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-ver" data-id="' + it.id + '" type="button" title="Ver">&#128065;</button></td>' +
         '<td class="mo-td" style="text-align:center; padding-left:4px; padding-right:4px;"><button class="iti-icon-btn iti-map" data-id="' + it.id + '" type="button" title="Mapa">&#128506;</button></td>' +
@@ -4586,24 +4856,12 @@ function renderItinerariosTable() {
         '<td class="mo-td"></td>' +
         '<td class="mo-td"></td>' +
         '<td class="mo-td"></td>' +
-        '<td class="mo-td"></td>' +
         '<td class="mo-td" style="color:#3a4060;">—</td>' +
         '</tr>'
       );
     }
   }
   tbody.innerHTML = filas.join('');
-
-  tbody.querySelectorAll('.iti-realizado').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      const id = btn.dataset.id;
-      const list = activeItinerarios().map(function(x) {
-        return x.id === id ? Object.assign({}, x, { realizado: !x.realizado }) : x;
-      });
-      saveActiveItinerarios(list);
-      renderItinerariosTable();
-    });
-  });
 
   tbody.querySelectorAll('.iti-edit').forEach(function(btn) {
     btn.addEventListener('click', function() {
