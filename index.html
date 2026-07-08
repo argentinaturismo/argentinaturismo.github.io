@@ -1736,7 +1736,16 @@
       font-family:'Playfair Display',serif; font-weight:700;
       font-size:1.7rem; padding:12px 14px; color:#e8c96a;
     }
-    .via-input-costo { font-size:0.76rem; max-width:260px; padding:8px 12px; }
+    .via-input-costo { font-size:1.05rem; font-weight:600; max-width:300px; padding:10px 13px; }
+    /* ── Sub-casilleros de Fecha/Hora en la tabla de Itinerario ── */
+    .via-iti-fecha-group, .via-iti-hora-group { display:flex; gap:4px; }
+    .via-iti-fecha-group input, .via-iti-hora-group input {
+      text-align:center; padding:5px 4px;
+    }
+    .via-iti-fecha-group input.via-iti-dd,
+    .via-iti-fecha-group input.via-iti-aa,
+    .via-iti-hora-group input { width:34px; flex-shrink:0; }
+    .via-iti-fecha-group input.via-iti-mm { width:44px; flex-shrink:0; }
     /* ── Tabla de Itinerario (Día / Fecha / Hora / Actividad) ── */
     .via-iti-table-wrap { overflow-x:auto; border:1px solid #2a3050; border-radius:8px; margin-top:6px; }
     .via-iti-table { min-width:0; width:100%; }
@@ -2783,8 +2792,8 @@
             <table class="mo-table via-iti-table">
               <thead>
                 <tr>
-                  <th class="mo-th mo-th-n">Día</th>
-                  <th class="mo-th" style="width:120px;">Fecha</th>
+                  <th class="mo-th mo-th-n">Evento</th>
+                  <th class="mo-th" style="width:150px;">Fecha</th>
                   <th class="mo-th" style="width:90px;">Hora</th>
                   <th class="mo-th">Actividad</th>
                   <th class="mo-th" style="width:36px;"></th>
@@ -6078,7 +6087,7 @@ let viajesRealtimeChannel = null; // canal de tiempo real activo (se limpia al c
 let viajesSeleccionado = null;      // { id, titulo, codigo, flyer, itinerario }
 let viajesCodigoValidado = null;    // viaje encontrado al ingresar un código (vista usuario)
 
-// ── COORDINADOR: tabla de Itinerario (Día / Fecha / Hora / Actividad) ──
+// ── COORDINADOR: tabla de Itinerario (Evento / Fecha dd-mmm-aa / Hora hh:mm / Actividad) ──
 let viajesItinerarioRows = [];
 
 function viajesRenderItinerarioTabla() {
@@ -6090,12 +6099,22 @@ function viajesRenderItinerarioTabla() {
     tr.className = 'mo-tr';
     tr.innerHTML =
       '<td class="mo-td mo-td-n"><span class="mo-num-circle">' + (idx + 1) + '</span></td>' +
-      '<td class="mo-td"><input class="mo-cell-input via-iti-fecha" type="text" maxlength="9" placeholder="dd-mmm-aa" value="' + escH(row.fecha) + '" /></td>' +
-      '<td class="mo-td"><input class="mo-cell-input via-iti-hora" type="text" maxlength="5" placeholder="hh:mm" value="' + escH(row.hora) + '" /></td>' +
+      '<td class="mo-td"><div class="via-iti-fecha-group">' +
+        '<input class="mo-cell-input via-iti-dd" type="text" maxlength="2" placeholder="dd" value="' + escH(row.fd) + '" />' +
+        '<input class="mo-cell-input via-iti-mm" type="text" maxlength="3" placeholder="mmm" value="' + escH(row.fm) + '" />' +
+        '<input class="mo-cell-input via-iti-aa" type="text" maxlength="2" placeholder="aa" value="' + escH(row.fa) + '" />' +
+      '</div></td>' +
+      '<td class="mo-td"><div class="via-iti-hora-group">' +
+        '<input class="mo-cell-input via-iti-hh" type="text" maxlength="2" placeholder="hh" value="' + escH(row.hh) + '" />' +
+        '<input class="mo-cell-input via-iti-min" type="text" maxlength="2" placeholder="mm" value="' + escH(row.mi) + '" />' +
+      '</div></td>' +
       '<td class="mo-td"><input class="mo-cell-input via-iti-actividad" type="text" maxlength="200" placeholder="Actividad" value="' + escH(row.actividad) + '" /></td>' +
       '<td class="mo-td"><button class="via-row-del" type="button" title="Quitar">✕</button></td>';
-    tr.querySelector('.via-iti-fecha').addEventListener('input', function(e) { row.fecha = e.target.value; });
-    tr.querySelector('.via-iti-hora').addEventListener('input', function(e) { row.hora = e.target.value; });
+    tr.querySelector('.via-iti-dd').addEventListener('input', function(e) { row.fd = e.target.value; });
+    tr.querySelector('.via-iti-mm').addEventListener('input', function(e) { row.fm = e.target.value; });
+    tr.querySelector('.via-iti-aa').addEventListener('input', function(e) { row.fa = e.target.value; });
+    tr.querySelector('.via-iti-hh').addEventListener('input', function(e) { row.hh = e.target.value; });
+    tr.querySelector('.via-iti-min').addEventListener('input', function(e) { row.mi = e.target.value; });
     tr.querySelector('.via-iti-actividad').addEventListener('input', function(e) { row.actividad = e.target.value; });
     tr.querySelector('.via-row-del').addEventListener('click', function() {
       viajesItinerarioRows.splice(idx, 1);
@@ -6150,7 +6169,13 @@ async function viajesCrear() {
   const flyer  = document.getElementById('via-in-flyer').value.trim();
   const vouchers = viajesVoucherRows.map(function(r) { return r.url.trim(); }).filter(Boolean);
   const itinerario = viajesItinerarioRows
-    .map(function(r) { return { fecha: r.fecha.trim(), hora: r.hora.trim(), actividad: r.actividad.trim() }; })
+    .map(function(r) {
+      const fd = (r.fd || '').trim(), fm = (r.fm || '').trim(), fa = (r.fa || '').trim();
+      const hh = (r.hh || '').trim(), mi = (r.mi || '').trim();
+      const fecha = [fd, fm, fa].filter(Boolean).join('-');
+      const hora  = (hh || mi) ? (hh || '--') + ':' + (mi || '--') : '';
+      return { fecha, hora, actividad: (r.actividad || '').trim() };
+    })
     .filter(function(r) { return r.fecha || r.hora || r.actividad; });
   const tramosRaw = document.getElementById('via-in-tramos').value.trim();
   const emailsRaw = document.getElementById('via-in-emails').value.trim();
@@ -6362,7 +6387,7 @@ function viajesRenderItinerarioVista(itinerario) {
   const box = document.getElementById('via-view-itinerario');
   if (Array.isArray(itinerario) && itinerario.length) {
     let html = '<table class="mo-table via-iti-table"><thead><tr>' +
-      '<th class="mo-th mo-th-n">Día</th><th class="mo-th" style="width:120px;">Fecha</th>' +
+      '<th class="mo-th mo-th-n">Evento</th><th class="mo-th" style="width:120px;">Fecha</th>' +
       '<th class="mo-th" style="width:90px;">Hora</th><th class="mo-th">Actividad</th>' +
       '</tr></thead><tbody>';
     itinerario.forEach(function(row, idx) {
@@ -7460,7 +7485,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Coordinador: agregar fila de Itinerario / Voucher
   document.getElementById('via-btn-iti-add').addEventListener('click', function() {
-    viajesItinerarioRows.push({ fecha: '', hora: '', actividad: '' });
+    viajesItinerarioRows.push({ fd: '', fm: '', fa: '', hh: '', mi: '', actividad: '' });
     viajesRenderItinerarioTabla();
   });
   document.getElementById('via-btn-voucher-add').addEventListener('click', function() {
