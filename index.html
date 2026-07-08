@@ -6237,7 +6237,8 @@ async function viajesCrear() {
     viajesCargarListaCoordinador();
   } catch (e) {
     console.error(e);
-    msg.className = 'via-msg err'; msg.textContent = 'Error al crear el viaje. Revisá la configuración de Supabase.';
+    msg.className = 'via-msg err';
+    msg.textContent = 'Error al crear el viaje: ' + (e && e.message ? e.message : 'revisá la configuración de Supabase.');
   } finally {
     btn.disabled = false;
   }
