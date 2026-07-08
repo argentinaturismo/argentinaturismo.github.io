@@ -2778,6 +2778,11 @@
         <div class="via-config-warning" id="via-warning-config" style="display:none;"></div>
 
         <div id="via-coord-form-wrap">
+          <div id="via-borrador-aviso" style="display:none; background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.4); color:#e8c96a; border-radius:8px; padding:10px 14px; font-size:0.74rem; line-height:1.5; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+            <span id="via-borrador-aviso-texto">Se restauró un borrador guardado.</span>
+            <button id="via-borrador-descartar" type="button" style="background:none; border:1px solid rgba(232,201,106,0.5); color:#e8c96a; border-radius:6px; padding:4px 10px; font-size:0.68rem; cursor:pointer; white-space:nowrap;">Descartar</button>
+          </div>
+
           <label class="via-label" for="via-in-titulo">Título del viaje</label>
           <input class="via-input via-input-titulo" id="via-in-titulo" type="text" maxlength="90" placeholder="Ej: Excursión a Bariloche - Octubre 2026" />
 
@@ -2815,8 +2820,12 @@
           <label class="via-label" for="via-in-emails" style="margin-top:18px;">Emails de los invitados (uno por línea)</label>
           <textarea class="via-textarea" id="via-in-emails" style="min-height:70px;" placeholder="juan@mail.com&#10;maria@mail.com"></textarea>
 
-          <button class="via-btn" id="via-btn-crear" type="button">Crear viaje y enviar invitaciones</button>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <button class="via-btn" id="via-btn-crear" type="button" style="margin-top:0;">Crear viaje y enviar invitaciones</button>
+            <button class="via-btn via-btn-secundario" id="via-btn-guardar-borrador" type="button" style="margin-top:0;">Guardar borrador</button>
+          </div>
           <div class="via-msg" id="via-msg-crear"></div>
+          <div class="via-msg" id="via-msg-borrador" style="color:#9aa3c4;"></div>
 
           <button class="via-btn via-btn-secundario" id="via-btn-pasajeros" type="button" style="margin-top:10px;">Pasajeros</button>
         </div>
@@ -6156,6 +6165,70 @@ function viajesResetVouchersLista() {
   viajesRenderVouchersLista();
 }
 
+// ── COORDINADOR: borrador local del formulario (para no perder lo tipeado
+//    si falla la creación del viaje). Se guarda en localStorage del navegador,
+//    no en Supabase. ──
+function viajesBorradorKey() {
+  return 'viajes_borrador_' + (moUsername || 'anon');
+}
+
+function viajesGuardarBorrador() {
+  const borrador = {
+    titulo: document.getElementById('via-in-titulo').value,
+    costo: document.getElementById('via-in-costo').value,
+    flyer: document.getElementById('via-in-flyer').value,
+    tramos: document.getElementById('via-in-tramos').value,
+    emails: document.getElementById('via-in-emails').value,
+    itinerarioRows: viajesItinerarioRows,
+    voucherRows: viajesVoucherRows,
+    guardadoEn: new Date().toISOString()
+  };
+  try {
+    localStorage.setItem(viajesBorradorKey(), JSON.stringify(borrador));
+    const m = document.getElementById('via-msg-borrador');
+    m.textContent = 'Borrador guardado en este navegador.';
+    setTimeout(function() { if (m.textContent === 'Borrador guardado en este navegador.') m.textContent = ''; }, 4000);
+  } catch (e) {
+    console.error('No se pudo guardar el borrador', e);
+    document.getElementById('via-msg-borrador').textContent = 'No se pudo guardar el borrador en este navegador.';
+  }
+}
+
+function viajesRestaurarBorradorSiExiste() {
+  let raw;
+  try { raw = localStorage.getItem(viajesBorradorKey()); } catch (e) { return; }
+  if (!raw) { document.getElementById('via-borrador-aviso').style.display = 'none'; return; }
+  let borrador;
+  try { borrador = JSON.parse(raw); } catch (e) { return; }
+
+  document.getElementById('via-in-titulo').value = borrador.titulo || '';
+  document.getElementById('via-in-costo').value = borrador.costo || '';
+  document.getElementById('via-in-flyer').value = borrador.flyer || '';
+  document.getElementById('via-in-tramos').value = borrador.tramos || '';
+  document.getElementById('via-in-emails').value = borrador.emails || '';
+  viajesItinerarioRows = Array.isArray(borrador.itinerarioRows) ? borrador.itinerarioRows : [];
+  viajesVoucherRows = Array.isArray(borrador.voucherRows) ? borrador.voucherRows : [];
+  viajesRenderItinerarioTabla();
+  viajesRenderVouchersLista();
+
+  const aviso = document.getElementById('via-borrador-aviso');
+  const fecha = borrador.guardadoEn ? new Date(borrador.guardadoEn).toLocaleString('es-AR') : '';
+  document.getElementById('via-borrador-aviso-texto').textContent = 'Se restauró un borrador guardado' + (fecha ? (' el ' + fecha) : '') + '.';
+  aviso.style.display = 'flex';
+}
+
+function viajesDescartarBorrador() {
+  try { localStorage.removeItem(viajesBorradorKey()); } catch (e) {}
+  document.getElementById('via-in-titulo').value = '';
+  document.getElementById('via-in-costo').value = '';
+  document.getElementById('via-in-flyer').value = '';
+  document.getElementById('via-in-tramos').value = '';
+  document.getElementById('via-in-emails').value = '';
+  viajesResetItinerarioTabla();
+  viajesResetVouchersLista();
+  document.getElementById('via-borrador-aviso').style.display = 'none';
+}
+
 // ── COORDINADOR: crear un viaje ──
 async function viajesCrear() {
   const msg = document.getElementById('via-msg-crear');
@@ -6233,6 +6306,8 @@ async function viajesCrear() {
     document.getElementById('via-in-emails').value = '';
     viajesResetItinerarioTabla();
     viajesResetVouchersLista();
+    try { localStorage.removeItem(viajesBorradorKey()); } catch (e) {}
+    document.getElementById('via-borrador-aviso').style.display = 'none';
 
     viajesCargarListaCoordinador();
   } catch (e) {
@@ -7443,6 +7518,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('via-sec-coord').classList.add('active');
       document.getElementById('via-sec-codigo').classList.remove('active');
       if (VIAJES_CONFIGURADO) viajesCargarListaCoordinador();
+      viajesRestaurarBorradorSiExiste();
     } else {
       // Usuario común: no ve la pestaña de coordinador, entra directo a "Tengo un Código"
       tabsBar.style.display = 'none';
@@ -7496,6 +7572,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Coordinador: crear viaje
   document.getElementById('via-btn-crear').addEventListener('click', viajesCrear);
+
+  // Coordinador: guardar / descartar borrador local
+  document.getElementById('via-btn-guardar-borrador').addEventListener('click', viajesGuardarBorrador);
+  document.getElementById('via-borrador-descartar').addEventListener('click', viajesDescartarBorrador);
 
   // Coordinador: botón "Pasajeros" (formulario a definir más adelante)
   document.getElementById('via-btn-pasajeros').addEventListener('click', function() {
