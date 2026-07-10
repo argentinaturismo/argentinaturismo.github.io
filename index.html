@@ -448,42 +448,50 @@
       overflow:hidden;
     }
 
-    /* ── SLIDESHOW ── */
-    .slideshow { position:fixed; inset:0; z-index:0; }
+    /* ── SLIDESHOW: efecto "pasar hojas de un libro" ──
+       Las fotos se apilan como páginas: la de encima (mayor z-index) gira
+       -180° sobre su borde izquierdo, como si se diera vuelta la hoja de un
+       libro, revelando la siguiente foto que ya estaba apilada debajo. */
+    .slideshow { position:fixed; inset:0; z-index:0; perspective:2400px; perspective-origin:center; }
     .slide {
       position:absolute; inset:0;
       background-size:cover; background-position:center;
-      opacity:0;
-      animation: slideshow 80s infinite;
-      transform:scale(1);
+      transform-origin:left center;
+      backface-visibility:hidden;
+      animation: pageflip 80s infinite;
+    }
+    /* Sombra sutil sobre el borde derecho, como el lomo/curvatura de una página */
+    .slide::before {
+      content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+      background:linear-gradient(90deg, rgba(0,0,0,0) 80%, rgba(0,0,0,0.32) 100%);
     }
     .slide span {
       position:absolute; inset:0; display:block;
       background-size:cover; background-position:center;
       animation: kenburns 80s infinite;
     }
-    /* La primera diapositiva arranca visible de inmediato;
-       al completar la vuelta, la animación la retoma con delay negativo */
-    .slide:nth-child(1)  { opacity:1; animation-delay:-0.5s; }
-    .slide:nth-child(2)  { animation-delay:4s;   }
-    .slide:nth-child(3)  { animation-delay:8s;   }
-    .slide:nth-child(4)  { animation-delay:12s;  }
-    .slide:nth-child(5)  { animation-delay:16s;  }
-    .slide:nth-child(6)  { animation-delay:20s;  }
-    .slide:nth-child(7)  { animation-delay:24s;  }
-    .slide:nth-child(8)  { animation-delay:28s;  }
-    .slide:nth-child(9)  { animation-delay:32s;  }
-    .slide:nth-child(10) { animation-delay:36s;  }
-    .slide:nth-child(11) { animation-delay:40s;  }
-    .slide:nth-child(12) { animation-delay:44s;  }
-    .slide:nth-child(13) { animation-delay:48s;  }
-    .slide:nth-child(14) { animation-delay:52s;  }
-    .slide:nth-child(15) { animation-delay:56s;  }
-    .slide:nth-child(16) { animation-delay:60s;  }
-    .slide:nth-child(17) { animation-delay:64s;  }
-    .slide:nth-child(18) { animation-delay:68s;  }
-    .slide:nth-child(19) { animation-delay:72s;  }
-    .slide:nth-child(20) { animation-delay:76s;  }
+    /* Cada diapositiva se apila por delante de la siguiente (mayor z-index) y,
+       al llegar su turno, se da vuelta como una hoja de libro. */
+    .slide:nth-child(1)  { animation-delay:-0.5s; z-index:20; }
+    .slide:nth-child(2)  { animation-delay:4s;    z-index:19; }
+    .slide:nth-child(3)  { animation-delay:8s;    z-index:18; }
+    .slide:nth-child(4)  { animation-delay:12s;   z-index:17; }
+    .slide:nth-child(5)  { animation-delay:16s;   z-index:16; }
+    .slide:nth-child(6)  { animation-delay:20s;   z-index:15; }
+    .slide:nth-child(7)  { animation-delay:24s;   z-index:14; }
+    .slide:nth-child(8)  { animation-delay:28s;   z-index:13; }
+    .slide:nth-child(9)  { animation-delay:32s;   z-index:12; }
+    .slide:nth-child(10) { animation-delay:36s;   z-index:11; }
+    .slide:nth-child(11) { animation-delay:40s;   z-index:10; }
+    .slide:nth-child(12) { animation-delay:44s;   z-index:9;  }
+    .slide:nth-child(13) { animation-delay:48s;   z-index:8;  }
+    .slide:nth-child(14) { animation-delay:52s;   z-index:7;  }
+    .slide:nth-child(15) { animation-delay:56s;   z-index:6;  }
+    .slide:nth-child(16) { animation-delay:60s;   z-index:5;  }
+    .slide:nth-child(17) { animation-delay:64s;   z-index:4;  }
+    .slide:nth-child(18) { animation-delay:68s;   z-index:3;  }
+    .slide:nth-child(19) { animation-delay:72s;   z-index:2;  }
+    .slide:nth-child(20) { animation-delay:76s;   z-index:1;  }
     .slide:nth-child(1)  span { animation-delay:-0.5s; }
     .slide:nth-child(2)  span { animation-delay:4s;   }
     .slide:nth-child(3)  span { animation-delay:8s;   }
@@ -505,12 +513,12 @@
     .slide:nth-child(19) span { animation-delay:72s;  }
     .slide:nth-child(20) span { animation-delay:76s;  }
 
-    @keyframes slideshow {
-      0%      { opacity:0; }
-      0.625%  { opacity:1; }
-      5%      { opacity:1; }
-      5.625%  { opacity:0; }
-      100%    { opacity:0; }
+    @keyframes pageflip {
+      0%     { transform:rotateY(0deg);    filter:brightness(1);   }
+      5%     { transform:rotateY(0deg);    filter:brightness(1);   }
+      6.9%   { transform:rotateY(-90deg);  filter:brightness(0.5); }
+      8.75%  { transform:rotateY(-180deg); filter:brightness(1);   }
+      100%   { transform:rotateY(-180deg); filter:brightness(1);   }
     }
     @keyframes kenburns {
       0%      { transform:scale(1);     }
@@ -649,7 +657,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       .slide, .slide span { animation:none; }
-      .slide:nth-child(1) { opacity:1; }
+      .slide { transform:rotateY(0deg); filter:none; }
       .slide:nth-child(1) span { transform:scale(1); }
     }
 
@@ -962,9 +970,11 @@
     .map-ham-dropdown {
       display:none; position:absolute; top:calc(100% + 8px); left:0;
       background:var(--panel); border:1px solid var(--border);
-      border-radius:10px; overflow:hidden; z-index:1100;
+      border-radius:10px; overflow:visible; z-index:1100;
       box-shadow:0 8px 24px rgba(0,0,0,0.5); min-width:200px;
     }
+    .map-ham-dropdown .map-ham-item:first-child { border-top-left-radius:9px; border-top-right-radius:9px; }
+    .map-ham-dropdown .map-ham-item:last-child { border-bottom-left-radius:9px; border-bottom-right-radius:9px; }
     .map-ham-dropdown.open { display:block; }
     .map-ham-item {
       width:100%; padding:12px 18px; border:none; background:transparent;
@@ -1132,7 +1142,17 @@
 
     /* ── Leaflet ── */
     .leaflet-container { background:#cfe3ee; }
-    .leaflet-tile { /* sin filtro: el estilo oscuro de CARTO ya viene con los colores correctos (agua en azul) */ }
+    /* Atenúa los colores del mapa base (OpenTopoMap) para que la línea de ruta
+       contraste con claridad por encima del relieve/vegetación. */
+    .leaflet-tile { filter: saturate(0.55) brightness(1.18) contrast(0.92); }
+    .pais-label span {
+      display:inline-block; white-space:nowrap;
+      font-family:'Barlow',sans-serif; font-weight:700; font-size:12px;
+      letter-spacing:0.09em; color:rgba(60,64,58,0.72);
+      text-shadow:0 1px 0 rgba(255,255,255,0.9), 0 -1px 0 rgba(255,255,255,0.9),
+                  1px 0 0 rgba(255,255,255,0.9), -1px 0 0 rgba(255,255,255,0.9);
+      pointer-events:none;
+    }
     .leaflet-popup { display:none !important; }
     .crosshair { cursor:crosshair !important; }
 
@@ -1392,6 +1412,67 @@
     .mo-td { padding:11px 14px; vertical-align:middle; font-size:0.82rem; color:#e8eaf2; }
     .mo-td-n { text-align:center; }
     .iti-nombre-cell { color:#ffee00; font-weight:600; }
+
+    /* ── Planilla de Control (checklist por Fase / Área) ── */
+    .pc-fase { font-family:'Playfair Display',serif; font-weight:400; font-size:1.35rem; color:#ffee00; text-shadow:0 0 14px rgba(255,238,0,0.35); margin-bottom:2px; }
+    .pc-area { font-family:'Barlow',sans-serif; font-weight:600; font-size:1rem; color:#c7cbe0; margin-bottom:4px; }
+    .pc-progreso { font-size:0.72rem; color:#7a83a6; margin-bottom:16px; }
+    .pc-tarea-lista { display:flex; flex-direction:column; gap:0; }
+    .pc-tarea {
+      display:flex; align-items:flex-start; gap:12px; padding:12px 4px;
+      border-top:1px solid #2a3050;
+    }
+    .pc-tarea:first-child { border-top:none; }
+    .pc-tarea-texto { flex:1; font-size:0.84rem; line-height:1.5; color:#e8eaf2; padding-top:2px; }
+    .pc-tarea.pc-hecha .pc-tarea-texto { color:#7a83a6; text-decoration:line-through; text-decoration-color:rgba(122,131,166,0.5); }
+    .pc-check {
+      flex-shrink:0; width:22px; height:22px; margin-top:1px; cursor:pointer;
+      accent-color:#22c55e;
+    }
+    .pc-nav {
+      display:flex; justify-content:center; align-items:stretch;
+      gap:14px; padding:14px 24px; border-top:1px solid #2a3050;
+    }
+    .pc-nav-lateral { flex:none; }
+    .pc-nav-lateral.pc-nav-der { text-align:left; }
+    .pc-nav button {
+      background:transparent; border:1.5px solid #e8c96a; border-radius:2px;
+      color:#e8c96a; font-family:'Barlow',sans-serif; font-weight:600;
+      font-size:0.78rem; letter-spacing:0.14em; text-transform:uppercase;
+      padding:9px 22px; min-width:130px; height:100%; box-sizing:border-box;
+      cursor:pointer; white-space:nowrap; text-align:center;
+      transition:background .3s ease, color .3s ease;
+    }
+    .pc-nav button:hover:not(:disabled) { background:#e8c96a; color:#0f1117; }
+    .pc-nav button:disabled { opacity:0.3; cursor:default; }
+    .pc-nav #pc-btn-cerrar { border-color:#e8c96a; color:#e8c96a; }
+
+    /* ── PLANILLA DE CONTROL GRÁFICA: fases con círculos de progreso por área ── */
+    .pcg-fase-block { margin-bottom:22px; }
+    .pcg-fase-block:last-child { margin-bottom:4px; }
+    .pcg-fase-nombre {
+      font-family:'Playfair Display',serif; font-weight:400; font-size:1.1rem;
+      color:#ffee00; text-shadow:0 0 14px rgba(255,238,0,0.35); margin-bottom:8px;
+    }
+    .pcg-track { display:flex; align-items:flex-start; overflow-x:auto; padding:4px 4px 10px; }
+    .pcg-node { display:flex; flex-direction:column; align-items:center; flex:0 0 auto; width:60px; }
+    .pcg-circle {
+      width:40px; height:40px; border-radius:50%; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Barlow',sans-serif; font-weight:700; font-size:0.82rem;
+      border:2px solid; transition:background .2s, border-color .2s, color .2s;
+    }
+    .pcg-circle.pcg-rojo     { background:rgba(220,38,38,0.16); border-color:#dc2626; color:#f87171; }
+    .pcg-circle.pcg-amarillo { background:rgba(234,179,8,0.16); border-color:#eab308; color:#fde047; }
+    .pcg-circle.pcg-verde    { background:rgba(34,197,94,0.16); border-color:#22c55e; color:#4ade80; }
+    .pcg-label {
+      margin-top:5px; font-size:0.56rem; line-height:1.15; color:#9aa3c4;
+      text-align:center; padding:0 1px;
+    }
+    .pcg-linea { flex:0 0 14px; height:2px; background:#3a4060; margin-top:19px; }
+    .pcg-node-total .pcg-circle { border-width:2.5px; }
+    .pcg-hueco-total { flex:0 0 40px; }
+
     .mo-num-circle {
       display:inline-flex; align-items:center; justify-content:center;
       flex-shrink:0; width:26px; height:26px; border-radius:50%;
@@ -1668,8 +1749,9 @@
     .via-input, .via-textarea, .via-select {
       width:100%; background:var(--panel2); border:1px solid #2a3050; border-radius:6px;
       color:#e8eaf2; font-family:'Barlow',sans-serif; font-size:0.85rem;
-      padding:10px 12px; outline:none;
+      padding:10px 12px; outline:none; color-scheme:dark;
     }
+    .via-input-uppercase { text-transform:uppercase; }
     .via-input:focus, .via-textarea:focus, .via-select:focus { border-color:#e8c96a; }
     .via-textarea { resize:vertical; min-height:90px; line-height:1.4; }
     .via-checks { display:flex; gap:18px; flex-wrap:wrap; margin-top:6px; }
@@ -1691,6 +1773,26 @@
     .via-msg { font-size:0.76rem; margin-top:10px; min-height:16px; }
     .via-msg.err { color:#fca5a5; }
     .via-msg.ok { color:#86efac; }
+    /* Formulario "Información" del usuario: el título y lo que completa el usuario en amarillo brillante */
+    #modal-usuario-informacion .via-input,
+    #modal-usuario-informacion .via-select,
+    #modal-usuario-informacion .via-detalle-titulo-viaje,
+    #modal-usuario-informacion .via-select option {
+      color:#fff200 !important;
+    }
+    #modal-usuario-informacion .via-input::placeholder { color:#fff200; opacity:0.25; }
+    /* Campos con valor por defecto (fecha vacía, +54 sin número, "General" sin elegir):
+       se muestran en amarillo muy tenue hasta que el usuario complete/elija algo. */
+    #modal-usuario-informacion .via-input.via-campo-tenue,
+    #modal-usuario-informacion .via-select.via-campo-tenue {
+      color:rgba(255,242,0,0.25) !important;
+    }
+    #modal-usuario-informacion .via-input,
+    #modal-usuario-informacion .via-select { border-color:rgba(255,242,0,0.35); }
+    #modal-usuario-informacion .via-input:focus,
+    #modal-usuario-informacion .via-select:focus { border-color:#fff200; }
+    #modal-usuario-informacion .via-msg.err { color:#fca5a5 !important; }
+    #modal-usuario-informacion .via-msg.ok { color:#86efac !important; }
     .via-codigo-badge {
       display:inline-block; font-family:'Barlow',sans-serif; font-weight:800;
       letter-spacing:0.3em; font-size:1.3rem; color:#e8c96a;
@@ -1704,8 +1806,42 @@
       padding:10px 14px; cursor:pointer; transition:border-color .18s;
     }
     .via-viaje-item:hover, .via-viaje-item.sel { border-color:#e8c96a; }
-    .via-viaje-item .via-vi-titulo { font-weight:700; color:#e8eaf2; font-size:0.85rem; }
+    .via-viaje-item .via-vi-titulo { font-weight:700; color:#e8eaf2; font-size:0.85rem; text-transform:uppercase; font-family:Arial, sans-serif; }
     .via-viaje-item .via-vi-codigo { font-size:0.72rem; color:#e8c96a; letter-spacing:0.1em; }
+    .via-viaje-item-borrador { border-style:dashed; border-color:#5a5030; }
+    .via-viaje-item-borrador .via-vi-codigo { color:#9aa3c4; }
+    .via-detalle-brand {
+      font-family:'Playfair Display',serif; font-weight:900; font-size:1.85rem;
+      color:#e8c96a; text-align:center; margin-bottom:8px;
+    }
+    .via-detalle-titulo-viaje {
+      font-family:'Playfair Display',serif; font-weight:700; font-size:1.05rem;
+      color:#e8eaf2; text-align:center; text-transform:uppercase; letter-spacing:0.04em;
+      margin-bottom:22px;
+    }
+    .via-detalle-info-row { display:flex; gap:14px; margin-bottom:20px; }
+    .via-detalle-info-box {
+      flex:1; border:1px solid #2a3050; border-radius:8px; padding:14px 12px;
+      background:var(--panel2); text-align:center;
+    }
+    .via-detalle-info-label {
+      font-size:0.6rem; text-transform:uppercase; letter-spacing:0.12em;
+      color:#7a83a6; margin-bottom:5px;
+    }
+    .via-detalle-info-valor {
+      font-size:1.64rem; color:#ffee00; font-weight:700; word-break:break-word;
+      text-shadow:0 0 14px rgba(255,238,0,0.3);
+    }
+    .via-detalle-eventos { display:flex; flex-direction:column; gap:8px; }
+    .via-detalle-evento { display:flex; align-items:center; gap:12px; padding:3px 0; }
+    .via-detalle-evento-fecha { font-size:0.72rem; color:#9aa3c4; flex:0 0 96px; }
+    .via-detalle-evento-hora { font-size:0.72rem; color:#9aa3c4; flex:0 0 66px; }
+    .via-detalle-evento-actividad { font-size:0.85rem; color:#e8eaf2; flex:1; }
+    .via-detalle-evento-separador { border-top:1px solid #2a3050; margin:8px 0; }
+    .via-detalle-footer {
+      padding:16px 28px; border-top:1px solid #2a3050; flex-shrink:0;
+      display:flex; justify-content:space-between; align-items:center;
+    }
     .via-flyer-img {
       width:100%; max-height:260px; object-fit:cover; border-radius:8px;
       border:1px solid #2a3050; margin-bottom:14px; display:block;
@@ -1731,21 +1867,64 @@
       color:#fca5a5; border-radius:8px; padding:12px 16px; font-size:0.78rem;
       line-height:1.5; margin-bottom:16px;
     }
+
+    /* ── Impresión del listado de pasajeros (apaisado / PDF) ── */
+    #via-print-area { display:none; }
+    @media print {
+      body * { visibility:hidden; }
+      #via-print-area, #via-print-area * { visibility:visible; }
+      #via-print-area {
+        display:block; position:absolute; left:0; top:0; width:100%;
+        font-family:'Barlow',sans-serif; color:#000;
+      }
+      @page { size: landscape; margin:10mm; }
+      .via-print-titulo { font-family:'Playfair Display',serif; font-size:1.3rem; margin:0 0 2px; text-transform:uppercase; }
+      .via-print-sub { font-size:0.75rem; color:#444; margin:0 0 14px; }
+      .via-print-table { width:100%; border-collapse:collapse; font-size:0.72rem; table-layout:fixed; }
+      .via-print-table th, .via-print-table td {
+        border:1px solid #999; padding:5px 6px; text-align:left; vertical-align:top;
+        white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      }
+      .via-print-table th { background:#eee; text-transform:uppercase; font-size:0.66rem; }
+      .via-print-table th:nth-child(1), .via-print-table td:nth-child(1) { width:18%; }
+      .via-print-table th:nth-child(2), .via-print-table td:nth-child(2) { width:10%; }
+      .via-print-table th:nth-child(3), .via-print-table td:nth-child(3) { width:9%; }
+      .via-print-table th:nth-child(4), .via-print-table td:nth-child(4) { width:6%; }
+      .via-print-table th:nth-child(5), .via-print-table td:nth-child(5) { width:12%; }
+      .via-print-table th:nth-child(6), .via-print-table td:nth-child(6) { width:20%; }
+      .via-print-table th:nth-child(7), .via-print-table td:nth-child(7) { width:14%; }
+      .via-print-table th:nth-child(8), .via-print-table td:nth-child(8) { width:11%; }
+    }
     /* ── Título grande / Costo chico (formulario Viajes) ── */
     .via-input-titulo {
       font-family:'Playfair Display',serif; font-weight:700;
-      font-size:1.7rem; padding:12px 14px; color:#e8c96a;
+      font-size:1.7rem; padding:12px 14px; color:#ffe600; text-transform:uppercase;
     }
-    .via-input-costo { font-size:1.05rem; font-weight:600; max-width:300px; padding:10px 13px; }
+    .via-input-costo { font-size:1.05rem; font-weight:400; color:#ffe600; max-width:300px; padding:10px 13px; }
+    /* ── Fila Fecha (izquierda) / Costo (derecha), debajo del título del viaje ── */
+    .via-fecha-costo-row { display:flex; gap:28px; flex-wrap:wrap; align-items:flex-start; }
+    .via-fecha-costo-row .via-fecha-col { flex:1 1 340px; min-width:260px; }
+    .via-fecha-costo-row .via-costo-col { flex:0 1 240px; min-width:180px; }
+    .via-fecha-costo-row .via-label { margin:0 0 6px; }
+    .via-fecha-rango { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .via-fecha-rango .via-fecha-und { font-size:1.05rem; font-weight:400; color:#ffffff; flex-shrink:0; }
+    .via-fecha-display {
+      flex:1 1 150px; min-width:150px; cursor:pointer; caret-color:transparent;
+      font-size:1.05rem; font-weight:400; color:#ffe600;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23ffe600' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right 10px center; padding-right:32px;
+    }
+    .via-fecha-display::placeholder { color:#9aa3c4; font-weight:400; }
+    .via-fecha-oculto { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
     /* ── Sub-casilleros de Fecha/Hora en la tabla de Itinerario ── */
     .via-iti-fecha-group, .via-iti-hora-group { display:flex; gap:4px; }
     .via-iti-fecha-group input, .via-iti-hora-group input {
       text-align:center; padding:5px 4px;
     }
     .via-iti-fecha-group input.via-iti-dd,
-    .via-iti-fecha-group input.via-iti-aa,
-    .via-iti-hora-group input { width:34px; flex-shrink:0; }
-    .via-iti-fecha-group input.via-iti-mm { width:44px; flex-shrink:0; }
+    .via-iti-fecha-group input.via-iti-mm,
+    .via-iti-fecha-group input.via-iti-aa { width:34px; flex-shrink:0; }
+    .via-iti-hora-group input { width:42px; flex-shrink:0; }
     /* ── Tabla de Itinerario (Día / Fecha / Hora / Actividad) ── */
     .via-iti-table-wrap { overflow-x:auto; border:1px solid #2a3050; border-radius:8px; margin-top:6px; }
     .via-iti-table { min-width:0; width:100%; }
@@ -1821,6 +2000,7 @@
       white-space:nowrap;
     }
     .ruta-nombre-ok:hover { background:#e8c96a; color:#0f1117; }
+    @page { size: A4 portrait; margin: 14mm; }
     @media print {
       body * { visibility:hidden; }
       #iti-ver-printarea, #iti-ver-printarea * { visibility:visible; }
@@ -1829,6 +2009,12 @@
         box-shadow:none; border:none;
       }
       .ruta-panel-close, .ruta-panel-footer { display:none !important; }
+      #via-detalle-printarea, #via-detalle-printarea * { visibility:visible; }
+      #via-detalle-printarea {
+        position:absolute; left:0; top:0; width:100%; max-height:none;
+        box-shadow:none; border:none; overflow:visible;
+      }
+      #via-detalle-printarea .via-detalle-footer { display:none !important; }
     }
 
     .ruta-tabla { width:100%; border-collapse:collapse; font-family:'Barlow',sans-serif; }
@@ -2147,7 +2333,7 @@
     <div class="tut-modal-body">
       <div class="contacto-body">
         <p>¿Tenés consultas, sugerencias o querés comunicarte con nosotros?</p>
-        <a class="contacto-email-link" href="mailto:argentina.turismo.web@gmail.com">email: argentina.turismo.web@gmail.com</a>
+        <a class="contacto-email-link" href="mailto:argentina.turismo.web@gmail.com">argentina.turismo.web@gmail.com</a>
       </div>
     </div>
   </div>
@@ -2288,6 +2474,31 @@
       <button class="map-ham-item" id="ham-btn-rutas" type="button">Planificador de Itinerarios</button>
       <button class="map-ham-item" id="ham-btn-itinerarios" type="button">Itinerarios</button>
       <button class="map-ham-item" id="ham-btn-viajes" type="button">Viajes</button>
+      <div id="ham-usuario-wrap" style="position:relative; display:none;">
+        <button class="map-ham-item" id="ham-btn-viajes-flyout" type="button" style="justify-content:space-between; align-items:center;">
+          <span>Viajes</span><span style="font-size:0.7rem; opacity:0.7;">▸</span>
+        </button>
+        <div id="ham-submenu-usuario" class="map-ham-dropdown" style="display:none; position:absolute; top:0; left:100%; margin-left:6px; min-width:200px;">
+          <button class="map-ham-item" id="ham-usr-sub-flyers" type="button">Flyer's</button>
+          <button class="map-ham-item" id="ham-usr-sub-mapa" type="button">Mapa</button>
+          <button class="map-ham-item" id="ham-usr-sub-itinerario" type="button">Itinerario</button>
+          <button class="map-ham-item" id="ham-usr-sub-informacion" type="button">Información</button>
+          <button class="map-ham-item" id="ham-usr-sub-vouchers" type="button">Voucher's</button>
+        </div>
+      </div>
+      <div id="ham-coordinador-wrap" style="position:relative; display:none;">
+        <button class="map-ham-item" id="ham-btn-coordinador" type="button" style="justify-content:space-between; align-items:center;">
+          <span>Coordinador</span><span id="ham-coord-caret" style="font-size:0.7rem; opacity:0.7;">▸</span>
+        </button>
+        <div id="ham-submenu-coordinador" class="map-ham-dropdown" style="display:none; position:absolute; top:0; left:100%; margin-left:6px; min-width:200px;">
+          <button class="map-ham-item" id="ham-sub-viajes" type="button">Viajes</button>
+          <button class="map-ham-item" id="ham-sub-mapa" type="button">Mapa</button>
+          <button class="map-ham-item" id="ham-sub-planilla-control" type="button">Planilla de Control</button>
+          <button class="map-ham-item" id="ham-sub-planilla-grafica" type="button">Planilla de Control gráfica</button>
+          <button class="map-ham-item" id="ham-sub-flyers" type="button">Flyer's</button>
+          <button class="map-ham-item" id="ham-sub-vouchers" type="button">Voucher's</button>
+        </div>
+      </div>
     </div>
   </div>
   <div class="header-count-box" id="header-count-box"><span id="sb-count-num">0</span> sitios</div>
@@ -2760,7 +2971,7 @@
 
 <!-- ═══════════════════  MODAL VIAJES  ═══════════════════ -->
 <div id="modal-viajes" class="mo-backdrop" style="display:none;">
-  <div class="mo-panel" style="width:min(760px, 96vw); max-height:88vh;">
+  <div class="mo-panel" style="width:min(980px, 96vw); max-height:88vh;">
     <div class="mo-header">
       <span class="mo-title">Viajes</span>
     </div>
@@ -2778,19 +2989,26 @@
         <div class="via-config-warning" id="via-warning-config" style="display:none;"></div>
 
         <div id="via-coord-form-wrap">
-          <div id="via-borrador-aviso" style="display:none; background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.4); color:#e8c96a; border-radius:8px; padding:10px 14px; font-size:0.74rem; line-height:1.5; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
-            <span id="via-borrador-aviso-texto">Se restauró un borrador guardado.</span>
-            <button id="via-borrador-descartar" type="button" style="background:none; border:1px solid rgba(232,201,106,0.5); color:#e8c96a; border-radius:6px; padding:4px 10px; font-size:0.68rem; cursor:pointer; white-space:nowrap;">Descartar</button>
-          </div>
-
           <label class="via-label" for="via-in-titulo">Título del viaje</label>
           <input class="via-input via-input-titulo" id="via-in-titulo" type="text" maxlength="90" placeholder="Ej: Excursión a Bariloche - Octubre 2026" />
 
-          <label class="via-label" for="via-in-costo">Costo</label>
-          <input class="via-input via-input-costo" id="via-in-costo" type="text" maxlength="40" placeholder="Ej: $150.000 por persona" />
-
-          <label class="via-label" for="via-in-flyer">Flyer (URL de la imagen)</label>
-          <input class="via-input" id="via-in-flyer" type="text" maxlength="500" placeholder="https://..." />
+          <div class="via-fecha-costo-row">
+            <div class="via-fecha-col">
+              <label class="via-label">Fecha</label>
+              <div class="via-fecha-rango">
+                <span class="via-fecha-und">Desde</span>
+                <input class="via-input via-fecha-display" id="via-in-fecha-desde-display" type="text" readonly placeholder="Elegir fecha" />
+                <input class="via-fecha-oculto" id="via-in-fecha-desde" type="date" tabindex="-1" />
+                <span class="via-fecha-und">al</span>
+                <input class="via-input via-fecha-display" id="via-in-fecha-hasta-display" type="text" readonly placeholder="Elegir fecha" />
+                <input class="via-fecha-oculto" id="via-in-fecha-hasta" type="date" tabindex="-1" />
+              </div>
+            </div>
+            <div class="via-costo-col">
+              <label class="via-label" for="via-in-costo">Costo</label>
+              <input class="via-input via-input-costo" id="via-in-costo" type="text" maxlength="40" placeholder="Ej: $150.000 por persona" style="max-width:none;" />
+            </div>
+          </div>
 
           <label class="via-label">Itinerario</label>
           <div class="via-iti-table-wrap">
@@ -2801,38 +3019,30 @@
                   <th class="mo-th" style="width:150px;">Fecha</th>
                   <th class="mo-th" style="width:90px;">Hora</th>
                   <th class="mo-th">Actividad</th>
-                  <th class="mo-th" style="width:36px;"></th>
+                  <th class="mo-th" style="width:60px;"></th>
                 </tr>
               </thead>
               <tbody id="via-iti-tbody"></tbody>
             </table>
           </div>
-          <button class="via-btn-add-row" id="via-btn-iti-add" type="button">+ Agregar día</button>
+          <button class="via-btn-add-row" id="via-btn-iti-add" type="button">+ Agregar evento</button>
 
-          <label class="via-label" for="via-in-tramos" style="margin-top:18px;">Recorrido por tramos (uno por línea: <em>Nombre del lugar; latitud; longitud</em>)</label>
-          <textarea class="via-textarea" id="via-in-tramos" style="min-height:80px;" placeholder="Salida - Terminal Retiro; -34.5924; -58.3731&#10;Parada 1 - San Antonio de Areco; -34.2596; -59.4713&#10;Llegada - Bariloche; -41.1335; -71.3103"></textarea>
-          <div class="via-field-hint" style="font-size:0.7rem; color:#7a83a6; margin-top:4px; line-height:1.5;">Este recorrido se muestra como un mapa con el trayecto marcado punto por punto. Podés sacar la latitud/longitud de Google Maps (clic derecho sobre el lugar → copiar coordenadas).</div>
-
-          <label class="via-label" style="margin-top:18px;">Vouchers (URL de imagen o PDF)</label>
-          <div id="via-vouchers-list"></div>
-          <button class="via-btn-add-row" id="via-btn-voucher-add" type="button">+ Agregar voucher</button>
-
-          <label class="via-label" for="via-in-emails" style="margin-top:18px;">Emails de los invitados (uno por línea)</label>
-          <textarea class="via-textarea" id="via-in-emails" style="min-height:70px;" placeholder="juan@mail.com&#10;maria@mail.com"></textarea>
-
-          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-            <button class="via-btn" id="via-btn-crear" type="button" style="margin-top:0;">Crear viaje y enviar invitaciones</button>
-            <button class="via-btn via-btn-secundario" id="via-btn-guardar-borrador" type="button" style="margin-top:0;">Guardar borrador</button>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:18px;">
+            <button class="via-btn" id="via-btn-crear" type="button" style="margin-top:0;">Crear viaje</button>
+            <button class="via-btn via-btn-secundario" id="via-btn-guardar-borrador" type="button" style="margin-top:0;">Guardar viaje</button>
           </div>
           <div class="via-msg" id="via-msg-crear"></div>
           <div class="via-msg" id="via-msg-borrador" style="color:#9aa3c4;"></div>
-
-          <button class="via-btn via-btn-secundario" id="via-btn-pasajeros" type="button" style="margin-top:10px;">Pasajeros</button>
         </div>
 
         <hr style="border:none; border-top:1px solid #2a3050; margin:22px 0;" />
 
-        <label class="via-label">Viajes creados</label>
+        <label class="via-label">Viajes guardados</label>
+        <div class="via-lista-viajes" id="via-lista-borradores">
+          <div class="via-roster-empty">No hay borradores guardados.</div>
+        </div>
+
+        <label class="via-label" style="margin-top:18px;">Viajes creados</label>
         <div class="via-lista-viajes" id="via-lista-viajes">
           <div class="via-roster-empty">Todavía no creaste ningún viaje.</div>
         </div>
@@ -2840,20 +3050,25 @@
         <div class="via-roster-wrap" id="via-roster-wrap" style="display:none;">
           <label class="via-label" id="via-roster-titulo">Inscriptos</label>
           <div class="via-codigo-badge" id="via-roster-codigo"></div>
-          <table class="mo-table">
-            <thead>
-              <tr>
-                <th class="mo-th" style="width:170px;">Apellido y Nombres</th>
-                <th class="mo-th" style="width:110px;">Teléfono</th>
-                <th class="mo-th" style="width:110px;">Documento</th>
-                <th class="mo-th" style="width:110px;">Nacionalidad</th>
-                <th class="mo-th">Condición</th>
-                <th class="mo-th" style="width:90px;">Fecha</th>
-              </tr>
-            </thead>
-            <tbody id="via-roster-tbody"></tbody>
-          </table>
+          <div class="via-iti-table-wrap">
+            <table class="mo-table">
+              <thead>
+                <tr>
+                  <th class="mo-th" style="width:170px;">Apellido y Nombres</th>
+                  <th class="mo-th" style="width:110px;">Documento</th>
+                  <th class="mo-th" style="width:90px;">Fecha Nac.</th>
+                  <th class="mo-th" style="width:60px;">Edad</th>
+                  <th class="mo-th" style="width:140px;">Teléfono</th>
+                  <th class="mo-th">Email</th>
+                  <th class="mo-th" style="width:130px;">Tipo de entrada</th>
+                  <th class="mo-th">Alérgico a</th>
+                </tr>
+              </thead>
+              <tbody id="via-roster-tbody"></tbody>
+            </table>
+          </div>
           <div class="via-roster-empty" id="via-roster-empty" style="display:none;">Todavía nadie completó el formulario.</div>
+          <button class="via-btn via-btn-secundario" id="via-btn-imprimir-roster" type="button">Imprimir</button>
         </div>
       </div>
 
@@ -2866,50 +3081,6 @@
           <button class="via-btn" id="via-btn-validar-codigo" type="button">Ingresar</button>
           <div class="via-msg" id="via-msg-codigo"></div>
         </div>
-
-        <div id="via-codigo-paso-2" style="display:none;">
-          <img class="via-flyer-img" id="via-view-flyer" src="" alt="Flyer del viaje" style="display:none;" />
-          <div class="via-vi-titulo" style="font-family:'Playfair Display',serif; font-size:1.2rem; color:#e8c96a; margin-bottom:4px;" id="via-view-titulo"></div>
-          <div id="via-view-costo" style="font-size:0.78rem; color:#9aa3c4; margin-bottom:10px;"></div>
-          <label class="via-label">Itinerario</label>
-          <div class="via-itinerario-box" id="via-view-itinerario"></div>
-
-          <div id="via-view-voucher-wrap" style="display:none; margin-top:14px;">
-            <label class="via-label">Vouchers</label>
-            <div id="via-view-vouchers-links" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
-          </div>
-
-          <div id="via-view-mapa-wrap" style="display:none; margin-top:16px;">
-            <label class="via-label">Recorrido</label>
-            <div id="via-view-mapa" style="width:100%; height:240px; border-radius:8px; border:1px solid #2a3050;"></div>
-          </div>
-
-          <hr style="border:none; border-top:1px solid #2a3050; margin:20px 0;" />
-
-          <label class="via-label" for="via-f-nombre">Apellido y Nombres</label>
-          <input class="via-input" id="via-f-nombre" type="text" maxlength="90" placeholder="Apellido, Nombre" />
-
-          <label class="via-label" for="via-f-tel">Teléfono</label>
-          <input class="via-input" id="via-f-tel" type="text" maxlength="30" placeholder="+54 9 11..." />
-
-          <label class="via-label" for="via-f-doc">Documento de identidad</label>
-          <input class="via-input" id="via-f-doc" type="text" maxlength="30" placeholder="DNI / Pasaporte" />
-
-          <label class="via-label" for="via-f-nac">Nacionalidad</label>
-          <input class="via-input" id="via-f-nac" type="text" maxlength="60" placeholder="Argentina" />
-
-          <label class="via-label" for="via-f-tipo">Tipo de entrada</label>
-          <select class="via-select" id="via-f-tipo">
-            <option value="General">General</option>
-            <option value="Menor">Menor</option>
-            <option value="Jubilado">Jubilado</option>
-            <option value="Discapacitado">Discapacitado</option>
-            <option value="Residente">Residente</option>
-          </select>
-
-          <button class="via-btn" id="via-btn-enviar-form" type="button">Ok</button>
-          <div class="via-msg" id="via-msg-form"></div>
-        </div>
       </div>
 
     </div>
@@ -2921,18 +3092,151 @@
   </div>
 </div>
 
-<!-- ═══════════════════  MODAL PASAJEROS  ═══════════════════ -->
-<!-- Placeholder: todavía no tiene campos definidos. Se completa más adelante. -->
-<div id="modal-pasajeros" class="mo-backdrop" style="display:none;">
-  <div class="mo-panel" style="width:min(760px, 96vw); max-height:88vh;">
-    <div class="mo-header">
-      <span class="mo-title">Pasajeros</span>
+
+<!-- ═══════════════════  MODAL DETALLE DE VIAJE (solo lectura)  ═══════════════════ -->
+<div id="modal-viaje-detalle" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" id="via-detalle-printarea" style="width:min(720px, 96vw); max-height:92vh; display:flex; flex-direction:column;">
+    <div class="mo-body" style="padding:28px 28px 20px; overflow-y:auto; flex:1;">
+      <div class="via-detalle-brand">AT Argentina Turismo</div>
+      <div class="via-detalle-titulo-viaje" id="via-detalle-titulo">Viaje</div>
+
+      <div class="via-detalle-info-row">
+        <div class="via-detalle-info-box">
+          <div class="via-detalle-info-label">Costo</div>
+          <div class="via-detalle-info-valor" id="via-detalle-costo"></div>
+        </div>
+        <div class="via-detalle-info-box">
+          <div class="via-detalle-info-label">Código</div>
+          <div class="via-detalle-info-valor" id="via-detalle-codigo"></div>
+        </div>
+      </div>
+
+      <img id="via-detalle-flyer" class="via-flyer-img" src="" alt="Flyer del viaje" style="display:none; margin-bottom:18px;" />
+
+      <div class="via-detalle-eventos" id="via-detalle-itinerario"></div>
+
+      <div id="via-detalle-vouchers-wrap" style="display:none; margin-top:18px;">
+        <label class="via-label">Vouchers</label>
+        <div id="via-detalle-vouchers-links" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+      </div>
     </div>
-    <div class="mo-body" style="padding:24px;">
-      <div class="via-roster-empty">Este formulario todavía no está configurado.</div>
+    <div class="via-detalle-footer">
+      <button class="ruta-btn-secundario" id="via-detalle-btn-imprimir" type="button">Imprimir</button>
+      <button class="ruta-btn-primario" id="via-detalle-btn-cerrar" type="button">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════  MODAL USUARIO: ITINERARIO (solo lectura, según el código ingresado)  ═══════════════════ -->
+<div id="modal-usuario-itinerario" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(560px, 96vw); max-height:88vh; display:flex; flex-direction:column;">
+    <div class="mo-body" style="padding:28px 28px 20px; overflow-y:auto; flex:1;">
+      <div class="via-detalle-titulo-viaje" id="usr-iti-titulo">Viaje</div>
+      <div id="usr-iti-costo" style="font-size:0.82rem; color:#9aa3c4; margin-bottom:18px;"></div>
+      <div class="via-detalle-eventos" id="usr-iti-itinerario"></div>
     </div>
     <div style="padding:14px 24px; border-top:1px solid #2a3050; display:flex; justify-content:center;">
-      <button class="mo-auth-submit" id="via-pas-btn-cerrar" type="button" style="padding:9px 40px; letter-spacing:0.2em;">Cerrar</button>
+      <button class="mo-auth-submit" id="usr-iti-btn-cerrar" type="button" style="padding:9px 40px; letter-spacing:0.2em;">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════  MODAL USUARIO: INFORMACIÓN (datos del pasajero)  ═══════════════════ -->
+<div id="modal-usuario-informacion" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(480px, 96vw); max-height:88vh; display:flex; flex-direction:column;">
+    <div class="mo-body" style="padding:28px 28px 20px; overflow-y:auto; flex:1;">
+      <div class="via-detalle-titulo-viaje" id="via-info-titulo-viaje" style="margin-bottom:18px;"></div>
+
+      <label class="via-label" for="via-f-apellido">Apellido</label>
+      <input class="via-input via-input-uppercase" id="via-f-apellido" type="text" maxlength="45" placeholder="Apellido" />
+
+      <label class="via-label" for="via-f-nombres">Nombres</label>
+      <input class="via-input via-input-uppercase" id="via-f-nombres" type="text" maxlength="45" placeholder="Nombres" />
+
+      <label class="via-label" for="via-f-doc">Documento de identidad</label>
+
+      <input class="via-input" id="via-f-doc" type="text" inputmode="numeric" maxlength="12" placeholder="Ej: 30.123.456" />
+
+      <label class="via-label" for="via-f-nac">Fecha de nacimiento</label>
+      <input class="via-input" id="via-f-nac" type="date" />
+      <div class="via-field-hint" id="via-f-edad-hint" style="font-size:0.7rem; color:#7a83a6; margin-top:4px;"></div>
+
+      <label class="via-label" for="via-f-tel">Teléfono</label>
+      <input class="via-input" id="via-f-tel" type="text" inputmode="numeric" maxlength="20" placeholder="+54 (11) 1234-5678" />
+
+      <label class="via-label" for="via-f-email">Email</label>
+      <input class="via-input" id="via-f-email" type="email" maxlength="120" placeholder="nombre@mail.com" />
+
+      <label class="via-label" for="via-f-tipo">Tipo de entrada</label>
+      <select class="via-select" id="via-f-tipo">
+        <option value="Amigo del museo">Amigo del museo</option>
+        <option value="Discapacitado">Discapacitado</option>
+        <option value="Docente">Docente</option>
+        <option value="Estudiante">Estudiante</option>
+        <option value="General" selected>General</option>
+        <option value="Grupo familiar">Grupo familiar</option>
+        <option value="Jubilado">Jubilado</option>
+        <option value="Menor">Menor</option>
+        <option value="Residente local">Residente local</option>
+        <option value="Residente nacional">Residente nacional</option>
+        <option value="Visita escolar">Visita escolar</option>
+      </select>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+        <button class="via-btn via-btn-secundario" id="via-btn-guardar-cerrar" type="button">Guardar y Cerrar</button>
+        <button class="via-btn" id="via-btn-enviar-form" type="button">Aceptar y Enviar</button>
+      </div>
+      <div class="via-msg" id="via-msg-form" style="text-align:right;"></div>
+    </div>
+    <div style="padding:14px 24px; border-top:1px solid #2a3050; display:flex; justify-content:center;">
+      <button class="mo-auth-submit" id="usr-info-btn-cerrar" type="button" style="padding:9px 40px; letter-spacing:0.2em;">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════  MODAL "PRÓXIMAMENTE" (placeholder de secciones del menú Coordinador)  ═══════════════════ -->
+<div id="modal-proximamente" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(420px, 94vw);">
+    <div class="mo-header">
+      <span class="mo-title" id="prox-titulo">Sección</span>
+    </div>
+    <div class="mo-body" style="padding:32px 24px; text-align:center;">
+      <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:700; color:#ef4444;">Próximamente</div>
+    </div>
+    <div style="padding:14px 24px; border-top:1px solid #2a3050; display:flex; justify-content:center;">
+      <button class="mo-auth-submit" id="prox-btn-cerrar" type="button" style="padding:9px 40px; letter-spacing:0.2em;">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════  MODAL "PLANILLA DE CONTROL" (checklist por Fase / Área)  ═══════════════════ -->
+<div id="modal-planilla-control" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(640px, 96vw); max-height:88vh; display:flex; flex-direction:column;">
+    <div class="mo-body" style="padding:24px 24px 4px; overflow-y:auto; flex:1;">
+      <div class="pc-fase" id="pc-fase-titulo"></div>
+      <div class="pc-area" id="pc-area-titulo"></div>
+      <div class="pc-progreso" id="pc-progreso"></div>
+      <div class="pc-tarea-lista" id="pc-tarea-lista"></div>
+    </div>
+    <div class="pc-nav">
+      <div class="pc-nav-lateral"><button id="pc-btn-anterior" type="button">← Anterior</button></div>
+      <div><button id="pc-btn-cerrar" type="button">Cerrar</button></div>
+      <div class="pc-nav-lateral pc-nav-der"><button id="pc-btn-siguiente" type="button">Siguiente →</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════  MODAL "PLANILLA DE CONTROL GRÁFICA" (progreso por Fase / Área)  ═══════════════════ -->
+<div id="modal-planilla-grafica" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(1180px, 97vw); max-height:92vh; display:flex; flex-direction:column;">
+    <div class="mo-header">
+      <span class="mo-title">Planilla de Control gráfica</span>
+    </div>
+    <div class="mo-body" style="padding:24px; overflow-y:auto; flex:1;">
+      <div id="pcg-contenido"></div>
+    </div>
+    <div class="mo-footer-salir" style="justify-content:center;">
+      <button class="ruta-btn-secundario" id="pcg-btn-cerrar" type="button">Cerrar</button>
     </div>
   </div>
 </div>
@@ -2953,6 +3257,485 @@
 
 <script>
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
+
+// ─── PLANILLA DE CONTROL: checklist de coordinación de viajes grupales ────────
+// Estructura basada en el documento "Coordinación Turística de Grupos –
+// Checklist Integral". Se organizó en 3 Fases (Antes / Durante / Post del
+// viaje, tal como las nombra el propio documento) y, dentro de cada Fase, en
+// las Áreas temáticas del checklist. Cuando un área del documento tenía tareas
+// de más de una etapa (por ej. "Transporte" o "Seguridad y Emergencias"), se
+// separó en dos entradas (una por Fase) para respetar el momento real en que
+// se ejecuta cada tarea.
+const PLANILLA_CONTROL_DATA = [
+  // ═══ FASE PRE-VIAJE ═══
+  { fase:"Pre-Viaje", area:"Administrativa", tasks:[
+    "Confirmar la habilitación vigente de la agencia de viajes.",
+    "Verificar que el coordinador designado (si corresponde) esté habilitado y cuente con certificaciones necesarias (cursos, licencias).",
+    "Validar y aprobar el itinerario definitivo (fechas, destinos, tiempos).",
+    "Aprobar presupuesto preliminar y plan financiero del viaje.",
+    "Emitir órdenes de servicio o contratos formales con proveedores clave (transporte, alojamiento, etc.) y exigir confirmación por escrito.",
+    "Confirmar proveedores (empresa de transporte, hotelería, guías locales) y obtener datos de contacto.",
+    "Verificar cronograma detallado de actividades (fechas y horas de cada servicio) y asignar responsabilidades.",
+    "Preparar la carpeta de viaje física con documentos esenciales (itinerario, listados, vouchers, hojas de ruta).",
+    "Preparar la carpeta digital o \"maletín virtual\" con archivos escaneados y copias electrónicas de toda la documentación relevante.",
+    "Verificar y registrar los teléfonos útiles (ambulancia, Policía, CNRT, consulados, hotel, proveedores) en todos los formatos (carpeta física y digital).",
+    "Programar reuniones de coordinación internas para revisar el plan final del viaje con el equipo operativo.",
+    "Coordinar permisos de trabajo o liberación horaria del personal que viaje (si aplica).",
+    "Revisar experiencias previas (lecciones aprendidas) de viajes similares para evitar errores repetidos.",
+    "Definir políticas de cancelación y reembolso internas; comunicar condiciones al cliente.",
+    "Confirmar plan de contingencias generales (p.ej. qué hacer ante cancelación de vuelo o catástrofe climática).",
+    "Establecer canales de comunicación entre sede y equipo en ruta (correo corporativo, apps, radios).",
+    "Asignar números de asiento o bloques de asientos en el transporte (opcional, según modalidad).",
+    "Revisar el calendario laboral: evitar traslapes con feriados o vacaciones del personal clave.",
+    "Actualizar la base de datos de pasajeros (telefonía y correo electrónico) y enviar instrucciones pre-viaje al grupo.",
+    "Gestionar anticipos o adelantos de pago a proveedores según contrato (hoteles, compañías de turismo).",
+    "Coordinar la disposición de recursos de apoyo logístico (e.g. botiquines extras, equipo audiovisual).",
+    "Establecer pautas de reporte interno sobre el avance de la organización (fechas límites para cierre de ventas, etc.).",
+    "Actualizar documentación de marketing (itinerario para clientes, flyers informativos).",
+    "Preparar el instructivo de viaje para los viajeros: reglas básicas, horario de encuentros, normas de convivencia.",
+    "Verificar la contratación de servicios auxiliares (guías, traductores, animadores) si son necesarios."
+  ]},
+  { fase:"Pre-Viaje", area:"Legal", tasks:[
+    "Revisar y asegurar que todos los contratos legales con proveedores cumplen las cláusulas exigidas por ley (plazos, coberturas, cancelaciones).",
+    "Verificar cumplimiento de la normativa CNRT para viajes recreativos y estudiantiles: solicitar fiscalización si corresponde.",
+    "Enviar solicitud de inspección de CNRT con la antelación requerida (7 días para CABA/AMBA, 10 días para interior del país).",
+    "Confirmar en la CNRT que la empresa de transporte y los vehículos estén habilitados, con VTV vigente y póliza de seguros obligatoria.",
+    "Verificar permisos provinciales o municipales: p.ej., habilitaciones locales para transporte turístico, permisos especiales para eventos.",
+    "Recabar autorizaciones escritas de padres o tutores para viajeros menores (según normativa de turismo estudiantil o leyes civiles locales).",
+    "Comprobar que la agencia cumple con el Reglamento de Turismo Estudiantil (Res. 1/2024) en viajes escolares: contar con certificado de agencia (si existiera) y confirmar la constitución del Fondo de Turismo Estudiantil y cauciones correspondientes.",
+    "Verificar requisitos de la Ley de Turismo Estudiantil (Ley 25.599): contar con garantías patrimoniales/fiduciarias como exige el inciso e) del art.7.",
+    "Asegurar el cumplimiento de la Ley Nacional de Turismo (Ley 25.997) en cuanto a protección al consumidor (información clara de servicios, precios finales, cláusulas de contrato).",
+    "Revisar permisos migratorios: visados de país de destino y tránsito (si aplica) para todo el grupo.",
+    "Verificar exigencias sanitarias legales (vacunas obligatorias, exámenes médicos) de los destinos previstos.",
+    "Confirmar el registro de la agencia en el sistema público Mi Argentina (antes Registro de Agentes de Viaje).",
+    "Revisar la normativa sobre datos personales: garantizar el uso adecuado de documentos de identidad (Ley de Protección de Datos Personales).",
+    "Definir cláusulas de exención de responsabilidad y condiciones de fuerza mayor en contratos con clientes.",
+    "Consultar asesoría jurídica ante dudas sobre régimen laboral del personal de viaje o coberturas legales.",
+    "Asegurar renuncias y formatos firmados de indemnidad por parte de clientes, según reglamentaciones municipales o provinciales vigentes.",
+    "Aplicar normativa de tránsito y fiscalizaciones durante el trayecto (licencias de choferes, DNIT).",
+    "Actualizar la agencia ante cambios legislativos recientes (ej. derogación de Ley 18.829 de agencias).",
+    "Revisar cumplimiento de la disposición de CNRT 766/2017 (verificación de vehículos antes del viaje) en caso de servicios de transporte terrestre."
+  ]},
+  { fase:"Pre-Viaje", area:"Documentación", tasks:[
+    "Elaborar el listado definitivo de pasajeros (con datos completos: nombre, DNI, contacto).",
+    "Revisar los DNI de todos los pasajeros (y de los acompañantes) para destino interno.",
+    "Verificar pasaportes válidos para viajes al exterior; llevar copias adicionales.",
+    "Confirmar las visas de ingreso/tránsito y otros permisos migratorios según país.",
+    "Recabar certificados de vacunación exigidos (COVID-19, fiebre amarilla, etc.).",
+    "Obtener autorizaciones notariales para menores (aplica según legislación).",
+    "Emitir e imprimir vouchers o comprobantes de reserva de hotel, transporte, excursiones y comidas.",
+    "Imprimir la hoja de ruta oficial del viaje con detalles horarios y contactos.",
+    "Preparar listados de teléfonos de emergencia (asistencia médica, ambulancias, embajadas) y locales.",
+    "Copiar las pólizas de seguro (viaje, accidentes) para portarlas durante el recorrido.",
+    "Reunir contratos firmados con proveedores (hotel, transporte, guías).",
+    "Preparar el contrato de viaje o condiciones de servicio para los pasajeros (en español, claro y firmado).",
+    "Imprimir el listado de teléfonos útiles (empresa, emergencia, embajadas) para entregar al cliente.",
+    "Organizar credenciales del grupo (etiquetas, cintas, identificadores de maleta).",
+    "Preparar carpeta o archivos con reglamentos internos del viaje (normas de conducta, horarios).",
+    "Verificar la existencia de manuales o protocolos de emergencia que puedan entregarse al equipo y cliente.",
+    "Imprimir planillas de control de asistencia diaria (check-in en buses, excursiones).",
+    "Registrar la documentación de traslado de dinero en efectivo (valijas de seguridad, recibos de giros).",
+    "Incluir copias de las credenciales de la agencia en caso de inspecciones de autoridades.",
+    "Asegurar los seguros y permisos firmados en sistemas digitales (respaldo en la nube)."
+  ]},
+  { fase:"Pre-Viaje", area:"Transporte", tasks:[
+    "Contratar formalmente el servicio de transporte (ómnibus, micro, van, combi) con una empresa habilitada.",
+    "Confirmar la patente y modelo del vehículo asignado.",
+    "Verificar la licencia de conducir nacional (LiNTI) de los choferes designados.",
+    "Confirmar fecha y hora de salida del vehículo, así como puntos de encuentro con los pasajeros.",
+    "Revisar la vigencia de la Revisión Técnica Obligatoria (VTV) del vehículo.",
+    "Asegurar que el vehículo cuente con póliza de seguro automotor para pasajeros (obligatorio).",
+    "Verificar equipamiento de seguridad a bordo (extintores, balizas, botiquín de primeros auxilios, señales reflectantes).",
+    "Confirmar capacidad de carga de equipaje y modalidad (bodega del bus).",
+    "Programar paradas intermedias seguras (estaciones de servicio con buena infraestructura).",
+    "Elaborar plan de recambio de conductor si la ruta es muy larga (respetar descansos obligatorios).",
+    "Revisar contrato de transporte para cláusulas de anulación o demoras.",
+    "Confirmar que el conductor y vehículo estén registrados en el sistema de la CNRT.",
+    "Coordinar formas de pago al chofer o empresa (efectivo, transferencia) según contrato.",
+    "Preparar un chequeo de última hora antes de la partida (nivel de combustible, neumáticos).",
+    "Garantizar la provisión de agua y refrigerios para el chofer durante la ruta.",
+    "Confirmar cobertura del teléfono o GPS para monitoreo en ruta.",
+    "Asegurar que el chofer conoce el itinerario y paradas planificadas (mapas actualizados).",
+    "Verificar si se requiere habilitación especial (autorización) para rutas fronterizas.",
+    "Revisar historial de la empresa transportista (antecedentes CNRT o quejas previas).",
+    "Planificar estacionamientos seguros al llegar a destinos (zona iluminada, custodiada)."
+  ]},
+  { fase:"Pre-Viaje", area:"Alojamiento", tasks:[
+    "Seleccionar establecimientos hoteleros adecuados al tipo de grupo (categoría, confort, ubicación).",
+    "Confirmar reserva de habitaciones (dobles, triples, etc.) y número de plazas necesarias.",
+    "Verificar fechas de check-in y check-out con el hotel.",
+    "Comprobar inclusión de régimen alimentario (desayuno, pensión completa) o servicios adicionales.",
+    "Coordinar envío de carta de bloque de habitaciones a nombre del grupo.",
+    "Verificar costo final (aranceles de impuestos o tasas no incluidas) y solicitar facturación proforma.",
+    "Revisar políticas de cancelación y penalidades en el contrato con el hotel.",
+    "Asegurar la disponibilidad de espacios comunes (salón para reunión, recepción familiar) para uso del grupo.",
+    "Confirmar amenities especiales (cunas, habitaciones accesibles, caja fuerte).",
+    "Coordinar servicio de traslados aeropuerto/hotel si no está incluido con el vuelo.",
+    "Verificar compromiso de wi-fi gratis o salas de trabajo si fueran necesarias.",
+    "Asegurar que el hotel esté informado de normas del grupo (p.ej. horarios de llegada tardía)."
+  ]},
+  { fase:"Pre-Viaje", area:"Alimentación", tasks:[
+    "Planificar el número y tipo de comidas a cubrir (desayunos, almuerzos, cenas) según duración del viaje.",
+    "Seleccionar proveedores de comidas o restaurantes para el grupo (capacidad y horarios adecuados).",
+    "Confirmar menús estándar y opcionales (vegetariano, sin gluten, etc.) por si hay restricciones alimentarias.",
+    "Coordinar vales o cupones de comida si el viaje incluye alimentos en restaurantes.",
+    "Verificar la existencia de agua potable y refrigerios para trayectos largos.",
+    "Realizar reservas en restaurantes para grupos grandes (prever compensación por esperado extra de comensales).",
+    "Controlar horarios de comidas con los hoteles (ej. desayuno desde tal hora).",
+    "Confirmar detalles para picnic o viandas en excursiones (sándwiches, frutas, agua).",
+    "Atender notificaciones de alergias o dieta especial y coordinar soluciones con los proveedores.",
+    "Establecer protocolo para consumos extra (propinas, minibar) y dejar instrucciones al grupo.",
+    "Validar si el viaje incluirá cenas temáticas o eventos especiales de comida y organizar menús.",
+    "Mantener contacto con el equipo de cocina/banquetería ante posibles cambios de menús."
+  ]},
+  { fase:"Pre-Viaje", area:"Personal", tasks:[
+    "Confirmar el equipo de trabajo: coordinador principal, asistentes/co-coordinadores y guías auxiliares.",
+    "Calcular la cantidad de coordinadores necesaria según normativa: 1 por cada 35 pasajeros (viajes de egresados) o 1 por 60 más 2 docentes (viajes de estudio).",
+    "Asignar roles detallados (quién se encarga de cada grupo/vehículo).",
+    "Verificar requisitos del coordinador: edad mínima 21 años y secundario completo.",
+    "Revisar antecedentes judiciales del coordinador y asistentes (certificado anual).",
+    "Confirmar la inscripción y renovación anual en el Registro Nacional de Coordinadores de Turismo Estudiantil.",
+    "Distribuir uniformes o distintivos identificatorios para el personal de coordinación.",
+    "Planificar viáticos y asignar presupuestos de gastos personales (combustible propio, viáticos de comidas).",
+    "Programar descansos obligatorios para choferes y personal (según horarios de manejo permitidos).",
+    "Preparar un briefing de equipo (funciones, reglas internas, emergencias).",
+    "Acordar método de comunicación interna (radios, celular, apps) entre coordinadores.",
+    "Revisar que el personal cuente con seguro médico o cobertura laboral vigente.",
+    "Definir procedimiento de relevo de guardias nocturnas (si aplica a transporte/seguridad).",
+    "Indicar normas de vestimenta y conducta para el personal en servicio (p.ej. no consumo de alcohol).",
+    "Establecer horas de trabajo diaria para el equipo evitando excesos según legislación laboral."
+  ]},
+  { fase:"Pre-Viaje", area:"Seguridad", tasks:[
+    "Realizar un análisis de riesgo del itinerario (zonas de mayor siniestralidad, clima adverso).",
+    "Elaborar un plan de emergencia general (puntos de encuentro, rutas de evacuación, responsables).",
+    "Preparar botiquines de primeros auxilios adicionales (botiquín del vehículo, traumas, alergias).",
+    "Identificar hospitales y centros médicos en cada etapa del viaje.",
+    "Asegurar la provisión y estado del equipo de seguridad de vehículos (extintores en orden, balizas no vencidas).",
+    "Capacitar brevemente al equipo y grupo en el uso del botiquín y protocolos de emergencia.",
+    "Planificar cómo actuar ante contingencias (accidente de pasajeros, asalto, catástrofe natural).",
+    "Coordinar con proveedores locales de seguridad (guardias, ambulancia en eventos).",
+    "Revisar el cumplimiento de las normas CNRT: chalecos reflectantes para paradas nocturnas, carteles de emergencia.",
+    "Recordar a los pasajeros las reglas básicas de seguridad (no ingerir alcohol en exceso, no dejar equipaje desatendido).",
+    "Denunciar ante la autoridad competente casos graves (ej. ebriedad o droga en menores) según reglamentaciones.",
+    "Impedir el consumo de alcohol/sustancias a menores, según exigencia legal.",
+    "Informar al grupo la importancia de proteger el medio ambiente visitado (no arrojar basura, respeto a la fauna).",
+    "Establecer reglas claras en caso de conducta riesgosa: el coordinador puede excluir del grupo a quien ponga en peligro el viaje."
+  ]},
+  { fase:"Pre-Viaje", area:"Seguros", tasks:[
+    "Gestionar la contratación de seguro de viaje grupal multi-riesgo (médico, accidentes, equipaje).",
+    "Verificar que la póliza de seguro cubra accidentes y responsabilidad civil del operador.",
+    "Confirmar la cobertura internacional adecuada (repatriación sanitaria en caso de viaje al exterior).",
+    "Asegurar el seguro de responsabilidad civil del vehículo de transporte.",
+    "Evaluar la necesidad de seguros complementarios (viajes de estudio: caución de fondos, fideicomiso).",
+    "Revisar que las pólizas de seguros exigibles por CNRT estén vigentes (póliza de unidad, seguro de pasajeros).",
+    "Documentar y distribuir al equipo y a los pasajeros los datos de contacto de las aseguradoras.",
+    "Coordinar con la aseguradora los procedimientos de atención al pasajero (teléfonos de emergencia).",
+    "Revisar condiciones de cobertura COVID-19 específicas si fueran pertinentes (tests, cuarentena).",
+    "Informar a los pasajeros sobre cómo proceder ante un reclamo de seguro (pasos a seguir).",
+    "Asegurar la póliza de cancelación de viaje para cubrir imprevistos (opcional).",
+    "Incluir en la documentación de viaje (carpeta) copia de la póliza y certificado del seguro adquirido."
+  ]},
+  { fase:"Pre-Viaje", area:"Comunicación", tasks:[
+    "Crear un grupo de mensajería móvil (WhatsApp/Telegram) para el viaje con pasajeros y coordinadores.",
+    "Enviar el itinerario final, datos de contacto y consejos generales por correo electrónico a todos los pasajeros.",
+    "Confirmar cobertura de red móvil en la ruta; en zonas sin señal prever alternativas (radios UHF).",
+    "Establecer un protocolo de comunicación de emergencias (ej. número único de contacto de urgencia).",
+    "Proveer códigos o palabras clave para alertar al equipo ante problemas (opción segura de mensajes).",
+    "Recoger en la carpeta digital números alternativos (familiares, embajada, CNRT 0800).",
+    "Preparar comunicados o avisos a los medios locales (si hubiese) para el día del viaje.",
+    "Informar la oficina central diariamente (resumen de estado) durante el viaje.",
+    "Coordinar cobertura de fotos/videos para usar en redes sociales (si corresponde).",
+    "Designar quién mantiene actualizado el blog/red de noticias del viaje."
+  ]},
+  { fase:"Pre-Viaje", area:"Ventas", tasks:[
+    "Confirmar que se han recibido todos los pagos de los clientes (depósito, saldo).",
+    "Emitir las facturas o comprobantes oficiales correspondientes a los pagos recibidos.",
+    "Revisar el estado de ingresos vs. el presupuesto inicial; informar variaciones al área administrativa.",
+    "Registrar comisiones de venta pagadas o por pagar a agentes intermediarios (si aplica).",
+    "Ofrecer servicios complementarios (por ejemplo, excursiones adicionales) y documentar aceptación.",
+    "Actualizar el sistema de CRM con datos del cliente y comentarios recibidos.",
+    "Coordinar los plazos de entrega de información al cliente (vouchers, itinerario).",
+    "Revisar posibles descuentos aplicados y su impacto en la ganancia final.",
+    "Gestionar cambios en la reserva (bajas o altas de pasajeros) y recalcular precios.",
+    "Preparar confirmación final de servicios contratados al cliente."
+  ]},
+  { fase:"Pre-Viaje", area:"Facturación", tasks:[
+    "Emitir factura final (o nota de crédito) correspondiente al viaje contratado.",
+    "Liquidar cuentas pendientes con proveedores (hoteles, transporte) y solicitar comprobantes fiscales.",
+    "Revisar retenciones fiscales aplicables (IVA, Ganancias) y registrarlas contablemente.",
+    "Recolectar todos los tickets y facturas de gastos operativos del viaje.",
+    "Cerrar el presupuesto final: comparar costos reales vs proyectados.",
+    "Verificar que los pagos de viáticos al personal queden registrados con sus respectivos recibos.",
+    "Realizar conciliación bancaria del viaje (entradas y salidas) para el departamento contable.",
+    "Preparar informe de facturación para gerencia (resumen ingresos/gastos).",
+    "Coordinar con contaduría el impacto fiscal del viaje (ganancias, IVA Crédito Fiscal).",
+    "Archivar toda la documentación contable en formato físico/digital para auditoría."
+  ]},
+  { fase:"Pre-Viaje", area:"Seguimiento", tasks:[
+    "Confirmar el número final de inscriptos y enviar resumen a todas las áreas.",
+    "Monitorear los pagos recibidos vs. la cantidad de inscritos.",
+    "Hacer seguimiento de la aprobación de documentos importantes (visas, seguros) antes del cierre del viaje.",
+    "Revisar encuestas o retroalimentación previa del cliente (si es viaje recurrente).",
+    "Confirmar el llenado de formularios de salud por parte de los pasajeros (si se solicita).",
+    "Registrar cualquier cambio de último momento en preferencias o restricciones del grupo.",
+    "Coordinar actualizaciones de agenda con coordinadores (últimos detalles, ajustes menores).",
+    "Verificar que el cliente haya recibido todo el material de pre-viaje (instrucciones, itinerario).",
+    "Establecer un canal de contacto para resolver dudas de último momento de los pasajeros.",
+    "Documentar cualquier incidencia de pre-viaje para referencia futura."
+  ]},
+  { fase:"Pre-Viaje", area:"Salud", tasks:[
+    "Recabar antecedentes médicos relevantes de pasajeros (alergias, patologías) confidencialmente.",
+    "Verificar que cada pasajero esté asegurado médicamente o tenga cobertura internacional.",
+    "Preparar botiquín de primeros auxilios (tiritas, antihistamínicos, analgésicos, etc.) a cargo del coordinador.",
+    "Confirmar vacunas necesarias para el destino (ej. fiebre amarilla) y su vigencia.",
+    "Informar a los pasajeros sobre hábitos saludables en viaje (hidratación, comidas seguras).",
+    "Incluir en la carpeta listados de alergias del grupo para emergencia.",
+    "Designar quién administrará medicamentos de emergencia (epinefrina, etc.).",
+    "Comprobar disponibilidad de seguro médico del personal de coordinación.",
+    "Coordinar protocolos COVID-19 vigentes (tests, cuarentenas) para el viaje.",
+    "Proveer indicaciones de cuidado sanitario (bebida segura, lugares de riesgo sanitario)."
+  ]},
+
+  // ═══ FASE DURANTE EL VIAJE ═══
+  { fase:"Durante el Viaje", area:"Administrativa", tasks:[
+    "Confirmar la llegada puntual al primer destino y el buen estado inicial de los servicios.",
+    "Monitorear el cumplimiento de los horarios del cronograma diario.",
+    "Gestionar cambios menores de itinerario por imprevistos (ej. retraso de vuelo, clima).",
+    "Controlar que se respeten las reservas de proveedores (transporte, hotel) según el plan.",
+    "Supervisar la experiencia del cliente (responder dudas del grupo en tiempo real).",
+    "Registrar cualquier incidencia administrativa que suceda (servicio no dado, cambios).",
+    "Coordinar con oficina central cualquier comunicación oficial (ej. solicitud de noticias a prensa).",
+    "Verificar el estado de pagos anticipados (confirmar con proveedores recepción de depósitos).",
+    "Ajustar el plan financiero diario en caso de gastos extraordinarios.",
+    "Responder rápidamente a solicitudes especiales inesperadas (cambiando de hotel si corresponde)."
+  ]},
+  { fase:"Durante el Viaje", area:"Legal", tasks:[
+    "Asegurar que el cumplimiento contractual sigue vigente (por ejemplo, no cambiar el vehículo sin aviso).",
+    "Manejar cualquier conflicto legal emergente (accidentes con terceros, infracciones de tránsito).",
+    "Custodiar la documentación legal sensible (pasaportes, contratos firmados) durante el viaje.",
+    "Notificar a consulado/embajada en caso de incidentes graves fuera del país.",
+    "Cumplir con todas las formalidades migratorias en fronteras (sellos, visados temporales).",
+    "Mantener actualizado el expediente de viajeros (listado de viajeros presente).",
+    "Documentar cualquier multa o infracción sufrida durante el viaje (y quién la pagará).",
+    "Coordinar con un abogado o asesor legal en caso de ser necesario."
+  ]},
+  { fase:"Durante el Viaje", area:"Documentación", tasks:[
+    "Portar siempre a mano la carpeta de viaje con documentos originales (principalmente pasaportes y visas).",
+    "Mantener actualizada la lista de pasajeros presentes (controles en cada embarque).",
+    "Distribuir copias de vouchers o tickets conforme se utilizan (sellos de excursiones, entradas).",
+    "Recopilar recibos de gastos menores durante el viaje para contabilidad.",
+    "Archivar recibos de peajes o peajes electrónicos usados durante la ruta.",
+    "Recibir y custodiar tickets de comida o servicios extras facturados.",
+    "Registrar incidencias de documentación (por ej. pasaporte perdido) y resolverlas.",
+    "Entregar al final del viaje un paquete de documentos contables (facturas, tickets) al área administrativa."
+  ]},
+  { fase:"Durante el Viaje", area:"Transporte", tasks:[
+    "Chequear diariamente el funcionamiento del vehículo antes de partir (luces, frenos, nivel de aceite).",
+    "Monitorear las horas de conducción para evitar fatigación del chofer.",
+    "Confirmar llegada puntual del bus a cada parada y controlar accesibilidad de lugares de baja.",
+    "Resolver rápidamente emergencias vehiculares (pinchazos, averías) con apoyo de talleres locales.",
+    "Controlar el nivel de combustible y programar las paradas de carga en estaciones confiables.",
+    "Manejar correctamente el equipaje del grupo durante trasbordos.",
+    "Actualizar al grupo sobre desvíos o cambios de ruta en tiempo real.",
+    "Supervisar condiciones de seguridad durante las paradas (coches cerrados, pertenencias vigiladas).",
+    "Asegurar que los choferes lleven siempre la documentación del vehículo y seguro durante el viaje.",
+    "Verificar eventuales trámites sobre ruedas (p.ej. permisos temporales)."
+  ]},
+  { fase:"Durante el Viaje", area:"Alojamiento", tasks:[
+    "Coordinar el check-in del grupo a la llegada: asignar habitaciones y entregar credenciales.",
+    "Verificar que las habitaciones asignadas cumplan con lo contratado (número de camas, vistas, etc.).",
+    "Informar al personal del hotel de posibles necesidades especiales del grupo (dietas, accesibilidad).",
+    "Supervisar el proceso de check-out puntual para evitar cargos adicionales.",
+    "Revisar las facturas de consumo del hotel (minibar, llamadas) y negociar cargos erróneos.",
+    "Resolver incidentes menores con el hotel (habitaciones sucias, servicios faltantes).",
+    "Confirmar transporte de equipaje entre hotel y vehículo al partir.",
+    "Mantener la comunicación diaria con el encargado de grupo en el hotel."
+  ]},
+  { fase:"Durante el Viaje", area:"Alimentación", tasks:[
+    "Organizar los tiempos de comida según las horas de llegada y salida en la ruta.",
+    "Confirmar la asistencia del grupo a las comidas reservadas en restaurantes.",
+    "Supervisar que los platos servidos cumplen con las restricciones del grupo (alergias).",
+    "Controlar los tiempos de espera en los restaurantes para ajustarlos al cronograma.",
+    "Asegurar la hidratación del grupo: abundante provisión de agua y bebidas apropiadas.",
+    "Resolver sobre la marcha situaciones de sobreventa en restaurantes (plan B).",
+    "Facilitar snacks adicionales si los horarios cambian repentinamente.",
+    "Llevar cuenta de gastos extra pagados por comida en ruta para cierre contable."
+  ]},
+  { fase:"Durante el Viaje", area:"Personal", tasks:[
+    "Realizar reunión matutina breve con el equipo para revisar actividades del día.",
+    "Controlar la distribución de tareas diaria entre coordinadores.",
+    "Verificar que el personal cumpla los tiempos de descanso y rotaciones.",
+    "Atender imprevistos personales (enfermedad o solicitud de cambio de turno).",
+    "Reaprovisionar al personal en necesidades básicas (agua, alimento, dinero para emergencias).",
+    "Coordinar la llegada a los hoteles del personal al mismo tiempo que el grupo.",
+    "Asegurar que el personal tenga acceso a toda la documentación e información del viaje.",
+    "Recomponer al equipo con ayuda externa si un miembro clave debe retornar antes."
+  ]},
+  { fase:"Durante el Viaje", area:"Seguridad", tasks:[
+    "Activar protocolos de emergencia establecidos si ocurre cualquier incidente.",
+    "Coordinar la asistencia médica inmediata ante accidentes o enfermedades (ambulancia, hospital).",
+    "Mantener el control sobre el grupo en lugares concurridos (estaciones, aeropuertos) para evitar extravíos.",
+    "Monitorear la situación socio-política y climática local; comunicar alertas al grupo.",
+    "Supervisar rigurosamente las normas de seguridad: uso de cinturones, precauciones del vehículo en marcha.",
+    "Verificar cada noche (o al final del día) que el equipaje y objetos de valor estén guardados con seguridad.",
+    "Verificar que nadie del grupo se ausente sin permiso; revisar lista de presentes antes de cada salida.",
+    "Hacer cumplir la prohibición de alcohol a menores (y desincentivar el consumo excesivo en mayores).",
+    "Intervenir ante peleas o comportamientos peligrosos, aplicando la facultad de excluir al responsable.",
+    "Reabastecer elementos de seguridad agotados (ej. botiquín usado, pilas de radio)."
+  ]},
+  { fase:"Durante el Viaje", area:"Seguros", tasks:[
+    "Gestionar reclamos de seguro para pasajeros o equipaje en caso de incidente (recolección de formularios).",
+    "Coordinar con la aseguradora la asistencia médica en destino (hospitales concertados).",
+    "Llevar registro de gastos cubiertos por seguro (facturas médicas, notas de hospital).",
+    "Comunicar a todos los participantes el procedimiento en caso de accidente: números de contacto, hospital más cercano.",
+    "Supervisar los plazos de reembolso o cobros de la póliza de grupo tras el evento.",
+    "Registrar cualquier incidente que afecte coberturas (ej. uso de seguro por COVID, cancelaciones).",
+    "Mantener al día en la carpeta de viaje los certificados de seguro de cada pasajero si los hay.",
+    "Informar al área administrativa de la oficina central los reclamos realizados."
+  ]},
+  { fase:"Durante el Viaje", area:"Comunicación", tasks:[
+    "Enviar actualizaciones diarias (por la mañana o noche) a los familiares autorizados.",
+    "Transmitir informes de avance a la dirección de la agencia (correo o chat corporativo).",
+    "Mantener informada a la oficina central sobre cambios importantes o emergencias.",
+    "Documentar el viaje mediante fotos/videos para evaluación posterior.",
+    "Facilitar a prensa interna o redes sociales notas breves de desempeño del viaje.",
+    "Proporcionar feedback inmediato al cliente si lo solicita (número único de la agencia).",
+    "Asegurar la privacidad y no divulgar datos sensibles del grupo en comunicaciones.",
+    "Centralizar las consultas entrantes (mails o llamadas de prensa) hacia un portavoz designado."
+  ]},
+  { fase:"Durante el Viaje", area:"Ventas", tasks:[
+    "Vender excursiones o servicios adicionales durante el viaje (registrar ventas efectivas).",
+    "Recopilar pagos en sitio por actividades opcionales (ej. guías locales, eventos culturales).",
+    "Proporcionar tickets y recibos correspondientes por los cobros adicionales.",
+    "Actualizar la lista de interesados en futuros viajes similares (para fidelización).",
+    "Verificar que el cliente esté conforme con los extras contratados."
+  ]},
+  { fase:"Durante el Viaje", area:"Facturación", tasks:[
+    "Registrar todos los comprobantes fiscales que se generan en ruta (transporte, hotelería).",
+    "Controlar facturas y notas de crédito entregadas por proveedores.",
+    "Llevar control de gastos menores del viaje (peajes, viáticos) para conciliación contable.",
+    "Coordinar pagos in situ a proveedores (si está previsto).",
+    "Preparar un informe de caja menor usado en el viaje."
+  ]},
+  { fase:"Durante el Viaje", area:"Seguimiento", tasks:[
+    "Realizar encuesta rápida de satisfacción a los pasajeros al final del viaje (vía papel o app).",
+    "Anotar feedback verbal de supervisores locales (guías, hoteles).",
+    "Identificar puntos de mejora sobre la marcha (por ejemplo, documentar que faltó un servicio).",
+    "Entregar al final del viaje formularios de reclamación de servicios para resolver luego con proveedores.",
+    "Actualizar el plan de viaje con cualquier cambio realizado (diferencia entre plan vs. real)."
+  ]},
+  { fase:"Durante el Viaje", area:"Salud", tasks:[
+    "Supervisar la salud general del grupo diariamente (en especial, de quienes tienen afecciones previas).",
+    "Administrar medicamentos preasignados (antialérgicos, antihipertensivos) según indicaciones médicas.",
+    "Registrar en la bitácora cualquier atención médica o visita a farmacias.",
+    "Vigilar la hidratación adecuada del grupo (beber suficiente agua).",
+    "Atender emergencias sanitarias menores (cortes, quemaduras leves) con el botiquín.",
+    "Coordinar atención médica formal en caso de emergencias (hospitalizar si fuese necesario).",
+    "Verificar que el personal conozca los síntomas clave de malestares generales (golpe de calor, deshidratación)."
+  ]},
+
+  // ═══ FASE POST-VIAJE ═══
+  { fase:"Post-Viaje", area:"Administrativa", tasks:[
+    "Verificar el regreso de todo el equipaje o material prestado, notificando pérdidas o faltantes.",
+    "Realizar un balance administrativo del viaje (ingresos, egresos y resultados).",
+    "Recopilar reportes finales de coordinación y proveedores (facturas, actas de servicio).",
+    "Programar reunión interna de cierre para analizar lo que funcionó y lo que se debe mejorar.",
+    "Archivar en el expediente todo el material (contratos firmados, reportes, fotos) para auditoría.",
+    "Dar de baja servicios temporales contratados para el viaje (ej. personal extra, servicios telefónicos).",
+    "Revisar cumplimiento de objetivos organizativos (cobertura de pagos, satisfacción del cliente).",
+    "Actualizar los procedimientos internos basados en los hallazgos del viaje."
+  ]},
+  { fase:"Post-Viaje", area:"Legal", tasks:[
+    "Revisar si ocurrió algún evento que genere responsabilidad legal (accidentes, incumplimientos) y resolverlo.",
+    "Gestionar reclamos formales de clientes o terceros que pudieran surgir tras el viaje.",
+    "Coordinar cualquier seguimiento legal necesario (denuncias, amparos).",
+    "Actualizar los contratos y modelos legales de la agencia en función de incidencias vividas.",
+    "Archivar la documentación legal del viaje por posibles requerimientos futuros."
+  ]},
+  { fase:"Post-Viaje", area:"Documentación", tasks:[
+    "Devolver documentación original (pasaportes, IDs) a sus titulares.",
+    "Organizar y archivar todos los comprobantes y facturas del viaje.",
+    "Cerrar listas de viajeros y actualizar bases de datos con la información final del viaje.",
+    "Elaborar informe final del viaje (itinerario real, resumen de actividades realizadas).",
+    "Comunicar a clientes la finalización del viaje y agradecer su confianza.",
+    "Enviar evaluaciones o encuestas de satisfacción detalladas por email.",
+    "Notificar a organismos pertinentes sobre la finalización del servicio (CNRT, municipalidad si aplica).",
+    "Actualizar manuales internos con lecciones aprendidas específicas de este viaje."
+  ]},
+  { fase:"Post-Viaje", area:"Transporte", tasks:[
+    "Inspeccionar el vehículo de transporte al regreso (estado general y desgaste tras el uso).",
+    "Confirmar con la empresa transportista la liquidación final de cuentas.",
+    "Revisar facturas finales del servicio de transporte.",
+    "Registrar y archivar comprobantes de gastos de movilidad adicional del viaje."
+  ]},
+  { fase:"Post-Viaje", area:"Alojamiento", tasks:[
+    "Solicitar facturas o notas de crédito finales al hotel.",
+    "Confirmar pago o liquidación de la cuenta hotelera.",
+    "Evaluar el cumplimiento de lo acordado (informar a gerencia sobre deficiencias).",
+    "Devolver depósitos de garantía al hotel (si los hubiere) y confirmar recepción."
+  ]},
+  { fase:"Post-Viaje", area:"Alimentación", tasks:[
+    "Confirmar pagos finales a restaurantes y proveedores de catering.",
+    "Recabar facturas o recibos de todas las comidas organizadas.",
+    "Analizar la calidad del servicio alimentario para futuros contratos.",
+    "Actualizar bases de datos de proveedores de catering (valoración del servicio)."
+  ]},
+  { fase:"Post-Viaje", area:"Personal", tasks:[
+    "Liquidar viáticos y gastos finales del personal.",
+    "Confirmar cierre de jornales y horas trabajadas de cada miembro del equipo.",
+    "Planificar días de descanso compensatorios post-viaje al personal.",
+    "Realizar feedback individual sobre el desempeño (opcional).",
+    "Agradecer formalmente el esfuerzo del equipo con un reconocimiento."
+  ]},
+  { fase:"Post-Viaje", area:"Seguridad", tasks:[
+    "Revisar la eficacia de los protocolos de emergencia aplicados (si se usaron), actualizar manuales en consecuencia.",
+    "Reportar a la aseguradora cualquier incidente menor que no se resolvió en el momento.",
+    "Archivar los registros de incidentes de seguridad ocurridos.",
+    "Cerrar alertas temporales generadas (p.ej. habilitación temporal de rutas, permisos)."
+  ]},
+  { fase:"Post-Viaje", area:"Seguros", tasks:[
+    "Presentar cualquier reclamo formal de seguro (médico o de accidentes) surgido durante el viaje.",
+    "Entregar documentos justificativos requeridos por las aseguradoras.",
+    "Actualizar el estado de los pagos de las aseguradoras hacia la agencia o beneficiarios.",
+    "Notificar a los pasajeros sobre cualquier cobertura adicional que se gestione a posteriori."
+  ]},
+  { fase:"Post-Viaje", area:"Comunicación", tasks:[
+    "Enviar un comunicado final a medios o redes sociales (si se había previsto).",
+    "Agradecer al grupo la participación (email o carta personalizada).",
+    "Compartir con el grupo fotos o álbum digital del viaje.",
+    "Actualizar la página web de la agencia con novedades del viaje (testimonial, crónica).",
+    "Desactivar el chat de grupo o listado oficial cuando ya no sea necesario."
+  ]},
+  { fase:"Post-Viaje", area:"Ventas", tasks:[
+    "Verificar y cobrar servicios extra de último minuto que falten (souvenirs, excursiones).",
+    "Revisar y pagar comisiones de venta a terceros involucrados.",
+    "Incluir al cliente en la base de datos para ofertas futuras (fidelización).",
+    "Analizar ventas realizadas vs. proyectadas para evaluar desempeño."
+  ]},
+  { fase:"Post-Viaje", area:"Facturación", tasks:[
+    "Emitir facturas finales por cualquier monto pendiente (ajustes de tarifa).",
+    "Cerrar contabilidad del viaje en el sistema contable de la empresa.",
+    "Generar un reporte fiscal final (ganancias/IVA) asociado al viaje.",
+    "Entregar un resumen financiero al cliente (en caso de agencias cerrando cuentas).",
+    "Archivar los registros de facturación y pagos en la carpeta contable digital.",
+    "Revisar la rentabilidad final del viaje (revisión de márgenes)."
+  ]},
+  { fase:"Post-Viaje", area:"Seguimiento", tasks:[
+    "Enviar encuesta de satisfacción detallada a los pasajeros (por email) para recibir retroalimentación.",
+    "Analizar respuestas de la encuesta y elaborar un informe de conclusiones.",
+    "Planificar mejoras en base a comentarios negativos (logística, servicio).",
+    "Reunir feedback interno del equipo y agentes involucrados.",
+    "Registrar propuestas de mejora para incluir en futuros viajes (actualizar checklist si es necesario).",
+    "Documentar casos de éxito o logros a destacar (para marketing interno)."
+  ]},
+  { fase:"Post-Viaje", area:"Salud", tasks:[
+    "Revisar cualquier seguimiento médico necesario después del viaje (ej. estudios post-viaje).",
+    "Asegurar atención a pasajeros que hayan tenido accidentes o enfermedades prolongadas.",
+    "Evaluar la respuesta médica recibida y su costo (para reclamos de seguros).",
+    "Completar los informes médicos y enviarlos a la oficina central (si aplica)."
+  ]}
+];
+
 const CATEGORIAS = [
   { id:'Aventura',         label:'Aventura',         color:'#ff6b00' },
   { id:'Bienestar',        label:'Bienestar',        color:'#00d4aa' },
@@ -3605,12 +4388,21 @@ function renderUserOrigenMarkers() {
 }
 
 // ── CAPA: división política de provincias (límites oficiales, API Georef) ──
-// Se pide UNA sola vez (son ~24 polígonos, no cambian) y se reutiliza el
-// mismo GeoJSON en el mapa de Argentina y en el de cada provincia.
+// Se pide UNA sola vez (son 24 polígonos —23 provincias + CABA— y no cambian)
+// y se reutiliza el mismo GeoJSON en el mapa de Argentina y en el de cada
+// provincia. Se dibuja con línea sólida, gruesa y de color claro para que
+// cada provincia se distinga con claridad sobre el mapa atenuado.
 function agregarCapaProvincias(map) {
   function dibujar(geojson) {
+    // Casing blanco por debajo + línea marrón oscuro por encima: se aprecia
+    // con nitidez tanto sobre zonas claras (llanura/Pampa) como oscuras
+    // (cordillera/vegetación) del nuevo mapa base de relieve.
     L.geoJSON(geojson, {
-      style: { color:'#e8c96a', weight:1.4, fill:false, dashArray:'5,4', opacity:0.8 },
+      style: { color:'#ffffff', weight:4, fill:false, opacity:0.9, lineJoin:'round' },
+      interactive: false
+    }).addTo(map);
+    L.geoJSON(geojson, {
+      style: { color:'#3d2b1f', weight:1.8, fill:false, opacity:0.95, lineJoin:'round' },
       interactive: false
     }).addTo(map);
   }
@@ -3682,14 +4474,66 @@ function agregarCapasReferencia(map) {
 
 
 function tileLayer() {
-  // OpenTopoMap: mapa topográfico gratuito y sin necesidad de API key, con
-  // estilo de relieve clásico — agua en tonos azules, curvas de nivel y
-  // sombreado de montañas en marrón, y vegetación/praderas en verde — en vez
-  // del estilo oscuro anterior.
-  return L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-    attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, SRTM | © <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)',
-    subdomains:'abc', maxNativeZoom:17, maxZoom:19
+  // Esri World Terrain Base: relieve físico (hillshade + vegetación/relieve
+  // atenuado) SIN nombres de países ni de islas dibujados dentro de la
+  // imagen de las teselas —a diferencia de OpenTopoMap—. Esto nos da control
+  // total sobre qué toponimia se muestra: evita nombres en disputa como
+  // "Falkland Islands" o "South Sandwich Islands" y permite agregar sólo
+  // las etiquetas de países vecinos que sí queremos (ver agregarEtiquetasPaises).
+  return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}', {
+    attribution:'Tiles © Esri — Source: Esri, USGS, NOAA',
+    maxNativeZoom:13, maxZoom:19
   });
+}
+
+// ── ETIQUETAS DE PAÍSES LIMÍTROFES (solo referencia; sin Malvinas/Falkland ni
+// Georgias del Sur/Sandwich) ── Se muestran únicamente con el mapa alejado,
+// igual que aparecían los nombres de país en el estilo anterior, pero ahora
+// bajo nuestro control total sobre qué topónimos se listan.
+const ETIQUETAS_PAISES = [
+  { nombre:'CHILE',    lat:-33.5, lng:-70.8 },
+  { nombre:'BOLIVIA',  lat:-18.5, lng:-65.0 },
+  { nombre:'PARAGUAY', lat:-23.4, lng:-58.3 },
+  { nombre:'BRASIL',   lat:-24.5, lng:-51.5 },
+  { nombre:'URUGUAY',  lat:-32.9, lng:-56.0 }
+];
+function agregarEtiquetasPaises(map) {
+  const marcadores = ETIQUETAS_PAISES.map(function(p) {
+    const icon = L.divIcon({
+      className:'pais-label',
+      html:'<span>' + p.nombre + '</span>',
+      iconSize:[0,0]
+    });
+    return L.marker([p.lat, p.lng], { icon, interactive:false, keyboard:false });
+  });
+  function actualizar() {
+    const mostrar = map.getZoom() <= 5;
+    marcadores.forEach(function(mk) {
+      if (mostrar && !map.hasLayer(mk)) mk.addTo(map);
+      if (!mostrar && map.hasLayer(mk)) map.removeLayer(mk);
+    });
+  }
+  actualizar();
+  map.on('zoomend', actualizar);
+}
+
+// ── DIBUJO DE RUTA CON ALTO CONTRASTE ──
+// Se traza en dos capas: un "casing" (borde) blanco más ancho por debajo, y
+// encima la línea de color fucsia/magenta bien saturado. Esta combinación se
+// aprecia con claridad sin importar si el mapa de fondo es claro u oscuro,
+// verde (vegetación) o marrón (relieve), a diferencia del negro casi puro
+// usado antes que se perdía contra el mapa.
+const RUTA_COLOR = '#ff1a1a';
+function crearCapaRuta(geometry, map) {
+  const capa = L.featureGroup();
+  L.geoJSON(geometry, {
+    style: { color:'#ffffff', weight:6, opacity:0.9, lineJoin:'round', lineCap:'round' }
+  }).addTo(capa);
+  L.geoJSON(geometry, {
+    style: { color:RUTA_COLOR, weight:3.2, opacity:1, lineJoin:'round', lineCap:'round' }
+  }).addTo(capa);
+  capa.addTo(map);
+  return capa;
 }
 
 function pasaFiltro(s, soloKey) {
@@ -3734,6 +4578,7 @@ function initMapArgentina() {
   mapArg = L.map('map-argentina', { center:[-38.5,-65], zoom:4, minZoom:3 });
   tileLayer().addTo(mapArg);
   agregarCapasReferencia(mapArg);
+  agregarEtiquetasPaises(mapArg);
   clusterArg = makeCluster();
   mapArg.addLayer(clusterArg);
   mapArg.on('click', onMapClick);
@@ -4318,9 +5163,7 @@ async function finalizarRuta() {
     const m = activeMap();
     if (m) {
       if (route.geometry) {
-        rutaPolyline = L.geoJSON(route.geometry, {
-          style:{ color:'#1a1a1a', weight:2, opacity:0.9, lineJoin:'round', lineCap:'round' }
-        }).addTo(m);
+        rutaPolyline = crearCapaRuta(route.geometry, m);
       }
       stops.forEach((p, idx) => {
         rutaMarkers.push(L.marker([p.lat, p.lng], {
@@ -5376,9 +6219,7 @@ async function mostrarItinerarioEnMapa(id) {
     });
 
     if (geometry) {
-      rutaPolyline = L.geoJSON(geometry, {
-        style:{ color:'#1a1a1a', weight:2, opacity:0.9, lineJoin:'round', lineCap:'round' }
-      }).addTo(m);
+      rutaPolyline = crearCapaRuta(geometry, m);
     } else {
       // OSRM no pudo recalcular la ruta (sin conexión, etc.) — se avisa en vez de simular el trazado
       alert('No se pudo obtener el trazado real de la ruta en este momento. Se muestran solo las paradas.');
@@ -5625,6 +6466,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Botón "Cerrar sesión" dentro del modal-auth (pantalla de sesión activa)
   document.getElementById('mo-auth-btn-logout').addEventListener('click', function() {
+    viajesOlvidarCodigoUsuario();
     sessionClear();
     guestSessionActive = false;
     moUsername = '';
@@ -5879,6 +6721,7 @@ let moDraft = [];
 // tener que tocar el resto del modal.
 const DB_USERS_KEY = 'arg_turismo_users_db';
 const SESSION_KEY  = 'arg_turismo_session';
+const SESSION_TOKEN_KEY = 'arg_turismo_session_token'; // ver sessionSet/sessionClear más abajo
 
 function dbHash(str) {
   // Obfuscación simple — NO es un hash criptográfico real.
@@ -6014,8 +6857,23 @@ function guardarItinerario(nombre, resumenData) {
 }
 
 function sessionGet()   { try { return localStorage.getItem(SESSION_KEY) || ''; } catch(e) { return ''; } }
-function sessionSet(u)  { try { localStorage.setItem(SESSION_KEY, u); } catch(e) {} }
-function sessionClear() { try { localStorage.removeItem(SESSION_KEY); } catch(e) {} }
+function sessionSet(u)  {
+  try {
+    localStorage.setItem(SESSION_KEY, u);
+    // Cada inicio de sesión nuevo genera un token distinto. El código de viaje
+    // guardado (ver viajesGuardar/Obtener/OlvidarCodigoUsuario) queda atado a
+    // este token, así que aunque quede algo viejo en localStorage, deja de
+    // valer apenas la sesión se cerró y se volvió a iniciar.
+    localStorage.setItem(SESSION_TOKEN_KEY, Date.now() + '_' + Math.random().toString(36).slice(2));
+  } catch(e) {}
+}
+function sessionClear() {
+  try {
+    localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(SESSION_TOKEN_KEY);
+  } catch(e) {}
+}
+function sessionTokenGet() { try { return localStorage.getItem(SESSION_TOKEN_KEY) || ''; } catch(e) { return ''; } }
 
 /* ════════════════════════════════════════════════════════════════════════════
    CONFIGURACIÓN VIAJES  —  ACÁ ES DONDE HAY QUE PEGAR LOS DATOS
@@ -6051,6 +6909,12 @@ const EMAILJS_CONFIGURADO = EMAILJS_CONFIG.publicKey !== "PEGAR_ACA";
    ──────────────────────────────────────────────────────────────────────── */
 let COORDINADORES = null; // null = todavía no cargado; Set una vez cargado
 
+// Lista de respaldo SOLO para probar localmente (abriendo el archivo con doble clic,
+// protocolo file://, donde no se puede leer coordinadores.json por CORS) o si por algún
+// motivo falla la descarga de coordinadores.json. Se usa nada más como último recurso;
+// si el archivo del servidor carga bien, esta lista se ignora.
+const COORDINADORES_RESPALDO_LOCAL = ['sroxana'];
+
 async function cargarCoordinadores() {
   if (COORDINADORES) return COORDINADORES;
   let lista = [];
@@ -6066,6 +6930,7 @@ async function cargarCoordinadores() {
       }
     } catch(e) { console.error('Error cargando coordinadores.json:', e); }
   }
+  if (!lista.length) lista = COORDINADORES_RESPALDO_LOCAL;
   COORDINADORES = new Set(lista.map(dbUserKey));
   return COORDINADORES;
 }
@@ -6099,6 +6964,70 @@ let viajesCodigoValidado = null;    // viaje encontrado al ingresar un código (
 // ── COORDINADOR: tabla de Itinerario (Evento / Fecha dd-mmm-aa / Hora hh:mm / Actividad) ──
 let viajesItinerarioRows = [];
 
+// ── COORDINADOR: deja solo los dígitos de un valor y lo recorta a "maxLen" ──
+function viajesItiSoloDigitos(valor, maxLen) {
+  return (valor || '').replace(/\D/g, '').slice(0, maxLen);
+}
+
+// ── COORDINADOR: engancha un casillero de Día/Mes/Año/Hora/Minutos para que
+//    (a) al completar los dígitos pase automáticamente al siguiente casillero,
+//    (b) si se presiona Enter (o se sale del campo con Tab/click) con un solo
+//        dígito, le agregue un cero a la izquierda y también avance al
+//        siguiente, y (c) si corresponde (hora/minutos) agregue la letra
+//        sufijo (" h" / " m") una vez que el valor está completo. El dato
+//        "limpio" (sin sufijo) es lo que se guarda en la fila
+//        (row[fieldKey]); el sufijo es solo visual, en el input. ──
+function viajesItiEnganchar(input, opts) {
+  // opts: { fieldKey, row, maxLen, sufijo, siguiente }
+  const maxLen = opts.maxLen || 2;
+  const sufijo = opts.sufijo || '';
+
+  function mostrar(digitos) {
+    return digitos ? (digitos + sufijo) : '';
+  }
+
+  // Si con lo tipeado hasta ahora queda un solo dígito, lo completa con un
+  // cero a la izquierda y avanza al siguiente casillero. Se usa tanto al
+  // presionar Enter como al salir del campo (blur).
+  function completarYAvanzar() {
+    let digitos = viajesItiSoloDigitos(input.value, maxLen);
+    if (digitos.length === 1) {
+      digitos = '0' + digitos;
+      opts.row[opts.fieldKey] = digitos;
+      input.value = mostrar(digitos);
+      if (opts.siguiente) opts.siguiente.focus();
+    } else if (digitos.length === maxLen) {
+      input.value = mostrar(digitos);
+      if (opts.siguiente) opts.siguiente.focus();
+    }
+  }
+
+  // Al enfocar, se muestran solo los dígitos crudos (sin el sufijo) para
+  // que sea cómodo seguir escribiendo o corregir.
+  input.addEventListener('focus', function() {
+    input.value = viajesItiSoloDigitos(input.value, maxLen);
+  });
+
+  input.addEventListener('input', function() {
+    const digitos = viajesItiSoloDigitos(input.value, maxLen);
+    input.value = digitos;
+    opts.row[opts.fieldKey] = digitos;
+    if (digitos.length === maxLen) {
+      input.value = mostrar(digitos);
+      if (opts.siguiente) opts.siguiente.focus();
+    }
+  });
+
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      completarYAvanzar();
+    }
+  });
+
+  input.addEventListener('blur', completarYAvanzar);
+}
+
 function viajesRenderItinerarioTabla() {
   const tbody = document.getElementById('via-iti-tbody');
   if (!tbody) return;
@@ -6110,24 +7039,52 @@ function viajesRenderItinerarioTabla() {
       '<td class="mo-td mo-td-n"><span class="mo-num-circle">' + (idx + 1) + '</span></td>' +
       '<td class="mo-td"><div class="via-iti-fecha-group">' +
         '<input class="mo-cell-input via-iti-dd" type="text" maxlength="2" placeholder="dd" value="' + escH(row.fd) + '" />' +
-        '<input class="mo-cell-input via-iti-mm" type="text" maxlength="3" placeholder="mmm" value="' + escH(row.fm) + '" />' +
+        '<input class="mo-cell-input via-iti-mm" type="text" maxlength="2" placeholder="mm" value="' + escH(row.fm) + '" />' +
         '<input class="mo-cell-input via-iti-aa" type="text" maxlength="2" placeholder="aa" value="' + escH(row.fa) + '" />' +
       '</div></td>' +
       '<td class="mo-td"><div class="via-iti-hora-group">' +
-        '<input class="mo-cell-input via-iti-hh" type="text" maxlength="2" placeholder="hh" value="' + escH(row.hh) + '" />' +
-        '<input class="mo-cell-input via-iti-min" type="text" maxlength="2" placeholder="mm" value="' + escH(row.mi) + '" />' +
+        '<input class="mo-cell-input via-iti-hh" type="text" maxlength="4" placeholder="hh" value="' + (row.hh ? escH(row.hh) + ' h' : '') + '" />' +
+        '<input class="mo-cell-input via-iti-min" type="text" maxlength="4" placeholder="mm" value="' + (row.mi ? escH(row.mi) + ' m' : '') + '" />' +
       '</div></td>' +
       '<td class="mo-td"><input class="mo-cell-input via-iti-actividad" type="text" maxlength="200" placeholder="Actividad" value="' + escH(row.actividad) + '" /></td>' +
-      '<td class="mo-td"><button class="via-row-del" type="button" title="Quitar">✕</button></td>';
-    tr.querySelector('.via-iti-dd').addEventListener('input', function(e) { row.fd = e.target.value; });
-    tr.querySelector('.via-iti-mm').addEventListener('input', function(e) { row.fm = e.target.value; });
-    tr.querySelector('.via-iti-aa').addEventListener('input', function(e) { row.fa = e.target.value; });
-    tr.querySelector('.via-iti-hh').addEventListener('input', function(e) { row.hh = e.target.value; });
-    tr.querySelector('.via-iti-min').addEventListener('input', function(e) { row.mi = e.target.value; });
-    tr.querySelector('.via-iti-actividad').addEventListener('input', function(e) { row.actividad = e.target.value; });
-    tr.querySelector('.via-row-del').addEventListener('click', function() {
+      '<td class="mo-td"><div class="mo-td-actions">' +
+        '<button class="mo-btn-edit via-iti-edit" type="button" title="Editar">&#9998;</button>' +
+        '<button class="mo-btn-del via-iti-del" type="button" title="Eliminar">&#128465;</button>' +
+      '</div></td>';
+
+    const inpDd  = tr.querySelector('.via-iti-dd');
+    const inpMm  = tr.querySelector('.via-iti-mm');
+    const inpAa  = tr.querySelector('.via-iti-aa');
+    const inpHh  = tr.querySelector('.via-iti-hh');
+    const inpMin = tr.querySelector('.via-iti-min');
+    const inpAct = tr.querySelector('.via-iti-actividad');
+
+    viajesItiEnganchar(inpDd,  { fieldKey:'fd', row:row, maxLen:2, siguiente:inpMm });
+    viajesItiEnganchar(inpMm,  { fieldKey:'fm', row:row, maxLen:2, siguiente:inpAa });
+    viajesItiEnganchar(inpAa,  { fieldKey:'fa', row:row, maxLen:2, siguiente:inpHh });
+    viajesItiEnganchar(inpHh,  { fieldKey:'hh', row:row, maxLen:2, sufijo:' h', siguiente:inpMin });
+    viajesItiEnganchar(inpMin, { fieldKey:'mi', row:row, maxLen:2, sufijo:' m', siguiente:inpAct });
+
+    // La primera letra de la Actividad se pasa a mayúscula automáticamente
+    inpAct.addEventListener('input', function(e) {
+      const v = e.target.value;
+      if (v) {
+        const capitalizado = v.charAt(0).toUpperCase() + v.slice(1);
+        if (capitalizado !== v) {
+          const pos = e.target.selectionStart;
+          e.target.value = capitalizado;
+          e.target.setSelectionRange(pos, pos);
+        }
+      }
+      row.actividad = e.target.value;
+    });
+    tr.querySelector('.via-iti-edit').addEventListener('click', function() {
+      inpDd.focus();
+    });
+    tr.querySelector('.via-iti-del').addEventListener('click', function() {
       viajesItinerarioRows.splice(idx, 1);
       viajesRenderItinerarioTabla();
+      viajesProgramarAutoGuardado();
     });
     tbody.appendChild(tr);
   });
@@ -6138,95 +7095,188 @@ function viajesResetItinerarioTabla() {
   viajesRenderItinerarioTabla();
 }
 
-// ── COORDINADOR: lista de Vouchers (varios links) ──
-let viajesVoucherRows = [];
-
-function viajesRenderVouchersLista() {
-  const cont = document.getElementById('via-vouchers-list');
-  if (!cont) return;
-  cont.innerHTML = '';
-  viajesVoucherRows.forEach(function(row, idx) {
-    const fila = document.createElement('div');
-    fila.className = 'via-voucher-row';
-    fila.innerHTML =
-      '<input class="via-input via-voucher-url" type="text" maxlength="500" placeholder="https://..." value="' + escH(row.url) + '" />' +
-      '<button class="via-row-del" type="button" title="Quitar">✕</button>';
-    fila.querySelector('.via-voucher-url').addEventListener('input', function(e) { row.url = e.target.value; });
-    fila.querySelector('.via-row-del').addEventListener('click', function() {
-      viajesVoucherRows.splice(idx, 1);
-      viajesRenderVouchersLista();
-    });
-    cont.appendChild(fila);
-  });
-}
-
-function viajesResetVouchersLista() {
-  viajesVoucherRows = [];
-  viajesRenderVouchersLista();
-}
-
 // ── COORDINADOR: borrador local del formulario (para no perder lo tipeado
 //    si falla la creación del viaje). Se guarda en localStorage del navegador,
 //    no en Supabase. ──
+// ── COORDINADOR: formatea el costo como "$ #.###.###" a medida que se escribe
+//    (solo toma los dígitos ingresados y les agrega separador de miles). ──
+function viajesFormatearCosto(valor) {
+  const digitos = (valor || '').replace(/\D/g, '');
+  if (!digitos) return '';
+  const conPuntos = digitos.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return '$ ' + conPuntos;
+}
+
+// ── COORDINADOR: formatea una fecha ISO (yyyy-mm-dd) como "dd de mmmm de aaaa" ──
+const VIAJES_MESES_LARGO = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+function viajesFormatearFechaLarga(fechaISO) {
+  if (!fechaISO) return '';
+  const d = new Date(fechaISO + 'T00:00:00');
+  if (isNaN(d.getTime())) return '';
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mmm = VIAJES_MESES_LARGO[d.getMonth()];
+  const aaaa = d.getFullYear();
+  return dd + ' de ' + mmm + ' de ' + aaaa;
+}
+
+// ── COORDINADOR: engancha el recuadro "Fecha" (Desde / al) para que, al
+//    presionarlo, se abra el selector de calendario nativo, y una vez elegida
+//    la fecha se muestre en el formato "dd de mmmm de aaaa". ──
+function viajesEngancharFecha(inputDisplay, inputOculto) {
+  function abrirCalendario() {
+    if (typeof inputOculto.showPicker === 'function') {
+      try { inputOculto.showPicker(); return; } catch (e) {}
+    }
+    inputOculto.focus();
+  }
+  inputDisplay.addEventListener('click', abrirCalendario);
+  inputDisplay.addEventListener('focus', abrirCalendario);
+  inputOculto.addEventListener('change', function() {
+    inputDisplay.value = viajesFormatearFechaLarga(inputOculto.value);
+    viajesProgramarAutoGuardado();
+  });
+}
+
+// ── COORDINADOR/USUARIO: arma el texto "Fecha: dd de mmmm de aaaa al dd de mmmm de aaaa"
+//    a partir de un viaje con fecha_desde / fecha_hasta (o solo una de las dos). ──
+function viajesFormatearRangoFechas(v) {
+  const desde = viajesFormatearFechaLarga(v && v.fecha_desde);
+  const hasta = viajesFormatearFechaLarga(v && v.fecha_hasta);
+  if (desde && hasta) return 'Fecha: ' + desde + ' al ' + hasta;
+  if (desde) return 'Fecha: desde ' + desde;
+  if (hasta) return 'Fecha: hasta ' + hasta;
+  return '';
+}
+
+
+// ── PASAJEROS: formatea el documento como "##.###.###" a medida que se escribe ──
+function viajesFormatearDocumento(valor) {
+  const digitos = (valor || '').replace(/\D/g, '').slice(0, 9);
+  if (!digitos) return '';
+  return digitos.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+// ── PASAJEROS: formatea el teléfono como "+54 (##) ####-####" a medida que se escribe ──
+function viajesFormatearTelefono(valor) {
+  const digitos = (valor || '').replace(/\D/g, '').replace(/^54/, '').slice(0, 10);
+  let out = '+54 ';
+  const area = digitos.slice(0, 2);
+  const p1 = digitos.slice(2, 6);
+  const p2 = digitos.slice(6, 10);
+  if (area) out += '(' + area;
+  if (area.length === 2) out += ')';
+  if (p1) out += ' ' + p1;
+  if (p2) out += '-' + p2;
+  return out;
+}
+
+// ── PASAJEROS: calcula la edad en años a partir de la fecha de nacimiento (YYYY-MM-DD) ──
+function viajesCalcularEdad(fechaISO) {
+  if (!fechaISO) return null;
+  const nac = new Date(fechaISO + 'T00:00:00');
+  if (isNaN(nac.getTime())) return null;
+  const hoy = new Date();
+  let edad = hoy.getFullYear() - nac.getFullYear();
+  const m = hoy.getMonth() - nac.getMonth();
+  if (m < 0 || (m === 0 && hoy.getDate() < nac.getDate())) edad--;
+  return edad >= 0 ? edad : null;
+}
+
+// ── PASAJEROS: formatea la fecha de nacimiento como "dd-mmm-aa" (ej: 07-jul-26) ──
+const VIAJES_MESES_ABR = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+function viajesFormatearFechaCorta(fechaISO) {
+  if (!fechaISO) return '—';
+  const d = new Date(fechaISO + 'T00:00:00');
+  if (isNaN(d.getTime())) return '—';
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mmm = VIAJES_MESES_ABR[d.getMonth()];
+  const aa = String(d.getFullYear()).slice(-2);
+  return dd + '-' + mmm + '-' + aa;
+}
+
 function viajesBorradorKey() {
   return 'viajes_borrador_' + (moUsername || 'anon');
 }
 
-function viajesGuardarBorrador() {
+function viajesGuardarBorradorSilencioso() {
   const borrador = {
     titulo: document.getElementById('via-in-titulo').value,
     costo: document.getElementById('via-in-costo').value,
-    flyer: document.getElementById('via-in-flyer').value,
-    tramos: document.getElementById('via-in-tramos').value,
-    emails: document.getElementById('via-in-emails').value,
+    fechaDesde: document.getElementById('via-in-fecha-desde').value,
+    fechaHasta: document.getElementById('via-in-fecha-hasta').value,
     itinerarioRows: viajesItinerarioRows,
-    voucherRows: viajesVoucherRows,
     guardadoEn: new Date().toISOString()
   };
+  // No guarda un borrador completamente vacío (evita ensuciar la lista con un
+  // ítem "(borrador sin título)" apenas se abre el formulario por primera vez).
+  const vacio = !borrador.titulo && !borrador.costo && !borrador.fechaDesde && !borrador.fechaHasta && !borrador.itinerarioRows.length;
   try {
+    if (vacio) { localStorage.removeItem(viajesBorradorKey()); return false; }
     localStorage.setItem(viajesBorradorKey(), JSON.stringify(borrador));
-    const m = document.getElementById('via-msg-borrador');
-    m.textContent = 'Borrador guardado en este navegador.';
-    setTimeout(function() { if (m.textContent === 'Borrador guardado en este navegador.') m.textContent = ''; }, 4000);
+    return true;
   } catch (e) {
     console.error('No se pudo guardar el borrador', e);
-    document.getElementById('via-msg-borrador').textContent = 'No se pudo guardar el borrador en este navegador.';
+    return false;
+  }
+}
+
+let viajesAutoGuardarTimer = null;
+function viajesProgramarAutoGuardado() {
+  clearTimeout(viajesAutoGuardarTimer);
+  viajesAutoGuardarTimer = setTimeout(function() {
+    viajesGuardarBorradorSilencioso();
+  }, 800);
+}
+
+function viajesGuardarBorrador() {
+  const ok = viajesGuardarBorradorSilencioso();
+  const m = document.getElementById('via-msg-borrador');
+  if (ok) {
+    m.textContent = 'Borrador guardado en este navegador.';
+    setTimeout(function() { if (m.textContent === 'Borrador guardado en este navegador.') m.textContent = ''; }, 4000);
+  } else {
+    m.textContent = 'No se pudo guardar el borrador en este navegador.';
   }
 }
 
 function viajesRestaurarBorradorSiExiste() {
   let raw;
   try { raw = localStorage.getItem(viajesBorradorKey()); } catch (e) { return; }
-  if (!raw) { document.getElementById('via-borrador-aviso').style.display = 'none'; return; }
+  if (!raw) return;
   let borrador;
   try { borrador = JSON.parse(raw); } catch (e) { return; }
 
   document.getElementById('via-in-titulo').value = borrador.titulo || '';
-  document.getElementById('via-in-costo').value = borrador.costo || '';
-  document.getElementById('via-in-flyer').value = borrador.flyer || '';
-  document.getElementById('via-in-tramos').value = borrador.tramos || '';
-  document.getElementById('via-in-emails').value = borrador.emails || '';
+  document.getElementById('via-in-costo').value = viajesFormatearCosto(borrador.costo || '');
+  document.getElementById('via-in-fecha-desde').value = borrador.fechaDesde || '';
+  document.getElementById('via-in-fecha-desde-display').value = viajesFormatearFechaLarga(borrador.fechaDesde || '');
+  document.getElementById('via-in-fecha-hasta').value = borrador.fechaHasta || '';
+  document.getElementById('via-in-fecha-hasta-display').value = viajesFormatearFechaLarga(borrador.fechaHasta || '');
   viajesItinerarioRows = Array.isArray(borrador.itinerarioRows) ? borrador.itinerarioRows : [];
-  viajesVoucherRows = Array.isArray(borrador.voucherRows) ? borrador.voucherRows : [];
   viajesRenderItinerarioTabla();
-  viajesRenderVouchersLista();
-
-  const aviso = document.getElementById('via-borrador-aviso');
-  const fecha = borrador.guardadoEn ? new Date(borrador.guardadoEn).toLocaleString('es-AR') : '';
-  document.getElementById('via-borrador-aviso-texto').textContent = 'Se restauró un borrador guardado' + (fecha ? (' el ' + fecha) : '') + '.';
-  aviso.style.display = 'flex';
 }
 
 function viajesDescartarBorrador() {
+  clearTimeout(viajesAutoGuardarTimer);
   try { localStorage.removeItem(viajesBorradorKey()); } catch (e) {}
+  viajesLimpiarFormularioCoordinador();
+}
+
+// ── COORDINADOR: deja el formulario (título, fecha, costo e itinerario) en
+//    blanco, SIN borrar el borrador guardado en localStorage. Se usa al abrir
+//    la ventana "Viajes": el formulario solo se completa si el coordinador
+//    elige explícitamente un viaje guardado o creado de la lista. ──
+function viajesLimpiarFormularioCoordinador() {
+  clearTimeout(viajesAutoGuardarTimer);
   document.getElementById('via-in-titulo').value = '';
   document.getElementById('via-in-costo').value = '';
-  document.getElementById('via-in-flyer').value = '';
-  document.getElementById('via-in-tramos').value = '';
-  document.getElementById('via-in-emails').value = '';
+  document.getElementById('via-in-fecha-desde').value = '';
+  document.getElementById('via-in-fecha-desde-display').value = '';
+  document.getElementById('via-in-fecha-hasta').value = '';
+  document.getElementById('via-in-fecha-hasta-display').value = '';
   viajesResetItinerarioTabla();
-  viajesResetVouchersLista();
-  document.getElementById('via-borrador-aviso').style.display = 'none';
+  const msg = document.getElementById('via-msg-crear');
+  if (msg) { msg.className = 'via-msg'; msg.textContent = ''; }
 }
 
 // ── COORDINADOR: crear un viaje ──
@@ -6239,8 +7289,8 @@ async function viajesCrear() {
 
   const titulo = document.getElementById('via-in-titulo').value.trim();
   const costo  = document.getElementById('via-in-costo').value.trim();
-  const flyer  = document.getElementById('via-in-flyer').value.trim();
-  const vouchers = viajesVoucherRows.map(function(r) { return r.url.trim(); }).filter(Boolean);
+  const fechaDesde = document.getElementById('via-in-fecha-desde').value;
+  const fechaHasta = document.getElementById('via-in-fecha-hasta').value;
   const itinerario = viajesItinerarioRows
     .map(function(r) {
       const fd = (r.fd || '').trim(), fm = (r.fm || '').trim(), fa = (r.fa || '').trim();
@@ -6250,25 +7300,9 @@ async function viajesCrear() {
       return { fecha, hora, actividad: (r.actividad || '').trim() };
     })
     .filter(function(r) { return r.fecha || r.hora || r.actividad; });
-  const tramosRaw = document.getElementById('via-in-tramos').value.trim();
-  const emailsRaw = document.getElementById('via-in-emails').value.trim();
 
   if (!titulo || !itinerario.length) { msg.className = 'via-msg err'; msg.textContent = 'Completá al menos el título y una fila del itinerario.'; return; }
 
-  // Parsear tramos: cada línea "Nombre; lat; lng"
-  const tramos = [];
-  if (tramosRaw) {
-    const lineas = tramosRaw.split('\n').map(s => s.trim()).filter(Boolean);
-    for (const linea of lineas) {
-      const partes = linea.split(';').map(s => s.trim());
-      if (partes.length < 3) { msg.className = 'via-msg err'; msg.textContent = 'Revisá el formato del recorrido: "Nombre; latitud; longitud" en cada línea.'; return; }
-      const lat = parseFloat(partes[1]), lng = parseFloat(partes[2]);
-      if (isNaN(lat) || isNaN(lng)) { msg.className = 'via-msg err'; msg.textContent = 'Alguna coordenada del recorrido no es un número válido.'; return; }
-      tramos.push({ nombre: partes[0], lat, lng });
-    }
-  }
-
-  const emails = emailsRaw.split('\n').map(s => s.trim()).filter(Boolean);
   const codigo = viajesGenerarCodigo();
 
   const btn = document.getElementById('via-btn-crear');
@@ -6276,38 +7310,23 @@ async function viajesCrear() {
 
   try {
     const { error } = await supabaseClient.from('viajes').insert({
-      titulo, costo, flyer, vouchers, itinerario, tramos, codigo,
+      titulo, costo, itinerario, codigo,
+      fecha_desde: fechaDesde || null, fecha_hasta: fechaHasta || null,
       coordinador: moUsername
     });
     if (error) throw error;
 
-    let enviados = 0, fallidos = 0;
-    if (emails.length && EMAILJS_CONFIGURADO && window.emailjs) {
-      const link = window.location.href.split('#')[0] + '#viajes-codigo=' + codigo;
-      for (const email of emails) {
-        try {
-          await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, {
-            to_email: email, codigo: codigo, titulo_viaje: titulo, link: link
-          });
-          enviados++;
-        } catch (e) { fallidos++; console.error('Error enviando mail a', email, e); }
-      }
-    }
-
     msg.className = 'via-msg ok';
-    msg.textContent = emails.length
-      ? ('Viaje creado. Código: ' + codigo + '. Invitaciones enviadas: ' + enviados + (fallidos ? (', fallidas: ' + fallidos) : '') + '.')
-      : ('Viaje creado. Código: ' + codigo + '.');
+    msg.textContent = 'Viaje creado. Código: ' + codigo + '.';
 
     document.getElementById('via-in-titulo').value = '';
     document.getElementById('via-in-costo').value = '';
-    document.getElementById('via-in-flyer').value = '';
-    document.getElementById('via-in-tramos').value = '';
-    document.getElementById('via-in-emails').value = '';
+    document.getElementById('via-in-fecha-desde').value = '';
+    document.getElementById('via-in-fecha-desde-display').value = '';
+    document.getElementById('via-in-fecha-hasta').value = '';
+    document.getElementById('via-in-fecha-hasta-display').value = '';
     viajesResetItinerarioTabla();
-    viajesResetVouchersLista();
     try { localStorage.removeItem(viajesBorradorKey()); } catch (e) {}
-    document.getElementById('via-borrador-aviso').style.display = 'none';
 
     viajesCargarListaCoordinador();
   } catch (e) {
@@ -6319,27 +7338,31 @@ async function viajesCrear() {
   }
 }
 
-// ── COORDINADOR: listar mis viajes creados ──
+// ── COORDINADOR: listar mis viajes creados (+ el borrador local si existe) ──
 async function viajesCargarListaCoordinador() {
   const cont = document.getElementById('via-lista-viajes');
   if (!supabaseClient || !moUsername) return;
   try {
     const { data, error } = await supabaseClient.from('viajes').select('*').eq('coordinador', moUsername).order('creado', { ascending: false });
     if (error) throw error;
+
+    cont.innerHTML = '';
+    viajesRenderListaBorradores();
+
     if (!data || !data.length) {
-      cont.innerHTML = '<div class="via-roster-empty">Todavía no creaste ningún viaje.</div>';
+      if (!cont.children.length) cont.innerHTML = '<div class="via-roster-empty">Todavía no creaste ningún viaje.</div>';
       return;
     }
-    cont.innerHTML = '';
     data.forEach(function(v) {
       const item = document.createElement('div');
       item.className = 'via-viaje-item';
-      item.innerHTML = '<div><div class="via-vi-titulo"></div><div class="via-vi-codigo"></div></div><span style="color:#7a83a6; font-size:0.75rem;">Ver inscriptos →</span>';
+      item.innerHTML = '<div><div class="via-vi-titulo"></div><div class="via-vi-codigo"></div></div><button class="mo-btn-edit" type="button" title="Ver viaje" style="pointer-events:none;">&#128065;</button>';
       item.querySelector('.via-vi-titulo').textContent = v.titulo;
       item.querySelector('.via-vi-codigo').textContent = 'Código: ' + v.codigo;
       item.addEventListener('click', function() {
         document.querySelectorAll('.via-viaje-item').forEach(function(el){ el.classList.remove('sel'); });
         item.classList.add('sel');
+        viajesAbrirDetalleViaje(v);
         viajesAbrirRoster(v.id, v.titulo, v.codigo);
       });
       cont.appendChild(item);
@@ -6347,29 +7370,167 @@ async function viajesCargarListaCoordinador() {
   } catch (e) { console.error(e); }
 }
 
+// ── COORDINADOR: si hay un borrador guardado en este navegador, lo muestra
+//    en su propia sección "Viajes guardados" (no se restaura automáticamente
+//    al abrir la ventana de Viajes). Al hacer clic se carga en el formulario
+//    de arriba para seguir editándolo. ──
+function viajesRenderListaBorradores() {
+  const cont = document.getElementById('via-lista-borradores');
+  if (!cont) return;
+  cont.innerHTML = '';
+
+  let raw;
+  try { raw = localStorage.getItem(viajesBorradorKey()); } catch (e) { raw = null; }
+  if (!raw) { cont.innerHTML = '<div class="via-roster-empty">No hay borradores guardados.</div>'; return; }
+  let borrador;
+  try { borrador = JSON.parse(raw); } catch (e) { cont.innerHTML = '<div class="via-roster-empty">No hay borradores guardados.</div>'; return; }
+
+  const item = document.createElement('div');
+  item.className = 'via-viaje-item via-viaje-item-borrador';
+  item.style.cssText = 'display:flex; align-items:center; justify-content:space-between; gap:10px;';
+  item.innerHTML =
+    '<div style="cursor:pointer; flex:1;"><div class="via-vi-titulo"></div><div class="via-vi-codigo">Guardado, todavía no creado</div></div>' +
+    '<button class="mo-btn-edit via-borrador-editar" type="button" title="Editar">&#9998;</button>' +
+    '<button class="mo-btn-del via-row-del" type="button" title="Descartar borrador">&#128465;</button>';
+  item.querySelector('.via-vi-titulo').textContent = borrador.titulo || '(borrador sin título)';
+  const abrir = function() {
+    viajesRestaurarBorradorSiExiste();
+    document.getElementById('via-coord-form-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  item.querySelector('div').addEventListener('click', abrir);
+  item.querySelector('.via-borrador-editar').addEventListener('click', abrir);
+  item.querySelector('.via-row-del').addEventListener('click', function(e) {
+    e.stopPropagation();
+    viajesDescartarBorrador();
+    viajesRenderListaBorradores();
+  });
+  cont.appendChild(item);
+}
+
+// ── COORDINADOR: ventana de solo lectura con el itinerario de un viaje ya creado ──
+function viajesFormatearFechaEventoCorta(fechaDDMMAA) {
+  if (!fechaDDMMAA) return '';
+  const partes = String(fechaDDMMAA).split('-');
+  if (partes.length < 2) return fechaDDMMAA;
+  const dd = partes[0].padStart(2, '0');
+  const mesIdx = parseInt(partes[1], 10) - 1;
+  const mesNombre = VIAJES_MESES_LARGO[mesIdx];
+  if (!mesNombre) return fechaDDMMAA;
+  return dd + ' de ' + mesNombre;
+}
+
+function viajesFormatearHoraEvento(hora) {
+  if (!hora) return '';
+  const partes = String(hora).split(':');
+  if (partes.length !== 2) return hora + ' hs';
+  const pad = function(v) { return (!v || v === '--') ? '--' : v.padStart(2, '0'); };
+  return pad(partes[0]) + ':' + pad(partes[1]) + ' hs';
+}
+
+// ── COORDINADOR: formatea el costo como "$ #.###.###" a partir del texto libre cargado ──
+function viajesFormatearCostoBox(costoRaw) {
+  if (!costoRaw) return '—';
+  const digitos = String(costoRaw).replace(/\D/g, '');
+  if (!digitos) return costoRaw;
+  const numero = parseInt(digitos, 10);
+  return '$ ' + numero.toLocaleString('es-AR');
+}
+
+// ── COORDINADOR: dibuja cada evento del itinerario en un solo renglón (círculo,
+//    fecha, hora y actividad), separando con una línea los eventos de distinto día. ──
+function viajesRenderEventosDetalle(itinerario, boxId) {
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  box.innerHTML = '';
+  if (!Array.isArray(itinerario) || !itinerario.length) {
+    box.textContent = typeof itinerario === 'string' ? itinerario : '';
+    return;
+  }
+  let fechaAnterior = null;
+  itinerario.forEach(function(row, idx) {
+    if (idx > 0 && row.fecha !== fechaAnterior) {
+      const linea = document.createElement('div');
+      linea.className = 'via-detalle-evento-separador';
+      box.appendChild(linea);
+    }
+    fechaAnterior = row.fecha;
+
+    const fechaCorta = viajesFormatearFechaEventoCorta(row.fecha);
+    const horaTxt = viajesFormatearHoraEvento(row.hora);
+
+    const div = document.createElement('div');
+    div.className = 'via-detalle-evento';
+    div.innerHTML =
+      '<span class="mo-num-circle">' + (idx + 1) + '</span>' +
+      '<span class="via-detalle-evento-fecha">' + escH(fechaCorta) + '</span>' +
+      '<span class="via-detalle-evento-hora">' + escH(horaTxt) + '</span>' +
+      '<span class="via-detalle-evento-actividad">' + escH(row.actividad || '') + '</span>';
+    box.appendChild(div);
+  });
+}
+
+function viajesAbrirDetalleViaje(v) {
+  document.getElementById('via-detalle-titulo').textContent = v.titulo || 'Viaje';
+  document.getElementById('via-detalle-codigo').textContent = v.codigo || '—';
+  document.getElementById('via-detalle-costo').textContent = viajesFormatearCostoBox(v.costo);
+
+  const img = document.getElementById('via-detalle-flyer');
+  if (v.flyer) { img.src = v.flyer; img.style.display = 'block'; } else { img.style.display = 'none'; }
+
+  viajesRenderEventosDetalle(v.itinerario, 'via-detalle-itinerario');
+
+  const wrap = document.getElementById('via-detalle-vouchers-wrap');
+  const linksCont = document.getElementById('via-detalle-vouchers-links');
+  linksCont.innerHTML = '';
+  const listaVouchers = Array.isArray(v.vouchers) ? v.vouchers : (v.voucher ? [v.voucher] : []);
+  if (listaVouchers.length) {
+    listaVouchers.forEach(function(url, idx) {
+      const a = document.createElement('a');
+      a.href = url; a.target = '_blank'; a.rel = 'noopener';
+      a.className = 'via-btn via-btn-secundario';
+      a.style.cssText = 'display:inline-block; text-decoration:none; margin-top:0;';
+      a.textContent = listaVouchers.length > 1 ? ('Voucher ' + (idx + 1)) : 'Ver / descargar voucher';
+      linksCont.appendChild(a);
+    });
+    wrap.style.display = 'block';
+  } else {
+    wrap.style.display = 'none';
+  }
+
+  document.getElementById('modal-viaje-detalle').style.display = 'flex';
+}
+
+// ── COORDINADOR: guarda el listado y el viaje actualmente abiertos, para poder imprimirlos ──
+let viajesRosterActual = { titulo: '', codigo: '', rows: [] };
+
 // ── COORDINADOR: renderiza la tabla de inscriptos a partir de una lista de filas ──
 function viajesRenderRoster(rows) {
   const tbody = document.getElementById('via-roster-tbody');
   const empty = document.getElementById('via-roster-empty');
   tbody.innerHTML = '';
+  viajesRosterActual.rows = rows || [];
   if (!rows || !rows.length) { empty.style.display = 'block'; return; }
   empty.style.display = 'none';
   const pillClass = {
     General: 'via-pill-gen', Menor: 'via-pill-men', Jubilado: 'via-pill-jub',
-    Discapacitado: 'via-pill-disc', Residente: 'via-pill-res'
+    Discapacitado: 'via-pill-disc', 'Residente local': 'via-pill-res', 'Residente nacional': 'via-pill-res',
+    'Grupo familiar': 'via-pill-gen', 'Visita escolar': 'via-pill-gen', 'Amigo del museo': 'via-pill-gen',
+    Estudiante: 'via-pill-gen', Docente: 'via-pill-gen'
   };
   rows.forEach(function(d) {
     const tr = document.createElement('tr');
     const tipo = d.tipo_entrada || 'General';
-    const pill = '<span class="via-pill ' + (pillClass[tipo] || 'via-pill-gen') + '">' + tipo + '</span>';
-    const fecha = d.fecha ? new Date(d.fecha).toLocaleDateString('es-AR') : '—';
+    const pill = '<span class="via-pill ' + (pillClass[tipo] || 'via-pill-gen') + '">' + escH(tipo) + '</span>';
+    const edad = viajesCalcularEdad(d.fecha_nacimiento);
     tr.innerHTML =
-      '<td class="mo-td">' + (d.nombre || '') + '</td>' +
-      '<td class="mo-td">' + (d.telefono || '') + '</td>' +
-      '<td class="mo-td">' + (d.documento || '') + '</td>' +
-      '<td class="mo-td">' + (d.nacionalidad || '') + '</td>' +
+      '<td class="mo-td">' + escH((d.nombre || '').toUpperCase()) + '</td>' +
+      '<td class="mo-td">' + escH(d.documento || '') + '</td>' +
+      '<td class="mo-td">' + viajesFormatearFechaCorta(d.fecha_nacimiento) + '</td>' +
+      '<td class="mo-td">' + (edad !== null ? (edad + ' años') : '—') + '</td>' +
+      '<td class="mo-td">' + escH(d.telefono || '') + '</td>' +
+      '<td class="mo-td">' + escH(d.email || '') + '</td>' +
       '<td class="mo-td">' + pill + '</td>' +
-      '<td class="mo-td">' + fecha + '</td>';
+      '<td class="mo-td">' + escH(d.alergias || '—') + '</td>';
     tbody.appendChild(tr);
   });
 }
@@ -6387,6 +7548,9 @@ async function viajesCargarRosterOnce(viajeId) {
 function viajesAbrirRoster(viajeId, titulo, codigo) {
   if (viajesRealtimeChannel) { supabaseClient.removeChannel(viajesRealtimeChannel); viajesRealtimeChannel = null; }
 
+  viajesRosterActual.titulo = titulo || '';
+  viajesRosterActual.codigo = codigo || '';
+
   document.getElementById('via-roster-wrap').style.display = 'block';
   document.getElementById('via-roster-titulo').textContent = 'Inscriptos — ' + titulo;
   document.getElementById('via-roster-codigo').textContent = codigo;
@@ -6401,6 +7565,62 @@ function viajesAbrirRoster(viajeId, titulo, codigo) {
       viajesCargarRosterOnce(viajeId);
     })
     .subscribe();
+}
+
+// ── COORDINADOR: arma el listado imprimible (apaisado) y dispara la impresión ──
+function viajesImprimirRoster() {
+  const area = document.getElementById('via-print-area');
+  const rows = viajesRosterActual.rows || [];
+  const fechaHoy = new Date().toLocaleDateString('es-AR');
+
+  let filas = '';
+  if (!rows.length) {
+    filas = '<tr><td colspan="8" style="text-align:center; color:#666;">Todavía nadie completó el formulario.</td></tr>';
+  } else {
+    rows.forEach(function(d) {
+      const edad = viajesCalcularEdad(d.fecha_nacimiento);
+      filas +=
+        '<tr>' +
+        '<td>' + escH((d.nombre || '').toUpperCase()) + '</td>' +
+        '<td>' + escH(d.documento || '') + '</td>' +
+        '<td>' + viajesFormatearFechaCorta(d.fecha_nacimiento) + '</td>' +
+        '<td>' + (edad !== null ? (edad + ' años') : '—') + '</td>' +
+        '<td>' + escH(d.telefono || '') + '</td>' +
+        '<td>' + escH(d.email || '') + '</td>' +
+        '<td>' + escH(d.tipo_entrada || 'General') + '</td>' +
+        '<td>' + escH(d.alergias || '—') + '</td>' +
+        '</tr>';
+    });
+  }
+
+  area.innerHTML =
+    '<div class="via-print-titulo">' + escH(viajesRosterActual.titulo || 'Viaje') + '</div>' +
+    '<div class="via-print-sub">Código: ' + escH(viajesRosterActual.codigo || '') + ' — Listado de pasajeros — Impreso el ' + fechaHoy + '</div>' +
+    '<table class="via-print-table">' +
+      '<thead><tr>' +
+        '<th>Apellido y Nombres</th><th>Documento</th><th>Fecha Nac.</th><th>Edad</th>' +
+        '<th>Teléfono</th><th>Email</th><th>Tipo de entrada</th><th>Alérgico a</th>' +
+      '</tr></thead>' +
+      '<tbody>' + filas + '</tbody>' +
+    '</table>';
+
+  // Fuerza A4 apaisado (horizontal) para ESTA impresión en particular, insertando la
+  // regla al final del <head> para que gane por orden de cascada sobre cualquier otra
+  // regla @page del sitio. Se quita apenas termina, para no afectar otras impresiones
+  // (itinerario, detalle de viaje) que sí usan A4 vertical.
+  var estiloPagina = document.getElementById('via-print-page-style');
+  if (!estiloPagina) {
+    estiloPagina = document.createElement('style');
+    estiloPagina.id = 'via-print-page-style';
+    document.head.appendChild(estiloPagina);
+  }
+  estiloPagina.textContent = '@page { size: A4 landscape; margin: 8mm; }';
+
+  window.print();
+
+  setTimeout(function() {
+    if (estiloPagina && estiloPagina.parentNode) estiloPagina.parentNode.removeChild(estiloPagina);
+  }, 500);
 }
 
 // ── USUARIO: validar un código ──
@@ -6418,49 +7638,98 @@ async function viajesValidarCodigo() {
     if (!data || !data.length) { msg.className = 'via-msg err'; msg.textContent = 'Código no encontrado. Revisalo e intentá de nuevo.'; return; }
 
     viajesCodigoValidado = data[0];
+    viajesGuardarCodigoUsuario(codigo);
 
-    document.getElementById('via-codigo-paso-1').style.display = 'none';
-    document.getElementById('via-codigo-paso-2').style.display = 'block';
-    document.getElementById('via-view-titulo').textContent = viajesCodigoValidado.titulo;
-    document.getElementById('via-view-costo').textContent = viajesCodigoValidado.costo ? ('Costo: ' + viajesCodigoValidado.costo) : '';
-    viajesRenderItinerarioVista(viajesCodigoValidado.itinerario);
+    msg.className = 'via-msg ok';
+    msg.textContent = '¡Código válido! Abriendo el menú "Viajes"...';
 
-    const flyerImg = document.getElementById('via-view-flyer');
-    if (viajesCodigoValidado.flyer) { flyerImg.src = viajesCodigoValidado.flyer; flyerImg.style.display = 'block'; }
-    else { flyerImg.style.display = 'none'; }
-
-    const voucherWrap = document.getElementById('via-view-voucher-wrap');
-    const voucherLinksCont = document.getElementById('via-view-vouchers-links');
-    voucherLinksCont.innerHTML = '';
-    // Compatibilidad: viajes viejos tenían un solo campo "voucher" (string);
-    // los nuevos tienen "vouchers" (array de links).
-    const listaVouchers = Array.isArray(viajesCodigoValidado.vouchers) ? viajesCodigoValidado.vouchers
-      : (viajesCodigoValidado.voucher ? [viajesCodigoValidado.voucher] : []);
-    if (listaVouchers.length) {
-      listaVouchers.forEach(function(url, idx) {
-        const a = document.createElement('a');
-        a.href = url; a.target = '_blank'; a.rel = 'noopener';
-        a.className = 'via-btn via-btn-secundario';
-        a.style.cssText = 'display:inline-block; text-decoration:none; margin-top:0;';
-        a.textContent = listaVouchers.length > 1 ? ('Voucher ' + (idx + 1)) : 'Ver / descargar voucher';
-        voucherLinksCont.appendChild(a);
-      });
-      voucherWrap.style.display = 'block';
-    } else {
-      voucherWrap.style.display = 'none';
-    }
-
-    viajesMostrarMapaTramos(viajesCodigoValidado.tramos);
+    setTimeout(async function() {
+      document.getElementById('via-in-codigo').value = '';
+      msg.textContent = '';
+      viajesCerrarModal();
+      await actualizarMenuHamburguesaSegunRol();
+      document.getElementById('ham-submenu-usuario').style.display = 'block';
+      document.getElementById('map-ham-dropdown').classList.add('open');
+    }, 700);
   } catch (e) {
     console.error(e);
     msg.className = 'via-msg err'; msg.textContent = 'Error al buscar el código. Intentá de nuevo.';
   }
 }
 
+// ── USUARIO: código de viaje guardado en este navegador (para que "Viajes" del
+//    menú hamburguesa se convierta en el submenú de opciones sin tener que
+//    volver a tipear el código cada vez). Se guarda por usuario logueado, o
+//    como invitado ("anon") si no hay sesión iniciada. ──
+function viajesClaveCodigoUsuario() {
+  return 'viajes_usuario_codigo_' + (moUsername || 'anon');
+}
+function viajesGuardarCodigoUsuario(codigo) {
+  try {
+    // Se guarda junto con el token de la sesión activa en este momento. Si
+    // no hay sesión iniciada (invitado), se guarda sin token ("").
+    var sess = sessionGet();
+    var token = sess ? sessionTokenGet() : '';
+    localStorage.setItem(viajesClaveCodigoUsuario(), JSON.stringify({ codigo: codigo, token: token }));
+  } catch (e) {}
+}
+function viajesObtenerCodigoUsuario() {
+  try {
+    var raw = localStorage.getItem(viajesClaveCodigoUsuario());
+    if (!raw) return '';
+    var data;
+    try { data = JSON.parse(raw); } catch (e) { data = null; }
+    // Compatibilidad con códigos guardados por versiones anteriores (string plano).
+    if (!data || typeof data !== 'object') return raw;
+    var sess = sessionGet();
+    var tokenActual = sess ? sessionTokenGet() : '';
+    // Si hay usuario logueado, el código solo vale si pertenece a ESTA sesión
+    // (mismo token). Si la sesión se cerró y se volvió a iniciar, el token
+    // cambió y el código guardado deja de considerarse válido.
+    if (sess && data.token !== tokenActual) {
+      viajesOlvidarCodigoUsuario();
+      return '';
+    }
+    return data.codigo || '';
+  } catch (e) { return ''; }
+}
+function viajesOlvidarCodigoUsuario() {
+  try { localStorage.removeItem(viajesClaveCodigoUsuario()); } catch (e) {}
+}
+
+// Decide qué se muestra en el menú hamburguesa: "Viajes" simple (sin código
+// todavía), el submenú "Viajes" del usuario (código ya validado) o el
+// submenú "Coordinador". Se recalcula cada vez que se abre el menú, y
+// también justo después de validar un código.
+async function actualizarMenuHamburguesaSegunRol() {
+  var sessActiva = sessionGet();
+  if (sessActiva) moUsername = sessActiva;
+  var esCoord = sessActiva ? await viajesEsCoordinador(moUsername) : false;
+  var codigoGuardado = viajesObtenerCodigoUsuario();
+
+  document.getElementById('ham-coordinador-wrap').style.display = esCoord ? 'block' : 'none';
+  document.getElementById('ham-usuario-wrap').style.display = (!esCoord && codigoGuardado) ? 'block' : 'none';
+  document.getElementById('ham-btn-viajes').style.display = (!esCoord && !codigoGuardado) ? 'flex' : 'none';
+
+  // Los submenús siempre arrancan colapsados cada vez que se reabre el menú hamburguesa.
+  document.getElementById('ham-submenu-coordinador').style.display = 'none';
+  document.getElementById('ham-submenu-usuario').style.display = 'none';
+}
+
+function viajesCerrarModal() {
+  document.getElementById('modal-viajes').style.display = 'none';
+  if (viajesRealtimeChannel) { supabaseClient.removeChannel(viajesRealtimeChannel); viajesRealtimeChannel = null; }
+  if (viajesMapaLeaflet) { viajesMapaLeaflet.remove(); viajesMapaLeaflet = null; }
+  document.getElementById('via-in-codigo').value = '';
+  document.getElementById('via-msg-codigo').textContent = '';
+  viajesCodigoValidado = null;
+}
+
 // ── USUARIO: pinta el itinerario recibido como tabla Día/Fecha/Hora/Actividad.
 //    Compatibilidad: viajes viejos guardaban el itinerario como texto libre. ──
-function viajesRenderItinerarioVista(itinerario) {
-  const box = document.getElementById('via-view-itinerario');
+function viajesRenderItinerarioVista(itinerario, boxId) {
+  const box = document.getElementById(boxId || 'via-view-itinerario');
+  if (!box) return;
   if (Array.isArray(itinerario) && itinerario.length) {
     let html = '<table class="mo-table via-iti-table"><thead><tr>' +
       '<th class="mo-th mo-th-n">Evento</th><th class="mo-th" style="width:120px;">Fecha</th>' +
@@ -6521,18 +7790,119 @@ function viajesMostrarMapaTramos(tramos) {
 }
 
 // ── USUARIO: enviar el formulario de inscripción ──
+// ── USUARIO: abre la ventana de solo lectura con el itinerario del viaje
+//    asociado al código guardado (re-consulta Supabase por si el coordinador
+//    actualizó el viaje después de que el usuario validó el código). ──
+async function viajesAbrirItinerarioUsuario() {
+  var codigo = viajesObtenerCodigoUsuario();
+  if (!codigo || !supabaseClient) return;
+  try {
+    const { data, error } = await supabaseClient.from('viajes').select('*').eq('codigo', codigo).limit(1);
+    if (error) throw error;
+    if (!data || !data.length) return;
+    var v = data[0];
+    document.getElementById('usr-iti-titulo').textContent = v.titulo;
+    document.getElementById('usr-iti-costo').innerHTML =
+      [viajesFormatearRangoFechas(v), (v.costo ? ('Costo: ' + escH(v.costo)) : '')].filter(Boolean).join('<br>');
+    viajesRenderEventosDetalle(v.itinerario, 'usr-iti-itinerario');
+    document.getElementById('modal-usuario-itinerario').style.display = 'flex';
+  } catch (e) { console.error(e); }
+}
+
+// ── USUARIO: guarda/carga en localStorage un borrador del formulario "Información",
+//    identificado por el código del viaje, para que "Guardar y Cerrar" no pierda lo tipeado. ──
+function viajesGuardarInfoBorradorStorage(codigo, datos) {
+  try { localStorage.setItem('via_info_borrador_' + codigo, JSON.stringify(datos)); } catch (e) {}
+}
+function viajesCargarInfoBorradorStorage(codigo) {
+  try { return JSON.parse(localStorage.getItem('via_info_borrador_' + codigo)) || null; } catch (e) { return null; }
+}
+function viajesBorrarInfoBorradorStorage(codigo) {
+  try { localStorage.removeItem('via_info_borrador_' + codigo); } catch (e) {}
+}
+
+// ── USUARIO: alterna el amarillo tenue/brillante de un campo del formulario "Información" ──
+function viajesTenue(el, tenue) {
+  if (el) el.classList.toggle('via-campo-tenue', !!tenue);
+}
+
+// ── USUARIO: aplica el estado tenue/brillante a Fecha de nacimiento, Teléfono y Tipo de
+//    entrada según si tienen (o no) un valor real cargado por el usuario. ──
+function viajesActualizarTenuesInformacion(tipoTocado) {
+  var nac = document.getElementById('via-f-nac');
+  viajesTenue(nac, !nac.value);
+
+  var tel = document.getElementById('via-f-tel');
+  var digitosTel = (tel.value || '').replace(/\D/g, '').replace(/^54/, '');
+  viajesTenue(tel, digitosTel.length === 0);
+
+  var tipo = document.getElementById('via-f-tipo');
+  viajesTenue(tipo, !tipoTocado);
+}
+
+// ── USUARIO: abre el formulario "Información" (datos del pasajero) para el
+//    viaje asociado al código guardado. ──
+async function viajesAbrirInformacionUsuario() {
+  var codigo = viajesObtenerCodigoUsuario();
+  if (!codigo || !supabaseClient) return;
+  try {
+    const { data, error } = await supabaseClient.from('viajes').select('*').eq('codigo', codigo).limit(1);
+    if (error) throw error;
+    if (!data || !data.length) return;
+    viajesCodigoValidado = data[0];
+    document.getElementById('via-info-titulo-viaje').textContent = data[0].titulo || '';
+    var btnForm = document.getElementById('via-btn-enviar-form');
+    btnForm.disabled = false; btnForm.textContent = 'Aceptar y Enviar';
+    document.getElementById('via-msg-form').textContent = '';
+
+    // Si hay un borrador guardado para este viaje, lo recupera; si no, aplica los valores por defecto.
+    var borrador = viajesCargarInfoBorradorStorage(data[0].codigo);
+    if (borrador) {
+      document.getElementById('via-f-apellido').value = borrador.apellido || '';
+      document.getElementById('via-f-nombres').value = borrador.nombres || '';
+      document.getElementById('via-f-doc').value = borrador.documento || '';
+      document.getElementById('via-f-nac').value = borrador.fechaNacimiento || '';
+      document.getElementById('via-f-tel').value = borrador.telefono || '+54 ';
+      document.getElementById('via-f-email').value = borrador.email || '';
+      document.getElementById('via-f-tipo').value = borrador.tipoEntrada || 'General';
+      var edadHint = document.getElementById('via-f-edad-hint');
+      var edad = viajesCalcularEdad(borrador.fechaNacimiento);
+      edadHint.textContent = edad !== null ? ('Edad: ' + edad + ' años') : '';
+    } else {
+      var telInput = document.getElementById('via-f-tel');
+      if (!telInput.value.trim()) telInput.value = '+54 ';
+    }
+
+    // Amarillo tenue por defecto en Fecha/Teléfono; en Tipo de entrada, tenue solo si
+    // no viene de un borrador ya guardado (si viene de un borrador, se asume ya elegido).
+    viajesActualizarTenuesInformacion(!!borrador);
+
+    document.getElementById('modal-usuario-informacion').style.display = 'flex';
+
+    // Foco automático en "Apellido" al abrir el formulario
+    setTimeout(function() {
+      var apellidoInput = document.getElementById('via-f-apellido');
+      if (apellidoInput) { apellidoInput.focus(); apellidoInput.select(); }
+    }, 50);
+  } catch (e) { console.error(e); }
+}
+
 async function viajesEnviarFormulario() {
   const msg = document.getElementById('via-msg-form');
   msg.className = 'via-msg'; msg.textContent = '';
-  if (!viajesCodigoValidado) return;
+  if (!supabaseClient) { msg.className = 'via-msg err'; msg.textContent = 'El sistema de Viajes todavía no está configurado.'; return; }
+  if (!viajesCodigoValidado) { msg.className = 'via-msg err'; msg.textContent = 'No se encontró el viaje asociado a tu código. Volvé a ingresar el código desde "Viajes".'; return; }
 
-  const nombre = document.getElementById('via-f-nombre').value.trim();
-  const telefono = document.getElementById('via-f-tel').value.trim();
+  const apellido = document.getElementById('via-f-apellido').value.trim().toUpperCase();
+  const nombres = document.getElementById('via-f-nombres').value.trim().toUpperCase();
+  const nombre = apellido + (apellido && nombres ? ', ' : '') + nombres;
   const documento = document.getElementById('via-f-doc').value.trim();
-  const nacionalidad = document.getElementById('via-f-nac').value.trim();
+  const fechaNacimiento = document.getElementById('via-f-nac').value;
+  const telefono = document.getElementById('via-f-tel').value.trim();
+  const email = document.getElementById('via-f-email').value.trim();
   const tipoEntrada = document.getElementById('via-f-tipo').value;
 
-  if (!nombre || !telefono || !documento || !nacionalidad) {
+  if (!apellido || !nombres || !documento || !fechaNacimiento || !telefono || !email) {
     msg.className = 'via-msg err'; msg.textContent = 'Completá todos los campos obligatorios.'; return;
   }
 
@@ -6540,22 +7910,27 @@ async function viajesEnviarFormulario() {
   btn.disabled = true;
 
   // doc_id: por usuario logueado (evita duplicados si vuelve a entrar) o por documento si es invitado
-  const docId = moUsername ? ('u_' + moUsername) : ('doc_' + documento.replace(/\s+/g, ''));
+  const docId = moUsername ? ('u_' + moUsername) : ('doc_' + documento.replace(/\D/g, ''));
 
   try {
     const { error } = await supabaseClient.from('inscripciones').upsert({
       viaje_id: viajesCodigoValidado.id,
       doc_id: docId,
-      nombre, telefono, documento, nacionalidad, tipo_entrada: tipoEntrada,
+      nombre, documento,
+      fecha_nacimiento: fechaNacimiento,
+      telefono, email,
+      tipo_entrada: tipoEntrada,
       usuario: moUsername || null
     }, { onConflict: 'viaje_id,doc_id' });
     if (error) throw error;
+    if (viajesCodigoValidado && viajesCodigoValidado.codigo) viajesBorrarInfoBorradorStorage(viajesCodigoValidado.codigo);
     msg.className = 'via-msg ok';
     msg.textContent = '¡Listo! Tus datos fueron enviados al coordinador.';
     btn.disabled = true; btn.textContent = 'Enviado ✓';
   } catch (e) {
-    console.error(e);
-    msg.className = 'via-msg err'; msg.textContent = 'Error al enviar. Intentá de nuevo.';
+    console.error('Error al enviar el formulario de Información:', e);
+    msg.className = 'via-msg err';
+    msg.textContent = 'Error al enviar: ' + (e && e.message ? e.message : 'intentá de nuevo.');
     btn.disabled = false;
   }
 }
@@ -7260,7 +8635,7 @@ function moCommitRow(i, tr) {
 }
 
 let moMode     = 'guest'; // 'session' | 'guest'
-let moUsername = '';
+let moUsername = sessionGet(); // si ya hay sesión iniciada, se toma de una vez (no solo al abrir "Orígenes")
 let guestSessionActive = false; // true una vez que el usuario elige "Continuar sin iniciar sesión"
 
 function moOpen() {
@@ -7374,8 +8749,10 @@ document.addEventListener('DOMContentLoaded', function() {
   var hamBtn  = document.getElementById('map-hamburger');
   var hamDrop = document.getElementById('map-ham-dropdown');
 
-  function toggleHam(e) {
+  async function toggleHam(e) {
     e.stopPropagation();
+    var vaAAbrir = !hamDrop.classList.contains('open');
+    if (vaAAbrir) await actualizarMenuHamburguesaSegunRol();
     hamDrop.classList.toggle('open');
   }
   function closeHam() { hamDrop.classList.remove('open'); }
@@ -7493,17 +8870,22 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // "Viajes" → abre el modal de Viajes (coordinador / código)
-  document.getElementById('ham-btn-viajes').addEventListener('click', async function() {
+  async function abrirModalViajes() {
     closeHam();
     var warn = document.getElementById('via-warning-config');
     if (!VIAJES_CONFIGURADO) {
       warn.style.display = 'block';
-      warn.textContent = 'El módulo "Viajes" todavía no está conectado a una base de datos. Completá SUPABASE_URL y SUPABASE_ANON_KEY (y EMAILJS_CONFIG para el envío de mails) en el código para activarlo.';
+      warn.textContent = 'El módulo "Viajes" todavía no está conectado a una base de datos. Completá SUPABASE_URL y SUPABASE_ANON_KEY en el código para activarlo.';
     } else {
       warn.style.display = 'none';
     }
 
     document.getElementById('modal-viajes').style.display = 'flex';
+
+    // Por si moUsername todavía no se sincronizó con la sesión activa
+    // (p. ej. se entra directo a "Viajes" sin haber abierto antes "Orígenes").
+    var sessActiva = sessionGet();
+    if (sessActiva) moUsername = sessActiva;
 
     var esCoord = await viajesEsCoordinador(moUsername);
     var tabsBar = document.querySelector('#modal-viajes .via-tabs');
@@ -7517,8 +8899,11 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('via-tab-codigo').classList.remove('active');
       document.getElementById('via-sec-coord').classList.add('active');
       document.getElementById('via-sec-codigo').classList.remove('active');
+      // El formulario arranca en blanco: título, fechas, costo e itinerario
+      // solo se completan si el coordinador elige un viaje guardado o creado.
+      viajesLimpiarFormularioCoordinador();
       if (VIAJES_CONFIGURADO) viajesCargarListaCoordinador();
-      viajesRestaurarBorradorSiExiste();
+      viajesRenderListaBorradores();
     } else {
       // Usuario común: no ve la pestaña de coordinador, entra directo a "Tengo un Código"
       tabsBar.style.display = 'none';
@@ -7527,20 +8912,264 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('via-sec-codigo').classList.add('active');
       document.getElementById('via-sec-coord').classList.remove('active');
     }
+  }
+  document.getElementById('ham-btn-viajes').addEventListener('click', abrirModalViajes);
+  document.getElementById('ham-sub-viajes').addEventListener('click', abrirModalViajes);
+
+  // ── Submenú "Coordinador" (solo visible para coordinadores logueados) ──
+  var hamBtnCoord = document.getElementById('ham-btn-coordinador');
+  var hamSubmenuCoord = document.getElementById('ham-submenu-coordinador');
+
+  hamBtnCoord.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var abierto = hamSubmenuCoord.style.display !== 'none';
+    hamSubmenuCoord.style.display = abierto ? 'none' : 'block';
   });
 
-  function viajesCerrarModal() {
-    document.getElementById('modal-viajes').style.display = 'none';
-    if (viajesRealtimeChannel) { supabaseClient.removeChannel(viajesRealtimeChannel); viajesRealtimeChannel = null; }
-    if (viajesMapaLeaflet) { viajesMapaLeaflet.remove(); viajesMapaLeaflet = null; }
-    document.getElementById('via-codigo-paso-1').style.display = 'block';
-    document.getElementById('via-codigo-paso-2').style.display = 'none';
-    document.getElementById('via-in-codigo').value = '';
-    document.getElementById('via-msg-codigo').textContent = '';
-    viajesCodigoValidado = null;
-    var btnForm = document.getElementById('via-btn-enviar-form');
-    btnForm.disabled = false; btnForm.textContent = 'Ok';
+  // ── Submenú "Viajes" del usuario (solo visible con un código ya validado) ──
+  var hamBtnViajesFlyout = document.getElementById('ham-btn-viajes-flyout');
+  var hamSubmenuUsuario = document.getElementById('ham-submenu-usuario');
+
+  hamBtnViajesFlyout.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var abierto = hamSubmenuUsuario.style.display !== 'none';
+    hamSubmenuUsuario.style.display = abierto ? 'none' : 'block';
+  });
+
+  // Los 5 ítems del submenú todavía sin desarrollar → modal "Próximamente"
+  function abrirProximamente(titulo) {
+    closeHam();
+    document.getElementById('prox-titulo').textContent = titulo;
+    document.getElementById('modal-proximamente').style.display = 'flex';
   }
+
+  // ── PLANILLA DE CONTROL: checklist por Fase / Área con progreso guardado ──
+  var pcAreaActual = 0;
+
+  function pcClaveTarea(areaIdx, tareaIdx) {
+    return (moUsername || 'anon') + '_' + areaIdx + '_' + tareaIdx;
+  }
+  function pcCargarEstado() {
+    try {
+      var raw = localStorage.getItem('planilla_control_estado');
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  }
+  function pcGuardarEstado(estado) {
+    try { localStorage.setItem('planilla_control_estado', JSON.stringify(estado)); } catch (e) {}
+  }
+
+  function pcRenderArea() {
+    var area = PLANILLA_CONTROL_DATA[pcAreaActual];
+    document.getElementById('pc-fase-titulo').textContent = area.fase;
+    document.getElementById('pc-area-titulo').textContent = area.area;
+    document.getElementById('pc-progreso').textContent = 'Área ' + (pcAreaActual + 1) + ' de ' + PLANILLA_CONTROL_DATA.length;
+
+    var estado = pcCargarEstado();
+    var lista = document.getElementById('pc-tarea-lista');
+    lista.innerHTML = '';
+    area.tasks.forEach(function(texto, idx) {
+      var clave = pcClaveTarea(pcAreaActual, idx);
+      var marcada = !!estado[clave];
+      var fila = document.createElement('div');
+      fila.className = 'pc-tarea' + (marcada ? ' pc-hecha' : '');
+      fila.innerHTML =
+        '<span class="mo-num-circle">' + (idx + 1) + '</span>' +
+        '<div class="pc-tarea-texto"></div>' +
+        '<input type="checkbox" class="pc-check" ' + (marcada ? 'checked' : '') + ' />';
+      fila.querySelector('.pc-tarea-texto').textContent = texto;
+      fila.querySelector('.pc-check').addEventListener('change', function(e) {
+        var est = pcCargarEstado();
+        est[clave] = e.target.checked;
+        pcGuardarEstado(est);
+        fila.classList.toggle('pc-hecha', e.target.checked);
+        var modalGrafica = document.getElementById('modal-planilla-grafica');
+        if (modalGrafica && modalGrafica.style.display !== 'none' && typeof pcgRenderContenido === 'function') {
+          pcgRenderContenido();
+        }
+      });
+      lista.appendChild(fila);
+    });
+
+    document.getElementById('pc-btn-anterior').disabled = (pcAreaActual === 0);
+    var btnSig = document.getElementById('pc-btn-siguiente');
+    var esUltima = (pcAreaActual === PLANILLA_CONTROL_DATA.length - 1);
+    btnSig.textContent = esUltima ? 'Finalizar' : 'Siguiente →';
+
+    var body = document.querySelector('#modal-planilla-control .mo-body');
+    if (body) body.scrollTop = 0;
+  }
+
+  function abrirPlanillaControl() {
+    closeHam();
+    pcAreaActual = 0;
+    pcRenderArea();
+    document.getElementById('modal-planilla-control').style.display = 'flex';
+  }
+
+  // ── PLANILLA DE CONTROL GRÁFICA: progreso por Fase / Área en círculos ─────
+  function pcgColorClase(pendientes, total) {
+    if (pendientes === 0) return 'pcg-verde';
+    if (pendientes === total) return 'pcg-rojo';
+    return 'pcg-amarillo';
+  }
+
+  function pcgNombreFase(nombre) {
+    if (nombre === 'Pre-Viaje') return 'Fase Pre-Viaje';
+    if (nombre === 'Durante el Viaje') return 'Fase Durante el Viaje';
+    if (nombre === 'Post-Viaje') return 'Fase Post-Viaje';
+    return nombre;
+  }
+
+  function pcgRenderContenido() {
+    var estado = pcCargarEstado();
+    var cont = document.getElementById('pcg-contenido');
+    cont.innerHTML = '';
+
+    var fasesOrden = [];
+    var porFase = {};
+    PLANILLA_CONTROL_DATA.forEach(function(entry, idx) {
+      if (!porFase[entry.fase]) { porFase[entry.fase] = []; fasesOrden.push(entry.fase); }
+      porFase[entry.fase].push({ entry: entry, idx: idx });
+    });
+
+    fasesOrden.forEach(function(faseNombre) {
+      var bloque = document.createElement('div');
+      bloque.className = 'pcg-fase-block';
+
+      var titulo = document.createElement('div');
+      titulo.className = 'pcg-fase-nombre';
+      titulo.textContent = pcgNombreFase(faseNombre);
+      bloque.appendChild(titulo);
+
+      var track = document.createElement('div');
+      track.className = 'pcg-track';
+
+      var areas = porFase[faseNombre];
+
+      // Calcular datos de cada área y el total acumulado de la fase
+      var datosAreas = areas.map(function(item) {
+        var total = item.entry.tasks.length;
+        var marcadas = 0;
+        item.entry.tasks.forEach(function(_, tIdx) {
+          var clave = pcClaveTarea(item.idx, tIdx);
+          if (estado[clave]) marcadas++;
+        });
+        return { entry: item.entry, total: total, pendientes: total - marcadas };
+      });
+      var totalFaseTareas = datosAreas.reduce(function(acc, d) { return acc + d.total; }, 0);
+      var totalFasePendientes = datosAreas.reduce(function(acc, d) { return acc + d.pendientes; }, 0);
+
+      // Círculo del total de la fase, a la izquierda
+      var nodoTotal = document.createElement('div');
+      nodoTotal.className = 'pcg-node pcg-node-total';
+      nodoTotal.title = faseNombre + ': ' + totalFasePendientes + ' de ' + totalFaseTareas + ' tareas pendientes en total';
+      var circuloTotal = document.createElement('div');
+      circuloTotal.className = 'pcg-circle ' + pcgColorClase(totalFasePendientes, totalFaseTareas);
+      circuloTotal.textContent = totalFasePendientes;
+      var labelTotal = document.createElement('div');
+      labelTotal.className = 'pcg-label';
+      labelTotal.textContent = 'Total';
+      nodoTotal.appendChild(circuloTotal);
+      nodoTotal.appendChild(labelTotal);
+      track.appendChild(nodoTotal);
+
+      var hueco = document.createElement('div');
+      hueco.className = 'pcg-hueco-total';
+      track.appendChild(hueco);
+
+      datosAreas.forEach(function(d, i) {
+        var colorClase = pcgColorClase(d.pendientes, d.total);
+
+        var node = document.createElement('div');
+        node.className = 'pcg-node';
+        node.title = d.entry.area + ': ' + d.pendientes + ' de ' + d.total + ' tareas pendientes';
+
+        var circulo = document.createElement('div');
+        circulo.className = 'pcg-circle ' + colorClase;
+        circulo.textContent = d.pendientes;
+
+        var label = document.createElement('div');
+        label.className = 'pcg-label';
+        label.textContent = d.entry.area;
+
+        node.appendChild(circulo);
+        node.appendChild(label);
+        track.appendChild(node);
+
+        if (i < datosAreas.length - 1) {
+          var linea = document.createElement('div');
+          linea.className = 'pcg-linea';
+          track.appendChild(linea);
+        }
+      });
+
+      bloque.appendChild(track);
+      cont.appendChild(bloque);
+    });
+  }
+
+  function abrirPlanillaGrafica() {
+    closeHam();
+    pcgRenderContenido();
+    document.getElementById('modal-planilla-grafica').style.display = 'flex';
+  }
+  document.getElementById('pcg-btn-cerrar').addEventListener('click', function() {
+    document.getElementById('modal-planilla-grafica').style.display = 'none';
+  });
+  document.getElementById('modal-planilla-grafica').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+
+  document.getElementById('ham-sub-mapa').addEventListener('click', function() { abrirProximamente('Mapa'); });
+  document.getElementById('ham-sub-planilla-control').addEventListener('click', abrirPlanillaControl);
+  document.getElementById('ham-sub-planilla-grafica').addEventListener('click', abrirPlanillaGrafica);
+  document.getElementById('ham-sub-flyers').addEventListener('click', function() { abrirProximamente('Flyer\'s'); });
+  document.getElementById('ham-sub-vouchers').addEventListener('click', function() { abrirProximamente('Voucher\'s'); });
+
+  // Submenú "Viajes" del usuario: Flyer's / Mapa / Voucher's → "Próximamente";
+  // Itinerario e Información → ventanas reales, según el código guardado.
+  document.getElementById('ham-usr-sub-flyers').addEventListener('click', function() { closeHam(); abrirProximamente('Flyer\'s'); });
+  document.getElementById('ham-usr-sub-mapa').addEventListener('click', function() { closeHam(); abrirProximamente('Mapa'); });
+  document.getElementById('ham-usr-sub-vouchers').addEventListener('click', function() { closeHam(); abrirProximamente('Voucher\'s'); });
+  document.getElementById('ham-usr-sub-itinerario').addEventListener('click', function() { closeHam(); viajesAbrirItinerarioUsuario(); });
+  document.getElementById('ham-usr-sub-informacion').addEventListener('click', function() { closeHam(); viajesAbrirInformacionUsuario(); });
+
+  document.getElementById('usr-iti-btn-cerrar').addEventListener('click', function() {
+    document.getElementById('modal-usuario-itinerario').style.display = 'none';
+  });
+  document.getElementById('modal-usuario-itinerario').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+  document.getElementById('usr-info-btn-cerrar').addEventListener('click', function() {
+    document.getElementById('modal-usuario-informacion').style.display = 'none';
+  });
+  document.getElementById('modal-usuario-informacion').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+
+  // ── PLANILLA DE CONTROL: checklist navegable por Fase / Área ──────────────
+  document.getElementById('pc-btn-anterior').addEventListener('click', function() {
+    if (pcAreaActual > 0) { pcAreaActual--; pcRenderArea(); }
+  });
+  document.getElementById('pc-btn-siguiente').addEventListener('click', function() {
+    if (pcAreaActual < PLANILLA_CONTROL_DATA.length - 1) { pcAreaActual++; pcRenderArea(); }
+    else { document.getElementById('modal-planilla-control').style.display = 'none'; }
+  });
+  document.getElementById('pc-btn-cerrar').addEventListener('click', function() {
+    document.getElementById('modal-planilla-control').style.display = 'none';
+  });
+  document.getElementById('modal-planilla-control').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+
+  document.getElementById('prox-btn-cerrar').addEventListener('click', function() {
+    document.getElementById('modal-proximamente').style.display = 'none';
+  });
+  document.getElementById('modal-proximamente').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+
   document.getElementById('via-btn-cerrar').addEventListener('click', viajesCerrarModal);
   document.getElementById('modal-viajes').addEventListener('click', function(e) {
     if (e.target === this) viajesCerrarModal();
@@ -7564,27 +9193,47 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('via-btn-iti-add').addEventListener('click', function() {
     viajesItinerarioRows.push({ fd: '', fm: '', fa: '', hh: '', mi: '', actividad: '' });
     viajesRenderItinerarioTabla();
+    viajesProgramarAutoGuardado();
+    // Foco automático en el casillero "día" de la fila recién agregada
+    const tbody = document.getElementById('via-iti-tbody');
+    const ultimaFila = tbody.querySelector('tr:last-child .via-iti-dd');
+    if (ultimaFila) ultimaFila.focus();
   });
-  document.getElementById('via-btn-voucher-add').addEventListener('click', function() {
-    viajesVoucherRows.push({ url: '' });
-    viajesRenderVouchersLista();
+
+  // Coordinador: formatear el Costo en vivo como "$ #.###.###" a medida que se escribe
+  document.getElementById('via-in-costo').addEventListener('input', function() {
+    this.value = viajesFormatearCosto(this.value);
   });
+
+  // Coordinador: recuadros de Fecha (Desde / al) → abren el calendario nativo
+  // y muestran la fecha elegida como "dd de mmmm de aaaa"
+  viajesEngancharFecha(document.getElementById('via-in-fecha-desde-display'), document.getElementById('via-in-fecha-desde'));
+  viajesEngancharFecha(document.getElementById('via-in-fecha-hasta-display'), document.getElementById('via-in-fecha-hasta'));
+
+
+  // Coordinador: autoguardado silencioso del borrador mientras se escribe
+  // (cubre título, costo y todas las filas de la tabla de itinerario,
+  // que están dentro de este mismo contenedor).
+  document.getElementById('via-coord-form-wrap').addEventListener('input', viajesProgramarAutoGuardado);
 
   // Coordinador: crear viaje
   document.getElementById('via-btn-crear').addEventListener('click', viajesCrear);
 
-  // Coordinador: guardar / descartar borrador local
-  document.getElementById('via-btn-guardar-borrador').addEventListener('click', viajesGuardarBorrador);
-  document.getElementById('via-borrador-descartar').addEventListener('click', viajesDescartarBorrador);
+  // Coordinador: guardar borrador local (la ventana permanece abierta)
+  document.getElementById('via-btn-guardar-borrador').addEventListener('click', function() {
+    viajesGuardarBorrador();
+    viajesCargarListaCoordinador();
+    viajesRenderListaBorradores();
+  });
 
-  // Coordinador: botón "Pasajeros" (formulario a definir más adelante)
-  document.getElementById('via-btn-pasajeros').addEventListener('click', function() {
-    document.getElementById('modal-pasajeros').style.display = 'flex';
+  // Modal de detalle de viaje (solo lectura)
+  document.getElementById('via-detalle-btn-cerrar').addEventListener('click', function() {
+    document.getElementById('modal-viaje-detalle').style.display = 'none';
   });
-  document.getElementById('via-pas-btn-cerrar').addEventListener('click', function() {
-    document.getElementById('modal-pasajeros').style.display = 'none';
+  document.getElementById('via-detalle-btn-imprimir').addEventListener('click', function() {
+    window.print();
   });
-  document.getElementById('modal-pasajeros').addEventListener('click', function(e) {
+  document.getElementById('modal-viaje-detalle').addEventListener('click', function(e) {
     if (e.target === this) this.style.display = 'none';
   });
 
@@ -7594,6 +9243,66 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.key === 'Enter') { e.preventDefault(); viajesValidarCodigo(); }
   });
   document.getElementById('via-btn-enviar-form').addEventListener('click', viajesEnviarFormulario);
+
+  // Usuario: "Guardar y Cerrar" en el formulario de Información — guarda un borrador
+  // local (por código de viaje) y cierra la ventana sin enviar al coordinador.
+  document.getElementById('via-btn-guardar-cerrar').addEventListener('click', function() {
+    if (viajesCodigoValidado && viajesCodigoValidado.codigo) {
+      viajesGuardarInfoBorradorStorage(viajesCodigoValidado.codigo, {
+        apellido: document.getElementById('via-f-apellido').value,
+        nombres: document.getElementById('via-f-nombres').value,
+        documento: document.getElementById('via-f-doc').value,
+        fechaNacimiento: document.getElementById('via-f-nac').value,
+        telefono: document.getElementById('via-f-tel').value,
+        email: document.getElementById('via-f-email').value,
+        tipoEntrada: document.getElementById('via-f-tipo').value
+      });
+    }
+    document.getElementById('modal-usuario-informacion').style.display = 'none';
+  });
+
+  // Pasajero: formatear Documento y Teléfono en vivo, y mostrar la edad calculada
+  document.getElementById('via-f-doc').addEventListener('input', function() {
+    this.value = viajesFormatearDocumento(this.value);
+  });
+  document.getElementById('via-f-tel').addEventListener('input', function() {
+    this.value = viajesFormatearTelefono(this.value);
+    var digitosTel = this.value.replace(/\D/g, '').replace(/^54/, '');
+    viajesTenue(this, digitosTel.length === 0);
+  });
+  document.getElementById('via-f-nac').addEventListener('input', function() {
+    const edad = viajesCalcularEdad(this.value);
+    document.getElementById('via-f-edad-hint').textContent = edad !== null ? ('Edad: ' + edad + ' años') : '';
+    viajesTenue(this, !this.value);
+  });
+  document.getElementById('via-f-tipo').addEventListener('change', function() {
+    viajesTenue(this, false);
+  });
+
+  // Usuario: formulario "Información" — al presionar Enter en cualquier campo,
+  // el foco pasa automáticamente al campo siguiente (y en el último, envía el formulario).
+  (function() {
+    var ORDEN_CAMPOS_INFO = ['via-f-apellido', 'via-f-nombres', 'via-f-doc', 'via-f-nac', 'via-f-tel', 'via-f-email', 'via-f-tipo'];
+    ORDEN_CAMPOS_INFO.forEach(function(id, idx) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('keydown', function(e) {
+        if (e.key !== 'Enter') return;
+        e.preventDefault();
+        var siguienteId = ORDEN_CAMPOS_INFO[idx + 1];
+        var siguiente = siguienteId ? document.getElementById(siguienteId) : null;
+        if (siguiente) {
+          siguiente.focus();
+          if (typeof siguiente.select === 'function') siguiente.select();
+        } else {
+          document.getElementById('via-btn-enviar-form').click();
+        }
+      });
+    });
+  })();
+
+  // Coordinador: imprimir el listado de pasajeros (apaisado / listo para guardar como PDF)
+  document.getElementById('via-btn-imprimir-roster').addEventListener('click', viajesImprimirRoster);
 
   // Si el usuario entra desde un link de invitación (#viajes-codigo=XXXXXX), abrir directo
   // en la pestaña de código con el valor precargado.
@@ -7656,6 +9365,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Cerrar sesión (usado también desde "Iniciar sesión" en modo invitado) → vuelve a la pantalla de bienvenida
   function moHacerLogout() {
+    viajesOlvidarCodigoUsuario();
     sessionClear();
     moUsername = '';
     guestSessionActive = false;
@@ -7672,6 +9382,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
+
+<!-- ═══════════════════  ÁREA DE IMPRESIÓN (listado de pasajeros)  ═══════════════════ -->
+<!-- Oculta en pantalla; solo se muestra durante la impresión (ver CSS @media print). -->
+<div id="via-print-area"></div>
 
 </body>
 </html>
