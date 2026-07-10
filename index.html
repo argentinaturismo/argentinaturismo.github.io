@@ -1141,16 +1141,16 @@
     }
 
     /* ── Leaflet ── */
-    .leaflet-container { background:#cfe3ee; }
-    /* Atenúa los colores del mapa base (OpenTopoMap) para que la línea de ruta
-       contraste con claridad por encima del relieve/vegetación. */
-    .leaflet-tile { filter: saturate(0.55) brightness(1.18) contrast(0.92); }
+    .leaflet-container { background:#0d1020; }
+    /* Tiñe el mapa de OpenStreetMap con el azul oscuro/marino de la
+       identidad del sitio (igual al diseño de referencia). */
+    .leaflet-tile { filter:brightness(0.72) saturate(0.55) hue-rotate(200deg); }
     .pais-label span {
       display:inline-block; white-space:nowrap;
       font-family:'Barlow',sans-serif; font-weight:700; font-size:12px;
-      letter-spacing:0.09em; color:rgba(60,64,58,0.72);
-      text-shadow:0 1px 0 rgba(255,255,255,0.9), 0 -1px 0 rgba(255,255,255,0.9),
-                  1px 0 0 rgba(255,255,255,0.9), -1px 0 0 rgba(255,255,255,0.9);
+      letter-spacing:0.09em; color:rgba(232,201,106,0.85);
+      text-shadow:0 1px 0 rgba(0,0,0,0.85), 0 -1px 0 rgba(0,0,0,0.85),
+                  1px 0 0 rgba(0,0,0,0.85), -1px 0 0 rgba(0,0,0,0.85);
       pointer-events:none;
     }
     .leaflet-popup { display:none !important; }
@@ -1780,6 +1780,26 @@
     #modal-usuario-informacion .via-select option {
       color:#fff200 !important;
     }
+    /* El <select> nativo, al tener color-scheme:dark, deja que el sistema
+       operativo re-pinte el texto del valor elegido con su propio matiz de
+       "amarillo oscuro", distinto al #fff200 real que usan los demás campos.
+       Se anula el estilo nativo del control (appearance:none) y se dibuja
+       una flechita propia, así el color se respeta igual que en los <input>. */
+    #modal-usuario-informacion .via-select {
+      -webkit-appearance:none; -moz-appearance:none; appearance:none;
+      /* Anula color-scheme:dark heredado del selector genérico .via-select: ese valor es
+         la causa real de que el navegador repinte el texto del valor elegido con su propio
+         matiz apagado. Al volverlo "light" para este <select> puntual, el color/­fondo quedan
+         100% a cargo de nuestras reglas (#fff200 sobre panel2) sin recoloreo del sistema. */
+      color-scheme:light;
+      background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M5 7l5 5 5-5' stroke='%23fff200' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+      background-repeat:no-repeat; background-position:right 12px center; background-size:14px;
+      padding-right:34px;
+    }
+    #modal-usuario-informacion .via-select option {
+      background:var(--panel2);
+      color-scheme:light;
+    }
     #modal-usuario-informacion .via-input::placeholder { color:#fff200; opacity:0.25; }
     /* Campos con valor por defecto (fecha vacía, +54 sin número, "General" sin elegir):
        se muestran en amarillo muy tenue hasta que el usuario complete/elija algo. */
@@ -1800,16 +1820,17 @@
       border-radius:8px; padding:10px 22px; margin:10px 0;
     }
     .via-lista-viajes { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+    /* Listado de "Viajes creados": todo el texto en Arial (el título ya lo usaba). */
+    #via-lista-viajes { font-family: Arial, sans-serif; }
     .via-viaje-item {
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       background:var(--panel2); border:1px solid #2a3050; border-radius:8px;
       padding:10px 14px; cursor:pointer; transition:border-color .18s;
     }
     .via-viaje-item:hover, .via-viaje-item.sel { border-color:#e8c96a; }
-    .via-viaje-item .via-vi-titulo { font-weight:700; color:#e8eaf2; font-size:0.85rem; text-transform:uppercase; font-family:Arial, sans-serif; }
-    .via-viaje-item .via-vi-codigo { font-size:0.72rem; color:#e8c96a; letter-spacing:0.1em; }
-    .via-viaje-item-borrador { border-style:dashed; border-color:#5a5030; }
-    .via-viaje-item-borrador .via-vi-codigo { color:#9aa3c4; }
+    .via-viaje-item .via-vi-titulo { font-weight:700; color:#e8eaf2; font-size:0.77rem; text-transform:uppercase; font-family:Arial, sans-serif; }
+    .via-viaje-item .via-vi-codigo { font-size:1.05rem; font-weight:400; color:#ffe600; letter-spacing:0.12em; margin-top:2px; }
+    .via-vi-info { display:flex; align-items:center; gap:12px; flex:1; min-width:0; }
     .via-detalle-brand {
       font-family:'Playfair Display',serif; font-weight:900; font-size:1.85rem;
       color:#e8c96a; text-align:center; margin-bottom:8px;
@@ -1854,14 +1875,14 @@
     .via-roster-wrap { margin-top:16px; }
     .via-roster-empty { color:#7a83a6; font-size:0.8rem; padding:14px 0; }
     .via-pill {
-      display:inline-block; font-size:0.68rem; font-weight:700; padding:2px 8px;
-      border-radius:999px; margin-right:4px; letter-spacing:0.03em;
+      display:inline-block; font-family:'Barlow',sans-serif; font-size:0.82rem; font-weight:400;
+      margin-right:4px; letter-spacing:normal;
     }
-    .via-pill-jub  { background:rgba(96,165,250,0.15); color:#93c5fd; }
-    .via-pill-men  { background:rgba(232,201,106,0.15); color:#e8c96a; }
-    .via-pill-disc { background:rgba(134,239,172,0.15); color:#86efac; }
-    .via-pill-gen  { background:rgba(122,131,166,0.15); color:#9aa3c4; }
-    .via-pill-res  { background:rgba(232,141,106,0.15); color:#f0a785; }
+    .via-pill-jub  { color:#93c5fd; }
+    .via-pill-men  { color:#e8c96a; }
+    .via-pill-disc { color:#86efac; }
+    .via-pill-gen  { color:#9aa3c4; }
+    .via-pill-res  { color:#f0a785; }
     .via-config-warning {
       background:rgba(220,38,38,0.1); border:1px solid rgba(220,38,38,0.4);
       color:#fca5a5; border-radius:8px; padding:12px 16px; font-size:0.78rem;
@@ -1917,16 +1938,27 @@
     .via-fecha-display::placeholder { color:#9aa3c4; font-weight:400; }
     .via-fecha-oculto { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
     /* ── Sub-casilleros de Fecha/Hora en la tabla de Itinerario ── */
-    .via-iti-fecha-group, .via-iti-hora-group { display:flex; gap:4px; }
+    .via-iti-fecha-group { display:flex; gap:4px; }
+    .via-iti-hora-group { display:flex; align-items:center; gap:3px; }
     .via-iti-fecha-group input, .via-iti-hora-group input {
       text-align:center; padding:5px 4px;
     }
     .via-iti-fecha-group input.via-iti-dd,
     .via-iti-fecha-group input.via-iti-mm,
     .via-iti-fecha-group input.via-iti-aa { width:34px; flex-shrink:0; }
-    .via-iti-hora-group input { width:42px; flex-shrink:0; }
+    .via-iti-hora-group input.via-iti-hh,
+    .via-iti-hora-group input.via-iti-min { width:34px; flex-shrink:0; }
+    .via-iti-hora-sep, .via-iti-hora-suf {
+      font-family:'Barlow', sans-serif; font-size:0.82rem; color:var(--cream); opacity:0.85; flex-shrink:0;
+    }
     /* ── Tabla de Itinerario (Día / Fecha / Hora / Actividad) ── */
     .via-iti-table-wrap { overflow-x:auto; border:1px solid #2a3050; border-radius:8px; margin-top:6px; }
+    /* Tabla de Inscriptos: alto máximo con scroll vertical propio y encabezado fijo,
+       para poder ver a todos los pasajeros aunque la lista sea larga. */
+    .via-roster-scroll { max-height:56vh; overflow-y:auto; }
+    .via-roster-scroll::-webkit-scrollbar { width:6px; }
+    .via-roster-scroll::-webkit-scrollbar-thumb { background:#2a3050; border-radius:4px; }
+    .via-roster-scroll .mo-table thead th { position:sticky; top:0; background:#171c27; z-index:2; }
     .via-iti-table { min-width:0; width:100%; }
     .via-iti-table .mo-th { font-size:0.66rem; }
     /* ── Botón "agregar fila" (itinerario / vouchers) ── */
@@ -2482,7 +2514,15 @@
           <button class="map-ham-item" id="ham-usr-sub-flyers" type="button">Flyer's</button>
           <button class="map-ham-item" id="ham-usr-sub-mapa" type="button">Mapa</button>
           <button class="map-ham-item" id="ham-usr-sub-itinerario" type="button">Itinerario</button>
-          <button class="map-ham-item" id="ham-usr-sub-informacion" type="button">Información</button>
+          <div id="ham-usr-sub-informacion-wrap" style="position:relative;">
+            <button class="map-ham-item" id="ham-usr-sub-informacion" type="button" style="justify-content:space-between; align-items:center; width:100%;">
+              <span>Información</span><span style="font-size:0.7rem; opacity:0.7;">▸</span>
+            </button>
+            <div id="ham-submenu-informacion" class="map-ham-dropdown" style="display:none; position:absolute; top:0; left:100%; margin-left:6px; min-width:200px;">
+              <button class="map-ham-item" id="ham-usr-sub-informacion-agregar" type="button">Crear</button>
+              <button class="map-ham-item" id="ham-usr-sub-informacion-inscriptos" type="button">Inscriptos</button>
+            </div>
+          </div>
           <button class="map-ham-item" id="ham-usr-sub-vouchers" type="button">Voucher's</button>
         </div>
       </div>
@@ -2491,7 +2531,16 @@
           <span>Coordinador</span><span id="ham-coord-caret" style="font-size:0.7rem; opacity:0.7;">▸</span>
         </button>
         <div id="ham-submenu-coordinador" class="map-ham-dropdown" style="display:none; position:absolute; top:0; left:100%; margin-left:6px; min-width:200px;">
-          <button class="map-ham-item" id="ham-sub-viajes" type="button">Viajes</button>
+          <div id="ham-sub-viajes-wrap" style="position:relative;">
+            <button class="map-ham-item" id="ham-sub-viajes" type="button" style="justify-content:space-between; align-items:center; width:100%;">
+              <span>Viajes</span><span style="font-size:0.7rem; opacity:0.7;">▸</span>
+            </button>
+            <div id="ham-submenu-viajes" class="map-ham-dropdown" style="display:none; position:absolute; top:0; left:100%; margin-left:6px; min-width:200px;">
+              <button class="map-ham-item" id="ham-viajes-sub-crear" type="button">Crear viaje</button>
+              <button class="map-ham-item" id="ham-viajes-sub-guardados" type="button">Viajes guardados</button>
+              <button class="map-ham-item" id="ham-viajes-sub-creados" type="button">Viajes creados</button>
+            </div>
+          </div>
           <button class="map-ham-item" id="ham-sub-mapa" type="button">Mapa</button>
           <button class="map-ham-item" id="ham-sub-planilla-control" type="button">Planilla de Control</button>
           <button class="map-ham-item" id="ham-sub-planilla-grafica" type="button">Planilla de Control gráfica</button>
@@ -2973,7 +3022,7 @@
 <div id="modal-viajes" class="mo-backdrop" style="display:none;">
   <div class="mo-panel" style="width:min(980px, 96vw); max-height:88vh;">
     <div class="mo-header">
-      <span class="mo-title">Viajes</span>
+      <span class="mo-title" id="via-modal-titulo">Viajes</span>
     </div>
 
     <div class="via-tabs">
@@ -3033,43 +3082,33 @@
           </div>
           <div class="via-msg" id="via-msg-crear"></div>
           <div class="via-msg" id="via-msg-borrador" style="color:#9aa3c4;"></div>
-        </div>
 
-        <hr style="border:none; border-top:1px solid #2a3050; margin:22px 0;" />
-
-        <label class="via-label">Viajes guardados</label>
-        <div class="via-lista-viajes" id="via-lista-borradores">
-          <div class="via-roster-empty">No hay borradores guardados.</div>
-        </div>
-
-        <label class="via-label" style="margin-top:18px;">Viajes creados</label>
-        <div class="via-lista-viajes" id="via-lista-viajes">
-          <div class="via-roster-empty">Todavía no creaste ningún viaje.</div>
-        </div>
-
-        <div class="via-roster-wrap" id="via-roster-wrap" style="display:none;">
-          <label class="via-label" id="via-roster-titulo">Inscriptos</label>
-          <div class="via-codigo-badge" id="via-roster-codigo"></div>
-          <div class="via-iti-table-wrap">
-            <table class="mo-table">
-              <thead>
-                <tr>
-                  <th class="mo-th" style="width:170px;">Apellido y Nombres</th>
-                  <th class="mo-th" style="width:110px;">Documento</th>
-                  <th class="mo-th" style="width:90px;">Fecha Nac.</th>
-                  <th class="mo-th" style="width:60px;">Edad</th>
-                  <th class="mo-th" style="width:140px;">Teléfono</th>
-                  <th class="mo-th">Email</th>
-                  <th class="mo-th" style="width:130px;">Tipo de entrada</th>
-                  <th class="mo-th">Alérgico a</th>
-                </tr>
-              </thead>
-              <tbody id="via-roster-tbody"></tbody>
-            </table>
+          <!-- Aparece al crear el viaje: código generado + Imprimir / Cerrar -->
+          <div id="via-crear-exito" style="display:none; margin-top:14px;">
+            <div style="text-align:center;">
+              <span class="via-codigo-badge" id="via-crear-exito-codigo"></span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
+              <button class="ruta-btn-secundario" id="via-crear-exito-imprimir" type="button">Imprimir</button>
+              <button class="ruta-btn-primario" id="via-crear-exito-cerrar" type="button">Cerrar</button>
+            </div>
           </div>
-          <div class="via-roster-empty" id="via-roster-empty" style="display:none;">Todavía nadie completó el formulario.</div>
-          <button class="via-btn via-btn-secundario" id="via-btn-imprimir-roster" type="button">Imprimir</button>
         </div>
+
+        <hr style="border:none; border-top:1px solid #2a3050; margin:22px 0;" id="via-hr-divisor" />
+
+        <div id="via-bloque-guardados">
+          <div class="via-lista-viajes" id="via-lista-borradores">
+            <div class="via-roster-empty">No hay viajes guardados.</div>
+          </div>
+        </div>
+
+        <div id="via-bloque-creados">
+          <div class="via-lista-viajes" id="via-lista-viajes">
+            <div class="via-roster-empty">Todavía no creaste ningún viaje.</div>
+          </div>
+        </div>
+
       </div>
 
       <!-- ══ VISTA INGRESO POR CÓDIGO ══ -->
@@ -3123,6 +3162,40 @@
     <div class="via-detalle-footer">
       <button class="ruta-btn-secundario" id="via-detalle-btn-imprimir" type="button">Imprimir</button>
       <button class="ruta-btn-primario" id="via-detalle-btn-cerrar" type="button">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════  MODAL LISTADO DE INSCRIPTOS (usuarios que aceptaron un viaje creado) ═══════════════════ -->
+<div id="modal-viaje-roster" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(1600px, 98vw); max-height:92vh; display:flex; flex-direction:column;">
+    <div class="mo-header">
+      <span class="mo-title" id="via-roster-titulo">Inscriptos</span>
+    </div>
+    <div class="mo-body" style="padding:20px 26px; overflow-y:auto; overflow-x:auto; flex:1;">
+      <div class="via-codigo-badge" id="via-roster-codigo"></div>
+      <div class="via-iti-table-wrap via-roster-scroll">
+        <table class="mo-table">
+          <thead>
+            <tr>
+              <th class="mo-th" style="width:230px;">Apellido y Nombres</th>
+              <th class="mo-th" style="width:140px;">Documento</th>
+              <th class="mo-th" style="width:120px;">Fecha Nac.</th>
+              <th class="mo-th" style="width:90px;">Edad</th>
+              <th class="mo-th" style="width:170px;">Teléfono</th>
+              <th class="mo-th">Email</th>
+              <th class="mo-th" style="width:160px;">Tipo de entrada</th>
+              <th class="mo-th" style="width:170px;">Fecha de Inscripción</th>
+            </tr>
+          </thead>
+          <tbody id="via-roster-tbody"></tbody>
+        </table>
+      </div>
+      <div class="via-roster-empty" id="via-roster-empty" style="display:none;">Todavía nadie completó el formulario.</div>
+    </div>
+    <div style="padding:14px 24px; border-top:1px solid #2a3050; display:flex; justify-content:center; gap:12px;">
+      <button class="ruta-btn-secundario" id="via-btn-imprimir-roster" type="button">Imprimir</button>
+      <button class="ruta-btn-primario" id="via-roster-btn-cerrar" type="button">Cerrar</button>
     </div>
   </div>
 </div>
@@ -3182,14 +3255,47 @@
         <option value="Visita escolar">Visita escolar</option>
       </select>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
-        <button class="via-btn via-btn-secundario" id="via-btn-guardar-cerrar" type="button">Guardar y Cerrar</button>
-        <button class="via-btn" id="via-btn-enviar-form" type="button">Aceptar y Enviar</button>
+      <div style="display:flex; justify-content:flex-end; align-items:center; gap:10px; flex-wrap:wrap;">
+        <button class="via-btn" id="via-btn-guardar-form" type="button">Guardar</button>
       </div>
       <div class="via-msg" id="via-msg-form" style="text-align:right;"></div>
     </div>
-    <div style="padding:14px 24px; border-top:1px solid #2a3050; display:flex; justify-content:center;">
+    <div style="padding:14px 24px; border-top:1px solid #2a3050; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+      <button class="mo-auth-submit" id="via-btn-agregar-otro" type="button" style="padding:9px 28px; letter-spacing:0.15em; background:transparent; color:#e8c96a; border:1.5px solid #e8c96a;">Agregar</button>
       <button class="mo-auth-submit" id="usr-info-btn-cerrar" type="button" style="padding:9px 40px; letter-spacing:0.2em;">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════  MODAL USUARIO: MIS INSCRIPTOS (pasajeros cargados en "Crear",
+     todavía no enviados o ya enviados al coordinador)  ═══════════════════ -->
+<div id="modal-usuario-inscriptos" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(900px, 98vw); max-height:92vh; display:flex; flex-direction:column;">
+    <div class="mo-header">
+      <span class="mo-title" id="usr-insc-titulo">Inscriptos</span>
+    </div>
+    <div class="mo-body" style="padding:20px 26px; overflow-y:auto; overflow-x:auto; flex:1;">
+      <div class="via-iti-table-wrap via-roster-scroll">
+        <table class="mo-table">
+          <thead>
+            <tr>
+              <th class="mo-th">Apellido y Nombres</th>
+              <th class="mo-th" style="width:140px;">Documento</th>
+              <th class="mo-th" style="width:160px;">Creado</th>
+              <th class="mo-th" style="width:100px;">Estado</th>
+              <th class="mo-th" style="width:50px; text-align:center;">Ver</th>
+              <th class="mo-th" style="width:60px; text-align:center;">Eliminar</th>
+            </tr>
+          </thead>
+          <tbody id="usr-insc-tbody"></tbody>
+        </table>
+      </div>
+      <div class="via-roster-empty" id="usr-insc-empty" style="display:none;">Todavía no cargaste ningún pasajero. Usá &quot;Crear&quot; para agregar uno.</div>
+      <div class="via-msg" id="usr-insc-msg" style="text-align:right; margin-top:10px;"></div>
+    </div>
+    <div style="padding:14px 24px; border-top:1px solid #2a3050; display:flex; justify-content:center; gap:12px;">
+      <button class="ruta-btn-primario" id="usr-insc-btn-enviar" type="button">Enviar</button>
+      <button class="ruta-btn-secundario" id="usr-insc-btn-cerrar" type="button">Cerrar</button>
     </div>
   </div>
 </div>
@@ -4394,17 +4500,20 @@ function renderUserOrigenMarkers() {
 // cada provincia se distinga con claridad sobre el mapa atenuado.
 function agregarCapaProvincias(map) {
   function dibujar(geojson) {
-    // Casing blanco por debajo + línea marrón oscuro por encima: se aprecia
-    // con nitidez tanto sobre zonas claras (llanura/Pampa) como oscuras
-    // (cordillera/vegetación) del nuevo mapa base de relieve.
+    // Casing oscuro por debajo + línea dorada por encima: sobre el mapa azul
+    // marino, el dorado (color de identidad del sitio) resalta con mucha más
+    // claridad que un contorno negro, que se perdería contra el fondo oscuro.
+    const capa = L.featureGroup();
     L.geoJSON(geojson, {
-      style: { color:'#ffffff', weight:4, fill:false, opacity:0.9, lineJoin:'round' },
+      style: { color:'#0d1020', weight:8, fill:false, opacity:0.85, lineJoin:'round' },
       interactive: false
-    }).addTo(map);
+    }).addTo(capa);
     L.geoJSON(geojson, {
-      style: { color:'#3d2b1f', weight:1.8, fill:false, opacity:0.95, lineJoin:'round' },
+      style: { color:'#e8c96a', weight:4, fill:false, opacity:1, lineJoin:'round' },
       interactive: false
-    }).addTo(map);
+    }).addTo(capa);
+    capa.addTo(map);
+    capa.bringToFront();
   }
   if (capaProvinciasGeoJSON) { dibujar(capaProvinciasGeoJSON); return; }
   fetch('https://apis.datos.gob.ar/georef/api/provincias?campos=completo&max=24')
@@ -4418,6 +4527,7 @@ function agregarCapaProvincias(map) {
     })
     .catch(function() { /* sin límites políticos si falla, no rompe el mapa */ });
 }
+
 
 // ── CAPAS: ríos y rutas nacionales (datos de OpenStreetMap vía Overpass) ──
 // A diferencia de los límites de provincia (fijos), estas capas se piden
@@ -4474,15 +4584,48 @@ function agregarCapasReferencia(map) {
 
 
 function tileLayer() {
-  // Esri World Terrain Base: relieve físico (hillshade + vegetación/relieve
-  // atenuado) SIN nombres de países ni de islas dibujados dentro de la
-  // imagen de las teselas —a diferencia de OpenTopoMap—. Esto nos da control
-  // total sobre qué toponimia se muestra: evita nombres en disputa como
-  // "Falkland Islands" o "South Sandwich Islands" y permite agregar sólo
-  // las etiquetas de países vecinos que sí queremos (ver agregarEtiquetasPaises).
-  return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}', {
-    attribution:'Tiles © Esri — Source: Esri, USGS, NOAA',
-    maxNativeZoom:13, maxZoom:19
+  // OpenStreetMap estándar + filtro de tinte azul oscuro (igual al diseño de
+  // referencia), acorde a la estética general oscura del sitio. Los nombres
+  // de país/isla "horneados" en la tesela (como "Falkland Islands") se tapan
+  // aparte con un parche sobre esa zona puntual (ver agregarMascaraIslas).
+  return L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+    subdomains:'abc', maxZoom:19
+  });
+}
+
+// ── PARCHE SOBRE ISLAS MALVINAS / GEORGIAS Y SANDWICH DEL SUR ──
+// En vez de cambiar el mapa base (lo que empobrecía los colores), se cubre
+// puntualmente esa zona con un rectángulo del mismo tono de océano que usa
+// el mapa, ocultando así el nombre en inglés que trae la tesela sin tocar
+// el resto de la cartografía.
+//
+// Para que el color coincida EXACTO con el agua ya filtrada (y no una
+// aproximación calculada a mano), el rectángulo se dibuja en un "pane"
+// propio con el color de agua ORIGINAL de OpenStreetMap (sin filtrar) y se
+// le aplica el mismo filter CSS que usan las teselas (.leaflet-tile). Al
+// pasar por el mismo filtro, el resultado final es matemáticamente idéntico
+// al agua de alrededor, sin importar qué tono exacto produzca el filtro.
+const OCEANO_COLOR_ORIGINAL = '#aad3df'; // agua estándar de OpenStreetMap, sin filtrar
+function agregarMascaraIslas(map) {
+  if (!map.getPane('islasMaskPane')) {
+    const pane = map.createPane('islasMaskPane');
+    pane.style.zIndex = 250; // por encima de las teselas (200), por debajo de overlays (400)
+    pane.style.filter = 'brightness(0.72) saturate(0.55) hue-rotate(200deg)'; // idéntico al de .leaflet-tile
+    pane.style.pointerEvents = 'none';
+  }
+  const zonas = [
+    [[-50.6, -62.3], [-52.7, -56.9]],   // Malvinas / Falkland Islands
+    [[-53.6, -38.6], [-55.2, -35.6]],   // Georgias del Sur
+    [[-56.0, -28.6], [-59.6, -25.8]]    // Sandwich del Sur
+  ];
+  zonas.forEach(function(bounds) {
+    L.rectangle(bounds, {
+      pane:'islasMaskPane',
+      color:'transparent', weight:0, fill:true,
+      fillColor:OCEANO_COLOR_ORIGINAL, fillOpacity:1,
+      interactive:false
+    }).addTo(map);
   });
 }
 
@@ -4578,6 +4721,7 @@ function initMapArgentina() {
   mapArg = L.map('map-argentina', { center:[-38.5,-65], zoom:4, minZoom:3 });
   tileLayer().addTo(mapArg);
   agregarCapasReferencia(mapArg);
+  agregarMascaraIslas(mapArg);
   agregarEtiquetasPaises(mapArg);
   clusterArg = makeCluster();
   mapArg.addLayer(clusterArg);
@@ -6973,8 +7117,8 @@ function viajesItiSoloDigitos(valor, maxLen) {
 //    (a) al completar los dígitos pase automáticamente al siguiente casillero,
 //    (b) si se presiona Enter (o se sale del campo con Tab/click) con un solo
 //        dígito, le agregue un cero a la izquierda y también avance al
-//        siguiente, y (c) si corresponde (hora/minutos) agregue la letra
-//        sufijo (" h" / " m") una vez que el valor está completo. El dato
+//        siguiente, y (c) si corresponde (hora/minutos) agregue el sufijo
+//        (":" / " hs") una vez que el valor está completo. El dato
 //        "limpio" (sin sufijo) es lo que se guarda en la fila
 //        (row[fieldKey]); el sufijo es solo visual, en el input. ──
 function viajesItiEnganchar(input, opts) {
@@ -7043,8 +7187,10 @@ function viajesRenderItinerarioTabla() {
         '<input class="mo-cell-input via-iti-aa" type="text" maxlength="2" placeholder="aa" value="' + escH(row.fa) + '" />' +
       '</div></td>' +
       '<td class="mo-td"><div class="via-iti-hora-group">' +
-        '<input class="mo-cell-input via-iti-hh" type="text" maxlength="4" placeholder="hh" value="' + (row.hh ? escH(row.hh) + ' h' : '') + '" />' +
-        '<input class="mo-cell-input via-iti-min" type="text" maxlength="4" placeholder="mm" value="' + (row.mi ? escH(row.mi) + ' m' : '') + '" />' +
+        '<input class="mo-cell-input via-iti-hh" type="text" maxlength="2" placeholder="hh" value="' + escH(row.hh) + '" />' +
+        '<span class="via-iti-hora-sep">:</span>' +
+        '<input class="mo-cell-input via-iti-min" type="text" maxlength="2" placeholder="mm" value="' + escH(row.mi) + '" />' +
+        '<span class="via-iti-hora-suf">hs</span>' +
       '</div></td>' +
       '<td class="mo-td"><input class="mo-cell-input via-iti-actividad" type="text" maxlength="200" placeholder="Actividad" value="' + escH(row.actividad) + '" /></td>' +
       '<td class="mo-td"><div class="mo-td-actions">' +
@@ -7062,8 +7208,8 @@ function viajesRenderItinerarioTabla() {
     viajesItiEnganchar(inpDd,  { fieldKey:'fd', row:row, maxLen:2, siguiente:inpMm });
     viajesItiEnganchar(inpMm,  { fieldKey:'fm', row:row, maxLen:2, siguiente:inpAa });
     viajesItiEnganchar(inpAa,  { fieldKey:'fa', row:row, maxLen:2, siguiente:inpHh });
-    viajesItiEnganchar(inpHh,  { fieldKey:'hh', row:row, maxLen:2, sufijo:' h', siguiente:inpMin });
-    viajesItiEnganchar(inpMin, { fieldKey:'mi', row:row, maxLen:2, sufijo:' m', siguiente:inpAct });
+    viajesItiEnganchar(inpHh,  { fieldKey:'hh', row:row, maxLen:2, siguiente:inpMin });
+    viajesItiEnganchar(inpMin, { fieldKey:'mi', row:row, maxLen:2, siguiente:inpAct });
 
     // La primera letra de la Actividad se pasa a mayúscula automáticamente
     inpAct.addEventListener('input', function(e) {
@@ -7194,12 +7340,74 @@ function viajesFormatearFechaCorta(fechaISO) {
   return dd + '-' + mmm + '-' + aa;
 }
 
-function viajesBorradorKey() {
-  return 'viajes_borrador_' + (moUsername || 'anon');
+// ── COORDINADOR: formatea fecha + hora (ej: timestamp de "fecha" en Inscripciones,
+//    que registra cuándo el usuario envió los datos del pasajero). ──
+function viajesFormatearFechaHora(fechaISO) {
+  if (!fechaISO) return '—';
+  const d = new Date(fechaISO);
+  if (isNaN(d.getTime())) return '—';
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mmm = VIAJES_MESES_ABR[d.getMonth()];
+  const aa = String(d.getFullYear()).slice(-2);
+  const hh = String(d.getHours()).padStart(2, '0');
+  const min = String(d.getMinutes()).padStart(2, '0');
+  return dd + '-' + mmm + '-' + aa + ' ' + hh + ':' + min;
 }
 
+function viajesBorradoresKey() {
+  return 'viajes_borradores_' + (moUsername || 'anon');
+}
+
+function viajesGenerarIdBorrador() {
+  return 'b_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+}
+
+// Migra el antiguo formato de un único borrador (clave "viajes_borrador_...")
+// al nuevo formato en lista (clave "viajes_borradores_..."), para no perder
+// lo que el coordinador ya tenía guardado antes de este cambio.
+function viajesMigrarBorradorAntiguo() {
+  const keyNueva = viajesBorradoresKey();
+  let yaExiste;
+  try { yaExiste = localStorage.getItem(keyNueva); } catch (e) { return; }
+  if (yaExiste !== null) return;
+  const keyVieja = 'viajes_borrador_' + (moUsername || 'anon');
+  let raw;
+  try { raw = localStorage.getItem(keyVieja); } catch (e) { return; }
+  if (!raw) return;
+  try {
+    const borrador = JSON.parse(raw);
+    borrador.id = viajesGenerarIdBorrador();
+    localStorage.setItem(keyNueva, JSON.stringify([borrador]));
+    localStorage.removeItem(keyVieja);
+  } catch (e) {}
+}
+
+function viajesLeerBorradores() {
+  viajesMigrarBorradorAntiguo();
+  let raw;
+  try { raw = localStorage.getItem(viajesBorradoresKey()); } catch (e) { return []; }
+  if (!raw) return [];
+  try {
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr : [];
+  } catch (e) { return []; }
+}
+
+function viajesGuardarListaBorradores(arr) {
+  try { localStorage.setItem(viajesBorradoresKey(), JSON.stringify(arr)); return true; }
+  catch (e) { console.error('No se pudo guardar la lista de viajes guardados', e); return false; }
+}
+
+// ID del borrador que se está editando actualmente en el formulario (null si
+// el formulario corresponde a un viaje nuevo que todavía no se guardó).
+let viajesBorradorEditandoId = null;
+
+// Límite de viajes guardados en este navegador (los "Viajes creados" en la
+// base de datos no tienen límite).
+const VIAJES_LIMITE_GUARDADOS = 20;
+
 function viajesGuardarBorradorSilencioso() {
-  const borrador = {
+  const datos = {
     titulo: document.getElementById('via-in-titulo').value,
     costo: document.getElementById('via-in-costo').value,
     fechaDesde: document.getElementById('via-in-fecha-desde').value,
@@ -7209,43 +7417,58 @@ function viajesGuardarBorradorSilencioso() {
   };
   // No guarda un borrador completamente vacío (evita ensuciar la lista con un
   // ítem "(borrador sin título)" apenas se abre el formulario por primera vez).
-  const vacio = !borrador.titulo && !borrador.costo && !borrador.fechaDesde && !borrador.fechaHasta && !borrador.itinerarioRows.length;
-  try {
-    if (vacio) { localStorage.removeItem(viajesBorradorKey()); return false; }
-    localStorage.setItem(viajesBorradorKey(), JSON.stringify(borrador));
-    return true;
-  } catch (e) {
-    console.error('No se pudo guardar el borrador', e);
-    return false;
+  const vacio = !datos.titulo && !datos.costo && !datos.fechaDesde && !datos.fechaHasta && !datos.itinerarioRows.length;
+  if (vacio) return false;
+
+  const arr = viajesLeerBorradores();
+  if (viajesBorradorEditandoId) {
+    const idx = arr.findIndex(function(b) { return b.id === viajesBorradorEditandoId; });
+    if (idx !== -1) {
+      arr[idx] = Object.assign({}, arr[idx], datos, { id: viajesBorradorEditandoId });
+    } else {
+      if (arr.length >= VIAJES_LIMITE_GUARDADOS) return false;
+      datos.id = viajesBorradorEditandoId;
+      arr.push(datos);
+    }
+  } else {
+    if (arr.length >= VIAJES_LIMITE_GUARDADOS) return false;
+    datos.id = viajesGenerarIdBorrador();
+    arr.push(datos);
+    viajesBorradorEditandoId = datos.id;
   }
+  return viajesGuardarListaBorradores(arr);
 }
 
 let viajesAutoGuardarTimer = null;
 function viajesProgramarAutoGuardado() {
   clearTimeout(viajesAutoGuardarTimer);
   viajesAutoGuardarTimer = setTimeout(function() {
-    viajesGuardarBorradorSilencioso();
+    if (viajesGuardarBorradorSilencioso()) viajesRenderListaBorradores();
   }, 800);
 }
 
 function viajesGuardarBorrador() {
+  const arr = viajesLeerBorradores();
+  const yaEsBorradorExistente = !!viajesBorradorEditandoId && arr.some(function(b) { return b.id === viajesBorradorEditandoId; });
+  const llegoAlLimite = !yaEsBorradorExistente && arr.length >= VIAJES_LIMITE_GUARDADOS;
   const ok = viajesGuardarBorradorSilencioso();
   const m = document.getElementById('via-msg-borrador');
   if (ok) {
-    m.textContent = 'Borrador guardado en este navegador.';
-    setTimeout(function() { if (m.textContent === 'Borrador guardado en este navegador.') m.textContent = ''; }, 4000);
+    m.textContent = 'Viaje guardado en este navegador.';
+    setTimeout(function() { if (m.textContent === 'Viaje guardado en este navegador.') m.textContent = ''; }, 4000);
+    viajesRenderListaBorradores();
+  } else if (llegoAlLimite) {
+    m.textContent = 'Alcanzaste el límite de ' + VIAJES_LIMITE_GUARDADOS + ' viajes guardados. Borrá alguno para guardar uno nuevo.';
   } else {
-    m.textContent = 'No se pudo guardar el borrador en este navegador.';
+    m.textContent = 'Completá al menos un dato para guardar el viaje.';
   }
 }
 
-function viajesRestaurarBorradorSiExiste() {
-  let raw;
-  try { raw = localStorage.getItem(viajesBorradorKey()); } catch (e) { return; }
-  if (!raw) return;
-  let borrador;
-  try { borrador = JSON.parse(raw); } catch (e) { return; }
-
+// Carga un borrador puntual (por id) en el formulario, para seguir editándolo.
+function viajesCargarBorradorEnFormulario(id) {
+  const borrador = viajesLeerBorradores().find(function(b) { return b.id === id; });
+  if (!borrador) return;
+  viajesBorradorEditandoId = id;
   document.getElementById('via-in-titulo').value = borrador.titulo || '';
   document.getElementById('via-in-costo').value = viajesFormatearCosto(borrador.costo || '');
   document.getElementById('via-in-fecha-desde').value = borrador.fechaDesde || '';
@@ -7256,18 +7479,24 @@ function viajesRestaurarBorradorSiExiste() {
   viajesRenderItinerarioTabla();
 }
 
-function viajesDescartarBorrador() {
-  clearTimeout(viajesAutoGuardarTimer);
-  try { localStorage.removeItem(viajesBorradorKey()); } catch (e) {}
-  viajesLimpiarFormularioCoordinador();
+// Descarta un borrador puntual (por id) de la lista de viajes guardados.
+function viajesDescartarBorrador(id) {
+  const arr = viajesLeerBorradores().filter(function(b) { return b.id !== id; });
+  viajesGuardarListaBorradores(arr);
+  if (viajesBorradorEditandoId === id) {
+    clearTimeout(viajesAutoGuardarTimer);
+    viajesBorradorEditandoId = null;
+    viajesLimpiarFormularioCoordinador();
+  }
 }
 
 // ── COORDINADOR: deja el formulario (título, fecha, costo e itinerario) en
-//    blanco, SIN borrar el borrador guardado en localStorage. Se usa al abrir
+//    blanco, SIN borrar los viajes guardados en localStorage. Se usa al abrir
 //    la ventana "Viajes": el formulario solo se completa si el coordinador
 //    elige explícitamente un viaje guardado o creado de la lista. ──
 function viajesLimpiarFormularioCoordinador() {
   clearTimeout(viajesAutoGuardarTimer);
+  viajesBorradorEditandoId = null;
   document.getElementById('via-in-titulo').value = '';
   document.getElementById('via-in-costo').value = '';
   document.getElementById('via-in-fecha-desde').value = '';
@@ -7316,8 +7545,9 @@ async function viajesCrear() {
     });
     if (error) throw error;
 
-    msg.className = 'via-msg ok';
-    msg.textContent = 'Viaje creado. Código: ' + codigo + '.';
+    msg.className = ''; msg.textContent = '';
+    document.getElementById('via-crear-exito-codigo').textContent = 'Código ' + codigo;
+    document.getElementById('via-crear-exito').style.display = 'block';
 
     document.getElementById('via-in-titulo').value = '';
     document.getElementById('via-in-costo').value = '';
@@ -7326,7 +7556,10 @@ async function viajesCrear() {
     document.getElementById('via-in-fecha-hasta').value = '';
     document.getElementById('via-in-fecha-hasta-display').value = '';
     viajesResetItinerarioTabla();
-    try { localStorage.removeItem(viajesBorradorKey()); } catch (e) {}
+    if (viajesBorradorEditandoId) {
+      viajesDescartarBorrador(viajesBorradorEditandoId);
+    }
+    viajesBorradorEditandoId = null;
 
     viajesCargarListaCoordinador();
   } catch (e) {
@@ -7353,16 +7586,15 @@ async function viajesCargarListaCoordinador() {
       if (!cont.children.length) cont.innerHTML = '<div class="via-roster-empty">Todavía no creaste ningún viaje.</div>';
       return;
     }
-    data.forEach(function(v) {
+    data.forEach(function(v, idx) {
       const item = document.createElement('div');
       item.className = 'via-viaje-item';
-      item.innerHTML = '<div><div class="via-vi-titulo"></div><div class="via-vi-codigo"></div></div><button class="mo-btn-edit" type="button" title="Ver viaje" style="pointer-events:none;">&#128065;</button>';
+      item.innerHTML = '<div class="via-vi-info"><span class="mo-num-circle">' + (idx + 1) + '</span><div><div class="via-vi-titulo"></div><div class="via-vi-codigo"></div></div></div><button class="mo-btn-edit" type="button" title="Ver viaje" style="pointer-events:none;">&#128065;</button>';
       item.querySelector('.via-vi-titulo').textContent = v.titulo;
       item.querySelector('.via-vi-codigo').textContent = 'Código: ' + v.codigo;
       item.addEventListener('click', function() {
         document.querySelectorAll('.via-viaje-item').forEach(function(el){ el.classList.remove('sel'); });
         item.classList.add('sel');
-        viajesAbrirDetalleViaje(v);
         viajesAbrirRoster(v.id, v.titulo, v.codigo);
       });
       cont.appendChild(item);
@@ -7370,41 +7602,50 @@ async function viajesCargarListaCoordinador() {
   } catch (e) { console.error(e); }
 }
 
-// ── COORDINADOR: si hay un borrador guardado en este navegador, lo muestra
-//    en su propia sección "Viajes guardados" (no se restaura automáticamente
-//    al abrir la ventana de Viajes). Al hacer clic se carga en el formulario
-//    de arriba para seguir editándolo. ──
+// ── COORDINADOR: muestra la lista completa (sin límite) de viajes guardados
+//    en este navegador, en la sección "Viajes guardados". Al hacer clic en
+//    alguno se carga en el formulario de arriba para seguir editándolo. ──
 function viajesRenderListaBorradores() {
   const cont = document.getElementById('via-lista-borradores');
   if (!cont) return;
   cont.innerHTML = '';
 
-  let raw;
-  try { raw = localStorage.getItem(viajesBorradorKey()); } catch (e) { raw = null; }
-  if (!raw) { cont.innerHTML = '<div class="via-roster-empty">No hay borradores guardados.</div>'; return; }
-  let borrador;
-  try { borrador = JSON.parse(raw); } catch (e) { cont.innerHTML = '<div class="via-roster-empty">No hay borradores guardados.</div>'; return; }
+  const borradores = viajesLeerBorradores();
+  if (!borradores.length) {
+    cont.innerHTML = '<div class="via-roster-empty">No hay viajes guardados.</div>';
+    return;
+  }
 
-  const item = document.createElement('div');
-  item.className = 'via-viaje-item via-viaje-item-borrador';
-  item.style.cssText = 'display:flex; align-items:center; justify-content:space-between; gap:10px;';
-  item.innerHTML =
-    '<div style="cursor:pointer; flex:1;"><div class="via-vi-titulo"></div><div class="via-vi-codigo">Guardado, todavía no creado</div></div>' +
-    '<button class="mo-btn-edit via-borrador-editar" type="button" title="Editar">&#9998;</button>' +
-    '<button class="mo-btn-del via-row-del" type="button" title="Descartar borrador">&#128465;</button>';
-  item.querySelector('.via-vi-titulo').textContent = borrador.titulo || '(borrador sin título)';
-  const abrir = function() {
-    viajesRestaurarBorradorSiExiste();
-    document.getElementById('via-coord-form-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-  item.querySelector('div').addEventListener('click', abrir);
-  item.querySelector('.via-borrador-editar').addEventListener('click', abrir);
-  item.querySelector('.via-row-del').addEventListener('click', function(e) {
-    e.stopPropagation();
-    viajesDescartarBorrador();
-    viajesRenderListaBorradores();
+  // Los más recientes primero.
+  const ordenados = borradores.slice().sort(function(a, b) {
+    return (b.guardadoEn || '').localeCompare(a.guardadoEn || '');
   });
-  cont.appendChild(item);
+
+  ordenados.forEach(function(borrador, idx) {
+    const item = document.createElement('div');
+    item.className = 'via-viaje-item via-viaje-item-borrador';
+    item.style.cssText = 'display:flex; align-items:center; justify-content:space-between; gap:10px;';
+    item.innerHTML =
+      '<div class="via-vi-info" style="cursor:pointer;"><span class="mo-num-circle">' + (idx + 1) + '</span><div><div class="via-vi-titulo"></div><div class="via-vi-codigo">Guardado, todavía no creado</div></div></div>' +
+      '<button class="mo-btn-edit via-borrador-editar" type="button" title="Editar">&#9998;</button>' +
+      '<button class="mo-btn-del via-row-del" type="button" title="Descartar viaje guardado">&#128465;</button>';
+    item.querySelector('.via-vi-titulo').textContent = borrador.titulo || '(viaje guardado sin título)';
+    const abrir = function() {
+      viajesCargarBorradorEnFormulario(borrador.id);
+      var elForm = document.getElementById('via-coord-form-wrap');
+      document.querySelector('#modal-viajes .mo-panel').style.width = 'min(980px, 96vw)';
+      elForm.style.display = '';
+      elForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    item.querySelector('.via-vi-info').addEventListener('click', abrir);
+    item.querySelector('.via-borrador-editar').addEventListener('click', abrir);
+    item.querySelector('.via-row-del').addEventListener('click', function(e) {
+      e.stopPropagation();
+      viajesDescartarBorrador(borrador.id);
+      viajesRenderListaBorradores();
+    });
+    cont.appendChild(item);
+  });
 }
 
 // ── COORDINADOR: ventana de solo lectura con el itinerario de un viaje ya creado ──
@@ -7530,17 +7771,33 @@ function viajesRenderRoster(rows) {
       '<td class="mo-td">' + escH(d.telefono || '') + '</td>' +
       '<td class="mo-td">' + escH(d.email || '') + '</td>' +
       '<td class="mo-td">' + pill + '</td>' +
-      '<td class="mo-td">' + escH(d.alergias || '—') + '</td>';
+      '<td class="mo-td">' + viajesFormatearFechaHora(d.fecha) + '</td>';
     tbody.appendChild(tr);
   });
 }
 
 // ── COORDINADOR: trae la lista actual de inscriptos de un viaje y la pinta ──
+// ── COORDINADOR: orden de "Inscriptos" — primero por fecha de inscripción (la más
+//    reciente primero) y, ante la misma fecha, por Apellido y luego por Nombre. Como
+//    "nombre" ya se guarda como "APELLIDO, NOMBRES", ordenar ese string alcanza para
+//    cumplir ambos criterios de desempate a la vez. ──
+function viajesCompararInscriptos(a, b) {
+  var fa = a.fecha ? new Date(a.fecha) : null;
+  var fb = b.fecha ? new Date(b.fecha) : null;
+  var da = (fa && !isNaN(fa.getTime())) ? new Date(fa.getFullYear(), fa.getMonth(), fa.getDate()).getTime() : -Infinity;
+  var db = (fb && !isNaN(fb.getTime())) ? new Date(fb.getFullYear(), fb.getMonth(), fb.getDate()).getTime() : -Infinity;
+  if (da !== db) return db - da; // fecha descendente: la última fecha va primero
+  var na = (a.nombre || '').toUpperCase();
+  var nb = (b.nombre || '').toUpperCase();
+  return na.localeCompare(nb, 'es');
+}
+
 async function viajesCargarRosterOnce(viajeId) {
   try {
     const { data, error } = await supabaseClient.from('inscripciones').select('*').eq('viaje_id', viajeId).order('fecha', { ascending: false });
     if (error) throw error;
-    viajesRenderRoster(data);
+    const ordenados = (data || []).slice().sort(viajesCompararInscriptos);
+    viajesRenderRoster(ordenados);
   } catch (e) { console.error('Error cargando inscripciones:', e); }
 }
 
@@ -7551,9 +7808,9 @@ function viajesAbrirRoster(viajeId, titulo, codigo) {
   viajesRosterActual.titulo = titulo || '';
   viajesRosterActual.codigo = codigo || '';
 
-  document.getElementById('via-roster-wrap').style.display = 'block';
   document.getElementById('via-roster-titulo').textContent = 'Inscriptos — ' + titulo;
   document.getElementById('via-roster-codigo').textContent = codigo;
+  document.getElementById('modal-viaje-roster').style.display = 'flex';
 
   viajesCargarRosterOnce(viajeId);
 
@@ -7565,6 +7822,11 @@ function viajesAbrirRoster(viajeId, titulo, codigo) {
       viajesCargarRosterOnce(viajeId);
     })
     .subscribe();
+}
+
+function viajesCerrarRoster() {
+  if (viajesRealtimeChannel) { supabaseClient.removeChannel(viajesRealtimeChannel); viajesRealtimeChannel = null; }
+  document.getElementById('modal-viaje-roster').style.display = 'none';
 }
 
 // ── COORDINADOR: arma el listado imprimible (apaisado) y dispara la impresión ──
@@ -7588,7 +7850,7 @@ function viajesImprimirRoster() {
         '<td>' + escH(d.telefono || '') + '</td>' +
         '<td>' + escH(d.email || '') + '</td>' +
         '<td>' + escH(d.tipo_entrada || 'General') + '</td>' +
-        '<td>' + escH(d.alergias || '—') + '</td>' +
+        '<td>' + viajesFormatearFechaHora(d.fecha) + '</td>' +
         '</tr>';
     });
   }
@@ -7599,7 +7861,7 @@ function viajesImprimirRoster() {
     '<table class="via-print-table">' +
       '<thead><tr>' +
         '<th>Apellido y Nombres</th><th>Documento</th><th>Fecha Nac.</th><th>Edad</th>' +
-        '<th>Teléfono</th><th>Email</th><th>Tipo de entrada</th><th>Alérgico a</th>' +
+        '<th>Teléfono</th><th>Email</th><th>Tipo de entrada</th><th>Fecha de Inscripción</th>' +
       '</tr></thead>' +
       '<tbody>' + filas + '</tbody>' +
     '</table>';
@@ -7629,7 +7891,7 @@ async function viajesValidarCodigo() {
   msg.className = 'via-msg'; msg.textContent = '';
   if (!supabaseClient) { msg.className = 'via-msg err'; msg.textContent = 'El sistema de Viajes todavía no está configurado.'; return; }
 
-  const codigo = document.getElementById('via-in-codigo').value.trim();
+  const codigo = document.getElementById('via-in-codigo').value.trim().toUpperCase();
   if (!codigo) { msg.className = 'via-msg err'; msg.textContent = 'Ingresá un código.'; return; }
 
   try {
@@ -7713,7 +7975,9 @@ async function actualizarMenuHamburguesaSegunRol() {
 
   // Los submenús siempre arrancan colapsados cada vez que se reabre el menú hamburguesa.
   document.getElementById('ham-submenu-coordinador').style.display = 'none';
+  document.getElementById('ham-submenu-viajes').style.display = 'none';
   document.getElementById('ham-submenu-usuario').style.display = 'none';
+  document.getElementById('ham-submenu-informacion').style.display = 'none';
 }
 
 function viajesCerrarModal() {
@@ -7809,16 +8073,137 @@ async function viajesAbrirItinerarioUsuario() {
   } catch (e) { console.error(e); }
 }
 
-// ── USUARIO: guarda/carga en localStorage un borrador del formulario "Información",
-//    identificado por el código del viaje, para que "Guardar y Cerrar" no pierda lo tipeado. ──
-function viajesGuardarInfoBorradorStorage(codigo, datos) {
-  try { localStorage.setItem('via_info_borrador_' + codigo, JSON.stringify(datos)); } catch (e) {}
+// ── USUARIO: "Mis Inscriptos" — pasajeros cargados por el usuario en "Crear" para el
+//    viaje actual, guardados en este navegador hasta que se presiona "Enviar". Se
+//    identifican por código de viaje + usuario logueado, para no mezclar listas. ──
+function viajesInscriptosClave(codigo) {
+  return 'via_inscriptos_' + codigo + '_' + (moUsername || 'invitado');
 }
-function viajesCargarInfoBorradorStorage(codigo) {
-  try { return JSON.parse(localStorage.getItem('via_info_borrador_' + codigo)) || null; } catch (e) { return null; }
+function viajesObtenerInscriptosLocal(codigo) {
+  try { return JSON.parse(localStorage.getItem(viajesInscriptosClave(codigo))) || []; } catch (e) { return []; }
 }
-function viajesBorrarInfoBorradorStorage(codigo) {
-  try { localStorage.removeItem('via_info_borrador_' + codigo); } catch (e) {}
+function viajesGuardarInscriptosLocal(codigo, arr) {
+  try { localStorage.setItem(viajesInscriptosClave(codigo), JSON.stringify(arr)); } catch (e) {}
+}
+
+// ── USUARIO: id del pasajero que se está editando (abierto desde el ícono "Ver" de
+//    Inscriptos). Si es null, "Crear" está dado de alta un pasajero nuevo. ──
+let viajesInscriptoEditandoId = null;
+// ── USUARIO: true si el formulario se abrió desde el ícono "Ver" de Inscriptos (al
+//    guardar, vuelve a esa ventana); false si se abrió desde "Crear" (al guardar, el
+//    formulario permanece abierto para poder cargar otro pasajero con "Agregar"). ──
+let viajesFormOrigenVer = false;
+
+// ── USUARIO: pinta la tabla de "Mis Inscriptos" con lo guardado en este navegador. ──
+function viajesRenderInscriptosUsuario(codigo) {
+  var lista = viajesObtenerInscriptosLocal(codigo);
+  var tbody = document.getElementById('usr-insc-tbody');
+  var empty = document.getElementById('usr-insc-empty');
+  tbody.innerHTML = '';
+  if (!lista.length) { empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  lista.forEach(function(p) {
+    var tr = document.createElement('tr');
+    var nombreCompleto = (p.apellido || '') + (p.apellido && p.nombres ? ', ' : '') + (p.nombres || '');
+    var fechaCreado = p.creado ? new Date(p.creado).toLocaleString('es-AR') : '—';
+    var estado = p.enviado
+      ? '<span style="color:#86efac;">Enviado</span>'
+      : '<span style="color:#e8c96a;">Pendiente</span>';
+    var btnEliminar = p.enviado ? '' :
+      '<button class="iti-icon-btn insc-del" data-id="' + p.id + '" type="button" title="Eliminar">&#128465;</button>';
+    tr.innerHTML =
+      '<td class="mo-td">' + escH(nombreCompleto.toUpperCase()) + '</td>' +
+      '<td class="mo-td">' + escH(p.documento || '') + '</td>' +
+      '<td class="mo-td">' + fechaCreado + '</td>' +
+      '<td class="mo-td">' + estado + '</td>' +
+      '<td class="mo-td" style="text-align:center;"><button class="iti-icon-btn insc-ver" data-id="' + p.id + '" type="button" title="Ver">&#128065;</button></td>' +
+      '<td class="mo-td" style="text-align:center;">' + btnEliminar + '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+// ── USUARIO: abre "Mis Inscriptos" con los pasajeros guardados localmente para el
+//    viaje asociado al código guardado (no es la planilla del coordinador). ──
+async function viajesAbrirInscriptosUsuario() {
+  var codigo = viajesObtenerCodigoUsuario();
+  if (!codigo || !supabaseClient) return;
+  try {
+    const { data, error } = await supabaseClient.from('viajes').select('*').eq('codigo', codigo).limit(1);
+    if (error) throw error;
+    if (!data || !data.length) return;
+    viajesCodigoValidado = data[0];
+    // Si el formulario "Crear" estaba abierto, se cierra para no superponerse con Inscriptos.
+    viajesInscriptoEditandoId = null;
+    viajesFormOrigenVer = false;
+    document.getElementById('modal-usuario-informacion').style.display = 'none';
+    document.getElementById('usr-insc-titulo').textContent = 'Inscriptos — ' + (data[0].titulo || '');
+    document.getElementById('usr-insc-msg').textContent = '';
+    viajesRenderInscriptosUsuario(data[0].codigo);
+    document.getElementById('modal-usuario-inscriptos').style.display = 'flex';
+  } catch (e) { console.error(e); }
+}
+
+function viajesCerrarInscriptosUsuario() {
+  document.getElementById('modal-usuario-inscriptos').style.display = 'none';
+}
+
+// ── USUARIO: elimina un pasajero todavía no enviado de "Mis Inscriptos". ──
+function viajesEliminarInscriptoLocal(id) {
+  if (!viajesCodigoValidado) return;
+  var codigo = viajesCodigoValidado.codigo;
+  var lista = viajesObtenerInscriptosLocal(codigo);
+  var idx = lista.findIndex(function(p) { return p.id === id; });
+  if (idx === -1 || lista[idx].enviado) return;
+  if (!confirm('¿Eliminar este inscripto?')) return;
+  lista.splice(idx, 1);
+  viajesGuardarInscriptosLocal(codigo, lista);
+  viajesRenderInscriptosUsuario(codigo);
+}
+
+// ── USUARIO: envía todos los pasajeros pendientes de "Mis Inscriptos" al coordinador
+//    (tabla "inscripciones"). Quedan marcados como enviados y ya no pueden eliminarse. ──
+async function viajesEnviarInscriptosUsuario() {
+  const msg = document.getElementById('usr-insc-msg');
+  msg.className = 'via-msg'; msg.textContent = '';
+  if (!supabaseClient || !viajesCodigoValidado) {
+    msg.className = 'via-msg err'; msg.textContent = 'No se encontró el viaje asociado a tu código.'; return;
+  }
+  var codigo = viajesCodigoValidado.codigo;
+  var lista = viajesObtenerInscriptosLocal(codigo);
+  var pendientes = lista.filter(function(p) { return !p.enviado; });
+  if (!pendientes.length) {
+    msg.className = 'via-msg err'; msg.textContent = 'No hay inscriptos pendientes para enviar.'; return;
+  }
+
+  const btn = document.getElementById('usr-insc-btn-enviar');
+  btn.disabled = true;
+  try {
+    for (var i = 0; i < pendientes.length; i++) {
+      var p = pendientes[i];
+      var docId = 'doc_' + (p.documento || '').replace(/\D/g, '');
+      const { error } = await supabaseClient.from('inscripciones').upsert({
+        viaje_id: viajesCodigoValidado.id,
+        doc_id: docId,
+        nombre: p.nombre, documento: p.documento,
+        fecha_nacimiento: p.fechaNacimiento,
+        telefono: p.telefono, email: p.email,
+        tipo_entrada: p.tipoEntrada,
+        usuario: moUsername || null
+      }, { onConflict: 'viaje_id,doc_id' });
+      if (error) throw error;
+      p.enviado = true;
+    }
+    viajesGuardarInscriptosLocal(codigo, lista);
+    viajesRenderInscriptosUsuario(codigo);
+    msg.className = 'via-msg ok';
+    msg.textContent = '¡Listo! Tus inscriptos fueron enviados al coordinador.';
+  } catch (e) {
+    console.error('Error al enviar inscriptos:', e);
+    msg.className = 'via-msg err';
+    msg.textContent = 'Error al enviar: ' + (e && e.message ? e.message : 'intentá de nuevo.');
+  } finally {
+    btn.disabled = false;
+  }
 }
 
 // ── USUARIO: alterna el amarillo tenue/brillante de un campo del formulario "Información" ──
@@ -7840,9 +8225,10 @@ function viajesActualizarTenuesInformacion(tipoTocado) {
   viajesTenue(tipo, !tipoTocado);
 }
 
-// ── USUARIO: abre el formulario "Información" (datos del pasajero) para el
-//    viaje asociado al código guardado. ──
-async function viajesAbrirInformacionUsuario() {
+// ── USUARIO: abre el formulario "Crear" (datos del pasajero) para el viaje asociado
+//    al código guardado. Siempre arranca vacío, salvo que se pase editarId (viene del
+//    ícono "Ver" de Inscriptos), en cuyo caso carga ese pasajero para editarlo. ──
+async function viajesAbrirInformacionUsuario(editarId) {
   var codigo = viajesObtenerCodigoUsuario();
   if (!codigo || !supabaseClient) return;
   try {
@@ -7851,47 +8237,66 @@ async function viajesAbrirInformacionUsuario() {
     if (!data || !data.length) return;
     viajesCodigoValidado = data[0];
     document.getElementById('via-info-titulo-viaje').textContent = data[0].titulo || '';
-    var btnForm = document.getElementById('via-btn-enviar-form');
-    btnForm.disabled = false; btnForm.textContent = 'Aceptar y Enviar';
     document.getElementById('via-msg-form').textContent = '';
+    viajesInscriptoEditandoId = editarId || null;
+    viajesFormOrigenVer = !!editarId;
 
-    // Si hay un borrador guardado para este viaje, lo recupera; si no, aplica los valores por defecto.
-    var borrador = viajesCargarInfoBorradorStorage(data[0].codigo);
-    if (borrador) {
-      document.getElementById('via-f-apellido').value = borrador.apellido || '';
-      document.getElementById('via-f-nombres').value = borrador.nombres || '';
-      document.getElementById('via-f-doc').value = borrador.documento || '';
-      document.getElementById('via-f-nac').value = borrador.fechaNacimiento || '';
-      document.getElementById('via-f-tel').value = borrador.telefono || '+54 ';
-      document.getElementById('via-f-email').value = borrador.email || '';
-      document.getElementById('via-f-tipo').value = borrador.tipoEntrada || 'General';
-      var edadHint = document.getElementById('via-f-edad-hint');
-      var edad = viajesCalcularEdad(borrador.fechaNacimiento);
-      edadHint.textContent = edad !== null ? ('Edad: ' + edad + ' años') : '';
-    } else {
-      var telInput = document.getElementById('via-f-tel');
-      if (!telInput.value.trim()) telInput.value = '+54 ';
+    var registro = null;
+    if (editarId) {
+      var lista = viajesObtenerInscriptosLocal(data[0].codigo);
+      registro = lista.find(function(p) { return p.id === editarId; }) || null;
     }
 
-    // Amarillo tenue por defecto en Fecha/Teléfono; en Tipo de entrada, tenue solo si
-    // no viene de un borrador ya guardado (si viene de un borrador, se asume ya elegido).
-    viajesActualizarTenuesInformacion(!!borrador);
+    if (registro) {
+      document.getElementById('via-f-apellido').value = registro.apellido || '';
+      document.getElementById('via-f-nombres').value = registro.nombres || '';
+      document.getElementById('via-f-doc').value = registro.documento || '';
+      document.getElementById('via-f-nac').value = registro.fechaNacimiento || '';
+      document.getElementById('via-f-tel').value = registro.telefono || '+54 ';
+      document.getElementById('via-f-email').value = registro.email || '';
+      document.getElementById('via-f-tipo').value = registro.tipoEntrada || 'General';
+      var edadHint = document.getElementById('via-f-edad-hint');
+      var edad = viajesCalcularEdad(registro.fechaNacimiento);
+      edadHint.textContent = edad !== null ? ('Edad: ' + edad + ' años') : '';
+    } else {
+      // "Crear" siempre arranca vacío.
+      document.getElementById('via-f-apellido').value = '';
+      document.getElementById('via-f-nombres').value = '';
+      document.getElementById('via-f-doc').value = '';
+      document.getElementById('via-f-nac').value = '';
+      document.getElementById('via-f-tel').value = '+54 ';
+      document.getElementById('via-f-email').value = '';
+      document.getElementById('via-f-tipo').value = 'General';
+      document.getElementById('via-f-edad-hint').textContent = '';
+    }
+
+    viajesActualizarTenuesInformacion(!!registro);
 
     document.getElementById('modal-usuario-informacion').style.display = 'flex';
 
-    // Foco automático en "Apellido" al abrir el formulario
-    setTimeout(function() {
-      var apellidoInput = document.getElementById('via-f-apellido');
-      if (apellidoInput) { apellidoInput.focus(); apellidoInput.select(); }
-    }, 50);
+    // Foco automático en "Apellido" solo al cargar un pasajero nuevo; si se abrió para
+    // editar uno existente (ícono "Ver"), no se posiciona el cursor en ningún campo.
+    if (!registro) {
+      setTimeout(function() {
+        var apellidoInput = document.getElementById('via-f-apellido');
+        if (apellidoInput) { apellidoInput.focus(); apellidoInput.select(); }
+      }, 50);
+    }
   } catch (e) { console.error(e); }
 }
 
-async function viajesEnviarFormulario() {
+// ── USUARIO: botón "Guardar" del formulario "Crear" — guarda el pasajero en "Mis
+//    Inscriptos" (localStorage), SIN enviarlo al coordinador. Si se estaba editando un
+//    inscripto existente (abierto con "Ver"), actualiza ese registro y vuelve a
+//    Inscriptos; si es un alta nueva, limpia el formulario para cargar otro pasajero. ──
+function viajesGuardarInscriptoLocal() {
   const msg = document.getElementById('via-msg-form');
   msg.className = 'via-msg'; msg.textContent = '';
-  if (!supabaseClient) { msg.className = 'via-msg err'; msg.textContent = 'El sistema de Viajes todavía no está configurado.'; return; }
-  if (!viajesCodigoValidado) { msg.className = 'via-msg err'; msg.textContent = 'No se encontró el viaje asociado a tu código. Volvé a ingresar el código desde "Viajes".'; return; }
+  if (!viajesCodigoValidado) {
+    msg.className = 'via-msg err';
+    msg.textContent = 'No se encontró el viaje asociado a tu código. Volvé a ingresar el código desde "Viajes".';
+    return;
+  }
 
   const apellido = document.getElementById('via-f-apellido').value.trim().toUpperCase();
   const nombres = document.getElementById('via-f-nombres').value.trim().toUpperCase();
@@ -7906,32 +8311,48 @@ async function viajesEnviarFormulario() {
     msg.className = 'via-msg err'; msg.textContent = 'Completá todos los campos obligatorios.'; return;
   }
 
-  const btn = document.getElementById('via-btn-enviar-form');
-  btn.disabled = true;
+  var codigo = viajesCodigoValidado.codigo;
+  var lista = viajesObtenerInscriptosLocal(codigo);
+  var idAGuardar = viajesInscriptoEditandoId;
 
-  // doc_id: por usuario logueado (evita duplicados si vuelve a entrar) o por documento si es invitado
-  const docId = moUsername ? ('u_' + moUsername) : ('doc_' + documento.replace(/\D/g, ''));
+  if (idAGuardar) {
+    var idx = lista.findIndex(function(p) { return p.id === idAGuardar; });
+    if (idx !== -1) {
+      var previo = lista[idx];
+      lista[idx] = {
+        id: previo.id, creado: previo.creado, enviado: previo.enviado,
+        apellido: apellido, nombres: nombres, nombre: nombre, documento: documento,
+        fechaNacimiento: fechaNacimiento, telefono: telefono, email: email, tipoEntrada: tipoEntrada
+      };
+    }
+  } else {
+    idAGuardar = 'local_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+    lista.push({
+      id: idAGuardar,
+      creado: new Date().toISOString(),
+      enviado: false,
+      apellido: apellido, nombres: nombres, nombre: nombre, documento: documento,
+      fechaNacimiento: fechaNacimiento, telefono: telefono, email: email, tipoEntrada: tipoEntrada
+    });
+  }
+  viajesGuardarInscriptosLocal(codigo, lista);
+  // Recuerda el id recién guardado: si el usuario presiona "Guardar" de nuevo sin
+  // pasar por "Agregar", actualiza este mismo registro en lugar de duplicarlo.
+  viajesInscriptoEditandoId = idAGuardar;
 
-  try {
-    const { error } = await supabaseClient.from('inscripciones').upsert({
-      viaje_id: viajesCodigoValidado.id,
-      doc_id: docId,
-      nombre, documento,
-      fecha_nacimiento: fechaNacimiento,
-      telefono, email,
-      tipo_entrada: tipoEntrada,
-      usuario: moUsername || null
-    }, { onConflict: 'viaje_id,doc_id' });
-    if (error) throw error;
-    if (viajesCodigoValidado && viajesCodigoValidado.codigo) viajesBorrarInfoBorradorStorage(viajesCodigoValidado.codigo);
+  if (viajesFormOrigenVer) {
+    // Venía del ícono "Ver" en Inscriptos: guarda los cambios y vuelve a esa ventana.
+    viajesInscriptoEditandoId = null;
+    viajesFormOrigenVer = false;
+    document.getElementById('modal-usuario-informacion').style.display = 'none';
+    document.getElementById('usr-insc-titulo').textContent = 'Inscriptos — ' + (viajesCodigoValidado.titulo || '');
+    viajesRenderInscriptosUsuario(codigo);
+    document.getElementById('modal-usuario-inscriptos').style.display = 'flex';
+  } else {
+    // Se guardó en "Inscriptos" sin salir del formulario: el usuario puede presionar
+    // "Agregar" para cargar otro pasajero, o "Cerrar" para terminar.
     msg.className = 'via-msg ok';
-    msg.textContent = '¡Listo! Tus datos fueron enviados al coordinador.';
-    btn.disabled = true; btn.textContent = 'Enviado ✓';
-  } catch (e) {
-    console.error('Error al enviar el formulario de Información:', e);
-    msg.className = 'via-msg err';
-    msg.textContent = 'Error al enviar: ' + (e && e.message ? e.message : 'intentá de nuevo.');
-    btn.disabled = false;
+    msg.textContent = '¡Guardado! Presioná "Agregar" para cargar otro pasajero, o "Cerrar" para terminar.';
   }
 }
 
@@ -8869,8 +9290,11 @@ document.addEventListener('DOMContentLoaded', function() {
     openItinerariosModal();
   });
 
-  // "Viajes" → abre el modal de Viajes (coordinador / código)
-  async function abrirModalViajes() {
+  // "Viajes" → abre el modal de Viajes (coordinador / código).
+  // soloSeccion (opcional): 'crear' | 'guardados' | 'creados' — usado desde el
+  // submenú "Coordinador → Viajes", que ahora ofrece esas 3 opciones por
+  // separado en vez de mostrar todo el formulario junto.
+  async function abrirModalViajes(soloSeccion) {
     closeHam();
     var warn = document.getElementById('via-warning-config');
     if (!VIAJES_CONFIGURADO) {
@@ -8881,6 +9305,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.getElementById('modal-viajes').style.display = 'flex';
+    document.getElementById('via-crear-exito').style.display = 'none';
 
     // Por si moUsername todavía no se sincronizó con la sesión activa
     // (p. ej. se entra directo a "Viajes" sin haber abierto antes "Orígenes").
@@ -8889,6 +9314,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var esCoord = await viajesEsCoordinador(moUsername);
     var tabsBar = document.querySelector('#modal-viajes .via-tabs');
+
+    // Bloques del formulario de coordinador que se pueden mostrar por separado.
+    var elForm = document.getElementById('via-coord-form-wrap');
+    var elHr = document.getElementById('via-hr-divisor');
+    var elGuardados = document.getElementById('via-bloque-guardados');
+    var elCreados = document.getElementById('via-bloque-creados');
+    var elTitulo = document.getElementById('via-modal-titulo');
+    var elPanel = document.querySelector('#modal-viajes .mo-panel');
 
     if (esCoord) {
       // Coordinador: no debe poder entrar como usuario común, así que la barra
@@ -8904,8 +9337,44 @@ document.addEventListener('DOMContentLoaded', function() {
       viajesLimpiarFormularioCoordinador();
       if (VIAJES_CONFIGURADO) viajesCargarListaCoordinador();
       viajesRenderListaBorradores();
+
+      if (soloSeccion === 'crear') {
+        elTitulo.textContent = 'Crear viaje';
+        elPanel.style.width = 'min(980px, 96vw)';
+        elForm.style.display = '';
+        elHr.style.display = 'none';
+        elGuardados.style.display = 'none';
+        elCreados.style.display = 'none';
+      } else if (soloSeccion === 'guardados') {
+        // Exclusivamente el listado de viajes guardados (sin límite de cantidad);
+        // el formulario solo aparece si se elige uno para editarlo, y ahí el
+        // panel vuelve a su ancho completo.
+        elTitulo.textContent = 'Viajes guardados';
+        elPanel.style.width = 'min(490px, 96vw)';
+        elForm.style.display = 'none';
+        elHr.style.display = 'none';
+        elGuardados.style.display = '';
+        elCreados.style.display = 'none';
+      } else if (soloSeccion === 'creados') {
+        elTitulo.textContent = 'Viajes guardados';
+        elPanel.style.width = 'min(490px, 96vw)';
+        elForm.style.display = 'none';
+        elHr.style.display = 'none';
+        elGuardados.style.display = 'none';
+        elCreados.style.display = '';
+      } else {
+        // Sin sección específica (p. ej. desde el botón "Viajes" general): todo visible.
+        elTitulo.textContent = 'Viajes';
+        elPanel.style.width = 'min(980px, 96vw)';
+        elForm.style.display = '';
+        elHr.style.display = '';
+        elGuardados.style.display = '';
+        elCreados.style.display = '';
+      }
     } else {
       // Usuario común: no ve la pestaña de coordinador, entra directo a "Tengo un Código"
+      elTitulo.textContent = 'Viajes';
+      elPanel.style.width = 'min(980px, 96vw)';
       tabsBar.style.display = 'none';
       document.getElementById('via-tab-codigo').classList.add('active');
       document.getElementById('via-tab-coord').classList.remove('active');
@@ -8913,8 +9382,25 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('via-sec-coord').classList.remove('active');
     }
   }
-  document.getElementById('ham-btn-viajes').addEventListener('click', abrirModalViajes);
-  document.getElementById('ham-sub-viajes').addEventListener('click', abrirModalViajes);
+  document.getElementById('ham-btn-viajes').addEventListener('click', function() { abrirModalViajes(); });
+
+  // ── Submenú "Coordinador → Viajes": flyout anidado con las 3 opciones ──
+  var hamSubViajesBtn = document.getElementById('ham-sub-viajes');
+  var hamSubmenuViajes = document.getElementById('ham-submenu-viajes');
+  hamSubViajesBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var abierto = hamSubmenuViajes.style.display !== 'none';
+    hamSubmenuViajes.style.display = abierto ? 'none' : 'block';
+  });
+  document.getElementById('ham-viajes-sub-crear').addEventListener('click', function() {
+    abrirModalViajes('crear');
+  });
+  document.getElementById('ham-viajes-sub-guardados').addEventListener('click', function() {
+    abrirModalViajes('guardados');
+  });
+  document.getElementById('ham-viajes-sub-creados').addEventListener('click', function() {
+    abrirModalViajes('creados');
+  });
 
   // ── Submenú "Coordinador" (solo visible para coordinadores logueados) ──
   var hamBtnCoord = document.getElementById('ham-btn-coordinador');
@@ -9133,7 +9619,16 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('ham-usr-sub-mapa').addEventListener('click', function() { closeHam(); abrirProximamente('Mapa'); });
   document.getElementById('ham-usr-sub-vouchers').addEventListener('click', function() { closeHam(); abrirProximamente('Voucher\'s'); });
   document.getElementById('ham-usr-sub-itinerario').addEventListener('click', function() { closeHam(); viajesAbrirItinerarioUsuario(); });
-  document.getElementById('ham-usr-sub-informacion').addEventListener('click', function() { closeHam(); viajesAbrirInformacionUsuario(); });
+  // ── Submenú "Viajes (usuario) → Información": flyout anidado con "Agregar" e "Inscriptos" ──
+  var hamSubInformacionBtn = document.getElementById('ham-usr-sub-informacion');
+  var hamSubmenuInformacion = document.getElementById('ham-submenu-informacion');
+  hamSubInformacionBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var abierto = hamSubmenuInformacion.style.display !== 'none';
+    hamSubmenuInformacion.style.display = abierto ? 'none' : 'block';
+  });
+  document.getElementById('ham-usr-sub-informacion-agregar').addEventListener('click', function() { closeHam(); viajesAbrirInformacionUsuario(); });
+  document.getElementById('ham-usr-sub-informacion-inscriptos').addEventListener('click', function() { closeHam(); viajesAbrirInscriptosUsuario(); });
 
   document.getElementById('usr-iti-btn-cerrar').addEventListener('click', function() {
     document.getElementById('modal-usuario-itinerario').style.display = 'none';
@@ -9142,10 +9637,48 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.target === this) this.style.display = 'none';
   });
   document.getElementById('usr-info-btn-cerrar').addEventListener('click', function() {
+    viajesInscriptoEditandoId = null;
+    viajesFormOrigenVer = false;
     document.getElementById('modal-usuario-informacion').style.display = 'none';
   });
   document.getElementById('modal-usuario-informacion').addEventListener('click', function(e) {
+    if (e.target === this) { viajesInscriptoEditandoId = null; viajesFormOrigenVer = false; this.style.display = 'none'; }
+  });
+
+  // Usuario: botón "Agregar" del formulario "Crear" — limpia los campos para poder
+  // cargar un nuevo pasajero sin cerrar el formulario.
+  document.getElementById('via-btn-agregar-otro').addEventListener('click', function() {
+    viajesInscriptoEditandoId = null;
+    viajesFormOrigenVer = false;
+    document.getElementById('via-msg-form').textContent = '';
+    document.getElementById('via-f-apellido').value = '';
+    document.getElementById('via-f-nombres').value = '';
+    document.getElementById('via-f-doc').value = '';
+    document.getElementById('via-f-nac').value = '';
+    document.getElementById('via-f-tel').value = '+54 ';
+    document.getElementById('via-f-email').value = '';
+    document.getElementById('via-f-tipo').value = 'General';
+    document.getElementById('via-f-edad-hint').textContent = '';
+    viajesActualizarTenuesInformacion(false);
+    var apellidoInput = document.getElementById('via-f-apellido');
+    if (apellidoInput) { apellidoInput.focus(); apellidoInput.select(); }
+  });
+
+  // ── Usuario: "Mis Inscriptos" — Enviar / Cerrar, y delegación de los íconos Ver/Eliminar ──
+  document.getElementById('usr-insc-btn-enviar').addEventListener('click', viajesEnviarInscriptosUsuario);
+  document.getElementById('usr-insc-btn-cerrar').addEventListener('click', viajesCerrarInscriptosUsuario);
+  document.getElementById('modal-usuario-inscriptos').addEventListener('click', function(e) {
     if (e.target === this) this.style.display = 'none';
+  });
+  document.getElementById('usr-insc-tbody').addEventListener('click', function(e) {
+    var btnVer = e.target.closest('.insc-ver');
+    if (btnVer) {
+      document.getElementById('modal-usuario-inscriptos').style.display = 'none';
+      viajesAbrirInformacionUsuario(btnVer.getAttribute('data-id'));
+      return;
+    }
+    var btnDel = e.target.closest('.insc-del');
+    if (btnDel) { viajesEliminarInscriptoLocal(btnDel.getAttribute('data-id')); return; }
   });
 
   // ── PLANILLA DE CONTROL: checklist navegable por Fase / Área ──────────────
@@ -9219,6 +9752,19 @@ document.addEventListener('DOMContentLoaded', function() {
   // Coordinador: crear viaje
   document.getElementById('via-btn-crear').addEventListener('click', viajesCrear);
 
+  // Coordinador: panel de éxito al crear el viaje (código + Imprimir / Cerrar)
+  document.getElementById('via-crear-exito-imprimir').addEventListener('click', function() {
+    const area = document.getElementById('via-print-area');
+    area.innerHTML =
+      '<div class="via-print-titulo">AT Argentina Turismo</div>' +
+      '<div class="via-print-sub" style="font-size:1.1rem; margin-top:10px;">' +
+      escH(document.getElementById('via-crear-exito-codigo').textContent) + '</div>';
+    window.print();
+  });
+  document.getElementById('via-crear-exito-cerrar').addEventListener('click', function() {
+    document.getElementById('via-crear-exito').style.display = 'none';
+  });
+
   // Coordinador: guardar borrador local (la ventana permanece abierta)
   document.getElementById('via-btn-guardar-borrador').addEventListener('click', function() {
     viajesGuardarBorrador();
@@ -9242,24 +9788,16 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('via-in-codigo').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') { e.preventDefault(); viajesValidarCodigo(); }
   });
-  document.getElementById('via-btn-enviar-form').addEventListener('click', viajesEnviarFormulario);
-
-  // Usuario: "Guardar y Cerrar" en el formulario de Información — guarda un borrador
-  // local (por código de viaje) y cierra la ventana sin enviar al coordinador.
-  document.getElementById('via-btn-guardar-cerrar').addEventListener('click', function() {
-    if (viajesCodigoValidado && viajesCodigoValidado.codigo) {
-      viajesGuardarInfoBorradorStorage(viajesCodigoValidado.codigo, {
-        apellido: document.getElementById('via-f-apellido').value,
-        nombres: document.getElementById('via-f-nombres').value,
-        documento: document.getElementById('via-f-doc').value,
-        fechaNacimiento: document.getElementById('via-f-nac').value,
-        telefono: document.getElementById('via-f-tel').value,
-        email: document.getElementById('via-f-email').value,
-        tipoEntrada: document.getElementById('via-f-tipo').value
-      });
-    }
-    document.getElementById('modal-usuario-informacion').style.display = 'none';
+  // El código no distingue mayúsculas de minúsculas: se convierte a mayúsculas
+  // automáticamente a medida que el usuario escribe (ej: "3y45hj9" -> "3Y45HJ9").
+  document.getElementById('via-in-codigo').addEventListener('input', function(e) {
+    const pos = this.selectionStart, posEnd = this.selectionEnd;
+    this.value = this.value.toUpperCase();
+    this.setSelectionRange(pos, posEnd);
   });
+  // Usuario: "Guardar" en el formulario "Crear" — guarda el pasajero en "Mis
+  // Inscriptos" (localStorage), sin enviarlo al coordinador.
+  document.getElementById('via-btn-guardar-form').addEventListener('click', viajesGuardarInscriptoLocal);
 
   // Pasajero: formatear Documento y Teléfono en vivo, y mostrar la edad calculada
   document.getElementById('via-f-doc').addEventListener('input', function() {
@@ -9295,7 +9833,7 @@ document.addEventListener('DOMContentLoaded', function() {
           siguiente.focus();
           if (typeof siguiente.select === 'function') siguiente.select();
         } else {
-          document.getElementById('via-btn-enviar-form').click();
+          document.getElementById('via-btn-guardar-form').click();
         }
       });
     });
@@ -9303,6 +9841,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Coordinador: imprimir el listado de pasajeros (apaisado / listo para guardar como PDF)
   document.getElementById('via-btn-imprimir-roster').addEventListener('click', viajesImprimirRoster);
+
+  document.getElementById('via-roster-btn-cerrar').addEventListener('click', viajesCerrarRoster);
+  document.getElementById('modal-viaje-roster').addEventListener('click', function(e) {
+    if (e.target === this) viajesCerrarRoster();
+  });
 
   // Si el usuario entra desde un link de invitación (#viajes-codigo=XXXXXX), abrir directo
   // en la pestaña de código con el valor precargado.
@@ -9312,7 +9855,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (m) {
       document.getElementById('ham-btn-viajes').click();
       document.getElementById('via-tab-codigo').click();
-      document.getElementById('via-in-codigo').value = m[1];
+      document.getElementById('via-in-codigo').value = m[1].toUpperCase();
     }
   })();
 
