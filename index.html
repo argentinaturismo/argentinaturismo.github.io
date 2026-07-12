@@ -448,83 +448,56 @@
       overflow:hidden;
     }
 
-    /* ── SLIDESHOW: efecto "pasar hojas de un libro" ──
-       Las fotos se apilan como páginas: la de encima (mayor z-index) gira
-       -180° sobre su borde izquierdo, como si se diera vuelta la hoja de un
-       libro, revelando la siguiente foto que ya estaba apilada debajo. */
-    .slideshow { position:fixed; inset:0; z-index:0; perspective:2400px; perspective-origin:center; }
+    /* ── SLIDESHOW: corte directo, sin efectos ──
+       Cada foto se muestra 2 segundos y pasa directo a la siguiente, sin
+       fundido, sin zoom y sin ningún tipo de transición. */
+    .slideshow { position:fixed; inset:0; z-index:0; }
     .slide {
       position:absolute; inset:0;
       background-size:cover; background-position:center;
-      transform-origin:left center;
-      backface-visibility:hidden;
-      animation: pageflip 80s infinite;
-    }
-    /* Sombra sutil sobre el borde derecho, como el lomo/curvatura de una página */
-    .slide::before {
-      content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
-      background:linear-gradient(90deg, rgba(0,0,0,0) 80%, rgba(0,0,0,0.32) 100%);
+      opacity:0;
+      animation: slidecut 60s infinite;
     }
     .slide span {
       position:absolute; inset:0; display:block;
       background-size:cover; background-position:center;
-      animation: kenburns 80s infinite;
     }
-    /* Cada diapositiva se apila por delante de la siguiente (mayor z-index) y,
-       al llegar su turno, se da vuelta como una hoja de libro. */
-    .slide:nth-child(1)  { animation-delay:-0.5s; z-index:20; }
-    .slide:nth-child(2)  { animation-delay:4s;    z-index:19; }
-    .slide:nth-child(3)  { animation-delay:8s;    z-index:18; }
-    .slide:nth-child(4)  { animation-delay:12s;   z-index:17; }
-    .slide:nth-child(5)  { animation-delay:16s;   z-index:16; }
-    .slide:nth-child(6)  { animation-delay:20s;   z-index:15; }
-    .slide:nth-child(7)  { animation-delay:24s;   z-index:14; }
-    .slide:nth-child(8)  { animation-delay:28s;   z-index:13; }
-    .slide:nth-child(9)  { animation-delay:32s;   z-index:12; }
-    .slide:nth-child(10) { animation-delay:36s;   z-index:11; }
-    .slide:nth-child(11) { animation-delay:40s;   z-index:10; }
-    .slide:nth-child(12) { animation-delay:44s;   z-index:9;  }
-    .slide:nth-child(13) { animation-delay:48s;   z-index:8;  }
-    .slide:nth-child(14) { animation-delay:52s;   z-index:7;  }
-    .slide:nth-child(15) { animation-delay:56s;   z-index:6;  }
-    .slide:nth-child(16) { animation-delay:60s;   z-index:5;  }
-    .slide:nth-child(17) { animation-delay:64s;   z-index:4;  }
-    .slide:nth-child(18) { animation-delay:68s;   z-index:3;  }
-    .slide:nth-child(19) { animation-delay:72s;   z-index:2;  }
-    .slide:nth-child(20) { animation-delay:76s;   z-index:1;  }
-    .slide:nth-child(1)  span { animation-delay:-0.5s; }
-    .slide:nth-child(2)  span { animation-delay:4s;   }
-    .slide:nth-child(3)  span { animation-delay:8s;   }
-    .slide:nth-child(4)  span { animation-delay:12s;  }
-    .slide:nth-child(5)  span { animation-delay:16s;  }
-    .slide:nth-child(6)  span { animation-delay:20s;  }
-    .slide:nth-child(7)  span { animation-delay:24s;  }
-    .slide:nth-child(8)  span { animation-delay:28s;  }
-    .slide:nth-child(9)  span { animation-delay:32s;  }
-    .slide:nth-child(10) span { animation-delay:36s;  }
-    .slide:nth-child(11) span { animation-delay:40s;  }
-    .slide:nth-child(12) span { animation-delay:44s;  }
-    .slide:nth-child(13) span { animation-delay:48s;  }
-    .slide:nth-child(14) span { animation-delay:52s;  }
-    .slide:nth-child(15) span { animation-delay:56s;  }
-    .slide:nth-child(16) span { animation-delay:60s;  }
-    .slide:nth-child(17) span { animation-delay:64s;  }
-    .slide:nth-child(18) span { animation-delay:68s;  }
-    .slide:nth-child(19) span { animation-delay:72s;  }
-    .slide:nth-child(20) span { animation-delay:76s;  }
+    .slide:nth-child(1)  { animation-delay:0s;  }
+    .slide:nth-child(2)  { animation-delay:2s;  }
+    .slide:nth-child(3)  { animation-delay:4s;  }
+    .slide:nth-child(4)  { animation-delay:6s;  }
+    .slide:nth-child(5)  { animation-delay:8s;  }
+    .slide:nth-child(6)  { animation-delay:10s; }
+    .slide:nth-child(7)  { animation-delay:12s; }
+    .slide:nth-child(8)  { animation-delay:14s; }
+    .slide:nth-child(9)  { animation-delay:16s; }
+    .slide:nth-child(10) { animation-delay:18s; }
+    .slide:nth-child(11) { animation-delay:20s; }
+    .slide:nth-child(12) { animation-delay:22s; }
+    .slide:nth-child(13) { animation-delay:24s; }
+    .slide:nth-child(14) { animation-delay:26s; }
+    .slide:nth-child(15) { animation-delay:28s; }
+    .slide:nth-child(16) { animation-delay:30s; }
+    .slide:nth-child(17) { animation-delay:32s; }
+    .slide:nth-child(18) { animation-delay:34s; }
+    .slide:nth-child(19) { animation-delay:36s; }
+    .slide:nth-child(20) { animation-delay:38s; }
+    .slide:nth-child(21) { animation-delay:40s; }
+    .slide:nth-child(22) { animation-delay:42s; }
+    .slide:nth-child(23) { animation-delay:44s; }
+    .slide:nth-child(24) { animation-delay:46s; }
+    .slide:nth-child(25) { animation-delay:48s; }
+    .slide:nth-child(26) { animation-delay:50s; }
+    .slide:nth-child(27) { animation-delay:52s; }
+    .slide:nth-child(28) { animation-delay:54s; }
+    .slide:nth-child(29) { animation-delay:56s; }
+    .slide:nth-child(30) { animation-delay:58s; }
 
-    @keyframes pageflip {
-      0%     { transform:rotateY(0deg);    filter:brightness(1);   }
-      5%     { transform:rotateY(0deg);    filter:brightness(1);   }
-      6.9%   { transform:rotateY(-90deg);  filter:brightness(0.5); }
-      8.75%  { transform:rotateY(-180deg); filter:brightness(1);   }
-      100%   { transform:rotateY(-180deg); filter:brightness(1);   }
-    }
-    @keyframes kenburns {
-      0%      { transform:scale(1);     }
-      5%      { transform:scale(1.025); }
-      5.625%  { transform:scale(1.03);  }
-      100%    { transform:scale(1.03); }
+    @keyframes slidecut {
+      0%      { opacity:1; }
+      3.333%  { opacity:1; }
+      3.334%  { opacity:0; }
+      100%    { opacity:0; }
     }
 
     /* ── OVERLAY ── */
@@ -656,9 +629,8 @@
     /* ── VISITOR COUNTER ── */
 
     @media (prefers-reduced-motion: reduce) {
-      .slide, .slide span { animation:none; }
-      .slide { transform:rotateY(0deg); filter:none; }
-      .slide:nth-child(1) span { transform:scale(1); }
+      .slide { animation:none; opacity:0; }
+      .slide:nth-child(1) { opacity:1; }
     }
 
     @media (max-width:480px) {
@@ -850,15 +822,68 @@
     }
     .header-center-group > * { pointer-events:auto; }
     .header-right { margin-left:auto; display:flex; gap:10px; }
-    .btn-volver {
-      background:rgba(232,201,106,0.1); border:1px solid rgba(232,201,106,0.35);
-      color:var(--accent); border-radius:999px; padding:7px 14px;
-      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
-      cursor:pointer; white-space:nowrap;
-      transition:background .2s ease, border-color .2s ease;
+    /* ── Contador regresivo del viaje (usuario) ──
+       Fijo, centrado, en la parte superior del área del mapa (overlay sobre
+       el mapa de Leaflet, que usa z-index bajo — ver .leaflet-container). */
+    .header-countdown {
+      position:absolute; top:14px; left:50%; transform:translateX(-50%);
+      z-index:900;
+      display:flex; flex-direction:column; align-items:center; gap:7px;
+      background:rgba(13,16,32,0.88); border:1px solid #2a3050; border-radius:10px;
+      padding:9px 14px; backdrop-filter:blur(4px);
+      box-shadow:0 4px 18px rgba(0,0,0,0.35);
+      max-width:min(92vw, 640px);
     }
-    .btn-volver:hover { background:rgba(232,201,106,0.2); border-color:rgba(232,201,106,0.55); }
+    .hcd-titulo {
+      font-family:'Barlow', sans-serif; font-weight:600; font-size:0.78rem;
+      color:var(--cream); text-align:center; letter-spacing:0.01em;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%;
+    }
+    .hcd-titulo b { color:#e8c96a; font-weight:700; }
+    .hcd-fila { display:flex; align-items:center; gap:6px; }
+    .hcd-cerrar {
+      position:absolute; top:-9px; right:-9px; z-index:1;
+      width:18px; height:18px; padding:0;
+      display:flex; align-items:center; justify-content:center;
+      background:#1a1e38; border:1px solid #3a4270; border-radius:4px;
+      color:#c8ceec; font-size:0.62rem; line-height:1; cursor:pointer;
+      box-shadow:0 2px 6px rgba(0,0,0,0.4);
+    }
+    .hcd-cerrar:hover { background:#2a3050; color:#fff; }
+    .hcd-box {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      min-width:44px; padding:4px 8px;
+      background:#161a30; border:1px solid #2a3050; border-radius:6px;
+    }
+    .hcd-val {
+      font-family:'Barlow', sans-serif; font-weight:700; font-size:0.95rem;
+      color:#e8c96a; line-height:1.1;
+    }
+    .hcd-lbl {
+      font-family:'Barlow', sans-serif; font-size:0.55rem; letter-spacing:0.08em;
+      text-transform:uppercase; color:#7a83a6; margin-top:2px;
+    }
+    .header-countdown.hcd-vencido .hcd-val { color:#ef4444; }
+    .btn-volver {
+      background:transparent; border:1.5px solid #e8c96a; border-radius:2px;
+      color:var(--accent); padding:7px 14px;
+      font-family:'Barlow',sans-serif; font-size:0.78rem; font-weight:600;
+      letter-spacing:0.1em; text-transform:uppercase;
+      cursor:pointer; white-space:nowrap;
+      transition:background .2s ease, color .2s ease;
+    }
+    .btn-volver:hover { background:#e8c96a; color:#0f1117; }
     .btn-volver:active { transform:translateY(1px); }
+    /* Mismo estilo que el resto de los botones de acción del sitio (Crear viaje,
+       Sí/No, etc.): fondo oscuro, borde dorado, esquinas rectas — en vez de la
+       píldora semitransparente de .btn-volver. */
+    .btn-habilitar-prov, .btn-habilitar-cat {
+      background:transparent; border:1.5px solid #e8c96a; border-radius:2px;
+      color:#e8c96a; letter-spacing:0.12em; text-transform:uppercase;
+    }
+    .btn-habilitar-prov:hover, .btn-habilitar-cat:hover {
+      background:#e8c96a; color:#0f1117; border-color:#e8c96a;
+    }
     #btn-abrir-origenes { color:#ef4444; }
     #btn-cambiar-origen { color:#ef4444; }
     .header-origen-select {
@@ -957,12 +982,13 @@
       position:relative; flex-shrink:0; margin-left:80px;
     }
     .map-hamburger {
-      width:36px; height:36px; border-radius:8px; border:1px solid rgba(232,201,106,0.35);
-      background:rgba(232,201,106,0.1); cursor:pointer;
+      width:36px; height:36px; border-radius:2px; border:1.5px solid #e8c96a;
+      background:transparent; cursor:pointer;
       display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;
       padding:0; transition:background .2s, border-color .2s;
     }
-    .map-hamburger:hover { background:rgba(232,201,106,0.2); border-color:rgba(232,201,106,0.55); }
+    .map-hamburger:hover { background:#e8c96a; }
+    .map-hamburger:hover span { background:#0f1117; }
     .map-hamburger span {
       display:block; width:18px; height:2px;
       background:var(--accent); border-radius:2px; pointer-events:none;
@@ -1160,7 +1186,7 @@
     .info-panel-top {
       flex:1; min-height:0; overflow-y:auto;
       display:flex; flex-direction:column;
-      padding:16px 14px 0;
+      padding:16px 14px 18px;
     }
     .info-panel-top::-webkit-scrollbar { width:4px; }
     .info-panel-top::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
@@ -1200,9 +1226,9 @@
     .tab-info-content .tic-desc::-webkit-scrollbar { width:3px; }
     .tab-info-content .tic-desc::-webkit-scrollbar-track { background:transparent; }
     .tab-info-content .tic-desc::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
-    .tic-fotos { display:flex; gap:6px; margin-top:12px; }
+    .tic-fotos { display:flex; gap:8px; margin-top:12px; }
     .tic-fotos img {
-      flex:1; min-width:0; width:100%; height:78px; object-fit:cover;
+      flex:1; min-width:0; width:100%; height:220px; object-fit:cover;
       border-radius:8px; border:1px solid var(--border); background:#11151f;
       cursor:zoom-in; transition:opacity .15s;
     }
@@ -1813,6 +1839,97 @@
     #modal-usuario-informacion .via-select:focus { border-color:#fff200; }
     #modal-usuario-informacion .via-msg.err { color:#fca5a5 !important; }
     #modal-usuario-informacion .via-msg.ok { color:#86efac !important; }
+
+    /* ── FICHA MÉDICA (formulario paginado, dentro de "Viajes → Información → Crear") ── */
+    .fm-pagina { display:none; }
+    .fm-pagina.activa { display:block; }
+    .fm-pagina-titulo {
+      font-family:'Playfair Display',serif; font-weight:400; font-size:1.2rem; color:#ffee00;
+      text-shadow:0 0 14px rgba(255,238,0,0.35); margin-bottom:4px;
+    }
+    .fm-pagina-progreso { font-size:0.7rem; color:#7a83a6; margin-bottom:16px; }
+    .fm-campo { margin-bottom:2px; }
+    .fm-item-row {
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+      padding:10px 2px; border-top:1px solid #2a3050; flex-wrap:wrap;
+    }
+    .fm-item-row:first-of-type { border-top:none; }
+    .fm-item-label { flex:1; font-size:0.84rem; color:#e8eaf2; min-width:160px; }
+    .fm-item-opts { display:flex; align-items:center; gap:16px; flex-shrink:0; flex-wrap:wrap; }
+    .fm-item-extra { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+    .fm-item-extra .fm-mini-label { font-size:0.7rem; color:#9aa3c4; letter-spacing:0.05em; }
+    .fm-suf-row { display:flex; align-items:center; gap:9px; }
+    .fm-suf-row input { width:80px; text-align:center; flex:none; }
+    .fm-suf-row span { font-size:0.78rem; color:#9aa3c4; }
+    .fm-presion-row { display:flex; align-items:center; gap:6px; }
+    .fm-presion-row input { width:52px; text-align:center; flex:none; }
+    .fm-presion-row span.fm-barra { font-size:1rem; color:#9aa3c4; }
+    .fm-presion-row span.fm-suf { font-size:0.78rem; color:#9aa3c4; margin-left:6px; }
+    .fm-grupo-row { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+    .fm-grupo-row .via-select { width:auto; min-width:110px; }
+    .fm-static-text {
+      font-size:0.82rem; line-height:1.6; color:#c7cbe0; background:var(--panel2);
+      border:1px solid #2a3050; border-radius:8px; padding:14px 16px; margin-bottom:16px;
+    }
+    .fm-tabla-wrap { overflow-x:auto; border:1px solid #2a3050; border-radius:8px; }
+    table.fm-tabla { width:100%; border-collapse:collapse; font-size:0.78rem; }
+    table.fm-tabla th {
+      text-align:left; padding:8px 10px; font-size:0.66rem; font-weight:700; letter-spacing:0.06em;
+      text-transform:uppercase; color:#9aa3c4; border-bottom:1px solid #2a3050; white-space:nowrap;
+    }
+    table.fm-tabla td { padding:6px 8px; border-bottom:1px solid #232945; vertical-align:middle; }
+    table.fm-tabla tr:last-child td { border-bottom:none; }
+    table.fm-tabla .fm-td-nombre { color:#e8eaf2; white-space:nowrap; }
+    table.fm-tabla .fm-td-opts { white-space:nowrap; }
+    table.fm-tabla input.via-input { padding:6px 8px; font-size:0.8rem; }
+    table.fm-tabla input.fm-anio { width:58px; text-align:center; }
+    table.fm-tabla input.fm-obs { min-width:140px; }
+    .fm-fila-med { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+    .fm-fila-med .via-input { flex:1; margin:0; }
+    .fm-check-grid { display:flex; flex-direction:column; gap:10px; margin-top:4px; }
+    .fm-nav {
+      display:flex; flex-direction:column; align-items:center;
+      gap:12px; padding:14px 24px; border-top:1px solid #2a3050;
+    }
+    .fm-nav-fila1 {
+      display:flex; justify-content:center; align-items:stretch; flex-wrap:wrap;
+      gap:10px 14px; width:100%;
+    }
+    .fm-nav-fila2 { display:flex; justify-content:center; }
+    .fm-nav button {
+      background:transparent; border:1.5px solid #e8c96a; border-radius:2px;
+      color:#e8c96a; font-family:'Barlow',sans-serif; font-weight:600;
+      font-size:0.74rem; letter-spacing:0.1em; text-transform:uppercase;
+      padding:9px 16px; min-width:104px; height:100%; box-sizing:border-box;
+      cursor:pointer; white-space:nowrap; text-align:center;
+      transition:background .3s ease, color .3s ease;
+    }
+    .fm-nav button:hover:not(:disabled) { background:#e8c96a; color:#0f1117; }
+    .fm-nav button:disabled { opacity:0.3; cursor:default; }
+    #fm-msg-guardado { text-align:center; font-size:0.76rem; color:#86efac; padding:0 24px 10px; min-height:14px; }
+    /* Impresión / Descarga en PDF: se muestran TODAS las páginas, una por hoja */
+    @media print {
+      #modal-ficha-medica, #modal-ficha-medica * { visibility:visible; }
+      #modal-ficha-medica {
+        position:absolute; left:0; top:0; width:100%; background:#fff !important;
+      }
+      #modal-ficha-medica .mo-panel { width:100% !important; max-height:none !important; box-shadow:none; border:none; }
+      #modal-ficha-medica .mo-header,
+      #modal-ficha-medica .fm-nav,
+      #modal-ficha-medica #fm-msg-guardado,
+      #modal-ficha-medica .fm-pagina-progreso { display:none !important; }
+      #modal-ficha-medica .mo-body { overflow:visible !important; padding:0 !important; }
+      #modal-ficha-medica .fm-pagina {
+        display:block !important; page-break-after:always; padding:14mm;
+      }
+      #modal-ficha-medica .fm-pagina:last-child { page-break-after:auto; }
+      #modal-ficha-medica .fm-pagina-titulo, #modal-ficha-medica .fm-item-label,
+      #modal-ficha-medica .fm-static-text, #modal-ficha-medica .via-label,
+      #modal-ficha-medica table.fm-tabla th, #modal-ficha-medica .fm-mini-label,
+      #modal-ficha-medica .fm-suf-row span, #modal-ficha-medica .fm-presion-row span { color:#000 !important; text-shadow:none !important; }
+      #modal-ficha-medica .via-input, #modal-ficha-medica .via-select,
+      #modal-ficha-medica table.fm-tabla input { color:#000 !important; border-color:#999 !important; background:#fff !important; }
+    }
     .via-codigo-badge {
       display:inline-block; font-family:'Barlow',sans-serif; font-weight:800;
       letter-spacing:0.3em; font-size:1.3rem; color:#e8c96a;
@@ -1825,11 +1942,14 @@
     .via-viaje-item {
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       background:var(--panel2); border:1px solid #2a3050; border-radius:8px;
-      padding:10px 14px; cursor:pointer; transition:border-color .18s;
+      padding:10px 14px; transition:border-color .18s;
     }
-    .via-viaje-item:hover, .via-viaje-item.sel { border-color:#e8c96a; }
+    .via-viaje-item.sel { border-color:#e8c96a; }
+    .via-viaje-item .via-vi-info { pointer-events:none; user-select:none; }
+    .via-viaje-item .mo-btn-edit, .via-viaje-item .mo-btn-del { cursor:pointer; pointer-events:auto; }
     .via-viaje-item .via-vi-titulo { font-weight:700; color:#e8eaf2; font-size:0.77rem; text-transform:uppercase; font-family:Arial, sans-serif; }
     .via-viaje-item .via-vi-codigo { font-size:1.05rem; font-weight:400; color:#ffe600; letter-spacing:0.12em; margin-top:2px; }
+    .via-viaje-item .via-vi-fecha { font-size:0.66rem; font-weight:400; color:#8a92b8; letter-spacing:0.03em; margin-top:2px; font-family:Arial, sans-serif; }
     .via-vi-info { display:flex; align-items:center; gap:12px; flex:1; min-width:0; }
     .via-detalle-brand {
       font-family:'Playfair Display',serif; font-weight:900; font-size:1.85rem;
@@ -1974,10 +2094,10 @@
     .via-voucher-row .via-input { flex:1; margin:0; }
     .via-row-del {
       width:26px; height:26px; flex-shrink:0; border-radius:6px; border:none; cursor:pointer;
-      background:rgba(220,38,38,0.12); color:#fca5a5; font-size:0.78rem;
+      background:rgba(255,255,255,0.06); color:#c8ceec; font-size:0.78rem;
       display:flex; align-items:center; justify-content:center; transition:background .15s;
     }
-    .via-row-del:hover { background:rgba(220,38,38,0.28); }
+    .via-row-del:hover { background:rgba(255,255,255,0.14); }
 
     /* ── MODAL RESUMEN DE RUTA ── */
     .ruta-backdrop {
@@ -2156,6 +2276,16 @@
     <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Salinas_grandes._Inmensidad.jpg?width=1920')"></span></div>
     <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Casa_Rosada_buenos_aires.JPG?width=1920')"></span></div>
     <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Buenos_Aires_-_Avenida_de_Mayo_the_Congress_and_La_Inmobiliaria_-_6976.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Talampaya_NP.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Ischigualasto,_San_Juan,_Argentina_EAG.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Fitz_Roy_1b.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Cartel_elefante_marino_(Elephant_seal),_Peninsula_Valdes,_Patagonia,_Argentina.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Delta_del_Tigre,_Buenos_Aires,_Argentina,_2023.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Vi%C3%B1edoCafayate.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/El_Tren_del_Fin_del_Mundo_-_Train_of_the_End_of_the_World_(25825195567).jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Mt._Fitzroy.jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Av._del_Libertador,_El_Calafate(1).jpg?width=1920')"></span></div>
+    <div class="slide"><span style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Dique_Frontal_de_R%C3%ADo_Hondo_desde_la_Costanera.JPG?width=1920')"></span></div>
   </div>
 
   <!-- TOP BAR: Quiénes somos / Tutorial / Contacto -->
@@ -2392,16 +2522,24 @@
       'Misiones · Ruinas Jesuíticas de San Ignacio Miní',
       'Jujuy / Salta · Salinas Grandes',
       'Buenos Aires · Casa Rosada',
-      'Buenos Aires · Congreso y Avenida de Mayo'
+      'Buenos Aires · Congreso y Avenida de Mayo',
+      'La Rioja · Parque Nacional Talampaya',
+      'San Juan · Parque Provincial Ischigualasto',
+      'Santa Cruz · Monte Fitz Roy, El Chaltén',
+      'Chubut · Península Valdés',
+      'Buenos Aires · Delta del Tigre',
+      'Salta · Viñedos de Cafayate',
+      'Tierra del Fuego · Tren del Fin del Mundo',
+      'Santa Cruz · Laguna de los Tres',
+      'Santa Cruz · El Calafate',
+      'Santiago del Estero · Termas de Río Hondo'
     ];
     const el = document.getElementById('caption');
     let i = 0;
     setInterval(() => {
       i = (i + 1) % captions.length;
-      el.style.opacity = 0;
-      setTimeout(() => { el.textContent = captions[i]; el.style.opacity = 0.55; }, 250);
-    }, 4000);
-    el.style.transition = 'opacity .3s ease';
+      el.textContent = captions[i];
+    }, 2000);
 
     // Precarga de la primera imagen para eliminar el retardo inicial.
     // El primer slide arranca con opacity:1 en CSS pero si la imagen aún
@@ -2596,7 +2734,7 @@
     </div>
   </div>
   <div class="header-right">
-    <button class="btn-volver" id="btn-volver-provincias" type="button">← Volver a Selección</button>
+    <button class="btn-volver" id="btn-volver-provincias" type="button">Volver a Selección</button>
   </div>
 </header>
 
@@ -2617,29 +2755,6 @@
         <div class="tic-geo" id="tic-geo"></div>
         <div class="tic-desc" id="tic-desc"></div>
         <div class="tic-fotos" id="tic-fotos"></div>
-      </div>
-    </div>
-
-    <div class="info-quickfacts" id="info-quickfacts">
-      <div class="qf-row">
-        <div class="qf-box">
-          <div class="qf-lbl">Días de apertura</div>
-          <div class="qf-val" id="qf-dias">—</div>
-        </div>
-        <div class="qf-box">
-          <div class="qf-lbl">Horarios</div>
-          <div class="qf-val" id="qf-horario">—</div>
-        </div>
-      </div>
-      <div class="qf-row">
-        <div class="qf-box">
-          <div class="qf-lbl">Costo de entrada</div>
-          <div class="qf-val" id="qf-costo">—</div>
-        </div>
-        <div class="qf-box">
-          <div class="qf-lbl">Mejor época del año</div>
-          <div class="qf-val" id="qf-epoca">—</div>
-        </div>
       </div>
     </div>
 
@@ -2675,6 +2790,22 @@
   <!-- MAP AREA -->
   <div class="map-area">
 
+    <!-- Contador regresivo del viaje del usuario: aparece cuando hay un código de -->
+    <!-- Viajes validado, mostrando el tiempo que falta para llegar a 5 días antes -->
+    <!-- del primer evento del itinerario. Al llegar a cero, bloquea el envío. -->
+    <!-- Fijo, centrado, en la parte superior del mapa. -->
+    <div class="header-countdown" id="header-viajes-countdown" style="display:none;">
+      <button class="hcd-cerrar" id="hcd-btn-cerrar" type="button" title="Cerrar" aria-label="Cerrar">✕</button>
+      <div class="hcd-titulo" id="hcd-titulo-viaje">Cierre de inscripción para el viaje: </div>
+      <div class="hcd-fila">
+        <div class="hcd-box"><span class="hcd-val" id="hcd-meses">00</span><span class="hcd-lbl">Meses</span></div>
+        <div class="hcd-box"><span class="hcd-val" id="hcd-dias">00</span><span class="hcd-lbl">Días</span></div>
+        <div class="hcd-box"><span class="hcd-val" id="hcd-horas">00</span><span class="hcd-lbl">Horas</span></div>
+        <div class="hcd-box"><span class="hcd-val" id="hcd-minutos">00</span><span class="hcd-lbl">Minutos</span></div>
+        <div class="hcd-box"><span class="hcd-val" id="hcd-segundos">00</span><span class="hcd-lbl">Segundos</span></div>
+      </div>
+    </div>
+
     <!-- BANNER PROVINCIA -->
     <div class="map-banner" id="map-banner">
       <span style="font-size:1rem">📍</span>
@@ -2689,7 +2820,6 @@
     <div id="map-argentina"></div>
     <div id="map-provincia"></div>
 
-    <div class="map-version-label">AR-Argentina Turismo v. 26.06.20.01</div>
 
   </div>
 </div>
@@ -3079,27 +3209,25 @@
           <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:18px;">
             <button class="via-btn" id="via-btn-crear" type="button" style="margin-top:0;">Crear viaje</button>
             <button class="via-btn via-btn-secundario" id="via-btn-guardar-borrador" type="button" style="margin-top:0;">Guardar viaje</button>
-          </div>
-          <div class="via-msg" id="via-msg-crear"></div>
-          <div class="via-msg" id="via-msg-borrador" style="color:#9aa3c4;"></div>
-
-          <!-- Aparece al crear el viaje: código generado + Imprimir / Cerrar -->
-          <div id="via-crear-exito" style="display:none; margin-top:14px;">
-            <div style="text-align:center;">
-              <span class="via-codigo-badge" id="via-crear-exito-codigo"></span>
-            </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
-              <button class="ruta-btn-secundario" id="via-crear-exito-imprimir" type="button">Imprimir</button>
+            <!-- "Cerrar" siempre visible del lado derecho; "Imprimir" aparece recién al crear el viaje -->
+            <div style="margin-left:auto; display:flex; gap:10px; align-items:center;">
+              <button class="ruta-btn-secundario" id="via-crear-exito-imprimir" type="button" style="display:none;">Imprimir</button>
               <button class="ruta-btn-primario" id="via-crear-exito-cerrar" type="button">Cerrar</button>
             </div>
           </div>
+          <div class="via-msg" id="via-msg-crear"></div>
+          <div class="via-msg" id="via-msg-borrador" style="color:#9aa3c4;"></div>
         </div>
+
 
         <hr style="border:none; border-top:1px solid #2a3050; margin:22px 0;" id="via-hr-divisor" />
 
         <div id="via-bloque-guardados">
           <div class="via-lista-viajes" id="via-lista-borradores">
             <div class="via-roster-empty">No hay viajes guardados.</div>
+          </div>
+          <div style="display:flex; justify-content:center; margin-top:16px;">
+            <button class="mo-auth-submit" id="via-guardados-btn-cerrar" type="button" style="padding:9px 40px; letter-spacing:0.2em;">Cerrar</button>
           </div>
         </div>
 
@@ -3124,10 +3252,6 @@
 
     </div>
 
-
-    <div style="padding:14px 24px; border-top:1px solid #2a3050; display:flex; justify-content:center;">
-      <button class="mo-auth-submit" id="via-btn-cerrar" type="button" style="padding:9px 40px; letter-spacing:0.2em;">Cerrar</button>
-    </div>
   </div>
 </div>
 
@@ -3216,7 +3340,7 @@
 
 <!-- ═══════════════════  MODAL USUARIO: INFORMACIÓN (datos del pasajero)  ═══════════════════ -->
 <div id="modal-usuario-informacion" class="mo-backdrop" style="display:none;">
-  <div class="mo-panel" style="width:min(480px, 96vw); max-height:88vh; display:flex; flex-direction:column;">
+  <div class="mo-panel" style="width:min(460px, 96vw); max-height:88vh; display:flex; flex-direction:column;">
     <div class="mo-body" style="padding:28px 28px 20px; overflow-y:auto; flex:1;">
       <div class="via-detalle-titulo-viaje" id="via-info-titulo-viaje" style="margin-bottom:18px;"></div>
 
@@ -3255,14 +3379,42 @@
         <option value="Visita escolar">Visita escolar</option>
       </select>
 
-      <div style="display:flex; justify-content:flex-end; align-items:center; gap:10px; flex-wrap:wrap;">
-        <button class="via-btn" id="via-btn-guardar-form" type="button">Guardar</button>
-      </div>
       <div class="via-msg" id="via-msg-form" style="text-align:right;"></div>
     </div>
-    <div style="padding:14px 24px; border-top:1px solid #2a3050; display:flex; justify-content:space-between; align-items:center; gap:12px;">
-      <button class="mo-auth-submit" id="via-btn-agregar-otro" type="button" style="padding:9px 28px; letter-spacing:0.15em; background:transparent; color:#e8c96a; border:1.5px solid #e8c96a;">Agregar</button>
-      <button class="mo-auth-submit" id="usr-info-btn-cerrar" type="button" style="padding:9px 40px; letter-spacing:0.2em;">Cerrar</button>
+    <div style="padding:14px 28px; border-top:1px solid #2a3050;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:nowrap;">
+        <button class="mo-auth-submit" id="via-btn-agregar-otro" type="button" style="padding:9px 22px; letter-spacing:0.12em; background:transparent; color:#e8c96a; border:1.5px solid #e8c96a; white-space:nowrap; flex-shrink:0;">Agregar</button>
+        <button class="mo-auth-submit" id="via-btn-ficha-medica" type="button" style="padding:9px 22px; letter-spacing:0.12em; white-space:nowrap; flex-shrink:0;">Ficha médica</button>
+        <button class="via-btn" id="via-btn-guardar-form" type="button" style="margin-top:0; padding:9px 22px; letter-spacing:0.12em; white-space:nowrap; flex-shrink:0;">Guardar</button>
+      </div>
+      <div style="display:flex; justify-content:center; margin-top:14px;">
+        <button class="mo-auth-submit" id="usr-info-btn-cerrar" type="button" style="padding:9px 40px; letter-spacing:0.2em; white-space:nowrap;">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════  MODAL USUARIO: FICHA MÉDICA (paginada, ligada al pasajero
+     cargado en "Crear") ═══════════════════ -->
+<div id="modal-ficha-medica" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(640px, 96vw); max-height:92vh; display:flex; flex-direction:column;">
+    <div class="mo-header">
+      <span class="mo-title" id="fm-titulo-modal">Ficha médica</span>
+    </div>
+    <div class="mo-body" style="padding:22px 24px 6px;">
+      <div id="fm-paginas"></div>
+    </div>
+    <div id="fm-msg-guardado"></div>
+    <div class="fm-nav">
+      <div class="fm-nav-fila1">
+        <button id="fm-btn-anterior" type="button">Anterior</button>
+        <button id="fm-btn-descargar" type="button">Descargar</button>
+        <button id="fm-btn-guardar" type="button">Guardar</button>
+        <button id="fm-btn-siguiente" type="button">Siguiente</button>
+      </div>
+      <div class="fm-nav-fila2">
+        <button id="fm-btn-cerrar" type="button">Cerrar</button>
+      </div>
     </div>
   </div>
 </div>
@@ -3315,6 +3467,61 @@
   </div>
 </div>
 
+<!-- ═══════════════════  MODAL "TIEMPO VENCIDO" (envío de información del pasajero)  ═══════════════════ -->
+<div id="modal-tiempo-vencido" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(440px, 94vw);">
+    <div class="mo-header">
+      <span class="mo-title">Tiempo vencido</span>
+    </div>
+    <div class="mo-body" style="padding:32px 24px; text-align:center;">
+      <div style="font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:700; color:#ef4444; margin-bottom:10px;">
+        El plazo para enviar tu información se ha vencido
+      </div>
+      <div style="font-family:'Barlow',sans-serif; font-size:0.85rem; color:#a8b0d0; line-height:1.5;">
+        Ya no es posible enviar los datos del pasajero al coordinador para este viaje.
+        Comunicate con el coordinador si necesitás más tiempo.
+      </div>
+    </div>
+    <div style="padding:14px 24px; border-top:1px solid #2a3050; display:flex; justify-content:center;">
+      <button class="mo-auth-submit" id="tv-btn-cerrar" type="button" style="padding:9px 40px; letter-spacing:0.2em;">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════  MODAL DE CONFIRMACIÓN genérico (letras rojas + Sí/No) ═══════════════════ -->
+<!-- Se reutiliza para cualquier acción destructiva que necesite confirmación (por ahora, -->
+<!-- descartar un viaje guardado). El texto se completa desde JS antes de mostrarlo. -->
+<div id="modal-confirmar" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(380px, 94vw);">
+    <div class="mo-body" style="padding:34px 24px 26px; text-align:center;">
+      <div id="mc-texto" style="font-family:'Barlow',sans-serif; font-size:1.05rem; font-weight:700; color:#ef4444;">
+        ¿Desea eliminar el viaje?
+      </div>
+    </div>
+    <div style="padding:14px 24px 22px; border-top:1px solid #2a3050; display:flex; justify-content:center; gap:14px;">
+      <button class="mo-auth-submit" id="mc-btn-si" type="button" style="padding:9px 36px; letter-spacing:0.2em;">Sí</button>
+      <button class="mo-auth-submit" id="mc-btn-no" type="button" style="padding:9px 36px; letter-spacing:0.2em; border-color:#4a5280; color:#c8ceec;">No</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════  MODAL "VIAJE CREADO" (nombre del viaje + código en rojo) ═══════════════════ -->
+<!-- Aparece automáticamente al crear un viaje y se mantiene abierta hasta que el -->
+<!-- coordinador presiona "Cerrar" (acá adentro; distinto del "Cerrar" de la fila -->
+<!-- de botones, que cierra todo el formulario y vuelve al mapa). -->
+<div id="modal-viaje-codigo" class="mo-backdrop" style="display:none;">
+  <div class="mo-panel" style="width:min(420px, 94vw);">
+    <div class="mo-body" style="padding:34px 24px 26px; text-align:center;">
+      <div id="vc-titulo" style="font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:#e8eaf2; margin-bottom:14px;"></div>
+      <div id="vc-codigo" style="font-family:'Barlow',sans-serif; font-size:1.35rem; font-weight:700; color:#ef4444; letter-spacing:0.15em;"></div>
+    </div>
+    <div style="padding:14px 24px 22px; border-top:1px solid #2a3050; display:flex; justify-content:center;">
+      <button class="mo-auth-submit" id="vc-btn-cerrar" type="button" style="padding:9px 40px; letter-spacing:0.2em;">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+
 <!-- ═══════════════════  MODAL "PLANILLA DE CONTROL" (checklist por Fase / Área)  ═══════════════════ -->
 <div id="modal-planilla-control" class="mo-backdrop" style="display:none;">
   <div class="mo-panel" style="width:min(640px, 96vw); max-height:88vh; display:flex; flex-direction:column;">
@@ -3349,6 +3556,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
 
 <!-- ═══ MÓDULO "VIAJES": Supabase (base de datos compartida) + EmailJS (envío de mails) ═══ -->
 <!-- Son las 2 únicas librerías nuevas. El resto de la página sigue igual sin tocarse.
@@ -4528,6 +4736,45 @@ function agregarCapaProvincias(map) {
     .catch(function() { /* sin límites políticos si falla, no rompe el mapa */ });
 }
 
+// ── CAPA: países limítrofes pintados de otro color ──
+// El mapa base no distingue países por color. En vez de traer los contornos
+// de los países vecinos desde otra fuente (lo que la vez pasada generó
+// desalineaciones/formas falsas), se usa turf.mask() sobre el propio
+// contorno oficial de Argentina (el mismo GeoJSON de Georef que ya se usa
+// para dibujar las provincias): el resultado es "todo lo que no es
+// Argentina" con un huequito exacto con la forma real del país, así que
+// encaja perfecto con el borde sin desalineaciones.
+function agregarTintePaisesLimitrofes(map) {
+  function dibujar(geojson) {
+    if (typeof turf === 'undefined') return; // si no cargó la librería, no rompe el mapa
+    try {
+      const combinado = turf.combine(geojson);
+      const argentina = combinado.features.find(function(f) {
+        return f.geometry && (f.geometry.type === 'MultiPolygon' || f.geometry.type === 'Polygon');
+      });
+      if (!argentina) return;
+      const bbox = turf.bboxPolygon([-90, -60, -25, 15]);
+      const mascara = turf.mask(argentina, bbox.geometry);
+      L.geoJSON(mascara, {
+        style: { color:'transparent', weight:0, fill:true, fillColor:'#233a2c', fillOpacity:0.55 },
+        interactive: false
+      }).addTo(map);
+    } catch (e) { /* si algo falla, no rompe el resto del mapa */ }
+  }
+  if (capaProvinciasGeoJSON) { dibujar(capaProvinciasGeoJSON); return; }
+  fetch('https://apis.datos.gob.ar/georef/api/provincias?campos=completo&max=24')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      const features = ((data && data.provincias) || []).map(function(p) {
+        return { type:'Feature', properties:{ nombre:p.nombre }, geometry:p.geometria };
+      });
+      capaProvinciasGeoJSON = { type:'FeatureCollection', features };
+      dibujar(capaProvinciasGeoJSON);
+    })
+    .catch(function() { /* sin tinte de vecinos si falla, no rompe el mapa */ });
+}
+
+
 
 // ── CAPAS: ríos y rutas nacionales (datos de OpenStreetMap vía Overpass) ──
 // A diferencia de los límites de provincia (fijos), estas capas se piden
@@ -4578,6 +4825,7 @@ function agregarCapasDinamicas(map) {
 }
 
 function agregarCapasReferencia(map) {
+  agregarTintePaisesLimitrofes(map);
   agregarCapaProvincias(map);
   agregarCapasDinamicas(map);
 }
@@ -4615,9 +4863,8 @@ function agregarMascaraIslas(map) {
     pane.style.pointerEvents = 'none';
   }
   const zonas = [
-    [[-50.6, -62.3], [-52.7, -56.9]],   // Malvinas / Falkland Islands
-    [[-53.6, -38.6], [-55.2, -35.6]],   // Georgias del Sur
-    [[-56.0, -28.6], [-59.6, -25.8]]    // Sandwich del Sur
+    [[-49.5, -63.5], [-53.5, -55.5]],   // Malvinas / Falkland Islands
+    [[-51.5, -41.5], [-61.5, -23.5]]    // Georgias del Sur + Sandwich del Sur (un solo parche amplio)
   ];
   zonas.forEach(function(bounds) {
     L.rectangle(bounds, {
@@ -4950,13 +5197,6 @@ function showOrigenInfo(o, lat, lng) {
   var ticFotos = document.getElementById('tic-fotos');
   if (ticFotos) { ticFotos.innerHTML = ''; ticFotos.style.display = 'none'; }
 
-  // Recuadros rápidos vacíos
-  var qfIds = ['qf-dias','qf-horario','qf-costo','qf-epoca'];
-  qfIds.forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = '—';
-  });
-
   document.getElementById('tab-info-placeholder').style.display = 'none';
   document.getElementById('tab-info-content').style.display     = 'flex';
 }
@@ -5022,12 +5262,6 @@ function showSiteInfo(s) {
 
   document.getElementById('tab-info-placeholder').style.display = 'none';
   document.getElementById('tab-info-content').style.display     = 'flex';
-
-  // Recuadros rápidos: Días / Horarios / Costo / Mejor época
-  document.getElementById('qf-dias').textContent    = s.dias    || '—';
-  document.getElementById('qf-horario').textContent = s.horario || '—';
-  document.getElementById('qf-costo').textContent   = s.costo   || '—';
-  document.getElementById('qf-epoca').textContent   = s.epoca   || '—';
 }
 
 // ─── ROUTE CALCULATION ────────────────────────────────────────────────────────
@@ -7104,6 +7338,134 @@ function viajesGenerarCodigo() {
 let viajesRealtimeChannel = null; // canal de tiempo real activo (se limpia al cambiar de viaje)
 let viajesSeleccionado = null;      // { id, titulo, codigo, flyer, itinerario }
 let viajesCodigoValidado = null;    // viaje encontrado al ingresar un código (vista usuario)
+let viajesUltimoCodigoCreado = '';  // último código generado al crear un viaje (para el botón Imprimir)
+let viajesUltimoTituloCreado = '';
+
+// ── USUARIO: contador regresivo hasta "5 días antes" del primer evento del
+//    itinerario. Se muestra en el header (Meses / Días / Horas / Minutos) y,
+//    al llegar a cero, bloquea el envío de "Mis Inscriptos" al coordinador. ──
+let viajesCountdownObjetivo = null;   // Date: momento en que el contador llega a 00 00 00 00
+let viajesCountdownIntervalId = null;
+let viajesCountdownAvisoMostrado = false; // para no reabrir el modal de "vencido" en cada tick
+
+// Suma "n" meses a una fecha preservando el día cuando es posible (si el mes
+// resultante tiene menos días, se ajusta al último día de ese mes).
+function viajesSumarMeses(fecha, n) {
+  var d = new Date(fecha.getTime());
+  var dia = d.getDate();
+  d.setDate(1);
+  d.setMonth(d.getMonth() + n);
+  var ultimoDiaMes = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+  d.setDate(Math.min(dia, ultimoDiaMes));
+  return d;
+}
+
+// Extrae la fecha/hora del primer evento del itinerario de un viaje.
+// itinerario[0] tiene fecha "dd-mm-aaaa" y hora "hh:mi" (ver viajesCrear()).
+function viajesFechaPrimerEvento(viaje) {
+  if (!viaje || !Array.isArray(viaje.itinerario) || !viaje.itinerario.length) return null;
+  var ev = viaje.itinerario[0];
+  var partesFecha = (ev.fecha || '').split('-');
+  if (partesFecha.length !== 3) return null;
+  var dd = parseInt(partesFecha[0], 10), mm = parseInt(partesFecha[1], 10), aa = parseInt(partesFecha[2], 10);
+  if (!dd || !mm || !aa) return null;
+  // El campo "año" del itinerario guarda solo 2 dígitos (ej. "26"), no el año
+  // completo. Al pasarlo tal cual al constructor Date, JS lo interpreta como
+  // 1926 (años 0-99 se mapean a 1900+n), dando una fecha absurdamente en el
+  // pasado. Se completa a año de 4 dígitos asumiendo siglo XXI.
+  if (aa < 100) aa += 2000;
+  var partesHora = (ev.hora || '').split(':');
+  var hh = parseInt(partesHora[0], 10); if (isNaN(hh)) hh = 0;
+  var mi = parseInt(partesHora[1], 10); if (isNaN(mi)) mi = 0;
+  var fecha = new Date(aa, mm - 1, dd, hh, mi, 0, 0);
+  return isNaN(fecha.getTime()) ? null : fecha;
+}
+
+// Objetivo del contador = fecha/hora del primer evento, menos 5 días.
+function viajesCalcularObjetivoCountdown(viaje) {
+  var primerEvento = viajesFechaPrimerEvento(viaje);
+  if (!primerEvento) return null;
+  return new Date(primerEvento.getTime() - (5 * 24 * 60 * 60 * 1000));
+}
+
+// Arranca (o reinicia) el contador para el viaje dado. Si el viaje no tiene
+// un primer evento con fecha/hora válida, el contador queda oculto.
+function viajesIniciarCountdown(viaje) {
+  var objetivo = viajesCalcularObjetivoCountdown(viaje);
+  var box = document.getElementById('header-viajes-countdown');
+  if (!objetivo) { box.style.display = 'none'; return; }
+  viajesCountdownObjetivo = objetivo;
+  document.getElementById('hcd-titulo-viaje').innerHTML =
+    'Cierre de inscripción para el viaje: <b>' + escH(viaje.titulo || '') + '</b>';
+  box.style.display = 'flex';
+  viajesActualizarDisplayCountdown();
+  if (viajesCountdownIntervalId) clearInterval(viajesCountdownIntervalId);
+  viajesCountdownIntervalId = setInterval(viajesActualizarDisplayCountdown, 1000);
+}
+
+// Pinta los 4 casilleros y detecta el momento en que el contador llega a cero.
+function viajesActualizarDisplayCountdown() {
+  if (!viajesCountdownObjetivo) return;
+  var pad = function(n) { return String(Math.max(0, n)).padStart(2, '0'); };
+  var box = document.getElementById('header-viajes-countdown');
+  var ahora = new Date();
+  var diff = viajesCountdownObjetivo.getTime() - ahora.getTime();
+
+  if (diff <= 0) {
+    document.getElementById('hcd-meses').textContent = '00';
+    document.getElementById('hcd-dias').textContent = '00';
+    document.getElementById('hcd-horas').textContent = '00';
+    document.getElementById('hcd-minutos').textContent = '00';
+    document.getElementById('hcd-segundos').textContent = '00';
+    box.classList.add('hcd-vencido');
+    if (viajesCountdownIntervalId) { clearInterval(viajesCountdownIntervalId); viajesCountdownIntervalId = null; }
+    if (!viajesCountdownAvisoMostrado) {
+      viajesCountdownAvisoMostrado = true;
+      viajesMostrarTiempoVencido();
+    }
+    return;
+  }
+
+  box.classList.remove('hcd-vencido');
+
+  // Descompone el tiempo restante en meses / días / horas / minutos / segundos
+  // usando fechas calendario (para que "un mes" respete la duración real de cada mes).
+  var cursor = new Date(ahora.getTime());
+  var meses = 0;
+  while (viajesSumarMeses(cursor, 1).getTime() <= viajesCountdownObjetivo.getTime()) {
+    cursor = viajesSumarMeses(cursor, 1);
+    meses++;
+  }
+  var dias = 0;
+  var siguienteDia;
+  while ((siguienteDia = new Date(cursor.getTime() + 24 * 60 * 60 * 1000)).getTime() <= viajesCountdownObjetivo.getTime()) {
+    cursor = siguienteDia;
+    dias++;
+  }
+  var restanteMs = viajesCountdownObjetivo.getTime() - cursor.getTime();
+  var horas = Math.floor(restanteMs / (60 * 60 * 1000));
+  var minutos = Math.floor((restanteMs % (60 * 60 * 1000)) / (60 * 1000));
+  var segundos = Math.floor((restanteMs % (60 * 1000)) / 1000);
+
+  document.getElementById('hcd-meses').textContent = pad(meses);
+  document.getElementById('hcd-dias').textContent = pad(dias);
+  document.getElementById('hcd-horas').textContent = pad(horas);
+  document.getElementById('hcd-minutos').textContent = pad(minutos);
+  document.getElementById('hcd-segundos').textContent = pad(segundos);
+}
+
+// true si, para el viaje actualmente cargado, ya se venció el plazo de 5 días
+// antes del primer evento (se recalcula en el momento, no depende del tick).
+function viajesCountdownVencidoAhora() {
+  var objetivo = viajesCalcularObjetivoCountdown(viajesCodigoValidado);
+  if (!objetivo) return false;
+  return Date.now() >= objetivo.getTime();
+}
+
+function viajesMostrarTiempoVencido() {
+  document.getElementById('modal-tiempo-vencido').style.display = 'flex';
+}
+
 
 // ── COORDINADOR: tabla de Itinerario (Evento / Fecha dd-mmm-aa / Hora hh:mm / Actividad) ──
 let viajesItinerarioRows = [];
@@ -7121,6 +7483,30 @@ function viajesItiSoloDigitos(valor, maxLen) {
 //        (":" / " hs") una vez que el valor está completo. El dato
 //        "limpio" (sin sufijo) es lo que se guarda en la fila
 //        (row[fieldKey]); el sufijo es solo visual, en el input. ──
+// ── Validación de fecha/hora del itinerario ──
+// Reglas: hora 00-23, minutos 00-59, mes 01-12, y día dentro del mes/año
+// correspondiente (28 o 29 para febrero según año bisiesto, 30 o 31 para
+// el resto). Se aplica apenas el casillero queda completo (2 dígitos).
+function viajesItiClamp(n, min, max) {
+  return Math.min(max, Math.max(min, n));
+}
+function viajesItiDiasEnMes(mesStr, anioStr) {
+  var mes = parseInt(mesStr, 10);
+  if (!mes || mes < 1 || mes > 12) return 31;
+  var anio = parseInt(anioStr, 10);
+  var anioCompleto = (anio && anio < 100) ? 2000 + anio : (anio || 2000);
+  return new Date(anioCompleto, mes, 0).getDate(); // día 0 del mes siguiente = último día del actual
+}
+function viajesItiValidarCampo(fieldKey, digitos, row) {
+  if (digitos.length < 2) return digitos; // todavía no está completo, no se corrige mientras se tipea
+  var n = parseInt(digitos, 10);
+  if (fieldKey === 'hh') n = viajesItiClamp(n, 0, 23);
+  else if (fieldKey === 'mi') n = viajesItiClamp(n, 0, 59);
+  else if (fieldKey === 'fm') n = viajesItiClamp(n, 1, 12);
+  else if (fieldKey === 'fd') n = viajesItiClamp(n, 1, viajesItiDiasEnMes(row.fm, row.fa));
+  return String(n).padStart(2, '0');
+}
+
 function viajesItiEnganchar(input, opts) {
   // opts: { fieldKey, row, maxLen, sufijo, siguiente }
   const maxLen = opts.maxLen || 2;
@@ -7135,14 +7521,13 @@ function viajesItiEnganchar(input, opts) {
   // presionar Enter como al salir del campo (blur).
   function completarYAvanzar() {
     let digitos = viajesItiSoloDigitos(input.value, maxLen);
-    if (digitos.length === 1) {
-      digitos = '0' + digitos;
+    if (digitos.length === 1) digitos = '0' + digitos;
+    if (digitos.length === maxLen) {
+      digitos = viajesItiValidarCampo(opts.fieldKey, digitos, opts.row);
       opts.row[opts.fieldKey] = digitos;
       input.value = mostrar(digitos);
       if (opts.siguiente) opts.siguiente.focus();
-    } else if (digitos.length === maxLen) {
-      input.value = mostrar(digitos);
-      if (opts.siguiente) opts.siguiente.focus();
+      if (opts.fieldKey === 'fm' || opts.fieldKey === 'fa') viajesItiRevalidarDia(opts);
     }
   }
 
@@ -7153,12 +7538,14 @@ function viajesItiEnganchar(input, opts) {
   });
 
   input.addEventListener('input', function() {
-    const digitos = viajesItiSoloDigitos(input.value, maxLen);
+    let digitos = viajesItiSoloDigitos(input.value, maxLen);
+    if (digitos.length === maxLen) digitos = viajesItiValidarCampo(opts.fieldKey, digitos, opts.row);
     input.value = digitos;
     opts.row[opts.fieldKey] = digitos;
     if (digitos.length === maxLen) {
       input.value = mostrar(digitos);
       if (opts.siguiente) opts.siguiente.focus();
+      if (opts.fieldKey === 'fm' || opts.fieldKey === 'fa') viajesItiRevalidarDia(opts);
     }
   });
 
@@ -7170,6 +7557,18 @@ function viajesItiEnganchar(input, opts) {
   });
 
   input.addEventListener('blur', completarYAvanzar);
+}
+
+// Cuando se completa el mes o el año, se re-chequea que el día ya cargado
+// siga siendo válido para ese mes/año (ej: día 31 con un mes que tiene 30,
+// o 29 de febrero en un año no bisiesto), y si no, se lo recorta.
+function viajesItiRevalidarDia(opts) {
+  if (!opts.diaInput || !opts.row.fd) return;
+  const corregido = viajesItiValidarCampo('fd', opts.row.fd, opts.row);
+  if (corregido !== opts.row.fd) {
+    opts.row.fd = corregido;
+    opts.diaInput.value = corregido;
+  }
 }
 
 function viajesRenderItinerarioTabla() {
@@ -7206,8 +7605,8 @@ function viajesRenderItinerarioTabla() {
     const inpAct = tr.querySelector('.via-iti-actividad');
 
     viajesItiEnganchar(inpDd,  { fieldKey:'fd', row:row, maxLen:2, siguiente:inpMm });
-    viajesItiEnganchar(inpMm,  { fieldKey:'fm', row:row, maxLen:2, siguiente:inpAa });
-    viajesItiEnganchar(inpAa,  { fieldKey:'fa', row:row, maxLen:2, siguiente:inpHh });
+    viajesItiEnganchar(inpMm,  { fieldKey:'fm', row:row, maxLen:2, siguiente:inpAa, diaInput:inpDd });
+    viajesItiEnganchar(inpAa,  { fieldKey:'fa', row:row, maxLen:2, siguiente:inpHh, diaInput:inpDd });
     viajesItiEnganchar(inpHh,  { fieldKey:'hh', row:row, maxLen:2, siguiente:inpMin });
     viajesItiEnganchar(inpMin, { fieldKey:'mi', row:row, maxLen:2, siguiente:inpAct });
 
@@ -7340,6 +7739,413 @@ function viajesFormatearFechaCorta(fechaISO) {
   return dd + '-' + mmm + '-' + aa;
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// FICHA MÉDICA — formulario paginado (usuario, "Viajes → Información → Crear",
+// botón "Ficha médica"). Se guarda en localStorage con una clave por pasajero
+// (apellido + nombres tomados del formulario "Crear"), y se puede descargar
+// en PDF con el diálogo de impresión del navegador (cada sección en su propia
+// hoja).
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ── Helpers para armar el HTML de cada campo/página ──
+function fmCampoTexto(id, label, opts) {
+  opts = opts || {};
+  var tipo = opts.tipo || 'text';
+  var cls = 'via-input fm-input' + (opts.extraClass ? ' ' + opts.extraClass : '');
+  var maxlen = opts.maxlength ? ' maxlength="' + opts.maxlength + '"' : '';
+  var placeholder = opts.placeholder ? ' placeholder="' + opts.placeholder + '"' : '';
+  var inputmode = opts.inputmode ? ' inputmode="' + opts.inputmode + '"' : '';
+  return '<label class="via-label" for="' + id + '">' + label + '</label>' +
+         '<input class="' + cls + '" id="' + id + '" data-key="' + id + '" type="' + tipo + '"' + maxlen + placeholder + inputmode + ' />';
+}
+function fmCampoLibre(id, label) {
+  return '<div class="fm-campo" style="margin-top:14px;">' + fmCampoTexto(id, label) + '</div>';
+}
+function fmExtraSiNo(id, label) {
+  return '<span class="fm-item-extra"><span class="fm-mini-label">' + label + '</span>' +
+    '<label class="via-check"><input type="radio" class="fm-input" name="' + id + '" value="si"/> Sí</label>' +
+    '<label class="via-check"><input type="radio" class="fm-input" name="' + id + '" value="no"/> No</label></span>';
+}
+function fmFilaSiNo(id, label, opts) {
+  opts = opts || {};
+  var extra = '';
+  if (opts.extra) { opts.extra.forEach(function(ex) { extra += fmExtraSiNo(ex.id, ex.label); }); }
+  return '<div class="fm-item-row">' +
+           '<div class="fm-item-label">' + label + '</div>' +
+           '<div class="fm-item-opts">' +
+             '<label class="via-check"><input type="radio" class="fm-input" name="' + id + '" value="si" /> Sí</label>' +
+             '<label class="via-check"><input type="radio" class="fm-input" name="' + id + '" value="no" /> No</label>' +
+             extra +
+           '</div>' +
+         '</div>';
+}
+function fmPaginaListaSiNo(items) {
+  var html = '';
+  items.forEach(function(it) { html += fmFilaSiNo(it.id, it.label, { extra: it.extra }); });
+  return html;
+}
+
+// ── Listas de ítems (Sí/No), en orden alfabético donde correspondía en la ficha original ──
+var FM_ALERGIAS_ITEMS = [
+  { id: 'fm-al-anestesia', label: 'Anestesia' },
+  { id: 'fm-al-antibioticos', label: 'Antibióticos' },
+  { id: 'fm-al-aspirina', label: 'Aspirina' },
+  { id: 'fm-al-ibuprofenos', label: 'Ibuprofenos' },
+  { id: 'fm-al-iodo', label: 'Iodo' },
+  { id: 'fm-al-latex', label: 'Látex' },
+  { id: 'fm-al-penicilina', label: 'Penicilina' },
+  { id: 'fm-al-picadura', label: 'Picadura de insectos' }
+];
+var FM_ENFERMEDADES_ITEMS = [
+  { id: 'fm-en-ansiedad', label: 'Ansiedad' },
+  { id: 'fm-en-arritmias', label: 'Arritmias' },
+  { id: 'fm-en-asma', label: 'Asma' },
+  { id: 'fm-en-panico', label: 'Ataques de pánico' },
+  { id: 'fm-en-cancer', label: 'Cáncer', extra: [{ id: 'fm-en-cancer-tratamiento', label: 'En tratamiento' }] },
+  { id: 'fm-en-convulsiones', label: 'Convulsiones' },
+  { id: 'fm-en-demencia', label: 'Demencia' },
+  { id: 'fm-en-diabetes', label: 'Diabetes' },
+  { id: 'fm-en-cardiaca', label: 'Enfermedad cardíaca' },
+  { id: 'fm-en-hepatica', label: 'Enfermedad hepática' },
+  { id: 'fm-en-psiquiatrica', label: 'Enfermedad psiquiátrica' },
+  { id: 'fm-en-renal', label: 'Enfermedad renal' },
+  { id: 'fm-en-tiroidea', label: 'Enfermedad tiroidea' },
+  { id: 'fm-en-epoc', label: 'EPOC' },
+  { id: 'fm-en-epilepsia', label: 'Epilepsia' },
+  { id: 'fm-en-hipertension', label: 'Hipertensión' },
+  { id: 'fm-en-parkinson', label: 'Parkinson' },
+  { id: 'fm-en-coagulacion', label: 'Trastornos de coagulación' }
+];
+var FM_MED_EMERGENCIA_ITEMS = [
+  { id: 'fm-me-inhalador', label: 'Inhalador' },
+  { id: 'fm-me-insulina', label: 'Insulina' },
+  { id: 'fm-me-glucagon', label: 'Glucagón' },
+  { id: 'fm-me-nitroglicerina', label: 'Nitroglicerina' },
+  { id: 'fm-me-adrenalina', label: 'Adrenalina autoinyectable' },
+  { id: 'fm-me-oxigeno', label: 'Oxígeno' },
+  { id: 'fm-me-anticoagulante', label: 'Anticoagulante' }
+];
+var FM_LIMITACIONES_ITEMS = [
+  { id: 'fm-li-camina', label: 'Camina normalmente' },
+  { id: 'fm-li-baston', label: 'Bastón' },
+  { id: 'fm-li-andador', label: 'Andador' },
+  { id: 'fm-li-silla', label: 'Silla de ruedas' },
+  { id: 'fm-li-protesis', label: 'Prótesis' },
+  { id: 'fm-li-escaleras', label: 'Ayuda para subir/bajar escaleras' },
+  { id: 'fm-li-distancias', label: 'Dificultad para caminar largas distancias' },
+  { id: 'fm-li-sinayuda', label: 'Puede desplazarse sin ayuda' },
+  { id: 'fm-li-micro', label: 'Puede subir a un micro sin asistencia' },
+  { id: 'fm-li-caminatas', label: 'Puede participar en excursiones de caminata' },
+  { id: 'fm-li-sentado', label: 'Puede permanecer sentado durante largos viajes' },
+  { id: 'fm-li-equilibrio', label: 'Problemas de equilibrio' }
+];
+var FM_VACUNACION_ITEMS = [
+  { id: 'fm-va-antitetanica', label: 'Antitetánica vigente' },
+  { id: 'fm-va-covid', label: 'COVID' },
+  { id: 'fm-va-antigripal', label: 'Antigripal' },
+  { id: 'fm-va-otras', label: 'Otras' }
+];
+var FM_CRISIS_ITEMS = [
+  { id: 'fm-cr-infarto', label: 'Infarto' },
+  { id: 'fm-cr-acv', label: 'ACV' },
+  { id: 'fm-cr-convulsiones', label: 'Convulsiones' },
+  { id: 'fm-cr-hipoglucemia', label: 'Hipoglucemia severa' },
+  { id: 'fm-cr-anafilaxia', label: 'Anafilaxia' },
+  { id: 'fm-cr-desmayo', label: 'Desmayo frecuente' }
+];
+var FM_SENSORIALES_ITEMS = [
+  { id: 'fm-se-hipoacusia', label: 'Hipoacusia' },
+  { id: 'fm-se-audifonos', label: 'Audífonos' },
+  { id: 'fm-se-anteojos', label: 'Anteojos' }
+];
+var FM_ALIMENTACION_ITEMS = [
+  { id: 'fm-di-celiaquia', label: 'Celiaquía' },
+  { id: 'fm-di-diabetes', label: 'Diabetes' },
+  { id: 'fm-di-vegetariano', label: 'Vegetariano' },
+  { id: 'fm-di-vegano', label: 'Vegano' },
+  { id: 'fm-di-hiposodico', label: 'Hiposódico' },
+  { id: 'fm-di-sinlactosa', label: 'Sin lactosa' }
+];
+var FM_ANTECEDENTES_ITEMS = [
+  { id: 'fm-aq-apendicectomia', label: 'Apendicectomía (apéndice)' },
+  { id: 'fm-aq-colecistectomia', label: 'Colecistectomía (vesícula)' },
+  { id: 'fm-aq-cardiaca', label: 'Cirugía cardíaca' },
+  { id: 'fm-aq-stent', label: 'Stent coronario' },
+  { id: 'fm-aq-marcapasos', label: 'Marcapasos/Desfibrilador' },
+  { id: 'fm-aq-cadera', label: 'Prótesis de cadera' },
+  { id: 'fm-aq-rodilla', label: 'Prótesis de rodilla' },
+  { id: 'fm-aq-columna', label: 'Cirugía de columna' },
+  { id: 'fm-aq-cerebral', label: 'Cirugía cerebral' },
+  { id: 'fm-aq-pulmonar', label: 'Cirugía pulmonar' },
+  { id: 'fm-aq-abdominal', label: 'Cirugía abdominal mayor' },
+  { id: 'fm-aq-trasplante', label: 'Trasplante de órganos' },
+  { id: 'fm-aq-oncologica', label: 'Cirugía oncológica' }
+];
+
+// ── Páginas con contenido propio (no son simples listas Sí/No) ──
+function fmPaginaContacto(n) {
+  var p = 'fm-c' + n + '-';
+  return fmCampoTexto(p + 'apellido', 'Apellido') +
+         fmCampoTexto(p + 'nombres', 'Nombres') +
+         fmCampoTexto(p + 'parentesco', 'Parentesco') +
+         '<label class="via-label" for="' + p + 'tel">Teléfono</label>' +
+         '<input class="via-input fm-input fm-tel" id="' + p + 'tel" data-key="' + p + 'tel" type="text" inputmode="numeric" maxlength="20" placeholder="+54 (11) 1234-5678" />';
+}
+function fmPaginaCobertura() {
+  return fmCampoTexto('fm-cob-obra', 'Obra Social/Prepaga') +
+         fmCampoTexto('fm-cob-afiliado', 'N° Afiliado') +
+         fmCampoTexto('fm-cob-plan', 'Plan') +
+         '<label class="via-label" for="fm-cob-tel">Teléfono</label>' +
+         '<input class="via-input fm-input fm-tel" id="fm-cob-tel" data-key="fm-cob-tel" type="text" inputmode="numeric" maxlength="20" placeholder="+54 (11) 1234-5678" />';
+}
+function fmPaginaMedico() {
+  return fmCampoTexto('fm-med-apellido', 'Apellido') +
+         fmCampoTexto('fm-med-nombres', 'Nombres') +
+         fmCampoTexto('fm-med-especialidad', 'Especialidad') +
+         '<label class="via-label" for="fm-med-tel">Teléfono</label>' +
+         '<input class="via-input fm-input fm-tel" id="fm-med-tel" data-key="fm-med-tel" type="text" inputmode="numeric" maxlength="20" placeholder="+54 (11) 1234-5678" />';
+}
+function fmPaginaClinica() {
+  return '<label class="via-label">Peso</label>' +
+         '<div class="fm-suf-row"><input class="via-input fm-input fm-numeric" id="fm-cli-peso" data-key="fm-cli-peso" type="text" inputmode="numeric" maxlength="3" /><span>kg</span></div>' +
+         '<label class="via-label">Talla</label>' +
+         '<div class="fm-suf-row"><input class="via-input fm-input fm-numeric" id="fm-cli-talla" data-key="fm-cli-talla" type="text" inputmode="numeric" maxlength="3" /><span>cm</span></div>' +
+         '<label class="via-label">Presión arterial (habitual)</label>' +
+         '<div class="fm-presion-row"><input class="via-input fm-input fm-numeric" id="fm-cli-presion-sist" data-key="fm-cli-presion-sist" type="text" inputmode="numeric" maxlength="2" /><span class="fm-barra">/</span><input class="via-input fm-input fm-numeric" id="fm-cli-presion-diast" data-key="fm-cli-presion-diast" type="text" inputmode="numeric" maxlength="2" /><span class="fm-suf">mmHg</span></div>' +
+         '<label class="via-label">Glucemia (habitual) (si corresponde)</label>' +
+         '<div class="fm-suf-row"><input class="via-input fm-input fm-numeric" id="fm-cli-glucemia" data-key="fm-cli-glucemia" type="text" inputmode="numeric" maxlength="3" /><span>mg/dL</span></div>' +
+         '<label class="via-label">Grupo sanguíneo</label>' +
+         '<div class="fm-grupo-row">' +
+           '<select class="via-select fm-input" id="fm-cli-grupo" data-key="fm-cli-grupo"><option value="">Grupo</option><option>A</option><option>B</option><option>AB</option><option>O</option></select>' +
+           '<select class="via-select fm-input" id="fm-cli-factor" data-key="fm-cli-factor"><option value="">Factor</option><option value="+">Positivo (+)</option><option value="-">Negativo (−)</option></select>' +
+         '</div>';
+}
+function fmPaginaMedicacionHabitual() {
+  return '<div class="fm-tabla-wrap"><table class="fm-tabla"><thead><tr><th>Medicamento</th><th>Dosis</th><th>Horario</th><th></th></tr></thead>' +
+         '<tbody id="fm-med-habitual-tbody"></tbody></table></div>' +
+         '<button class="via-btn-add-row" id="fm-med-habitual-add" type="button">+ Agregar medicamento</button>';
+}
+function fmPaginaAntecedentesQuirurgicos() {
+  var rows = '';
+  FM_ANTECEDENTES_ITEMS.forEach(function(it) {
+    rows += '<tr>' +
+      '<td class="fm-td-nombre">' + it.label + '</td>' +
+      '<td class="fm-td-opts"><label class="via-check"><input type="radio" class="fm-input" name="' + it.id + '" value="si"/> Sí</label> <label class="via-check"><input type="radio" class="fm-input" name="' + it.id + '" value="no"/> No</label></td>' +
+      '<td><input class="via-input fm-input fm-numeric fm-anio" data-key="' + it.id + '-anio" maxlength="4" inputmode="numeric" /></td>' +
+      '<td><input class="via-input fm-input fm-obs" data-key="' + it.id + '-obs" type="text" /></td>' +
+      '</tr>';
+  });
+  rows += '<tr>' +
+    '<td class="fm-td-nombre"><input class="via-input fm-input" data-key="fm-aq-otra-nombre" type="text" placeholder="Otra…" style="min-width:150px;" /></td>' +
+    '<td class="fm-td-opts"><label class="via-check"><input type="radio" class="fm-input" name="fm-aq-otra" value="si"/> Sí</label> <label class="via-check"><input type="radio" class="fm-input" name="fm-aq-otra" value="no"/> No</label></td>' +
+    '<td><input class="via-input fm-input fm-numeric fm-anio" data-key="fm-aq-otra-anio" maxlength="4" inputmode="numeric" /></td>' +
+    '<td><input class="via-input fm-input fm-obs" data-key="fm-aq-otra-obs" type="text" /></td>' +
+    '</tr>';
+  return '<div class="fm-tabla-wrap"><table class="fm-tabla"><thead><tr><th>Antecedente</th><th>Sí/No</th><th>Año</th><th>Observaciones</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+}
+function fmPaginaDiscapacidad() {
+  return fmFilaSiNo('fm-disc-cud', '¿Posee Certificado Único de Discapacidad (CUD)?') +
+         '<div style="margin-top:14px;">' + fmCampoTexto('fm-disc-tipo', 'Tipo') + '</div>';
+}
+function fmPaginaAlimentacion() {
+  var html = '<div class="fm-check-grid">';
+  FM_ALIMENTACION_ITEMS.forEach(function(it) {
+    html += '<label class="via-check"><input type="checkbox" class="fm-input" id="' + it.id + '" data-key="' + it.id + '" /> ' + it.label + '</label>';
+  });
+  html += '</div>';
+  return html;
+}
+function fmPaginaEmbarazo() {
+  return fmFilaSiNo('fm-emb-embarazo', 'Embarazo') +
+    '<label class="via-label" style="margin-top:14px;">Semanas de gestación</label>' +
+    '<div class="fm-suf-row"><input class="via-input fm-input fm-numeric" id="fm-emb-semanas" data-key="fm-emb-semanas" type="text" inputmode="numeric" maxlength="2" /><span>semanas</span></div>' +
+    fmFilaSiNo('fm-emb-autorizacion', '¿Posee autorización médica para viajar?');
+}
+function fmPaginaAutorizacion() {
+  return '<div class="fm-static-text">Autorizo a la empresa de turismo y a sus coordinadores a utilizar exclusivamente la información consignada en esta ficha para asistir mi atención médica durante el viaje y comunicarla únicamente a profesionales de la salud, servicios de emergencia o autoridades competentes cuando resulte necesario.</div>';
+}
+function fmPaginaDeclaracion() {
+  return '<div class="fm-static-text">Declaro que la información suministrada es completa y veraz. Me comprometo a informar cualquier modificación en mi estado de salud antes del inicio del viaje.</div>' +
+    fmCampoTexto('fm-decl-firma', 'Firma (nombre y apellido)') +
+    fmCampoTexto('fm-decl-lugar', 'Lugar') +
+    '<label class="via-label" for="fm-decl-fecha">Fecha</label>' +
+    '<input class="via-input fm-input" id="fm-decl-fecha" data-key="fm-decl-fecha" type="date" />' +
+    fmCampoTexto('fm-decl-nombre', 'Nombres y Apellido') +
+    fmCampoTexto('fm-decl-dni', 'DNI');
+}
+function fmPaginaConfidencialidad() {
+  return '<div class="fm-static-text">Los datos consignados en la presente ficha tienen carácter confidencial y serán utilizados exclusivamente para la prevención y atención de eventuales emergencias durante el viaje. La empresa y su personal se comprometen a mantener su confidencialidad y a comunicar esta información únicamente a profesionales de la salud, servicios de emergencia o autoridades competentes cuando resulte estrictamente necesario.</div>';
+}
+
+// ── Índice de páginas (cada título = una hoja nueva al imprimir/descargar) ──
+var FICHA_MEDICA_PAGINAS = [
+  { titulo: 'Contacto de emergencia 1', html: function() { return fmPaginaContacto(1); } },
+  { titulo: 'Contacto de emergencia 2', html: function() { return fmPaginaContacto(2); } },
+  { titulo: 'Cobertura médica', html: fmPaginaCobertura },
+  { titulo: 'Médico de cabecera', html: fmPaginaMedico },
+  { titulo: 'Información clínica', html: fmPaginaClinica },
+  { titulo: 'Alergias', html: function() { return fmPaginaListaSiNo(FM_ALERGIAS_ITEMS) + fmCampoLibre('fm-al-alimentos', 'Alimentos') + fmCampoLibre('fm-al-otros', 'Otros'); } },
+  { titulo: 'Enfermedades', html: function() { return fmPaginaListaSiNo(FM_ENFERMEDADES_ITEMS) + fmCampoLibre('fm-en-otros', 'Otros'); } },
+  { titulo: 'Medicación habitual', html: fmPaginaMedicacionHabitual },
+  { titulo: 'Medicación de emergencia', html: function() { return fmPaginaListaSiNo(FM_MED_EMERGENCIA_ITEMS) + fmCampoLibre('fm-me-otros', 'Otros'); } },
+  { titulo: 'Limitaciones físicas', html: function() { return fmPaginaListaSiNo(FM_LIMITACIONES_ITEMS); } },
+  { titulo: 'Discapacidad', html: fmPaginaDiscapacidad },
+  { titulo: 'Alimentación', html: fmPaginaAlimentacion },
+  { titulo: 'Embarazo', html: fmPaginaEmbarazo },
+  { titulo: 'Vacunación', html: function() { return fmPaginaListaSiNo(FM_VACUNACION_ITEMS); } },
+  { titulo: 'Antecedentes quirúrgicos (importantes)', html: fmPaginaAntecedentesQuirurgicos },
+  { titulo: 'Crisis médicas previas', html: function() { return fmPaginaListaSiNo(FM_CRISIS_ITEMS) + fmCampoLibre('fm-cr-otro', 'Otro'); } },
+  { titulo: 'Problemas sensoriales', html: function() { return fmPaginaListaSiNo(FM_SENSORIALES_ITEMS); } },
+  { titulo: 'Autorización para informar datos médicos', html: fmPaginaAutorizacion },
+  { titulo: 'Declaración del pasajero', html: fmPaginaDeclaracion },
+  { titulo: 'Confidencialidad de la información', html: fmPaginaConfidencialidad }
+];
+
+var fmPaginaActual = 0;
+var fmClaveActual = null;
+var fmPaginasConstruidas = false;
+var fmMedFilaContador = 0;
+
+function fmAgregarFilaMedicacion(datos) {
+  datos = datos || {};
+  var tbody = document.getElementById('fm-med-habitual-tbody');
+  if (!tbody) return;
+  fmMedFilaContador++;
+  var tr = document.createElement('tr');
+  tr.innerHTML =
+    '<td><input class="via-input fm-med-medicamento" type="text" /></td>' +
+    '<td><input class="via-input fm-med-dosis" type="text" /></td>' +
+    '<td><input class="via-input fm-med-horario" type="text" /></td>' +
+    '<td><button type="button" class="via-row-del fm-med-del" title="Eliminar">✕</button></td>';
+  tr.querySelector('.fm-med-medicamento').value = datos.medicamento || '';
+  tr.querySelector('.fm-med-dosis').value = datos.dosis || '';
+  tr.querySelector('.fm-med-horario').value = datos.horario || '';
+  tr.querySelector('.fm-med-del').addEventListener('click', function() { tr.remove(); });
+  tbody.appendChild(tr);
+}
+
+function fmConstruirPaginas() {
+  if (fmPaginasConstruidas) return;
+  var cont = document.getElementById('fm-paginas');
+  var html = '';
+  FICHA_MEDICA_PAGINAS.forEach(function(pg, idx) {
+    html += '<div class="fm-pagina" data-idx="' + idx + '">' +
+              '<div class="fm-pagina-titulo">' + pg.titulo + '</div>' +
+              '<div class="fm-pagina-progreso">Página ' + (idx + 1) + ' de ' + FICHA_MEDICA_PAGINAS.length + '</div>' +
+              (typeof pg.html === 'function' ? pg.html() : '') +
+            '</div>';
+  });
+  cont.innerHTML = html;
+  fmPaginasConstruidas = true;
+  var addBtn = document.getElementById('fm-med-habitual-add');
+  if (addBtn) addBtn.addEventListener('click', function() { fmAgregarFilaMedicacion(); });
+  fmAgregarFilaMedicacion();
+  fmAgregarFilaMedicacion();
+}
+
+function fmMostrarPagina(idx) {
+  fmPaginaActual = idx;
+  document.querySelectorAll('#fm-paginas .fm-pagina').forEach(function(el) {
+    el.classList.toggle('activa', parseInt(el.getAttribute('data-idx'), 10) === idx);
+  });
+  document.getElementById('fm-btn-anterior').disabled = (idx === 0);
+  document.getElementById('fm-btn-siguiente').disabled = (idx === FICHA_MEDICA_PAGINAS.length - 1);
+  var body = document.querySelector('#modal-ficha-medica .mo-body');
+  if (body) body.scrollTop = 0;
+}
+
+function fmRecolectarDatos() {
+  var datos = {};
+  document.querySelectorAll('#fm-paginas .fm-input').forEach(function(el) {
+    if (el.type === 'radio') {
+      if (el.checked) datos[el.name] = el.value;
+    } else if (el.type === 'checkbox') {
+      datos[el.getAttribute('data-key') || el.id] = el.checked;
+    } else {
+      var key = el.getAttribute('data-key') || el.id;
+      if (key) datos[key] = el.value;
+    }
+  });
+  var meds = [];
+  document.querySelectorAll('#fm-med-habitual-tbody tr').forEach(function(tr) {
+    var medicamento = tr.querySelector('.fm-med-medicamento').value.trim();
+    var dosis = tr.querySelector('.fm-med-dosis').value.trim();
+    var horario = tr.querySelector('.fm-med-horario').value.trim();
+    if (medicamento || dosis || horario) meds.push({ medicamento: medicamento, dosis: dosis, horario: horario });
+  });
+  datos.medicacionHabitual = meds;
+  return datos;
+}
+
+function fmAplicarDatos(datos) {
+  datos = datos || {};
+  document.querySelectorAll('#fm-paginas .fm-input').forEach(function(el) {
+    if (el.type === 'radio') {
+      el.checked = (datos[el.name] === el.value);
+    } else if (el.type === 'checkbox') {
+      el.checked = !!datos[el.getAttribute('data-key') || el.id];
+    } else {
+      el.value = datos[el.getAttribute('data-key') || el.id] || '';
+    }
+  });
+  var tbody = document.getElementById('fm-med-habitual-tbody');
+  if (tbody) tbody.innerHTML = '';
+  var meds = (datos.medicacionHabitual && datos.medicacionHabitual.length) ? datos.medicacionHabitual : [{}, {}];
+  meds.forEach(function(m) { fmAgregarFilaMedicacion(m); });
+}
+
+// ── Clave de localStorage a partir de Apellido/Nombres del formulario "Crear" ──
+function fmClaveStorage(apellido, nombres) {
+  var base = (apellido || '').trim().toUpperCase() + '_' + (nombres || '').trim().toUpperCase();
+  if (base.normalize) base = base.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  base = base.replace(/[^A-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+  return 'fichaMedica_' + base;
+}
+
+function fmAbrir() {
+  fmConstruirPaginas();
+  var apellido = document.getElementById('via-f-apellido').value.trim();
+  var nombres = document.getElementById('via-f-nombres').value.trim();
+  var msg = document.getElementById('fm-msg-guardado');
+  if (apellido && nombres) {
+    fmClaveActual = fmClaveStorage(apellido, nombres);
+    document.getElementById('fm-titulo-modal').textContent = 'Ficha médica — ' + apellido.toUpperCase() + ', ' + nombres.toUpperCase();
+    var guardado = null;
+    try {
+      var raw = localStorage.getItem(fmClaveActual);
+      if (raw) guardado = JSON.parse(raw);
+    } catch (e) { console.error(e); }
+    fmAplicarDatos(guardado || {});
+    msg.textContent = '';
+  } else {
+    fmClaveActual = null;
+    document.getElementById('fm-titulo-modal').textContent = 'Ficha médica';
+    fmAplicarDatos({});
+    msg.textContent = 'Completá Apellido y Nombres en "Crear" para poder guardar esta ficha.';
+  }
+  fmMostrarPagina(0);
+  document.getElementById('modal-ficha-medica').style.display = 'flex';
+}
+
+function fmGuardar() {
+  var apellido = document.getElementById('via-f-apellido').value.trim();
+  var nombres = document.getElementById('via-f-nombres').value.trim();
+  var msg = document.getElementById('fm-msg-guardado');
+  if (!apellido || !nombres) {
+    msg.textContent = 'Completá Apellido y Nombres en "Crear" para poder guardar esta ficha.';
+    return;
+  }
+  fmClaveActual = fmClaveStorage(apellido, nombres);
+  try {
+    localStorage.setItem(fmClaveActual, JSON.stringify(fmRecolectarDatos()));
+    msg.textContent = '¡Ficha médica guardada!';
+    setTimeout(function() { if (msg.textContent === '¡Ficha médica guardada!') msg.textContent = ''; }, 2500);
+  } catch (e) { console.error(e); }
+}
+
+function fmDescargar() { window.print(); }
+function fmCerrar() { document.getElementById('modal-ficha-medica').style.display = 'none'; }
+
 // ── COORDINADOR: formatea fecha + hora (ej: timestamp de "fecha" en Inscripciones,
 //    que registra cuándo el usuario envió los datos del pasajero). ──
 function viajesFormatearFechaHora(fechaISO) {
@@ -7464,6 +8270,24 @@ function viajesGuardarBorrador() {
   }
 }
 
+// ── Modal de confirmación genérico (letras rojas + Sí/No) para acciones
+//    destructivas. Uso: viajesConfirmar('¿Desea eliminar el viaje?', function() { ... }). ──
+function viajesConfirmar(texto, onSi) {
+  document.getElementById('mc-texto').textContent = texto;
+  document.getElementById('modal-confirmar').style.display = 'flex';
+  var btnSi = document.getElementById('mc-btn-si');
+  var btnNo = document.getElementById('mc-btn-no');
+  function limpiar() {
+    document.getElementById('modal-confirmar').style.display = 'none';
+    btnSi.removeEventListener('click', clickSi);
+    btnNo.removeEventListener('click', clickNo);
+  }
+  function clickSi() { limpiar(); onSi(); }
+  function clickNo() { limpiar(); }
+  btnSi.addEventListener('click', clickSi);
+  btnNo.addEventListener('click', clickNo);
+}
+
 // Carga un borrador puntual (por id) en el formulario, para seguir editándolo.
 function viajesCargarBorradorEnFormulario(id) {
   const borrador = viajesLeerBorradores().find(function(b) { return b.id === id; });
@@ -7546,8 +8370,17 @@ async function viajesCrear() {
     if (error) throw error;
 
     msg.className = ''; msg.textContent = '';
-    document.getElementById('via-crear-exito-codigo').textContent = 'Código ' + codigo;
-    document.getElementById('via-crear-exito').style.display = 'block';
+
+    // Ventana emergente: nombre del viaje + código en rojo. Se mantiene abierta
+    // hasta que el coordinador la cierra con su propio botón "Cerrar".
+    document.getElementById('vc-titulo').textContent = titulo;
+    document.getElementById('vc-codigo').textContent = 'Código ' + codigo;
+    document.getElementById('modal-viaje-codigo').style.display = 'flex';
+    viajesUltimoCodigoCreado = codigo;
+    viajesUltimoTituloCreado = titulo;
+
+    // Botón Imprimir, en la misma fila de Crear/Guardar viaje (Cerrar ya está siempre visible).
+    document.getElementById('via-crear-exito-imprimir').style.display = 'inline-block';
 
     document.getElementById('via-in-titulo').value = '';
     document.getElementById('via-in-costo').value = '';
@@ -7572,6 +8405,18 @@ async function viajesCrear() {
 }
 
 // ── COORDINADOR: listar mis viajes creados (+ el borrador local si existe) ──
+// ── COORDINADOR: formatea una fecha/hora ISO (de Supabase o de un borrador
+//    local) como "dd/mm/aaaa hh:mm hs", para mostrar cuándo se guardó o creó
+//    cada viaje en los listados de "Viajes guardados" y "Viajes creados". ──
+function viajesFormatearFechaHoraCorta(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  const pad = function(n) { return String(n).padStart(2, '0'); };
+  return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' +
+         pad(d.getHours()) + ':' + pad(d.getMinutes()) + ' hs';
+}
+
 async function viajesCargarListaCoordinador() {
   const cont = document.getElementById('via-lista-viajes');
   if (!supabaseClient || !moUsername) return;
@@ -7589,10 +8434,12 @@ async function viajesCargarListaCoordinador() {
     data.forEach(function(v, idx) {
       const item = document.createElement('div');
       item.className = 'via-viaje-item';
-      item.innerHTML = '<div class="via-vi-info"><span class="mo-num-circle">' + (idx + 1) + '</span><div><div class="via-vi-titulo"></div><div class="via-vi-codigo"></div></div></div><button class="mo-btn-edit" type="button" title="Ver viaje" style="pointer-events:none;">&#128065;</button>';
+      item.innerHTML = '<div class="via-vi-info"><span class="mo-num-circle">' + (idx + 1) + '</span><div><div class="via-vi-titulo"></div><div class="via-vi-codigo"></div><div class="via-vi-fecha"></div></div></div><button class="mo-btn-edit via-creado-ver" type="button" title="Ver viaje">&#128065;</button>';
       item.querySelector('.via-vi-titulo').textContent = v.titulo;
       item.querySelector('.via-vi-codigo').textContent = 'Código: ' + v.codigo;
-      item.addEventListener('click', function() {
+      item.querySelector('.via-vi-fecha').textContent = 'Creado: ' + viajesFormatearFechaHoraCorta(v.creado);
+      item.querySelector('.via-creado-ver').addEventListener('click', function(e) {
+        e.stopPropagation();
         document.querySelectorAll('.via-viaje-item').forEach(function(el){ el.classList.remove('sel'); });
         item.classList.add('sel');
         viajesAbrirRoster(v.id, v.titulo, v.codigo);
@@ -7626,10 +8473,11 @@ function viajesRenderListaBorradores() {
     item.className = 'via-viaje-item via-viaje-item-borrador';
     item.style.cssText = 'display:flex; align-items:center; justify-content:space-between; gap:10px;';
     item.innerHTML =
-      '<div class="via-vi-info" style="cursor:pointer;"><span class="mo-num-circle">' + (idx + 1) + '</span><div><div class="via-vi-titulo"></div><div class="via-vi-codigo">Guardado, todavía no creado</div></div></div>' +
+      '<div class="via-vi-info"><span class="mo-num-circle">' + (idx + 1) + '</span><div><div class="via-vi-titulo"></div><div class="via-vi-codigo">Guardado, todavía no creado</div><div class="via-vi-fecha"></div></div></div>' +
       '<button class="mo-btn-edit via-borrador-editar" type="button" title="Editar">&#9998;</button>' +
       '<button class="mo-btn-del via-row-del" type="button" title="Descartar viaje guardado">&#128465;</button>';
     item.querySelector('.via-vi-titulo').textContent = borrador.titulo || '(viaje guardado sin título)';
+    item.querySelector('.via-vi-fecha').textContent = 'Guardado: ' + viajesFormatearFechaHoraCorta(borrador.guardadoEn);
     const abrir = function() {
       viajesCargarBorradorEnFormulario(borrador.id);
       var elForm = document.getElementById('via-coord-form-wrap');
@@ -7637,12 +8485,13 @@ function viajesRenderListaBorradores() {
       elForm.style.display = '';
       elForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
-    item.querySelector('.via-vi-info').addEventListener('click', abrir);
     item.querySelector('.via-borrador-editar').addEventListener('click', abrir);
     item.querySelector('.via-row-del').addEventListener('click', function(e) {
       e.stopPropagation();
-      viajesDescartarBorrador(borrador.id);
-      viajesRenderListaBorradores();
+      viajesConfirmar('¿Desea eliminar el viaje?', function() {
+        viajesDescartarBorrador(borrador.id);
+        viajesRenderListaBorradores();
+      });
     });
     cont.appendChild(item);
   });
@@ -7901,6 +8750,7 @@ async function viajesValidarCodigo() {
 
     viajesCodigoValidado = data[0];
     viajesGuardarCodigoUsuario(codigo);
+    viajesIniciarCountdown(viajesCodigoValidado);
 
     msg.className = 'via-msg ok';
     msg.textContent = '¡Código válido! Abriendo el menú "Viajes"...';
@@ -8065,6 +8915,7 @@ async function viajesAbrirItinerarioUsuario() {
     if (error) throw error;
     if (!data || !data.length) return;
     var v = data[0];
+    viajesIniciarCountdown(v);
     document.getElementById('usr-iti-titulo').textContent = v.titulo;
     document.getElementById('usr-iti-costo').innerHTML =
       [viajesFormatearRangoFechas(v), (v.costo ? ('Costo: ' + escH(v.costo)) : '')].filter(Boolean).join('<br>');
@@ -8105,7 +8956,7 @@ function viajesRenderInscriptosUsuario(codigo) {
   lista.forEach(function(p) {
     var tr = document.createElement('tr');
     var nombreCompleto = (p.apellido || '') + (p.apellido && p.nombres ? ', ' : '') + (p.nombres || '');
-    var fechaCreado = p.creado ? new Date(p.creado).toLocaleString('es-AR') : '—';
+    var fechaCreado = p.creado ? viajesFormatearFechaHoraCorta(p.creado) : '—';
     var estado = p.enviado
       ? '<span style="color:#86efac;">Enviado</span>'
       : '<span style="color:#e8c96a;">Pendiente</span>';
@@ -8132,6 +8983,7 @@ async function viajesAbrirInscriptosUsuario() {
     if (error) throw error;
     if (!data || !data.length) return;
     viajesCodigoValidado = data[0];
+    viajesIniciarCountdown(viajesCodigoValidado);
     // Si el formulario "Crear" estaba abierto, se cierra para no superponerse con Inscriptos.
     viajesInscriptoEditandoId = null;
     viajesFormOrigenVer = false;
@@ -8139,6 +8991,10 @@ async function viajesAbrirInscriptosUsuario() {
     document.getElementById('usr-insc-titulo').textContent = 'Inscriptos — ' + (data[0].titulo || '');
     document.getElementById('usr-insc-msg').textContent = '';
     viajesRenderInscriptosUsuario(data[0].codigo);
+    var btnEnviar = document.getElementById('usr-insc-btn-enviar');
+    var vencido = viajesCountdownVencidoAhora();
+    btnEnviar.disabled = vencido;
+    btnEnviar.title = vencido ? 'El plazo para enviar se ha vencido.' : '';
     document.getElementById('modal-usuario-inscriptos').style.display = 'flex';
   } catch (e) { console.error(e); }
 }
@@ -8167,6 +9023,10 @@ async function viajesEnviarInscriptosUsuario() {
   msg.className = 'via-msg'; msg.textContent = '';
   if (!supabaseClient || !viajesCodigoValidado) {
     msg.className = 'via-msg err'; msg.textContent = 'No se encontró el viaje asociado a tu código.'; return;
+  }
+  if (viajesCountdownVencidoAhora()) {
+    viajesMostrarTiempoVencido();
+    return;
   }
   var codigo = viajesCodigoValidado.codigo;
   var lista = viajesObtenerInscriptosLocal(codigo);
@@ -8236,6 +9096,7 @@ async function viajesAbrirInformacionUsuario(editarId) {
     if (error) throw error;
     if (!data || !data.length) return;
     viajesCodigoValidado = data[0];
+    viajesIniciarCountdown(viajesCodigoValidado);
     document.getElementById('via-info-titulo-viaje').textContent = data[0].titulo || '';
     document.getElementById('via-msg-form').textContent = '';
     viajesInscriptoEditandoId = editarId || null;
@@ -9305,7 +10166,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.getElementById('modal-viajes').style.display = 'flex';
-    document.getElementById('via-crear-exito').style.display = 'none';
+    document.getElementById('via-crear-exito-imprimir').style.display = 'none';
+    document.getElementById('modal-viaje-codigo').style.display = 'none';
 
     // Por si moUsername todavía no se sincronizó con la sesión activa
     // (p. ej. se entra directo a "Viajes" sin haber abierto antes "Orígenes").
@@ -9356,7 +10218,7 @@ document.addEventListener('DOMContentLoaded', function() {
         elGuardados.style.display = '';
         elCreados.style.display = 'none';
       } else if (soloSeccion === 'creados') {
-        elTitulo.textContent = 'Viajes guardados';
+        elTitulo.textContent = 'Viajes creados';
         elPanel.style.width = 'min(490px, 96vw)';
         elForm.style.display = 'none';
         elHr.style.display = 'none';
@@ -9644,6 +10506,35 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('modal-usuario-informacion').addEventListener('click', function(e) {
     if (e.target === this) { viajesInscriptoEditandoId = null; viajesFormOrigenVer = false; this.style.display = 'none'; }
   });
+  // Usuario: botón "Ficha médica" del formulario "Crear" — abre el modal paginado
+  // (ligado al Apellido/Nombres cargados en "Crear").
+  document.getElementById('via-btn-ficha-medica').addEventListener('click', fmAbrir);
+
+  // Ficha médica: navegación entre páginas, Guardar/Descargar/Cerrar.
+  document.getElementById('fm-btn-anterior').addEventListener('click', function() {
+    if (fmPaginaActual > 0) fmMostrarPagina(fmPaginaActual - 1);
+  });
+  document.getElementById('fm-btn-siguiente').addEventListener('click', function() {
+    if (fmPaginaActual < FICHA_MEDICA_PAGINAS.length - 1) fmMostrarPagina(fmPaginaActual + 1);
+  });
+  document.getElementById('fm-btn-guardar').addEventListener('click', fmGuardar);
+  document.getElementById('fm-btn-descargar').addEventListener('click', fmDescargar);
+  document.getElementById('fm-btn-cerrar').addEventListener('click', fmCerrar);
+  document.getElementById('modal-ficha-medica').addEventListener('click', function(e) {
+    if (e.target === this) fmCerrar();
+  });
+  // Ficha médica: formatea en vivo los teléfonos y limita los campos numéricos
+  // (peso/talla/presión/glucemia/semanas/año) a solo dígitos.
+  document.getElementById('fm-paginas').addEventListener('input', function(e) {
+    if (e.target.classList.contains('fm-tel')) {
+      e.target.value = viajesFormatearTelefono(e.target.value);
+    } else if (e.target.classList.contains('fm-numeric')) {
+      var max = e.target.getAttribute('maxlength');
+      var digitos = e.target.value.replace(/\D/g, '');
+      if (max) digitos = digitos.slice(0, parseInt(max, 10));
+      e.target.value = digitos;
+    }
+  });
 
   // Usuario: botón "Agregar" del formulario "Crear" — limpia los campos para poder
   // cargar un nuevo pasajero sin cerrar el formulario.
@@ -9699,11 +10590,23 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('prox-btn-cerrar').addEventListener('click', function() {
     document.getElementById('modal-proximamente').style.display = 'none';
   });
+  document.getElementById('hcd-btn-cerrar').addEventListener('click', function() {
+    document.getElementById('header-viajes-countdown').style.display = 'none';
+    if (viajesCountdownIntervalId) { clearInterval(viajesCountdownIntervalId); viajesCountdownIntervalId = null; }
+  });
+  document.getElementById('tv-btn-cerrar').addEventListener('click', function() {
+    document.getElementById('modal-tiempo-vencido').style.display = 'none';
+  });
+  document.getElementById('modal-tiempo-vencido').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+  document.getElementById('modal-confirmar').addEventListener('click', function(e) {
+    if (e.target === this) document.getElementById('mc-btn-no').click();
+  });
   document.getElementById('modal-proximamente').addEventListener('click', function(e) {
     if (e.target === this) this.style.display = 'none';
   });
 
-  document.getElementById('via-btn-cerrar').addEventListener('click', viajesCerrarModal);
   document.getElementById('modal-viajes').addEventListener('click', function(e) {
     if (e.target === this) viajesCerrarModal();
   });
@@ -9758,12 +10661,26 @@ document.addEventListener('DOMContentLoaded', function() {
     area.innerHTML =
       '<div class="via-print-titulo">AT Argentina Turismo</div>' +
       '<div class="via-print-sub" style="font-size:1.1rem; margin-top:10px;">' +
-      escH(document.getElementById('via-crear-exito-codigo').textContent) + '</div>';
+      escH(viajesUltimoTituloCreado) + '</div>' +
+      '<div class="via-print-sub" style="font-size:1.1rem; margin-top:4px;">Código ' +
+      escH(viajesUltimoCodigoCreado) + '</div>';
     window.print();
   });
   document.getElementById('via-crear-exito-cerrar').addEventListener('click', function() {
-    document.getElementById('via-crear-exito').style.display = 'none';
+    // Este "Cerrar" está en la fila de Crear/Guardar viaje: cierra todo el
+    // formulario de Viajes y vuelve al mapa (distinto del Cerrar de la
+    // ventana emergente del código, que solo cierra esa ventanita). Está
+    // siempre visible, se haya creado un viaje o no.
+    document.getElementById('via-crear-exito-imprimir').style.display = 'none';
+    viajesCerrarModal();
   });
+  document.getElementById('vc-btn-cerrar').addEventListener('click', function() {
+    document.getElementById('modal-viaje-codigo').style.display = 'none';
+  });
+  document.getElementById('modal-viaje-codigo').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+  document.getElementById('via-guardados-btn-cerrar').addEventListener('click', viajesCerrarModal);
 
   // Coordinador: guardar borrador local (la ventana permanece abierta)
   document.getElementById('via-btn-guardar-borrador').addEventListener('click', function() {
