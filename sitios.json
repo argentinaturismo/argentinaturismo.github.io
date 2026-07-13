@@ -587,6 +587,23 @@
     "lng": -71.6268
   },
   {
+    "id": "u1783911338334zxmz",
+    "name": "Perito Moreno (ciudad)",
+    "provincia": "santa_cruz",
+    "localidad": "Perito Moreno",
+    "cat": "Urbano",
+    "desc": "Perito Moreno es una localidad ubicada en el noroeste de la provincia de Santa Cruz, en una región donde la estepa patagónica se encuentra con los paisajes cordilleranos y los valles recorridos por ríos y lagos de origen glaciar. Su entorno natural ofrece una notable diversidad de escenarios, con amplias mesetas, formaciones rocosas y áreas de gran valor arqueológico y paleontológico que reflejan la riqueza geográfica del noroeste santacruceño. Gracias a su ubicación estratégica, constituye un importante punto de conexión para quienes recorren la Patagonia austral.\n\nDesde tiempos remotos, estas tierras fueron habitadas por los pueblos originarios aonikenk o tehuelches, quienes dejaron importantes testimonios de su presencia en distintos sitios arqueológicos de la región. La localidad fue fundada el 7 de diciembre de 1917 con el nombre de Lago Buenos Aires y, posteriormente, adoptó el nombre de Perito Moreno en homenaje al destacado explorador y científico Francisco Pascasio Moreno, cuya labor fue fundamental para el conocimiento y la delimitación del territorio patagónico. A lo largo de su historia, el crecimiento de la localidad estuvo vinculado a la ganadería, el comercio y las comunicaciones del noroeste provincial.\n\nLa identidad cultural de Perito Moreno está profundamente relacionada con el legado de los antiguos pobladores, las tradiciones rurales y el patrimonio histórico de la Patagonia. La comunidad mantiene vivas las costumbres vinculadas al campo y al trabajo en la estepa, al tiempo que promueve la conservación de importantes sitios arqueológicos que permiten conocer la vida de las primeras poblaciones humanas de la región. La gastronomía local, las festividades populares y el espíritu hospitalario de sus habitantes reflejan la esencia de una localidad que combina historia y tradición.\n\nEn la actualidad, Perito Moreno es un atractivo destino turístico para quienes desean explorar el noroeste de Santa Cruz. Desde allí es posible visitar el reconocido sitio arqueológico de la Cueva de las Manos, recorrer paisajes naturales de gran belleza, disfrutar de la pesca deportiva, realizar actividades al aire libre y descubrir la inmensidad de la estepa patagónica. Su cercanía con áreas protegidas y con importantes circuitos turísticos convierte a la localidad en una excelente base para conocer una de las regiones más auténticas y menos intervenidas de la Patagonia argentina.",
+    "dias": "",
+    "horario": "",
+    "costo": "",
+    "epoca": "",
+    "foto1": "",
+    "foto2": "",
+    "foto3": "",
+    "lat": -46.58861,
+    "lng": -70.92417
+  },
+  {
     "id": "u1783911004103h707",
     "name": "Puerto San Julián (ciudad)",
     "provincia": "santa_cruz",
