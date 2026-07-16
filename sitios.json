@@ -91,7 +91,7 @@
   },
   {
     "id": "u1783958244242ku6o",
-    "name": "Andalgalá",
+    "name": "② Andalgalá",
     "provincia": "catamarca",
     "localidad": "Andalgalá (Departamento Andalgalá)",
     "cat": "Urbano",
@@ -108,7 +108,7 @@
   },
   {
     "id": "u1783957953710skv9",
-    "name": "Belén",
+    "name": "② Belén",
     "provincia": "catamarca",
     "localidad": "Belén (Departamento Belén)",
     "cat": "Urbano",
@@ -125,7 +125,7 @@
   },
   {
     "id": "u1783958044523wram",
-    "name": "Fiambalá",
+    "name": "① Fiambalá",
     "provincia": "catamarca",
     "localidad": "Fiambalá (Departamento Tinogasta)",
     "cat": "Urbano",
@@ -142,7 +142,7 @@
   },
   {
     "id": "u1783957851588haac",
-    "name": "San Fernando del Valle de Catamarca",
+    "name": "① San Fernando del Valle de Catamarca",
     "provincia": "catamarca",
     "localidad": "San Fernando del Valle de Catamarca (Departamento Capital)",
     "cat": "Urbano",
@@ -159,7 +159,7 @@
   },
   {
     "id": "u1783958114627g7w6",
-    "name": "Tinogasta",
+    "name": "② Tinogasta",
     "provincia": "catamarca",
     "localidad": "Tinogasta (Departamento Tinogasta)",
     "cat": "Urbano",
@@ -261,7 +261,7 @@
   },
   {
     "id": "u17839552433568138",
-    "name": "Comodoro Rivadavia",
+    "name": "② Comodoro Rivadavia",
     "provincia": "chubut",
     "localidad": "Comodoro Rivadavia (Departamento Escalante)",
     "cat": "Urbano",
@@ -278,7 +278,7 @@
   },
   {
     "id": "u17839162792774abo",
-    "name": "Esquel",
+    "name": "① Esquel",
     "provincia": "chubut",
     "localidad": "Esquel (Departamento Futaleufú)",
     "cat": "Urbano",
@@ -295,7 +295,7 @@
   },
   {
     "id": "u1783916216805v6iu",
-    "name": "Gaiman",
+    "name": "② Gaiman",
     "provincia": "chubut",
     "localidad": "Gaiman (Departamento Gaiman)",
     "cat": "Urbano",
@@ -329,7 +329,7 @@
   },
   {
     "id": "u17839152382973liq",
-    "name": "Puerto Madryn",
+    "name": "① Puerto Madryn",
     "provincia": "chubut",
     "localidad": "Puerto Madryn (Departamento Biedma)",
     "cat": "Urbano",
@@ -346,7 +346,7 @@
   },
   {
     "id": "u1783955124838cbe5",
-    "name": "Rawson",
+    "name": "② Rawson",
     "provincia": "chubut",
     "localidad": "Rawson (Departamento Rawson)",
     "cat": "Urbano",
@@ -363,7 +363,7 @@
   },
   {
     "id": "u1783915343048ewwb",
-    "name": "Trelew",
+    "name": "② Trelew",
     "provincia": "chubut",
     "localidad": "Trelew (Departamento Rawson)",
     "cat": "Urbano",
@@ -397,7 +397,7 @@
   },
   {
     "id": "u1783916479956tb42",
-    "name": "Trevelin",
+    "name": "① Trevelin",
     "provincia": "chubut",
     "localidad": "Trevelin (Departamento Futaleufú)",
     "cat": "Urbano",
@@ -785,7 +785,7 @@
   },
   {
     "id": "u17839559287541fhd",
-    "name": "General Acha",
+    "name": "③ General Acha",
     "provincia": "la_pampa",
     "localidad": "General Acha (Departamento Utracán)",
     "cat": "Urbano",
@@ -819,7 +819,7 @@
   },
   {
     "id": "u17839558264279e2u",
-    "name": "San Rosa",
+    "name": "② San Rosa",
     "provincia": "la_pampa",
     "localidad": "Santa Rosa (Departamento Capital)",
     "cat": "Urbano",
@@ -836,7 +836,7 @@
   },
   {
     "id": "u1783958402618g3df",
-    "name": "Chilecito",
+    "name": "① Chilecito",
     "provincia": "la_rioja",
     "localidad": "Chilecito (Chilecito)",
     "cat": "Urbano",
@@ -853,7 +853,7 @@
   },
   {
     "id": "u1783958892337az1l",
-    "name": "Famatina",
+    "name": "② Famatina",
     "provincia": "la_rioja",
     "localidad": "Famatina (Departamento Famatina)",
     "cat": "Urbano",
@@ -870,7 +870,7 @@
   },
   {
     "id": "u17839583275220mgf",
-    "name": "La Rioja",
+    "name": "① La Rioja",
     "provincia": "la_rioja",
     "localidad": "La Rioja (Departamento Capital)",
     "cat": "Urbano",
@@ -887,7 +887,7 @@
   },
   {
     "id": "u17839584926434327",
-    "name": "Villa Unión",
+    "name": "① Villa Unión",
     "provincia": "la_rioja",
     "localidad": "Villa Unión (Departamento General Felipe Varela)",
     "cat": "Urbano",
@@ -966,7 +966,7 @@
   },
   {
     "id": "u1783956482592fvtp",
-    "name": "Godoy Cruz",
+    "name": "③ Godoy Cruz",
     "provincia": "mendoza",
     "localidad": "Godoy Cruz (Departamento Godoy Cruz)",
     "cat": "Urbano",
@@ -983,7 +983,7 @@
   },
   {
     "id": "u1783956663105vm7c",
-    "name": "Luján de Cuyo",
+    "name": "① Luján de Cuyo",
     "provincia": "mendoza",
     "localidad": "Luján de Cuyo (Departamento Luján de Cuyo)",
     "cat": "Urbano",
@@ -1000,7 +1000,7 @@
   },
   {
     "id": "u1783956575297mge9",
-    "name": "Maipú",
+    "name": "① Maipú",
     "provincia": "mendoza",
     "localidad": "Maipú (Departamento Maipú)",
     "cat": "Urbano",
@@ -1017,7 +1017,7 @@
   },
   {
     "id": "u1783956828513t3w9",
-    "name": "Malargüe",
+    "name": "② Malargüe",
     "provincia": "mendoza",
     "localidad": "Malargüe (Departamento Malargüe)",
     "cat": "Urbano",
@@ -1034,7 +1034,7 @@
   },
   {
     "id": "u1783956395297onqx",
-    "name": "Mendoza",
+    "name": "① Mendoza",
     "provincia": "mendoza",
     "localidad": "Mendoza (Departamento Capital)",
     "cat": "Urbano",
@@ -1051,7 +1051,7 @@
   },
   {
     "id": "u178395673952740ov",
-    "name": "San Rafael",
+    "name": "① San Rafael",
     "provincia": "mendoza",
     "localidad": "San Rafael (Departamento San Rafael)",
     "cat": "Urbano",
@@ -1137,7 +1137,7 @@
   },
   {
     "id": "u1783925485252t5sb",
-    "name": "Caviahue-Copahue",
+    "name": "② Caviahue-Copahue",
     "provincia": "neuquen",
     "localidad": "Caviahue-Copahue (Departamento Ñorquín)",
     "cat": "Urbano",
@@ -1154,7 +1154,7 @@
   },
   {
     "id": "u1783925563196969d",
-    "name": "Neuquén",
+    "name": "② Neuquén",
     "provincia": "neuquen",
     "localidad": "Neuquén (Departamento Confluencia)",
     "cat": "Urbano",
@@ -1171,7 +1171,7 @@
   },
   {
     "id": "u1783925124694f6tg",
-    "name": "San Martín de los Andes",
+    "name": "① San Martín de los Andes",
     "provincia": "neuquen",
     "localidad": "San Martín de los Andes (Departamento Lácar)",
     "cat": "Urbano",
@@ -1222,7 +1222,7 @@
   },
   {
     "id": "u1783925241565x9u0",
-    "name": "Villa La Angostura",
+    "name": "① Villa La Angostura",
     "provincia": "neuquen",
     "localidad": "Villa La Angostura (Departamento Los Lagos)",
     "cat": "Urbano",
@@ -1256,7 +1256,7 @@
   },
   {
     "id": "u178392533517270j4",
-    "name": "Villa Pehuenia",
+    "name": "① Villa Pehuenia",
     "provincia": "neuquen",
     "localidad": "Villa Pehuenia (Departamento Aluminé)",
     "cat": "Urbano",
@@ -1367,7 +1367,7 @@
   },
   {
     "id": "u17839170139304d63",
-    "name": "El Bolsón",
+    "name": "① El Bolsón",
     "provincia": "rio_negro",
     "localidad": "El Bolsón (Departamento Bariloche)",
     "cat": "Urbano",
@@ -1384,7 +1384,7 @@
   },
   {
     "id": "u1783917249081pp85",
-    "name": "General Roca",
+    "name": "② General Roca",
     "provincia": "rio_negro",
     "localidad": "General Roca (Departamento General Roca)",
     "cat": "Urbano",
@@ -1401,7 +1401,7 @@
   },
   {
     "id": "u1783917093178poos",
-    "name": "Las Grutas",
+    "name": "① Las Grutas",
     "provincia": "rio_negro",
     "localidad": "Las Grutas (Departamento San Antonio)",
     "cat": "Urbano",
@@ -1435,7 +1435,7 @@
   },
   {
     "id": "u17839169068986gnz",
-    "name": "San Carlos de Bariloche",
+    "name": "① San Carlos de Bariloche",
     "provincia": "rio_negro",
     "localidad": "San Carlos de Bariloche (Departamento Bariloche)",
     "cat": "Urbano",
@@ -1469,7 +1469,7 @@
   },
   {
     "id": "u1783917150978oj8k",
-    "name": "Viedma",
+    "name": "② Viedma",
     "provincia": "rio_negro",
     "localidad": "Viedma (Departamento Adolfo Alsina)",
     "cat": "Urbano",
@@ -1615,7 +1615,7 @@
   },
   {
     "id": "u1783957260910ipnw",
-    "name": "Barreal",
+    "name": "① Barreal",
     "provincia": "san_juan",
     "localidad": "Barreal (Departamento Calingasta)",
     "cat": "Urbano",
@@ -1632,7 +1632,7 @@
   },
   {
     "id": "u1783957341431zqu9",
-    "name": "Iglesia",
+    "name": "② Iglesia",
     "provincia": "san_juan",
     "localidad": "Iglesia (Departamento Iglesia)",
     "cat": "Urbano",
@@ -1666,7 +1666,7 @@
   },
   {
     "id": "u17839575397096wve",
-    "name": "San José de Jáchal",
+    "name": "② San José de Jáchal",
     "provincia": "san_juan",
     "localidad": "San José de Jáchal (Departamento Jáchal)",
     "cat": "Urbano",
@@ -1683,9 +1683,9 @@
   },
   {
     "id": "u1783957003720kkk4",
-    "name": "San Juan",
+    "name": "① San Juan",
     "provincia": "san_juan",
-    "localidad": "San Juan (Deprtamento Capital)",
+    "localidad": "San Juan (Departamento Capital)",
     "cat": "Urbano",
     "desc": "San Juan es la capital de la provincia homónima y uno de los principales centros urbanos del oeste argentino. Se encuentra ubicada en el centro de un amplio oasis rodeado por montañas, donde la presencia de los ríos provenientes del deshielo de la Cordillera de los Andes permitió el desarrollo de una región fértil en medio de un ambiente predominantemente árido. Su paisaje combina valles, sierras, zonas agrícolas y grandes escenarios naturales, ofreciendo una identidad marcada por la relación entre el agua, la tierra y la actividad humana. La ciudad es reconocida por su tranquilidad, sus espacios verdes, su patrimonio histórico y su cercanía con algunos de los paisajes más destacados de la cordillera.\n\nLa flora y fauna de San Juan están adaptadas principalmente a los ambientes áridos del monte y de la precordillera. En las zonas naturales predominan especies como jarillas, algarrobos, chañares y cactus, mientras que en los oasis agrícolas se destacan viñedos, olivares y arboledas desarrolladas gracias al sistema de riego. Entre la fauna característica se encuentran guanacos, zorros grises, pumas, maras, cóndores andinos y numerosas aves propias de los ambientes de montaña y desierto. Las áreas protegidas cercanas conservan ecosistemas de gran valor, incluyendo paisajes de altura, valles cordilleranos y formaciones geológicas únicas.\n\nLa historia de San Juan se remonta a la presencia ancestral de los pueblos originarios huarpes, quienes desarrollaron sistemas de aprovechamiento del agua y una estrecha relación con el ambiente desértico. La ciudad fue fundada por Juan Jufré el 13 de junio de 1562 como parte del proceso de expansión española en la región de Cuyo. Durante el período de la independencia tuvo un papel destacado, ya que fue tierra natal del General Domingo Faustino Sarmiento y un punto importante en la organización del Ejército de los Andes comandado por José de San Martín. Un acontecimiento decisivo en su historia fue el terremoto de 1944, que destruyó gran parte de la antigua ciudad y dio lugar a una profunda reconstrucción urbana con nuevos criterios arquitectónicos y de planificación.\n\nEn la actualidad, San Juan combina historia, cultura, naturaleza y producción regional en una variada propuesta turística. Sus principales atractivos incluyen la Casa Natal de Sarmiento, museos, plazas y espacios culturales, además de circuitos hacia paisajes naturales como el Parque Provincial Ischigualasto, declarado Patrimonio Mundial por la UNESCO en 2000, y los escenarios cordilleranos de la provincia. La actividad vitivinícola, especialmente la producción de vinos de calidad, junto con el turismo astronómico, las rutas del vino, la aventura y la gastronomía regional, forman parte de su identidad. Su combinación de patrimonio histórico, cielos privilegiados, paisajes desérticos y montañas convierte a San Juan en uno de los destinos más representativos del oeste argentino.",
     "dias": "",
@@ -1751,7 +1751,7 @@
   },
   {
     "id": "u17839106093446zj7",
-    "name": "El Calafate",
+    "name": "① El Calafate",
     "provincia": "santa_cruz",
     "localidad": "El Calafate (Departamento Lago Argentino)",
     "cat": "Urbano",
@@ -1768,9 +1768,9 @@
   },
   {
     "id": "u1783910754584luob",
-    "name": "El Chalten",
+    "name": "① El Chaltén",
     "provincia": "santa_cruz",
-    "localidad": "El Chalten (Departamento Lago Argentino)",
+    "localidad": "El Chaltén (Departamento Lago Argentino)",
     "cat": "Urbano",
     "desc": "El Chaltén es una pequeña localidad de la provincia de Santa Cruz ubicada en el extremo sur de la Cordillera de los Andes, dentro de un entorno natural dominado por montañas, glaciares, bosques y ríos cristalinos. Considerada la “Capital Nacional del Trekking”, se encuentra al pie de los imponentes cerros Fitz Roy y Torre, dos de las cumbres más emblemáticas de la Patagonia argentina. Su paisaje combina la aridez de la estepa patagónica con los bosques andino-patagónicos, creando un escenario único donde la naturaleza se mantiene en gran parte intacta y constituye el principal atractivo de la región.\n\nLa flora y fauna de El Chaltén representan la riqueza de los ambientes cordilleranos australes. En los bosques predominan especies como la lenga, el ñire y otros árboles adaptados al clima frío y húmedo de la montaña, mientras que en las zonas abiertas aparecen pastizales y vegetación típica de la estepa. Entre la fauna característica se encuentran el huemul, el guanaco, el zorro colorado, el puma y diversas especies de aves, entre ellas el cóndor andino. Los ríos, lagunas y glaciares cercanos conforman ecosistemas de gran valor ambiental, protegidos dentro del Parque Nacional Los Glaciares.\n\nLa historia de El Chaltén está vinculada con los pueblos originarios que habitaron la Patagonia austral, especialmente los tehuelches o aónikenk, quienes conocían y recorrían estos territorios mucho antes de la llegada europea. El nombre Chaltén proviene de la lengua tehuelche y está asociado al cerro Fitz Roy, considerado por estos pueblos como una montaña sagrada relacionada con la presencia de nubes y fenómenos atmosféricos. La localidad fue fundada oficialmente el 12 de octubre de 1985, en un contexto relacionado con la consolidación territorial de la zona y el desarrollo de un nuevo asentamiento en un área de gran valor paisajístico y estratégico.\n\nEn la actualidad, El Chaltén es uno de los destinos de naturaleza y aventura más destacados de la Argentina. Sus senderos permiten acceder a lugares de extraordinaria belleza, como las lagunas Torre y de los Tres, miradores panorámicos, glaciares y valles rodeados de montañas. Las actividades de trekking, escalada, fotografía de naturaleza y observación de fauna atraen a visitantes de todo el mundo que buscan experiencias en contacto directo con ambientes prístinos. Su ambiente tranquilo, su arquitectura integrada al paisaje y su cercanía con el Parque Nacional Los Glaciares convierten a El Chaltén en un destino donde la aventura, la cultura patagónica y la conservación de la naturaleza se encuentran en perfecta armonía.",
     "dias": "",
@@ -1836,7 +1836,7 @@
   },
   {
     "id": "u17839108799996uh6",
-    "name": "Los Antiguos",
+    "name": "② Los Antiguos",
     "provincia": "santa_cruz",
     "localidad": "Los Antiguos (Departamento Lago Buenos Aires)",
     "cat": "Urbano",
@@ -1870,7 +1870,7 @@
   },
   {
     "id": "u17839543953359d40",
-    "name": "Puerto Deseado",
+    "name": "① Puerto Deseado",
     "provincia": "santa_cruz",
     "localidad": "Puerto Deseado (Departamento Deseado)",
     "cat": "Urbano",
@@ -1904,7 +1904,7 @@
   },
   {
     "id": "u1783911004103h707",
-    "name": "Puerto San Julián",
+    "name": "② Puerto San Julián",
     "provincia": "santa_cruz",
     "localidad": "Puerto San Julián (Departamento Magallanes)",
     "cat": "Urbano",
@@ -1921,7 +1921,7 @@
   },
   {
     "id": "u17839111127420zbs",
-    "name": "Río Gallegos",
+    "name": "② Río Gallegos",
     "provincia": "santa_cruz",
     "localidad": "Río Gallegos (Departamento Güer Aike)",
     "cat": "Urbano",
@@ -1989,7 +1989,7 @@
   },
   {
     "id": "u17839098387728o4u",
-    "name": "Río Grande",
+    "name": "② Río Grande",
     "provincia": "tierra_del_fuego",
     "localidad": "Río Grande (Departamento Río Grande)",
     "cat": "Urbano",
@@ -2006,7 +2006,7 @@
   },
   {
     "id": "u1783909707019iit0",
-    "name": "Tolhuin",
+    "name": "② Tolhuin",
     "provincia": "tierra_del_fuego",
     "localidad": "Tolhuin (Departamento Tolhuin)",
     "cat": "Urbano",
@@ -2057,7 +2057,7 @@
   },
   {
     "id": "u17839094793011vz3",
-    "name": "Ushuaia",
+    "name": "① Ushuaia",
     "provincia": "tierra_del_fuego",
     "localidad": "Ushuaia (Departamento Ushuaia)",
     "cat": "Urbano",
