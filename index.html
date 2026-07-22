@@ -5982,6 +5982,8 @@
     href="https://commons.wikimedia.org/wiki/Special:FilePath/99-Quebrada_de_Humahuaca.jpg?width=1920" />
   <!-- Generación real de QR para los vouchers -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+  <!-- Lectura de QR desde la cámara del teléfono (escáner del coordinador) -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
   <style>
     /* ── Pantalla de verificación de voucher al escanear el QR ── */
     #qrv-overlay{display:none;position:fixed;inset:0;z-index:999999;background:#0A2A43;overflow:auto;font-family:'Inter',Arial,sans-serif;}
@@ -7554,8 +7556,30 @@
         </div>
       </div>
       <div style="padding:14px 24px; border-top:1px solid #2a3050; display:flex; justify-content:center; gap:12px;">
+        <button class="ruta-btn-secundario" id="via-btn-escanear-qr" type="button">&#128247; Escanear QR</button>
         <button class="ruta-btn-secundario" id="via-btn-imprimir-roster" type="button">Imprimir</button>
         <button class="ruta-btn-primario" id="via-roster-btn-cerrar" type="button">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════  MODAL COORDINADOR: ESCANEAR QR DE VOUCHER CON LA CÁMARA  ═══════════════════ -->
+  <div id="modal-qr-scan" class="mo-backdrop" style="display:none;">
+    <div class="mo-panel" style="width:min(420px, 96vw); max-height:92vh; display:flex; flex-direction:column;">
+      <div class="mo-header">
+        <span class="mo-title">Escanear voucher</span>
+      </div>
+      <div class="mo-body" style="padding:16px 16px 6px; overflow-y:auto; flex:1;">
+        <div id="qrs-camara-wrap" style="position:relative; width:100%; aspect-ratio:1/1; background:#000; border-radius:10px; overflow:hidden;">
+          <video id="qrs-video" playsinline muted style="width:100%; height:100%; object-fit:cover; display:block;"></video>
+          <div style="position:absolute; inset:12%; border:2.5px solid rgba(255,255,255,.75); border-radius:12px; pointer-events:none;"></div>
+        </div>
+        <div id="qrs-msg" style="margin-top:12px; font-size:12.5px; color:#AFC4D6; text-align:center;">Apuntá la cámara al código QR del voucher.</div>
+        <div id="qrs-resultado" style="margin-top:10px;"></div>
+      </div>
+      <div style="padding:14px 24px; border-top:1px solid #2a3050; display:flex; justify-content:center; gap:12px;">
+        <button class="ruta-btn-secundario" id="qrs-btn-escanear-otro" type="button" style="display:none;">Escanear otro</button>
+        <button class="ruta-btn-primario" id="qrs-btn-cerrar" type="button">Cerrar</button>
       </div>
     </div>
   </div>
@@ -12083,34 +12107,133 @@
     function qrvLoadingHTML() { return '<div class="qrv-loading">Verificando voucher…</div>'; }
     function qrvErrorHTML(msg) { return '<div class="qrv-error">' + msg + '</div>'; }
 
+    // Busca el voucher en Supabase por su código único y devuelve el HTML ya
+    // armado (tarjeta con el cartel de color) o un mensaje de error. La usan
+    // tanto la pantalla pública de verificación (qrvMostrar) como el escáner
+    // con cámara del coordinador (qrsProcesarCodigo). ──
+    async function qrvObtenerHTML(codigo) {
+      if (!supabaseClient) return qrvErrorHTML('No se pudo conectar con la base de datos para verificar este voucher.');
+      try {
+        var { data, error } = await supabaseClient.from('vouchers').select('datos').eq('codigo_unico', codigo).maybeSingle();
+        if (error) throw error;
+        if (!data || !data.datos) return qrvErrorHTML('Código no encontrado. Este voucher no es válido o fue eliminado.');
+        return qrvRenderHTML(data.datos);
+      } catch (e) {
+        console.error('Error verificando voucher por QR:', e);
+        return qrvErrorHTML('Ocurrió un error al verificar el voucher. Probá de nuevo en unos segundos.');
+      }
+    }
+
     async function qrvMostrar(codigo) {
       var overlay = document.getElementById('qrv-overlay');
       var cont = document.getElementById('qrv-content');
       if (!overlay || !cont) return;
       overlay.style.display = 'block';
       cont.innerHTML = qrvLoadingHTML();
-      if (!supabaseClient) {
-        cont.innerHTML = qrvErrorHTML('No se pudo conectar con la base de datos para verificar este voucher.');
-        return;
-      }
-      try {
-        var { data, error } = await supabaseClient.from('vouchers').select('datos').eq('codigo_unico', codigo).maybeSingle();
-        if (error) throw error;
-        if (!data || !data.datos) {
-          cont.innerHTML = qrvErrorHTML('Código no encontrado. Este voucher no es válido o fue eliminado.');
-          return;
-        }
-        cont.innerHTML = qrvRenderHTML(data.datos);
-      } catch (e) {
-        console.error('Error verificando voucher por QR:', e);
-        cont.innerHTML = qrvErrorHTML('Ocurrió un error al verificar el voucher. Probá de nuevo en unos segundos.');
-      }
+      cont.innerHTML = await qrvObtenerHTML(codigo);
     }
 
     document.addEventListener('DOMContentLoaded', function () {
       var codigoVerif = new URLSearchParams(location.search).get('verificar');
       if (codigoVerif) qrvMostrar(codigoVerif);
     });
+
+    // ══════════════════════════════════════════════════════════════════════
+    //  COORDINADOR: ESCÁNER DE VOUCHERS CON LA CÁMARA DEL TELÉFONO
+    //  Botón "Escanear QR" dentro de la lista de Inscriptos de un viaje. Abre
+    //  la cámara del teléfono (requiere sesión de coordinador, ya que el botón
+    //  solo está disponible dentro de esa pantalla), lee el QR en vivo con
+    //  jsQR y muestra el mismo resultado de verificación con su color.
+    // ══════════════════════════════════════════════════════════════════════
+    var qrsStream = null, qrsRAF = null, qrsCanvas = null, qrsCtx = null, qrsActivo = false;
+
+    // El QR de un voucher trae una URL del tipo "...?verificar=CODIGO". Si por algún
+    // motivo se escanea el código pelado (sin URL), se usa tal cual.
+    function qrsExtraerCodigo(textoEscaneado) {
+      var t = (textoEscaneado || '').trim();
+      try {
+        var u = new URL(t);
+        var c = u.searchParams.get('verificar');
+        if (c) return c;
+      } catch (e) { /* no es una URL válida: seguimos con el texto tal cual */ }
+      return t;
+    }
+
+    function qrsAbrir() {
+      document.getElementById('modal-qr-scan').style.display = 'flex';
+      document.getElementById('qrs-resultado').innerHTML = '';
+      document.getElementById('qrs-msg').textContent = 'Apuntá la cámara al código QR del voucher.';
+      document.getElementById('qrs-msg').style.display = 'block';
+      document.getElementById('qrs-btn-escanear-otro').style.display = 'none';
+      qrsIniciarCamara();
+    }
+
+    function qrsCerrar() {
+      document.getElementById('modal-qr-scan').style.display = 'none';
+      qrsDetenerCamara();
+    }
+
+    async function qrsIniciarCamara() {
+      qrsDetenerCamara();
+      document.getElementById('qrs-resultado').innerHTML = '';
+      document.getElementById('qrs-msg').style.display = 'block';
+      document.getElementById('qrs-msg').textContent = 'Apuntá la cámara al código QR del voucher.';
+      document.getElementById('qrs-btn-escanear-otro').style.display = 'none';
+      var video = document.getElementById('qrs-video');
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        document.getElementById('qrs-msg').textContent = 'Este navegador no permite acceder a la cámara. Probá desde el teléfono, con HTTPS.';
+        return;
+      }
+      try {
+        qrsStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
+      } catch (e) {
+        console.error('No se pudo acceder a la cámara:', e);
+        document.getElementById('qrs-msg').textContent = 'No se pudo acceder a la cámara. Revisá los permisos del navegador para este sitio.';
+        return;
+      }
+      video.srcObject = qrsStream;
+      try { await video.play(); } catch (e) { /* algunos navegadores ya la reproducen solos */ }
+      if (!qrsCanvas) { qrsCanvas = document.createElement('canvas'); qrsCtx = qrsCanvas.getContext('2d'); }
+      qrsActivo = true;
+      qrsLoopEscaneo();
+    }
+
+    function qrsDetenerCamara() {
+      qrsActivo = false;
+      if (qrsRAF) cancelAnimationFrame(qrsRAF);
+      qrsRAF = null;
+      if (qrsStream) { qrsStream.getTracks().forEach(function (t) { t.stop(); }); qrsStream = null; }
+      var video = document.getElementById('qrs-video');
+      if (video) video.srcObject = null;
+    }
+
+    function qrsLoopEscaneo() {
+      if (!qrsActivo) return;
+      var video = document.getElementById('qrs-video');
+      if (video.readyState === video.HAVE_ENOUGH_DATA && typeof jsQR !== 'undefined' && video.videoWidth) {
+        qrsCanvas.width = video.videoWidth;
+        qrsCanvas.height = video.videoHeight;
+        qrsCtx.drawImage(video, 0, 0, qrsCanvas.width, qrsCanvas.height);
+        var img = qrsCtx.getImageData(0, 0, qrsCanvas.width, qrsCanvas.height);
+        var resultado = jsQR(img.data, img.width, img.height);
+        if (resultado && resultado.data) {
+          qrsProcesarCodigo(resultado.data);
+          return; // se detiene acá; "Escanear otro" vuelve a llamar a qrsIniciarCamara
+        }
+      }
+      qrsRAF = requestAnimationFrame(qrsLoopEscaneo);
+    }
+
+    async function qrsProcesarCodigo(textoEscaneado) {
+      qrsActivo = false;
+      if (qrsRAF) cancelAnimationFrame(qrsRAF);
+      var codigo = qrsExtraerCodigo(textoEscaneado);
+      document.getElementById('qrs-msg').style.display = 'none';
+      document.getElementById('qrs-btn-escanear-otro').style.display = 'inline-block';
+      document.getElementById('qrs-resultado').innerHTML = qrvLoadingHTML();
+      document.getElementById('qrs-resultado').innerHTML = await qrvObtenerHTML(codigo);
+      qrsDetenerCamara(); // apaga la cámara mientras se ve el resultado, para ahorrar batería
+    }
 
     // ── Utilidades ──
     function viajesGenerarCodigo() {
@@ -16799,6 +16922,10 @@
 
       // Coordinador: imprimir el listado de pasajeros (apaisado / listo para guardar como PDF)
       document.getElementById('via-btn-imprimir-roster').addEventListener('click', viajesImprimirRoster);
+      document.getElementById('via-btn-escanear-qr').addEventListener('click', qrsAbrir);
+      document.getElementById('qrs-btn-cerrar').addEventListener('click', qrsCerrar);
+      document.getElementById('qrs-btn-escanear-otro').addEventListener('click', qrsIniciarCamara);
+      document.getElementById('modal-qr-scan').addEventListener('click', function (e) { if (e.target === this) qrsCerrar(); });
 
       document.getElementById('via-roster-btn-cerrar').addEventListener('click', viajesCerrarRoster);
       document.getElementById('modal-viaje-roster').addEventListener('click', function (e) {
